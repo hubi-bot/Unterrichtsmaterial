@@ -1,0 +1,2070 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lernmodul – Lineare Funktionen: Vom Rechnen zum echten Leben</title>
+<style>
+  :root{
+    --pink:#ff3d8b;
+    --purple:#8b3dff;
+    --turq:#15c8c0;
+    --yellow:#ffc233;
+    --dark:#2a2350;
+    --soft:#6b6390;
+    --card:#ffffff;
+    --field:#efe9f9;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    font-family:"Trebuchet MS","Segoe UI",Verdana,sans-serif;
+    background:linear-gradient(135deg,#ff7ac0 0%,#a06bff 45%,#3dd6cf 100%);
+    background-attachment:fixed;
+    color:var(--dark);
+    line-height:1.55;
+    padding:24px 14px 80px;
+  }
+  .wrap{max-width:880px;margin:0 auto;}
+
+  /* ---------- HEADER ---------- */
+  .hero{
+    background:linear-gradient(120deg,var(--pink),var(--purple));
+    color:#fff;border-radius:26px;padding:30px 28px;
+    box-shadow:0 14px 34px rgba(80,30,120,.35);text-align:center;
+  }
+  .hero h1{font-size:1.85rem;line-height:1.25;margin-bottom:8px;}
+  .hero p{font-size:1.02rem;opacity:.95;}
+  .hero .tag{display:inline-block;background:rgba(255,255,255,.22);
+    padding:5px 14px;border-radius:30px;font-size:.82rem;margin-top:12px;letter-spacing:.5px;}
+
+  .namebox{
+    background:#fff;border-radius:18px;padding:16px 20px;margin-top:16px;
+    display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+    box-shadow:0 8px 20px rgba(80,30,120,.18);
+  }
+  .namebox label{font-weight:bold;color:var(--purple);}
+  .namebox input{
+    flex:1;min-width:170px;border:2px solid #e7e1f5;border-radius:12px;
+    padding:9px 12px;font-size:1rem;font-family:inherit;background:var(--field);
+  }
+
+  /* ---------- SECTIONS ---------- */
+  .section{
+    background:var(--card);border-radius:22px;padding:24px 22px;
+    margin-top:22px;box-shadow:0 10px 26px rgba(80,30,120,.20);
+  }
+  .sec-head{display:flex;align-items:center;gap:12px;margin-bottom:6px;}
+  .badge{
+    flex:none;width:46px;height:46px;border-radius:14px;display:flex;
+    align-items:center;justify-content:center;font-size:1.35rem;font-weight:bold;color:#fff;
+  }
+  .b-turq{background:linear-gradient(135deg,#15c8c0,#0e9b95);}
+  .b-pink{background:linear-gradient(135deg,#ff3d8b,#d61f6b);}
+  .b-purple{background:linear-gradient(135deg,#8b3dff,#6a1fd6);}
+  .b-yellow{background:linear-gradient(135deg,#ffc233,#f59e0b);}
+  .sec-head h2{font-size:1.3rem;color:var(--dark);}
+  .sec-sub{color:var(--soft);font-size:.95rem;margin:6px 0 14px;}
+
+  h3.task-title{font-size:1.05rem;margin:20px 0 4px;color:var(--purple);}
+
+  /* ---------- INFO / HEFT ---------- */
+  .info{
+    background:#f3eeff;border-left:5px solid var(--purple);
+    border-radius:10px;padding:12px 15px;margin:12px 0;font-size:.96rem;
+  }
+  .heft{
+    background:#fff7e0;border-left:5px solid var(--yellow);
+    border-radius:10px;padding:11px 15px;margin:12px 0;font-size:.94rem;
+  }
+  .heft b{color:#b9790a;}
+  .calc{
+    background:#e6faf8;border-left:5px solid var(--turq);
+    border-radius:10px;padding:11px 15px;margin:12px 0;font-size:.94rem;
+  }
+  .findxy{
+    background:#eafff6;border:2px dashed var(--turq);
+    border-radius:12px;padding:11px 15px;margin:12px 0;font-size:.93rem;
+  }
+  .findxy b{color:#0e9b95;}
+
+  /* ---------- PLAN ---------- */
+  .planrow{
+    display:flex;align-items:center;gap:12px;padding:9px 0;
+    border-bottom:1px solid #ece4fb;
+  }
+  .planrow:last-child{border-bottom:none;}
+  .plantime{
+    flex:none;background:linear-gradient(135deg,var(--turq),var(--purple));
+    color:#fff;border-radius:20px;padding:4px 12px;font-size:.8rem;font-weight:bold;
+    min-width:96px;text-align:center;
+  }
+  .planrow .pt{font-size:.96rem;}
+
+  /* ---------- TASK CARD ---------- */
+  .qa{
+    border:2px solid #efeaf9;border-radius:16px;padding:15px 16px;margin:14px 0;
+    background:#fbfaff;
+  }
+  .qa .ask{font-weight:bold;margin:10px 0 6px;}
+  .fieldrow{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:8px 0;}
+  .fieldrow .lab{font-size:.95rem;}
+  input.ans{
+    width:92px;border:2px solid #d2c6ee;border-radius:10px;padding:8px 9px;
+    font-size:1rem;font-family:inherit;text-align:center;background:var(--field);
+  }
+  input.ans.res{width:165px;text-align:left;}
+  input.ans::placeholder{color:#a99fc4;font-style:italic;font-size:.84rem;}
+  input.ans:focus{outline:none;border-color:var(--purple);background:#fff;}
+  input.ans.ok{border-color:#1faa4a;background:#e9fbef;}
+  input.ans.bad{border-color:#e23b3b;background:#fdeaea;}
+  select.ans{
+    border:2px solid #d2c6ee;border-radius:10px;padding:8px 9px;
+    font-size:.95rem;font-family:inherit;background:var(--field);max-width:100%;
+  }
+  select.ans.ok{border-color:#1faa4a;background:#e9fbef;}
+  select.ans.bad{border-color:#e23b3b;background:#fdeaea;}
+
+  /* ---------- FRACTION ---------- */
+  .frac{display:inline-block;vertical-align:middle;text-align:center;margin:0 3px;}
+  .frac>span{display:block;padding:0 7px;line-height:1.3;}
+  .frac .num{border-bottom:2px solid currentColor;}
+
+  /* ---------- BUTTONS ---------- */
+  button{
+    font-family:inherit;cursor:pointer;border:none;border-radius:11px;
+    font-size:.92rem;font-weight:bold;transition:transform .08s;
+  }
+  button:active{transform:scale(.96);}
+  .btn-check{
+    background:linear-gradient(135deg,var(--pink),var(--purple));
+    color:#fff;padding:9px 18px;
+  }
+  .hintwrap{margin-top:10px;display:flex;flex-direction:column;gap:6px;}
+  .hbtn{
+    background:#efe7ff;color:var(--purple);padding:7px 13px;align-self:flex-start;
+  }
+  .hbtn.sol{background:#ffe9d6;color:#c2620a;}
+  .hbtn.active{filter:brightness(.93);}
+  .hint{
+    display:none;background:#f6f2ff;border-radius:10px;padding:11px 14px;
+    font-size:.93rem;border:1px dashed #c9b8ef;
+  }
+  .hint.open{display:block;}
+  .hint.solhint{background:#fff4e8;border-color:#f0b87a;}
+  .hint .step{margin:3px 0;}
+
+  .fb{
+    display:none;margin-top:9px;padding:8px 12px;border-radius:10px;
+    font-size:.93rem;font-weight:bold;
+  }
+  .fb.show{display:block;}
+  .fb.right{background:#e3f9ea;color:#157a38;}
+  .fb.wrong{background:#fdeaea;color:#bb2222;}
+  .fb.neutral{background:#fff4d6;color:#9a6b00;}
+
+  /* ---------- LERNSTATION ---------- */
+  .lernstation{
+    background:linear-gradient(135deg,#fff9e6,#e7fbf7);
+    border:3px dashed var(--turq);
+    border-radius:24px;padding:30px 22px 24px;margin-top:30px;position:relative;
+    box-shadow:0 12px 30px rgba(80,30,120,.22);
+  }
+  .ribbon{
+    position:absolute;top:-17px;left:24px;
+    background:linear-gradient(135deg,var(--yellow),var(--pink));
+    color:#fff;padding:7px 18px;border-radius:22px;font-weight:bold;font-size:.86rem;
+    box-shadow:0 5px 12px rgba(0,0,0,.22);
+  }
+  .lernstation h2{color:#0e9b95;font-size:1.32rem;}
+  .lcard{
+    background:#fff;border-radius:14px;padding:14px 16px;margin:12px 0;
+    box-shadow:0 4px 12px rgba(80,30,120,.10);
+  }
+  .lcard h4{color:var(--purple);font-size:1rem;margin-bottom:6px;}
+  .lcard.star{border:2px solid var(--pink);}
+  .lcard.star h4{color:var(--pink);}
+  .qmark{
+    display:inline-flex;width:24px;height:24px;border-radius:50%;
+    background:var(--turq);color:#fff;align-items:center;justify-content:center;
+    font-weight:bold;font-size:.85rem;margin-right:6px;
+  }
+
+  /* ---------- MERKKASTEN ---------- */
+  .merkscroll{overflow-x:auto;margin:12px 0;}
+  .merk{
+    border-collapse:collapse;width:100%;min-width:640px;font-size:.87rem;
+    background:#fff;border-radius:14px;overflow:hidden;
+    box-shadow:0 4px 14px rgba(80,30,120,.14);
+  }
+  .merk th{
+    background:linear-gradient(135deg,var(--purple),var(--pink));color:#fff;
+    padding:10px 11px;text-align:left;font-size:.84rem;
+  }
+  .merk td{border-bottom:1px solid #ece4fb;padding:10px 11px;vertical-align:top;}
+  .merk tr:last-child td{border-bottom:none;}
+  .merk .do{font-weight:bold;color:var(--purple);}
+  .merk .ex{font-family:"Courier New",monospace;color:#0e9b95;font-size:.85rem;}
+  .pill{
+    display:inline-block;background:var(--turq);color:#fff;border-radius:20px;
+    padding:2px 10px;font-size:.8rem;font-weight:bold;
+  }
+  .pill.gold{background:linear-gradient(135deg,var(--yellow),#f59e0b);color:#5a3c00;}
+
+  /* ---------- CODE BOX ---------- */
+  .codebox{
+    background:#2a2350;color:#fff;border-radius:14px;padding:14px 16px;margin-top:12px;
+  }
+  .codebox.gold{background:linear-gradient(135deg,#5a3c8a,#3a2a66);}
+  .codebox .clab{font-size:.92rem;margin-bottom:7px;}
+  .codebox input{
+    border:2px solid #6b5fae;border-radius:10px;padding:8px 10px;font-size:1rem;
+    font-family:inherit;width:130px;text-align:center;background:#f3eeff;color:var(--dark);
+  }
+  .btn-unlock{background:var(--yellow);color:#5a3c00;padding:9px 15px;margin-left:6px;}
+  .codebox .fb{font-weight:bold;}
+
+  /* ---------- QUIZ ---------- */
+  .quizq{border:2px solid #efeaf9;border-radius:14px;padding:13px 15px;margin:12px 0;background:#fbfaff;}
+  .quizq.hard{border-color:#ffd98a;background:#fffaf0;}
+  .quizq .q{font-weight:bold;margin-bottom:8px;}
+  .quizq .q .pill{margin-left:4px;}
+  .quizq label{
+    display:block;padding:7px 10px;border-radius:9px;margin:4px 0;cursor:pointer;
+    font-size:.95rem;border:2px solid transparent;background:var(--field);
+  }
+  .quizq label:hover{background:#e7ddfb;}
+  .quizq label.right-a{background:#e3f9ea;border-color:#1faa4a;}
+  .quizq label.wrong-a{background:#fdeaea;border-color:#e23b3b;}
+  .scorebox{
+    text-align:center;font-size:1.1rem;font-weight:bold;margin-top:12px;
+    padding:12px;border-radius:12px;background:#f3eeff;color:var(--purple);display:none;
+  }
+  .scorebox.show{display:block;}
+
+  /* ---------- REFLEXION ---------- */
+  .refrow{
+    display:flex;justify-content:space-between;align-items:center;gap:10px;
+    padding:10px 0;border-bottom:1px solid #ece4fb;flex-wrap:wrap;
+  }
+  .refrow .rtext{font-size:.95rem;flex:1;min-width:200px;}
+  .moods button{
+    background:var(--field);font-size:1.15rem;padding:5px 9px;border-radius:10px;margin-left:4px;
+  }
+  .moods button.sel{background:var(--purple);transform:scale(1.12);}
+  textarea.refl{
+    width:100%;border:2px solid #d2c6ee;border-radius:12px;padding:10px;
+    font-family:inherit;font-size:.95rem;margin-top:8px;resize:vertical;min-height:62px;
+    background:var(--field);
+  }
+  textarea.refl:focus{outline:none;border-color:var(--purple);background:#fff;}
+
+  /* ---------- DOWNLOAD ---------- */
+  .dlbtn{
+    background:linear-gradient(135deg,var(--turq),var(--purple));color:#fff;
+    padding:15px 26px;font-size:1.05rem;border-radius:16px;display:block;
+    margin:8px auto 0;box-shadow:0 8px 20px rgba(80,30,120,.3);
+  }
+  .footer{text-align:center;color:#fff;font-size:.85rem;margin-top:26px;opacity:.85;}
+  code{background:#efe7ff;padding:1px 6px;border-radius:6px;font-size:.95em;}
+  .formula{font-size:1.04rem;font-weight:bold;color:var(--purple);}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ======================= HERO ======================= -->
+  <div class="hero">
+    <h1>📈 Lineare Funktionen<br>Vom Rechnen zum echten Leben</h1>
+    <p>Erst rechnen üben – dann TikTok, Gaming &amp; Co. mit Mathe knacken!</p>
+    <span class="tag">Selbstlernmodul · Klasse 8 · 2 Doppelstunden</span>
+  </div>
+
+  <div class="namebox">
+    <label for="studentName">✏️ Dein Name:</label>
+    <input type="text" id="studentName">
+  </div>
+
+  <!-- ======================= DAS ERWARTET DICH ======================= -->
+  <div class="section">
+    <div class="sec-head">
+      <div class="badge b-yellow">📋</div>
+      <h2>Das erwartet dich heute</h2>
+    </div>
+    <p style="font-size:.97rem;margin-bottom:6px;">
+      Du arbeitest dich durch <b>4 Level</b>. Rechne alles <b>mit Rechenweg ins Heft ✏️</b> –
+      der Taschenrechner ist nur zum <b>Prüfen 🧮</b>. Trag deine Ergebnisse ein und klick auf
+      <span class="pill">Prüfen</span>. Steckst du fest, helfen dir die Tipps.
+    </p>
+    <div class="planrow"><span class="plantime">ca. 20 Min.</span><span class="pt"><b>Level 1</b> – Rechnen aufwärmen</span></div>
+    <div class="planrow"><span class="plantime">ca. 15 Min.</span><span class="pt"><b>📚 Lernstation</b> – Vom Text zur Mathematik</span></div>
+    <div class="planrow"><span class="plantime">ca. 30 Min.</span><span class="pt"><b>Level 2</b> – Gemeinsam üben</span></div>
+    <div class="planrow"><span class="plantime">ca. 35 Min.</span><span class="pt"><b>Level 3</b> – Jetzt du allein</span></div>
+    <div class="planrow"><span class="plantime">freiwillig</span><span class="pt"><b>Level 4</b> – Bonus für schnelle Profis</span></div>
+    <div class="planrow"><span class="plantime">ca. 15 Min.</span><span class="pt"><b>Abschluss</b> – Quiz, Zuordnung &amp; Reflexion</span></div>
+  </div>
+
+  <!-- ======================= LEVEL 1 ======================= -->
+  <div class="section">
+    <div class="sec-head">
+      <div class="badge b-turq">1</div>
+      <h2>Level 1 – Rechnen aufwärmen</h2>
+    </div>
+    <div class="sec-sub">Reine Rechenaufgaben – nur Zahlen und Formeln, noch keine Texte.</div>
+
+    <div class="heft">
+      ✏️ <b>Ins Heft:</b> Schreibe für jede Aufgabe in diesem Level den vollständigen Rechenweg auf –
+      nicht nur das Ergebnis. Tippe die Ergebnisse danach hier ein.
+    </div>
+
+    <div class="info">
+      Erinnerung – eine lineare Funktion sieht so aus:
+      <span class="formula">f(x) = m · x + b</span> &nbsp;·&nbsp;
+      <b>m</b> = Steigung, <b>b</b> = y-Achsenabschnitt (Startwert).
+    </div>
+
+    <!-- A1 -->
+    <h3 class="task-title">Aufgabe A1 · Funktionswert (y-Wert) berechnen</h3>
+    <div class="qa" data-q="Level 1 – A1: f(4)">
+      <div>Gegeben ist <span class="formula">f(x) = 3x + 5</span>.</div>
+      <div class="ask">a) Berechne f(4).</div>
+      <div class="fieldrow">
+        <span class="lab">f(4) =</span>
+        <input class="ans" data-name="A1 f(4)" data-answer="17">
+        <button class="btn-check" onclick="checkBox(this)">Prüfen</button>
+      </div>
+      <div class="fb"></div>
+      <div class="hintwrap">
+        <button class="hbtn" onclick="toggleH(this)">💡 Tipp 1</button>
+        <div class="hint">Setze für jedes <code>x</code> die Zahl 4 ein.</div>
+        <button class="hbtn sol" onclick="toggleH(this)">📝 Lösungsweg</button>
+        <div class="hint solhint">
+          <div class="step">f(4) = 3 · 4 + 5</div>
+          <div class="step">f(4) = 12 + 5</div>
+          <div class="step"><b>f(4) = 17</b></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- A2 -->
+    <h3 class="task-title">Aufgabe A2 · Einen Wert (x-Wert) berechnen</h3>
+    <div class="qa" data-q="Level 1 – A2: x bei f(x)=10">
+      <div>Gegeben ist <span class="formula">f(x) = 2x − 6</span>.</div>
+      <div class="ask">a) Für welches x ist f(x) = 10?</div>
+      <div class="fieldrow">
+        <span class="lab">x =</span>
+        <input class="ans" data-name="A2 x bei f(x)=10" data-answer="8">
+        <button class="btn-check" onclick="checkBox(this)">Prüfen</button>
+      </div>
+      <div class="fb"></div>
+      <div class="hintwrap">
+        <button class="hbtn" onclick="toggleH(this)">💡 Tipp 1</button>
+        <div class="hint">Setze den Funktionsterm gleich 10: <code>2x − 6 = 10</code>.</div>
+        <button class="hbtn" onclick="toggleH(this)">💡 Tipp 2</button>
+        <div class="hint">Forme mit Äquivalenzumformungen nach x um (erst + 6, dann : 2).</div>
+        <button class="hbtn sol" onclick="toggleH(this)">📝 Lösungsweg</button>
+        <div class="hint solhint">
+          <div class="step">2x − 6 = 10 &nbsp;&nbsp;| + 6</div>
+          <div class="step">2x = 16 &nbsp;&nbsp;| : 2</div>
+          <div class="step"><b>x = 8</b></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- A3 -->
+    <h3 class="task-title">Aufgabe A3 · Nullstelle</h3>
+    <div class="qa" data-q="Level 1 – A3: Nullstelle">
+      <div>Gegeben ist <span class="formula">f(x) = −4x + 12</span>.</div>
+      <div class="ask">a) Berechne die Nullstelle.</div>
+      <div class="fieldrow">
+        <span class="lab">x =</span>
+        <input class="ans" data-name="A3 Nullstelle" data-answer="3">
+        <button class="btn-check" onclick="checkBox(this)">Prüfen</button>
+      </div>
+      <div class="fb"></div>
+      <div class="hintwrap">
+        <button class="hbtn" onclick="toggleH(this)">💡 Tipp 1</button>
+        <div class="hint">Bei der Nullstelle ist f(x) = 0. Setze also <code>−4x + 12 = 0</code>.</div>
+        <button class="hbtn sol" onclick="toggleH(this)">📝 Lösungsweg</button>
+        <div class="hint solhint">
+          <div class="step">−4x + 12 = 0 &nbsp;&nbsp;| − 12</div>
+          <div class="step">−4x = −12 &nbsp;&nbsp;| : (−4)</div>
+          <div class="step"><b>x = 3</b></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- A4 -->
+    <h3 class="task-title">Aufgabe A4 · Funktionsgleichung (Steigung &amp; Punkt)</h3>
+    <div class="qa" data-q="Level 1 – A4: b bestimmen">
+      <div>Eine Gerade hat die Steigung <b>m = −3</b> und verläuft durch den Punkt <b>P(2 | 1)</b>.</div>
+      <div class="ask">a) Bestimme b. Die Funktionsgleichung lautet dann f(x) = −3 · x + b.</div>
+      <div class="fieldrow">
+        <span class="lab">b =</span>
+        <input class="ans" data-name="A4 b" data-answer="7">
+        <button class="btn-check" onclick="checkBox(this)">Prüfen</button>
+      </div>
+      <div class="fb"></div>
+      <div class="hintwrap">
+        <button class="hbtn" onclick="toggleH(this)">💡 Tipp 1</button>
+        <div class="hint">Setze den Punkt P in die Gleichung <code>y = m·x + b</code> ein.</div>
+        <button class="hbtn" onclick="toggleH(this)">💡 Tipp 2</button>
+        <div class="hint">Denk daran, auch die bekannte Steigung <code>m = −3</code> einzusetzen.</div>
+        <button class="hbtn sol" onclick="toggleH(this)">📝 Lösungsweg</button>
+        <div class="hint solhint">
+          <div class="step">y = m·x + b &nbsp;→&nbsp; 1 = −3 · 2 + b</div>
+          <div class="step">1 = −6 + b &nbsp;&nbsp;| + 6</div>
+          <div class="step"><b>b = 7</b> &nbsp;→&nbsp; f(x) = −3x + 7</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- A5 NEU: b und Punkt -->
+    <h3 class="task-title">Aufgabe A5 · Funktionsgleichung (y-Achsenabschnitt &amp; Punkt)</h3>
+    <div class="qa" data-q="Level 1 – A5: m bestimmen">
+      <div>Eine Gerade hat den y-Achsenabschnitt <b>b = 5</b> und verläuft durch den Punkt <b>P(3 | 14)</b>.</div>
+      <div class="ask">a) Bestimme m. Die Funktionsgleichung lautet dann f(x) = m · x + 5.</div>
+      <div class="fieldrow">
+        <span class="lab">m =</span>
+        <input class="ans" data-name="A5 m" data-answer="3">
+        <button class="btn-check" onclick="checkBox(this)">Prüfen</button>
+      </div>
+      <div class="fb"></div>
+      <div class="hintwrap">
+        <button class="hbtn" onclick="toggleH(this)">💡 Tipp 1</button>
+        <div class="hint">Setze den Punkt P und den bekannten y-Achsenabschnitt b = 5 in <code>y = m·x + b</code> ein.</div>
+        <button class="hbtn" onclick="toggleH(this)">💡 Tipp 2</button>
+        <div class="hint">Du erhältst eine Gleichung, in der nur noch m unbekannt ist. Forme nach m um.</div>
+        <button class="hbtn sol" onclick="toggleH(this)">📝 Lösungsweg</button>
+        <div class="hint solhint">
+          <div class="step">y = m·x + b &nbsp;→&nbsp; 14 = m · 3 + 5</div>
+          <div class="step">14 = 3m + 5 &nbsp;&nbsp;| − 5</div>
+          <div class="step">9 = 3m &nbsp;&nbsp;| : 3</div>
+          <div class="step"><b>m = 3</b> &nbsp;→&nbsp; f(x) = 3x + 5</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- A6 zwei Punkte -->
+    <h3 class="task-title">Aufgabe A6 · Funktionsgleichung (zwei Punkte)</h3>
+    <div class="qa" data-q="Level 1 – A6: Funktionsgleichung aus zwei Punkten">
+      <div>Eine Gerade verläuft durch <b>P(1 | 4)</b> und <b>Q(3 | 10)</b>.</div>
+      <div class="ask">a) Bestimme m und b.</div>
+      <div class="fieldrow">
+        <span class="lab">m =</span>
+        <input class="ans" data-name="A6 m" data-answer="3">
+        <span class="lab">&nbsp;&nbsp;b =</span>
+        <input class="ans" data-name="A6 b" data-answer="1">
+        <button class="btn-check" onclick="checkBox(this)">Prüfen</button>
+      </div>
+      <div class="fb"></div>
+      <div class="hintwrap">
+        <button class="hbtn" onclick="toggleH(this)">💡 Tipp 1</button>
+        <div class="hint">
+          Berechne zuerst die Steigung:
+          m =
+          <span class="frac"><span class="num">y₂ − y₁</span><span class="den">x₂ − x₁</span></span>
+        </div>
+        <button class="hbtn" onclick="toggleH(this)">💡 Tipp 2</button>
+        <div class="hint">Setze danach einen der beiden Punkte ein, um b zu finden.</div>
+        <button class="hbtn sol" onclick="toggleH(this)">📝 Lösungsweg</button>
+        <div class="hint solhint">
+          <div class="step">
+            m =
+            <span class="frac"><span class="num">10 − 4</span><span class="den">3 − 1</span></span>
+            =
+            <span class="frac"><span class="num">6</span><span class="den">2</span></span>
+            = 3
+          </div>
+          <div class="step">P einsetzen: 4 = 3 · 1 + b &nbsp;→&nbsp; b = 1</div>
+          <div class="step"><b>f(x) = 3x + 1</b></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- A7 NEU: Punktprobe -->
+    <h3 class="task-title">Aufgabe A7 · Punktprobe</h3>
+    <div class="qa" data-q="Level 1 – A7: Punktprobe">
+      <div>
+        Gegeben ist <span class="formula">f(x) = 2x + 5</span>.
+        Mit der <b>Punktprobe</b> prüfst du, ob ein Punkt auf der Geraden liegt.
+      </div>
+      <div class="ask">a) Liegt der Punkt P(4 | 13) auf der Geraden?</div>
+      <div class="fieldrow">
+        <span class="lab">Rechne f(4) =</span>
+        <input class="ans" data-name="A7a f(4)" data-answer="13">
+        <span class="lab">&nbsp;&nbsp;Liegt P auf der Geraden?</span>
+        <select class="ans" data-name="A7a Punkt liegt drauf" data-answer="ja">
+          <option value="">– wählen –</option>
+          <option>ja</option>
+          <option>nein</option>
+        </select>
+      </div>
+      <div class="ask">b) Liegt der Punkt Q(3 | 10) auf der Geraden?</div>
+      <div class="fieldrow">
+        <span class="lab">Rechne f(3) =</span>
+        <input class="ans" data-name="A7b f(3)" data-answer="11">
+        <span class="lab">&nbsp;&nbsp;Liegt Q auf der Geraden?</span>
+        <select class="ans" data-name="A7b Punkt liegt drauf" data-answer="nein">
+          <option value="">– wählen –</option>
+          <option>ja</option>
+          <option>nein</option>
+        </select>
+        <button class="btn-check" onclick="checkBox(this)">Prüfen</button>
+      </div>
+      <div class="fb"></div>
+      <div class="hintwrap">
+        <button class="hbtn" onclick="toggleH(this)">💡 Tipp 1</button>
+        <div class="hint">Setze den <b>x-Wert</b> des Punktes in die Funktion ein und berechne f(x).</div>
+        <button class="hbtn" onclick="toggleH(this)">💡 Tipp 2</button>
+        <div class="hint">Vergleiche dein Ergebnis mit dem <b>y-Wert</b> des Punktes. Sind sie gleich, liegt der Punkt auf der Geraden.</div>
+        <button class="hbtn sol" onclick="toggleH(this)">📝 Lösungsweg</button>
+        <div class="hint solhint">
+          <div class="step">a) f(4) = 2 · 4 + 5 = 13. &nbsp;13 = 13 ✓ → P liegt auf der Geraden (<b>ja</b>).</div>
+          <div class="step">b) f(3) = 2 · 3 + 5 = 11. &nbsp;11 ≠ 10 → Q liegt <b>nicht</b> auf der Geraden (<b>nein</b>).</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- A8 Schnittpunkt -->
+    <h3 class="task-title">Aufgabe A8 · Schnittpunkt</h3>
+    <div class="qa" data-q="Level 1 – A8: Schnittpunkt zweier Geraden">
+      <div>Gegeben sind <span class="formula">f(x) = 2x + 1</span> und <span class="formula">g(x) = −x + 7</span>.</div>
+      <div class="ask">a) Berechne den Schnittpunkt S(x | y).</div>
+      <div class="fieldrow">
+        <span class="lab">x =</span>
+        <input class="ans" data-name="A8 x" data-answer="2">
+        <span class="lab">&nbsp;&nbsp;y =</span>
+        <input class="ans" data-name="A8 y" data-answer="5">
+        <button class="btn-check" onclick="checkBox(this)">Prüfen</button>
+      </div>
+      <div class="fb"></div>
+      <div class="hintwrap">
+        <button class="hbtn" onclick="toggleH(this)">💡 Tipp 1</button>
+        <div class="hint">Überlege zuerst: Welche Größe ist unbekannt? Du suchst die Stelle x, an der f und g denselben Wert haben. Wie findest du sie? – Indem du f(x) = g(x) setzt.</div>
+        <button class="hbtn" onclick="toggleH(this)">💡 Tipp 2</button>
+        <div class="hint">Setze f(x) = g(x) und forme mit <b>Äquivalenzumformungen</b> nach der unbekannten Größe (hier x) um.</div>
+        <button class="hbtn" onclick="toggleH(this)">💡 Tipp 3</button>
+        <div class="hint">Hast du x, setze es in eine der beiden Funktionen ein, um y zu bekommen.</div>
+        <button class="hbtn sol" onclick="toggleH(this)">📝 Lösungsweg</button>
+        <div class="hint solhint">
+          <div class="step">2x + 1 = −x + 7 &nbsp;&nbsp;| + x</div>
+          <div class="step">3x + 1 = 7 &nbsp;&nbsp;| − 1</div>
+          <div class="step">3x = 6 &nbsp;&nbsp;| : 3 &nbsp;→&nbsp; x = 2</div>
+          <div class="step">y = 2 · 2 + 1 = 5</div>
+          <div class="step"><b>S(2 | 5)</b></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================= LERNSTATION ======================= -->
+  <div class="lernstation">
+    <div class="ribbon">📚 NEU – Lernstation: Hier lernst du, wie's geht!</div>
+    <div class="sec-head" style="margin-top:6px;">
+      <div class="badge b-turq">💡</div>
+      <h2>Vom Text zur Mathematik</h2>
+    </div>
+    <div class="sec-sub">
+      Jetzt der wichtige Schritt: Wie wird aus einer Textaufgabe eine Rechnung?
+      Lies das genau – danach geht es in Level 2 los.
+    </div>
+
+    <div class="lcard star">
+      <h4>⭐ Diese zwei Wörter musst du kennen</h4>
+      <div class="step">▸ <b>Funktionswert = y-Wert.</b> Das ist das <b>Ergebnis</b> – der Wert auf der senkrechten Achse.</div>
+      <div class="step">▸ <b>„Wert" = x-Wert.</b> Wenn eine Aufgabe sagt „berechne einen Wert", ist die gesuchte <b>Stelle x</b> gemeint – auf der waagerechten Achse.</div>
+    </div>
+
+    <div class="lcard">
+      <h4>Schritt 1 · Was ist x, was ist f(x)? <span class="pill">immer zuerst!</span></h4>
+      <div class="step">▸ <b>f(x)</b> = das <b>Ergebnis</b>, das du wissen willst. Es <i>hängt ab</i> von etwas anderem.</div>
+      <div class="step">▸ <b>x</b> = das, <i>wovon</i> das Ergebnis abhängt – das, was du <b>einsetzt</b>.</div>
+      <div class="step">▸ <b>Suchtrick:</b> Finde im Text das Wort „<b>pro</b>" oder „<b>je</b>". Direkt danach steht die Einheit von x.</div>
+      <div class="step" style="background:#eafff6;border-radius:8px;padding:6px 9px;">
+        Beispiel: „Ein Sticker kostet 1,50 € <b>pro</b> Stück" → x = Anzahl Sticker, f(x) = Kosten.<br>
+        Beispiel: „Strom kostet 0,30 € <b>pro</b> kWh" → x = kWh, f(x) = Kosten.
+      </div>
+    </div>
+
+    <div class="lcard">
+      <h4>Schritt 2 · Die 3 Fragen</h4>
+      <div class="step"><span class="qmark">1</span><b>Was ist gegeben?</b> Startwert (b) und Veränderung pro Schritt (m).</div>
+      <div class="step"><span class="qmark">2</span><b>Was ist gesucht?</b> Achte auf die <b>Signalwörter</b> (siehe Merkkasten unten).</div>
+      <div class="step"><span class="qmark">3</span><b>Womit rechne ich?</b> Funktionswert, Wert, Nullstelle, Schnittpunkt oder Punktprobe.</div>
+    </div>
+
+    <div class="lcard">
+      <h4>Beispiel</h4>
+      „Lena hat 200 Follower und bekommt täglich 40 dazu."<br>
+      → x = Zeit in Tagen, f(x) = Anzahl Follower → Startwert b = 200, Veränderung m = 40
+      → <span class="formula">f(x) = 40x + 200</span>
+    </div>
+
+    <h3 class="task-title" style="color:#0e9b95;">📌 Merkkasten – Signalwörter erkennen</h3>
+    <div class="sec-sub">Daran erkennst du, was du rechnen musst.</div>
+    <div class="merkscroll">
+      <table class="merk">
+        <tr>
+          <th>Das steht im Text (Signalwort)</th>
+          <th>Das berechnest du</th>
+          <th>Mathematischer Ansatz</th>
+          <th>Beispiel</th>
+        </tr>
+        <tr>
+          <td>„Wie viel … <b>nach 12 Tagen</b>?" – ein Zeitpunkt (x) ist gegeben</td>
+          <td class="do">einen Funktionswert berechnen</td>
+          <td>Zahl für x einsetzen, f(x) ausrechnen</td>
+          <td class="ex">f(12) = 40·12 + 200</td>
+        </tr>
+        <tr>
+          <td>„<b>Wann</b> erreicht … genau 500?" – ein Funktionswert (y-Wert) ist gegeben, der x-Wert gesucht</td>
+          <td class="do">einen Wert berechnen</td>
+          <td>f(x) = 500 setzen, nach x auflösen</td>
+          <td class="ex">40x + 200 = 500</td>
+        </tr>
+        <tr>
+          <td>„Wann ist … <b>leer / aufgebraucht / 0 / fertig</b>?"</td>
+          <td class="do">eine Nullstelle berechnen</td>
+          <td>f(x) = 0 setzen, nach x auflösen</td>
+          <td class="ex">−16x + 240 = 0</td>
+        </tr>
+        <tr>
+          <td>„Wann ist … <b>halb voll / halb leer</b>?"</td>
+          <td class="do">einen Wert berechnen</td>
+          <td>f(x) = <b>halber Startwert</b> setzen, nach x auflösen</td>
+          <td class="ex">−16x + 240 = 120</td>
+        </tr>
+        <tr>
+          <td>„Wann sind <b>beide gleich</b>? / Wann <b>überholt</b> …? / Ab wann <b>lohnt sich</b> …?"</td>
+          <td class="do">einen Schnittpunkt berechnen</td>
+          <td>f(x) = g(x) setzen, nach x auflösen</td>
+          <td class="ex">8x + 60 = 12x + 20</td>
+        </tr>
+        <tr>
+          <td>„<b>Liegt</b> Punkt P auf der Geraden? / <b>Stimmt</b> der Wert / die Angabe?"</td>
+          <td class="do">eine Punktprobe machen</td>
+          <td>x-Wert von P einsetzen; ist f(x) = y-Wert von P?</td>
+          <td class="ex">f(4) = 2·4+5; ist das 13?</td>
+        </tr>
+        <tr>
+          <td>„<b>Stelle die Funktionsgleichung auf</b>" – Startwert &amp; Veränderung gegeben</td>
+          <td class="do">eine Funktionsgleichung aufstellen</td>
+          <td>m und b bestimmen: f(x) = m·x + b</td>
+          <td class="ex">Start 200, +40/Tag → 40x+200</td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="heft">
+      ✏️ <b>Ins Heft:</b> Übertrage den Merkkasten und die zwei wichtigen Wörter (oben ⭐) in dein Heft.
+      Du brauchst sie ab jetzt bei jeder Aufgabe!
+    </div>
+  </div>
+
+  <!-- ======================= LEVEL 2 ======================= -->
+  <div class="section">
+    <div class="sec-head">
+      <div class="badge b-pink">2</div>
+      <h2>Level 2 – Gemeinsam üben</h2>
+    </div>
+    <div class="sec-sub">
+      Du wirst Schritt für Schritt geführt. <b>Finde immer zuerst heraus, was x und was f(x) ist</b> –
+      danach wählst du den Ansatz und rechnest.
+    </div>
+    <div class="heft">✏️ <b>Ins Heft:</b> Schreibe jede Aufgabe (B1–B5) mit vollständigem Rechenweg ins Heft.</div>
+
+    <!-- ============ B1 TikTok ============ -->
+    <h3 class="task-title">Aufgabe B1 · TikTok-Follower 🎵</h3>
+    <div class="info">
+      Lina postet ihr erstes TikTok-Video. Sie startet mit <b>50 Followern</b> und
+      bekommt jeden Tag <b>30 neue Follower</b> dazu.
+    </div>
+    <div class="findxy">
+      🔍 <b>Zuerst:</b> Was ist x, was ist f(x)?
+      <div class="fieldrow" style="margin-top:6px;">
+        <span class="lab">x ist …</span>
+        <select class="ans" data-name="B1 x" data-answer="die Zeit in Tagen">
+          <option value="">– wählen –</option>
+          <option>die Zeit in Tagen</option>
+          <option>die Anzahl der Follower</option>
+        </select>
+        <span class="lab">&nbsp; f(x) ist …</span>
+        <select class="ans" data-name="B1 f(x)" data-answer="die Anzahl der Follower">
+          <option value="">– wählen –</option>
+          <option>die Zeit in Tagen</option>
+          <option>die Anzahl der Follower</option>
+        </select>
+        <button class="btn-check" onclick="checkBox(this)">Prüfen</button>
+      </div>
+      <div class="fb"></div>
+    </div>
+
+    <div class="qa" data-q="B1 a) Funktionsgleichung aufstellen">
+      <div class="ask">a) Stelle eine passende Funktionsgleichung auf.</div>
+      <div class="fieldrow">
+        <span class="lab">f(x) =</span>
+        <input class="ans" data-name="B1a m" data-answer="30"><span class="lab">· x +</span>
+        <input class="ans" data-name="B1a b" data-answer="50">
+        <button class="btn-check" onclick="checkBox(this)">Prüfen</button>
+      </div>
+      <div class="fb"></div>
+      <div class="heft">✏️ <b>Ins Heft:</b> Zeichne den Graphen dieser Funktion in dein Heft (Wertetabelle hilft!).</div>
+      <div class="hintwrap">
+        <button class="hbtn" onclick="toggleH(this)">💡 Tipp 1</button>
+        <div class="hint">Der Startwert am Tag 0 ist b. Was jeden Tag dazukommt, ist die Steigung m.</div>
+        <button class="hbtn sol" onclick="toggleH(this)">📝 Lösungsweg</button>
+        <div class="hint solhint">Startwert b = 50, pro Tag +30 → m = 30. <b>f(x) = 30x + 50</b></div>
+      </div>
+    </div>
+
+    <div class="qa" data-q="B1 b) Follower nach 14 Tagen">
+      <div class="ask">b) Wie viele Follower hat Lina nach 14 Tagen?</div>
+      <div class="fieldrow">
+        <span class="lab">Was musst du berechnen?</span>
+        <select class="ans" data-name="B1b Ansatz" data-answer="einen Funktionswert berechnen">
+          <option value="">– bitte wählen –</option>
+          <option>einen Funktionswert berechnen</option>
+          <option>einen Wert berechnen</option>
+          <option>eine Nullstelle berechnen</option>
+          <option>einen Schnittpunkt berechnen</option>
+          <option>eine Punktprobe machen</option>
+        </select>
+      </div>
+      <div class="fieldrow">
+        <input class="ans res" data-name="B1b Ergebnis" data-answer="470" placeholder="z. B. 150 Follower">
+        <button class="btn-check" onclick="checkBox(this)">Prüfen</button>
+      </div>
+      <div class="fb"></div>
+      <div class="hintwrap">
+        <button class="hbtn" onclick="toggleH(this)">💡 Tipp 1 · Ansatz finden</button>
+        <div class="hint">Frag dich: Ist die Zeit hier <i>gegeben</i> oder <i>gesucht</i>? Schau dann in den Merkkasten.</div>
+        <button class="hbtn" onclick="toggleH(this)">💡 Tipp 2 · Mathematischer Ansatz</button>
+        <div class="hint">Setze die gegebene Zeit für x in deine Funktionsgleichung ein.</div>
+        <button class="hbtn sol" onclick="toggleH(this)">📝 Lösungsweg</button>
+        <div class="hint solhint">
+          <div class="step">f(14) = 30 · 14 + 50</div>
+          <div class="step">f(14) = 420 + 50</div>
+          <div class="step"><b>f(14) = 470 Follower</b></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa" data-q="B1 c) Tage bis 1000 Follower">
+      <div class="ask">c) Nach wie vielen <b>ganzen Tagen</b> hat Lina mindestens 1000 Follower?</div>
+      <div class="fieldrow">
+        <span class="lab">Was musst du berechnen?</span>
+        <select class="ans" data-name="B1c Ansatz" data-answer="einen Wert berechnen">
+          <option value="">– bitte wählen –</option>
+          <option>einen Funktionswert berechnen</option>
+          <option>einen Wert berechnen</option>
+          <option>eine Nullstelle berechnen</option>
+          <option>einen Schnittpunkt berechnen</option>
+          <option>eine Punktprobe machen</option>
+        </select>
+      </div>
+      <div class="fieldrow">
+        <input class="ans res" data-name="B1c Ergebnis" data-answer="32" placeholder="z. B. 20 Tage">
+        <button class="btn-check" onclick="checkBox(this)">Prüfen</button>
+      </div>
+      <div class="fb"></div>
+      <div class="hintwrap">
+        <button class="hbtn" onclick="toggleH(this)">💡 Tipp 1 · Ansatz finden</button>
+        <div class="hint">Lies genau: Welche Größe ist diesmal die bekannte Zahl – die Zeit oder die Followerzahl?</div>
+        <button class="hbtn" onclick="toggleH(this)">💡 Tipp 2 · Mathematischer Ansatz</button>
+        <div class="hint">Setze deine Funktion gleich 1000 und forme nach x um. Kommt keine ganze Zahl heraus, runde auf.</div>
+        <button class="hbtn sol" onclick="toggleH(this)">📝 Lösungsweg</button>
+        <div class="hint solhint">
+          <div class="step">30x + 50 = 1000 &nbsp;&nbsp;| − 50</div>
+          <div class="step">30x = 950 &nbsp;&nbsp;| : 30</div>
+          <div class="step">x = 31,67 → aufrunden</div>
+          <div class="step"><b>Nach 32 Tagen</b></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ B2 Sticker-Shop ============ -->
+    <h3 class="task-title">Aufgabe B2 · K-Pop-Sticker-Shop 💌</h3>
+    <div class="info">
+      In einem K-Pop-Onlineshop kostet jeder Sticker <b>1,50 €</b>.
+      Dazu kommen einmalig <b>3 € Versandkosten</b>.
+    </div>
+    <div class="findxy">
+      🔍 <b>Zuerst:</b> Was ist x, was ist f(x)? Achtung – hier ist x <u>nicht</u> die Zeit! Nutze den „pro"-Trick.
+      <div class="fieldrow" style="margin-top:6px;">
+        <span class="lab">x ist …</span>
+        <select class="ans" data-name="B2 x" data-answer="die Anzahl der Sticker">
+          <option value="">– wählen –</option>
+          <option>die Anzahl der Sticker</option>
+          <option>die Gesamtkosten in €</option>
+        </select>
+        <span class="lab">&nbsp; f(x) ist …</span>
+        <select class="ans" data-name="B2 f(x)" data-answer="die Gesamtkosten in €">
+          <option value="">– wählen –</option>
+          <option>die Anzahl der Sticker</option>
+          <option>die Gesamtkosten in €</option>
+        </select>
+        <button class="btn-check" onclick="checkBox(this)">Prüfen</button>
+      </div>
+      <div class="fb"></div>
+    </div>
+
+    <div class="qa" data-q="B2 a) Funktionsgleichung aufstellen">
+      <div class="ask">a) Stelle eine passende Funktionsgleichung auf.</div>
+      <div class="fieldrow">
+        <span class="lab">f(x) =</span>
+        <input class="ans" data-name="B2a m" data-answer="1.5"><span class="lab">· x +</span>
+        <input class="ans" data-name="B2a b" data-answer="3">
+        <button class="btn-check" onclick="checkBox(this)">Prüfen</button>
+      </div>
+      <div class="fb"></div>
+      <div class="hintwrap">
+        <button class="hbtn" onclick="toggleH(this)">💡 Tipp 1</button>
+        <div class="hint">Was kostet <b>ein einzelner</b> Sticker? Das ist m. Was kommt <b>einmalig</b> dazu? Das ist b.</div>
+        <button class="hbtn sol" onclick="toggleH(this)">📝 Lösungsweg</button>
+        <div class="hint solhint">m = 1,50 (pro Sticker), b = 3 (Versand) → <b>f(x) = 1,5x + 3</b></div>
+      </div>
+    </div>
+
+    <div class="qa" data-q="B2 b) Kosten für 12 Sticker">
+      <div class="ask">b) Was kosten 12 Sticker insgesamt?</div>
+      <div class="fieldrow">
+        <span class="lab">Was musst du berechnen?</span>
+        <select class="ans" data-name="B2b Ansatz" data-answer="einen Funktionswert berechnen">
+          <option value="">– bitte wählen –</option>
+          <option>einen Funktionswert berechnen</option>
+          <option>einen Wert berechnen</option>
+          <option>eine Nullstelle berechnen</option>
+          <option>einen Schnittpunkt berechnen</option>
+          <option>eine Punktprobe machen</option>
+        </select>
+      </div>
+      <div class="fieldrow">
+        <input class="ans res" data-name="B2b Ergebnis" data-answer="21" placeholder="z. B. 14 €">
+        <button class="btn-check" onclick="checkBox(this)">Prüfen</button>
+      </div>
+      <div class="fb"></div>
+      <div class="hintwrap">
+        <button class="hbtn" onclick="toggleH(this)">💡 Tipp 1 · Ansatz finden</button>
+        <div class="hint">Die Anzahl der Sticker (12) ist gegeben. Ist das die Größe x oder f(x)?</div>
+        <button class="hbtn" onclick="toggleH(this)">💡 Tipp 2 · Mathematischer Ansatz</button>
+        <div class="hint">Setze die Stickerzahl für x in deine Funktionsgleichung ein.</div>
+        <button class="hbtn sol" onclick="toggleH(this)">📝 Lösungsweg</button>
+        <div class="hint solhint">
+          <div class="step">f(12) = 1,5 · 12 + 3</div>
+          <div class="step">f(12) = 18 + 3</div>
+          <div class="step"><b>f(12) = 21 €</b></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa" data-q="B2 c) Sticker für 30 Euro">
+      <div class="ask">c) Wie viele Sticker bekommst du für 30 €?</div>
+      <div class="fieldrow">
+        <span class="lab">Was musst du berechnen?</span>
+        <select class="ans" data-name="B2c Ansatz" data-answer="einen Wert berechnen">
+          <option value="">– bitte wählen –</option>
+          <option>einen Funktionswert berechnen</option>
+          <option>einen Wert berechnen</option>
+          <option>eine Nullstelle berechnen</option>
+          <option>einen Schnittpunkt berechnen</option>
+          <option>eine Punktprobe machen</option>
+        </select>
+      </div>
+      <div class="fieldrow">
+        <input class="ans res" data-name="B2c Ergebnis" data-answer="18" placeholder="z. B. 25 Sticker">
+        <button class="btn-check" onclick="checkBox(this)">Prüfen</button>
+      </div>
+      <div class="fb"></div>
+      <div class="hintwrap">
+        <button class="hbtn" onclick="toggleH(this)">💡 Tipp 1 · Ansatz finden</button>
+        <div class="hint">Diesmal sind die Kosten (30 €) bekannt. Welche Größe ist damit gegeben – x oder f(x)?</div>
+        <button class="hbtn" onclick="toggleH(this)">💡 Tipp 2 · Mathematischer Ansatz</button>
+        <div class="hint">Setze deine Funktion gleich 30 und forme nach x um.</div>
+        <button class="hbtn sol" onclick="toggleH(this)">📝 Lösungsweg</button>
+        <div class="hint solhint">
+          <div class="step">1,5x + 3 = 30 &nbsp;&nbsp;| − 3</div>
+          <div class="step">1,5x = 27 &nbsp;&nbsp;| : 1,5</div>
+          <div class="step"><b>x = 18 Sticker</b></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ B3 Powerbank ============ -->
+    <h3 class="task-title">Aufgabe B3 · Powerbank beim Zocken 🔋</h3>
+    <div class="info">
+      Deine Powerbank ist mit <b>20 000 mAh</b> voll geladen.
+      Beim Zocken verbraucht dein Handy <b>2 500 mAh pro Stunde</b>.
+    </div>
+    <div class="findxy">
+      🔍 <b>Zuerst:</b> Was ist x, was ist f(x)?
+      <div class="fieldrow" style="margin-top:6px;">
+        <span class="lab">x ist …</span>
+        <select class="ans" data-name="B3 x" data-answer="die Zeit in Stunden">
+          <option value="">– wählen –</option>
+          <option>die Zeit in Stunden</option>
+          <option>die Ladung in mAh</option>
+        </select>
+        <span class="lab">&nbsp; f(x) ist …</span>
+        <select class="ans" data-name="B3 f(x)" data-answer="die Ladung in mAh">
+          <option value="">– wählen –</option>
+          <option>die Zeit in Stunden</option>
+          <option>die Ladung in mAh</option>
+        </select>
+        <button class="btn-check" onclick="checkBox(this)">Prüfen</button>
+      </div>
+      <div class="fb"></div>
+    </div>
+
+    <div class="qa" data-q="B3 a) Funktionsgleichung aufstellen">
+      <div class="ask">a) Stelle eine passende Funktionsgleichung auf.</div>
+      <div class="fieldrow">
+        <span class="lab">f(x) =</span>
+        <input class="ans" data-name="B3a m" data-answer="-2500"><span class="lab">· x +</span>
+        <input class="ans" data-name="B3a b" data-answer="20000">
+        <button class="btn-check" onclick="checkBox(this)">Prüfen</button>
+      </div>
+      <div class="fb"></div>
+      <div class="hintwrap">
+        <button class="hbtn" onclick="toggleH(this)">💡 Tipp 1</button>
+        <div class="hint">Die Ladung <b>wird weniger</b> – überlege, welches Vorzeichen die Steigung m dann hat.</div>
+        <button class="hbtn sol" onclick="toggleH(this)">📝 Lösungsweg</button>
+        <div class="hint solhint">Start b = 20 000, pro Stunde −2 500 → <b>f(x) = −2500x + 20000</b></div>
+      </div>
+    </div>
+
+    <div class="qa" data-q="B3 b) Wann halb leer">
+      <div class="ask">b) Nach wie vielen Stunden ist die Powerbank <b>halb leer</b>?</div>
+      <div class="fieldrow">
+        <span class="lab">Was musst du berechnen?</span>
+        <select class="ans" data-name="B3b Ansatz" data-answer="einen Wert berechnen">
+          <option value="">– bitte wählen –</option>
+          <option>einen Funktionswert berechnen</option>
+          <option>einen Wert berechnen</option>
+          <option>eine Nullstelle berechnen</option>
+          <option>einen Schnittpunkt berechnen</option>
+          <option>eine Punktprobe machen</option>
+        </select>
+      </div>
+      <div class="fieldrow">
+        <input class="ans res" data-name="B3b Ergebnis" data-answer="4" placeholder="z. B. 6 Stunden">
+        <button class="btn-check" onclick="checkBox(this)">Prüfen</button>
+      </div>
+      <div class="fb"></div>
+      <div class="hintwrap">
+        <button class="hbtn" onclick="toggleH(this)">💡 Tipp 1 · Ansatz finden</button>
+        <div class="hint">„Halb leer" – wie viele mAh sind das? Rechne zuerst die Hälfte des Startwertes aus.</div>
+        <button class="hbtn" onclick="toggleH(this)">💡 Tipp 2 · Mathematischer Ansatz</button>
+        <div class="hint">Setze deine Funktion gleich diesem halben Wert und forme nach x um.</div>
+        <button class="hbtn sol" onclick="toggleH(this)">📝 Lösungsweg</button>
+        <div class="hint solhint">
+          <div class="step">Halber Startwert: 20 000 : 2 = 10 000</div>
+          <div class="step">−2500x + 20000 = 10000 &nbsp;&nbsp;| − 20000</div>
+          <div class="step">−2500x = −10000 &nbsp;&nbsp;| : (−2500)</div>
+          <div class="step"><b>x = 4 Stunden</b></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa" data-q="B3 c) Wann ganz leer">
+      <div class="ask">c) Nach wie vielen Stunden ist die Powerbank <b>ganz leer</b>?</div>
+      <div class="fieldrow">
+        <span class="lab">Was musst du berechnen?</span>
+        <select class="ans" data-name="B3c Ansatz" data-answer="eine Nullstelle berechnen">
+          <option value="">– bitte wählen –</option>
+          <option>einen Funktionswert berechnen</option>
+          <option>einen Wert berechnen</option>
+          <option>eine Nullstelle berechnen</option>
+          <option>einen Schnittpunkt berechnen</option>
+          <option>eine Punktprobe machen</option>
+        </select>
+      </div>
+      <div class="fieldrow">
+        <input class="ans res" data-name="B3c Ergebnis" data-answer="8" placeholder="z. B. 10 Stunden">
+        <button class="btn-check" onclick="checkBox(this)">Prüfen</button>
+      </div>
+      <div class="fb"></div>
+      <div class="hintwrap">
+        <button class="hbtn" onclick="toggleH(this)">💡 Tipp 1 · Ansatz finden</button>
+        <div class="hint">Was bedeutet „ganz leer" für die Ladung? Welchen Wert hat f(x) dann?</div>
+        <button class="hbtn" onclick="toggleH(this)">💡 Tipp 2 · Mathematischer Ansatz</button>
+        <div class="hint">Setze f(x) = 0 und forme nach x um.</div>
+        <button class="hbtn sol" onclick="toggleH(this)">📝 Lösungsweg</button>
+        <div class="hint solhint">
+          <div class="step">−2500x + 20000 = 0 &nbsp;&nbsp;| − 20000</div>
+          <div class="step">−2500x = −20000 &nbsp;&nbsp;| : (−2500)</div>
+          <div class="step"><b>x = 8 Stunden</b></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ B4 K-Pop sparen ============ -->
+    <h3 class="task-title">Aufgabe B4 · Sparen fürs K-Pop-Konzert 💜</h3>
+    <div class="info">
+      Mia und Jana sparen für ein Konzert von <b>Stray Kids</b>.<br>
+      <b>Mia</b> hat schon <b>60 €</b> und legt jede Woche <b>8 €</b> dazu.<br>
+      <b>Jana</b> hat erst <b>20 €</b>, legt aber jede Woche <b>12 €</b> dazu.
+    </div>
+    <div class="findxy">
+      🔍 <b>Zuerst:</b> Was ist x, was ist f(x)?
+      <div class="fieldrow" style="margin-top:6px;">
+        <span class="lab">x ist …</span>
+        <select class="ans" data-name="B4 x" data-answer="die Zeit in Wochen">
+          <option value="">– wählen –</option>
+          <option>die Zeit in Wochen</option>
+          <option>das gesparte Geld in €</option>
+        </select>
+        <span class="lab">&nbsp; f(x) ist …</span>
+        <select class="ans" data-name="B4 f(x)" data-answer="das gesparte Geld in €">
+          <option value="">– wählen –</option>
+          <option>die Zeit in Wochen</option>
+          <option>das gesparte Geld in €</option>
+        </select>
+        <button class="btn-check" onclick="checkBox(this)">Prüfen</button>
+      </div>
+      <div class="fb"></div>
+    </div>
+
+    <div class="qa" data-q="B4 a) Beide Funktionsgleichungen aufstellen">
+      <div class="ask">a) Stelle für beide eine passende Funktionsgleichung auf.</div>
+      <div class="fieldrow">
+        <span class="lab">Mia: M(x) =</span>
+        <input class="ans" data-name="B4a Mia-m" data-answer="8"><span class="lab">· x +</span>
+        <input class="ans" data-name="B4a Mia-b" data-answer="60">
+      </div>
+      <div class="fieldrow">
+        <span class="lab">Jana: J(x) =</span>
+        <input class="ans" data-name="B4a Jana-m" data-answer="12"><span class="lab">· x +</span>
+        <input class="ans" data-name="B4a Jana-b" data-answer="20">
+        <button class="btn-check" onclick="checkBox(this)">Prüfen</button>
+      </div>
+      <div class="fb"></div>
+      <div class="hintwrap">
+        <button class="hbtn" onclick="toggleH(this)">💡 Tipp 1</button>
+        <div class="hint">Das schon gesparte Geld ist b, das wöchentlich Gesparte ist m.</div>
+        <button class="hbtn sol" onclick="toggleH(this)">📝 Lösungsweg</button>
+        <div class="hint solhint"><b>M(x) = 8x + 60</b> &nbsp;und&nbsp; <b>J(x) = 12x + 20</b></div>
+      </div>
+    </div>
+
+    <div class="qa" data-q="B4 b) Woche mit gleichem Stand">
+      <div class="ask">b) Nach wie vielen Wochen haben beide gleich viel Geld?</div>
+      <div class="fieldrow">
+        <span class="lab">Was musst du berechnen?</span>
+        <select class="ans" data-name="B4b Ansatz" data-answer="einen Schnittpunkt berechnen">
+          <option value="">– bitte wählen –</option>
+          <option>einen Funktionswert berechnen</option>
+          <option>einen Wert berechnen</option>
+          <option>eine Nullstelle berechnen</option>
+          <option>einen Schnittpunkt berechnen</option>
+          <option>eine Punktprobe machen</option>
+        </select>
+      </div>
+      <div class="fieldrow">
+        <input class="ans res" data-name="B4b Ergebnis" data-answer="10" placeholder="z. B. 6 Wochen">
+        <button class="btn-check" onclick="checkBox(this)">Prüfen</button>
+      </div>
+      <div class="fb"></div>
+      <div class="hintwrap">
+        <button class="hbtn" onclick="toggleH(this)">💡 Tipp 1 · Ansatz finden</button>
+        <div class="hint">Es geht um zwei Personen. Was haben Mia und Jana zum gesuchten Zeitpunkt gemeinsam?</div>
+        <button class="hbtn" onclick="toggleH(this)">💡 Tipp 2 · Mathematischer Ansatz</button>
+        <div class="hint">Setze die beiden Funktionsterme gleich: M(x) = J(x). Forme nach x um.</div>
+        <button class="hbtn sol" onclick="toggleH(this)">📝 Lösungsweg</button>
+        <div class="hint solhint">
+          <div class="step">8x + 60 = 12x + 20 &nbsp;&nbsp;| − 8x</div>
+          <div class="step">60 = 4x + 20 &nbsp;&nbsp;| − 20</div>
+          <div class="step">40 = 4x &nbsp;&nbsp;| : 4</div>
+          <div class="step"><b>x = 10 Wochen</b></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa" data-q="B4 c) Geldbetrag in Woche 10">
+      <div class="ask">c) Wie viel Geld hat dann jede der beiden?</div>
+      <div class="fieldrow">
+        <span class="lab">Was musst du berechnen?</span>
+        <select class="ans" data-name="B4c Ansatz" data-answer="einen Funktionswert berechnen">
+          <option value="">– bitte wählen –</option>
+          <option>einen Funktionswert berechnen</option>
+          <option>einen Wert berechnen</option>
+          <option>eine Nullstelle berechnen</option>
+          <option>einen Schnittpunkt berechnen</option>
+          <option>eine Punktprobe machen</option>
+        </select>
+      </div>
+      <div class="fieldrow">
+        <input class="ans res" data-name="B4c Ergebnis" data-answer="140" placeholder="z. B. 95 €">
+        <button class="btn-check" onclick="checkBox(this)">Prüfen</button>
+      </div>
+      <div class="fb"></div>
+      <div class="hintwrap">
+        <button class="hbtn" onclick="toggleH(this)">💡 Tipp 1 · Ansatz finden</button>
+        <div class="hint">Du kennst aus b) jetzt die Woche. Welche Größe ist damit gegeben, welche gesucht?</div>
+        <button class="hbtn" onclick="toggleH(this)">💡 Tipp 2 · Mathematischer Ansatz</button>
+        <div class="hint">Setze die Woche aus b) in eine der beiden Funktionen ein.</div>
+        <button class="hbtn sol" onclick="toggleH(this)">📝 Lösungsweg</button>
+        <div class="hint solhint">
+          <div class="step">M(10) = 8 · 10 + 60 = 80 + 60</div>
+          <div class="step"><b>= 140 €</b> (Probe: J(10) = 12·10+20 = 140 € ✓)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ B5 Abo ============ -->
+    <h3 class="task-title">Aufgabe B5 · Abo oder Kaufen? 🎮</h3>
+    <div class="info">
+      Du willst ein beliebtes Game-Paket nutzen. Es gibt zwei Möglichkeiten:<br>
+      <b>Möglichkeit A:</b> 12 € pro Monat im Abo.<br>
+      <b>Möglichkeit B:</b> einmalig 60 € kaufen + 4 € pro Monat für Updates.
+    </div>
+    <div class="findxy">
+      🔍 <b>Zuerst:</b> Was ist x, was ist f(x)?
+      <div class="fieldrow" style="margin-top:6px;">
+        <span class="lab">x ist …</span>
+        <select class="ans" data-name="B5 x" data-answer="die Zeit in Monaten">
+          <option value="">– wählen –</option>
+          <option>die Zeit in Monaten</option>
+          <option>die Gesamtkosten in €</option>
+        </select>
+        <span class="lab">&nbsp; f(x) ist …</span>
+        <select class="ans" data-name="B5 f(x)" data-answer="die Gesamtkosten in €">
+          <option value="">– wählen –</option>
+          <option>die Zeit in Monaten</option>
+          <option>die Gesamtkosten in €</option>
+        </select>
+        <button class="btn-check" onclick="checkBox(this)">Prüfen</button>
+      </div>
+      <div class="fb"></div>
+    </div>
+
+    <div class="qa" data-q="B5 a) Beide Kostenfunktionen">
+      <div class="ask">a) Stelle für beide Möglichkeiten eine passende Funktionsgleichung auf.</div>
+      <div class="fieldrow">
+        <span class="lab">A(x) =</span>
+        <input class="ans" data-name="B5a A-m" data-answer="12"><span class="lab">· x +</span>
+        <input class="ans" data-name="B5a A-b" data-answer="0">
+      </div>
+      <div class="fieldrow">
+        <span class="lab">B(x) =</span>
+        <input class="ans" data-name="B5a B-m" data-answer="4"><span class="lab">· x +</span>
+        <input class="ans" data-name="B5a B-b" data-answer="60">
+        <button class="btn-check" onclick="checkBox(this)">Prüfen</button>
+      </div>
+      <div class="fb"></div>
+      <div class="hintwrap">
+        <button class="hbtn" onclick="toggleH(this)">💡 Tipp 1</button>
+        <div class="hint">Bei A gibt es keine Startkosten. Bei B ist der einmalige Kauf der Startwert b.</div>
+        <button class="hbtn sol" onclick="toggleH(this)">📝 Lösungsweg</button>
+        <div class="hint solhint"><b>A(x) = 12x</b> &nbsp;und&nbsp; <b>B(x) = 4x + 60</b></div>
+      </div>
+    </div>
+
+    <div class="qa" data-q="B5 b) Monat mit gleichen Kosten">
+      <div class="ask">b) Bei wie vielen Monaten kosten beide Möglichkeiten gleich viel?</div>
+      <div class="fieldrow">
+        <span class="lab">Was musst du berechnen?</span>
+        <select class="ans" data-name="B5b Ansatz" data-answer="einen Schnittpunkt berechnen">
+          <option value="">– bitte wählen –</option>
+          <option>einen Funktionswert berechnen</option>
+          <option>einen Wert berechnen</option>
+          <option>eine Nullstelle berechnen</option>
+          <option>einen Schnittpunkt berechnen</option>
+          <option>eine Punktprobe machen</option>
+        </select>
+      </div>
+      <div class="fieldrow">
+        <input class="ans res" data-name="B5b Ergebnis" data-answer="7.5" placeholder="z. B. 5 Monate">
+        <button class="btn-check" onclick="checkBox(this)">Prüfen</button>
+      </div>
+      <div class="fb"></div>
+      <div class="hintwrap">
+        <button class="hbtn" onclick="toggleH(this)">💡 Tipp 1 · Ansatz finden</button>
+        <div class="hint">Wann ist es egal, welche Möglichkeit du wählst? Was haben beide dann gemeinsam?</div>
+        <button class="hbtn" onclick="toggleH(this)">💡 Tipp 2 · Mathematischer Ansatz</button>
+        <div class="hint">Setze die beiden Kostenfunktionen gleich: A(x) = B(x).</div>
+        <button class="hbtn sol" onclick="toggleH(this)">📝 Lösungsweg</button>
+        <div class="hint solhint">
+          <div class="step">12x = 4x + 60 &nbsp;&nbsp;| − 4x</div>
+          <div class="step">8x = 60 &nbsp;&nbsp;| : 8</div>
+          <div class="step"><b>x = 7,5 Monate</b></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa" data-q="B5 c) Welche Möglichkeit lohnt sich länger?">
+      <div class="ask">c) Was lohnt sich, wenn du das Game länger als 8 Monate nutzt?</div>
+      <div class="fieldrow">
+        <select class="ans" data-name="B5c Entscheidung" data-answer="Möglichkeit B (kaufen)">
+          <option value="">– bitte wählen –</option>
+          <option>Möglichkeit A (Abo)</option>
+          <option>Möglichkeit B (kaufen)</option>
+        </select>
+        <button class="btn-check" onclick="checkBox(this)">Prüfen</button>
+      </div>
+      <div class="fb"></div>
+      <div class="hintwrap">
+        <button class="hbtn" onclick="toggleH(this)">💡 Tipp 1</button>
+        <div class="hint">Rechne für eine Monatszahl nach Monat 8 beide Kosten aus und vergleiche, welche kleiner ist.</div>
+        <button class="hbtn sol" onclick="toggleH(this)">📝 Lösungsweg</button>
+        <div class="hint solhint">
+          <div class="step">A(10) = 120 € &nbsp;·&nbsp; B(10) = 4·10+60 = 100 €</div>
+          <div class="step">Ab Monat 8 ist B günstiger → <b>Möglichkeit B (kaufen)</b></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================= LEVEL 3 ======================= -->
+  <div class="section">
+    <div class="sec-head">
+      <div class="badge b-purple">3</div>
+      <h2>Level 3 – Jetzt du allein!</h2>
+    </div>
+    <div class="sec-sub">
+      Diese Aufgaben löst du selbstständig. Die Tipps geben dir nur einen kleinen Anstoß.
+    </div>
+    <div class="heft">
+      ✏️ <b>Ins Heft:</b> Schreibe jede Aufgabe (C1–C6) mit Rechenweg ins Heft – und notiere
+      <b>immer zuerst: Was ist x? Was ist f(x)?</b>
+    </div>
+    <div class="calc">
+      🧮 C1–C4 kannst du selbst kontrollieren. Für C5 und C6 brauchst du einen
+      <b>Code von deiner Lehrkraft</b>.
+    </div>
+
+    <!-- C1 Instagram -->
+    <h3 class="task-title">Aufgabe C1 · Instagram-Wachstum 📸</h3>
+    <div class="info">
+      Tom hat <b>120 Follower</b> auf Instagram und gewinnt täglich <b>25 Follower</b> dazu.<br>
+      👉 Finde zuerst heraus: Was ist x? Was ist f(x)?<br>
+      a) Stelle eine passende Funktionsgleichung auf. &nbsp;
+      b) Wie viele Follower hat Tom nach 20 Tagen? &nbsp;
+      c) Nach wie vielen <b>ganzen Tagen</b> hat er mindestens 1000 Follower?
+    </div>
+    <div class="qa" data-q="C1 Lösungen">
+      <div class="fieldrow"><span class="lab">a) f(x) =</span>
+        <input class="ans" data-name="C1a m" data-answer="25"><span class="lab">· x +</span>
+        <input class="ans" data-name="C1a b" data-answer="120"></div>
+      <div class="ask">b) Follower nach 20 Tagen</div>
+      <div class="fieldrow">
+        <input class="ans res" data-name="C1b" data-answer="620" placeholder="z. B. 300 Follower"></div>
+      <div class="ask">c) Tage bis mindestens 1000 Follower</div>
+      <div class="fieldrow">
+        <input class="ans res" data-name="C1c" data-answer="36" placeholder="z. B. 22 Tage">
+        <button class="btn-check" onclick="checkBox(this)">Prüfen</button></div>
+      <div class="fb"></div>
+      <div class="hintwrap">
+        <button class="hbtn" onclick="toggleH(this)">💡 Tipp 1 · Ansatz finden</button>
+        <div class="hint">Lies b) und c) getrennt: Ist die Zeit jeweils gegeben oder gesucht?</div>
+        <button class="hbtn" onclick="toggleH(this)">💡 Tipp 2 · Mathematischer Ansatz</button>
+        <div class="hint">Bei c): Setze deine Funktion gleich 1000 und forme nach x um. Denk ans Aufrunden.</div>
+        <button class="hbtn sol" onclick="toggleH(this)">✅ Lösung anzeigen</button>
+        <div class="hint solhint">
+          <div class="step">x = Zeit in Tagen, f(x) = Anzahl Follower</div>
+          <div class="step">a) f(x) = 25x + 120</div>
+          <div class="step">b) f(20) = 25·20 + 120 = 500 + 120 = <b>620 Follower</b></div>
+          <div class="step">c) 25x + 120 = 1000 → 25x = 880 → x = 35,2 → <b>36 Tage</b></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- C2 Haustier -->
+    <h3 class="task-title">Aufgabe C2 · Welpe wird groß 🐶</h3>
+    <div class="info">
+      Ein junger Hund wiegt mit 8 Wochen <b>4 kg</b> und nimmt pro Woche etwa <b>1,5 kg</b> zu
+      (x = Wochen nach der 8. Woche).<br>
+      👉 Finde zuerst heraus: Was ist x? Was ist f(x)?<br>
+      a) Stelle eine passende Funktionsgleichung auf. &nbsp;
+      b) Wie schwer ist er nach 10 Wochen? &nbsp;
+      c) Nach wie vielen Wochen wiegt er 25 kg?
+    </div>
+    <div class="qa" data-q="C2 Lösungen">
+      <div class="fieldrow"><span class="lab">a) f(x) =</span>
+        <input class="ans" data-name="C2a m" data-answer="1.5"><span class="lab">· x +</span>
+        <input class="ans" data-name="C2a b" data-answer="4"></div>
+      <div class="ask">b) Gewicht nach 10 Wochen</div>
+      <div class="fieldrow">
+        <input class="ans res" data-name="C2b" data-answer="19" placeholder="z. B. 11 kg"></div>
+      <div class="ask">c) Wochen bis 25 kg</div>
+      <div class="fieldrow">
+        <input class="ans res" data-name="C2c" data-answer="14" placeholder="z. B. 9 Wochen">
+        <button class="btn-check" onclick="checkBox(this)">Prüfen</button></div>
+      <div class="fb"></div>
+      <div class="hintwrap">
+        <button class="hbtn" onclick="toggleH(this)">💡 Tipp 1 · Ansatz finden</button>
+        <div class="hint">Was ist bei b) die bekannte Zahl, was bei c)? Schau in den Merkkasten.</div>
+        <button class="hbtn" onclick="toggleH(this)">💡 Tipp 2 · Mathematischer Ansatz</button>
+        <div class="hint">Bei c): Setze f(x) = 25 und forme nach x um.</div>
+        <button class="hbtn sol" onclick="toggleH(this)">✅ Lösung anzeigen</button>
+        <div class="hint solhint">
+          <div class="step">x = Wochen, f(x) = Gewicht in kg</div>
+          <div class="step">a) f(x) = 1,5x + 4</div>
+          <div class="step">b) f(10) = 1,5·10 + 4 = 15 + 4 = <b>19 kg</b></div>
+          <div class="step">c) 1,5x + 4 = 25 → 1,5x = 21 → x = <b>14 Wochen</b></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- C3 Mode -->
+    <h3 class="task-title">Aufgabe C3 · Sparen für die Traum-Sneaker 👟</h3>
+    <div class="info">
+      Du sparst für Sneaker, die <b>150 €</b> kosten. Du hast schon <b>30 €</b> und
+      legst pro Woche <b>15 €</b> zurück.<br>
+      👉 Finde zuerst heraus: Was ist x? Was ist f(x)?<br>
+      a) Stelle eine passende Funktionsgleichung auf. &nbsp;
+      b) Wie viel Geld hast du nach 6 Wochen? &nbsp;
+      c) Nach wie vielen Wochen kannst du die Sneaker kaufen?
+    </div>
+    <div class="qa" data-q="C3 Lösungen">
+      <div class="fieldrow"><span class="lab">a) f(x) =</span>
+        <input class="ans" data-name="C3a m" data-answer="15"><span class="lab">· x +</span>
+        <input class="ans" data-name="C3a b" data-answer="30"></div>
+      <div class="ask">b) Gespartes Geld nach 6 Wochen</div>
+      <div class="fieldrow">
+        <input class="ans res" data-name="C3b" data-answer="120" placeholder="z. B. 75 €"></div>
+      <div class="ask">c) Wochen bis 150 €</div>
+      <div class="fieldrow">
+        <input class="ans res" data-name="C3c" data-answer="8" placeholder="z. B. 5 Wochen">
+        <button class="btn-check" onclick="checkBox(this)">Prüfen</button></div>
+      <div class="fb"></div>
+      <div class="hintwrap">
+        <button class="hbtn" onclick="toggleH(this)">💡 Tipp 1 · Ansatz finden</button>
+        <div class="hint">Bei c): Welcher Geldbetrag muss erreicht sein? Ist das gegeben oder gesucht?</div>
+        <button class="hbtn" onclick="toggleH(this)">💡 Tipp 2 · Mathematischer Ansatz</button>
+        <div class="hint">Bei c): Setze deine Funktion gleich 150.</div>
+        <button class="hbtn sol" onclick="toggleH(this)">✅ Lösung anzeigen</button>
+        <div class="hint solhint">
+          <div class="step">x = Wochen, f(x) = gespartes Geld in €</div>
+          <div class="step">a) f(x) = 15x + 30</div>
+          <div class="step">b) f(6) = 15·6 + 30 = 90 + 30 = <b>120 €</b></div>
+          <div class="step">c) 15x + 30 = 150 → 15x = 120 → x = <b>8 Wochen</b></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- C4 Punktprobe -->
+    <h3 class="task-title">Aufgabe C4 · Stimmt die Behauptung? 🕵️</h3>
+    <div class="info">
+      Ein Fan-Account von <b>Stray Kids</b> wächst gleichmäßig nach
+      <span class="formula">f(x) = 120x + 800</span> (x = Tage, f(x) = Anzahl Follower).<br>
+      Prüfe die Behauptungen mit einer <b>Punktprobe</b>.<br>
+      a) Ein Mitschüler sagt: „Nach 15 Tagen hatte der Account 2700 Follower." Kann das stimmen? &nbsp;
+      b) Stimmt es, dass der Account nach 25 Tagen 3800 Follower hatte?
+    </div>
+    <div class="qa" data-q="C4 Lösungen">
+      <div class="ask">a) Behauptung: Tag 15 → 2700 Follower</div>
+      <div class="fieldrow">
+        <span class="lab">f(15) =</span>
+        <input class="ans" data-name="C4a f(15)" data-answer="2600">
+        <span class="lab">&nbsp; Behauptung stimmt?</span>
+        <select class="ans" data-name="C4a stimmt" data-answer="nein">
+          <option value="">– wählen –</option>
+          <option>ja</option>
+          <option>nein</option>
+        </select>
+      </div>
+      <div class="ask">b) Behauptung: Tag 25 → 3800 Follower</div>
+      <div class="fieldrow">
+        <span class="lab">f(25) =</span>
+        <input class="ans" data-name="C4b f(25)" data-answer="3800">
+        <span class="lab">&nbsp; Behauptung stimmt?</span>
+        <select class="ans" data-name="C4b stimmt" data-answer="ja">
+          <option value="">– wählen –</option>
+          <option>ja</option>
+          <option>nein</option>
+        </select>
+        <button class="btn-check" onclick="checkBox(this)">Prüfen</button>
+      </div>
+      <div class="fb"></div>
+      <div class="hintwrap">
+        <button class="hbtn" onclick="toggleH(this)">💡 Tipp 1 · Ansatz finden</button>
+        <div class="hint">„Stimmt die Angabe?" → das ist eine Punktprobe. Setze den Tag (x-Wert) ein.</div>
+        <button class="hbtn" onclick="toggleH(this)">💡 Tipp 2 · Mathematischer Ansatz</button>
+        <div class="hint">Vergleiche dein f(x)-Ergebnis mit der behaupteten Followerzahl.</div>
+        <button class="hbtn sol" onclick="toggleH(this)">✅ Lösung anzeigen</button>
+        <div class="hint solhint">
+          <div class="step">a) f(15) = 120·15 + 800 = 1800 + 800 = 2600. &nbsp;2600 ≠ 2700 → <b>nein</b>, kann nicht stimmen.</div>
+          <div class="step">b) f(25) = 120·25 + 800 = 3000 + 800 = 3800. &nbsp;3800 = 3800 → <b>ja</b>, stimmt.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- C5 Streaming - Code -->
+    <h3 class="task-title">Aufgabe C5 · Welche Musik-App? 🎧 <span class="pill">Code nötig</span></h3>
+    <div class="info">
+      Zwei Musik-Apps im Vergleich:<br>
+      <b>App „Beatzz":</b> keine Anmeldegebühr, 6 € pro Monat.<br>
+      <b>App „SoundMax":</b> 24 € einmalige Anmeldegebühr, dann 3 € pro Monat.<br>
+      👉 Finde zuerst heraus: Was ist x? Was ist f(x)?<br>
+      a) Stelle beide Funktionsgleichungen auf. &nbsp;
+      b) Nach wie vielen Monaten kosten beide gleich viel? &nbsp;
+      c) Welche App ist günstiger, wenn du sie 1 Jahr (12 Monate) nutzt?
+    </div>
+    <div class="qa" data-q="C5 Lösungen">
+      <div class="fieldrow"><span class="lab">a) Beatzz: B(x) =</span>
+        <input class="ans" data-name="C5a Beatzz-m" data-answer="6"><span class="lab">· x +</span>
+        <input class="ans" data-name="C5a Beatzz-b" data-answer="0"></div>
+      <div class="fieldrow"><span class="lab">a) SoundMax: S(x) =</span>
+        <input class="ans" data-name="C5a SoundMax-m" data-answer="3"><span class="lab">· x +</span>
+        <input class="ans" data-name="C5a SoundMax-b" data-answer="24"></div>
+      <div class="ask">b) Monate bis gleiche Kosten</div>
+      <div class="fieldrow">
+        <input class="ans res" data-name="C5b" data-answer="8" placeholder="z. B. 5 Monate"></div>
+      <div class="ask">c) Günstiger nach 12 Monaten</div>
+      <div class="fieldrow">
+        <select class="ans" data-name="C5c" data-answer="SoundMax">
+          <option value="">– bitte wählen –</option>
+          <option>Beatzz</option>
+          <option>SoundMax</option>
+        </select></div>
+      <div class="hintwrap">
+        <button class="hbtn" onclick="toggleH(this)">💡 Tipp 1 · Ansatz finden</button>
+        <div class="hint">Was bedeutet „kosten gleich viel"? Was haben beide Apps zu diesem Zeitpunkt gemeinsam?</div>
+        <button class="hbtn" onclick="toggleH(this)">💡 Tipp 2 · Mathematischer Ansatz</button>
+        <div class="hint">Setze die beiden Kostenfunktionen gleich. Für c): setze x = 12 in beide ein.</div>
+      </div>
+      <div class="codebox" data-code="2026">
+        <div class="clab">🔒 Lösung von C5 mit Code freischalten:</div>
+        <input type="text" class="codein">
+        <button class="btn-unlock" onclick="unlock(this)">Freischalten</button>
+        <div class="fb"></div>
+        <div class="hint sollocked">
+          <div class="step">a) B(x) = 6x &nbsp;·&nbsp; S(x) = 3x + 24</div>
+          <div class="step">b) 6x = 3x + 24 → 3x = 24 → x = <b>8 Monate</b></div>
+          <div class="step">c) B(12) = 72 € &nbsp;·&nbsp; S(12) = 3·12+24 = 60 € → <b>SoundMax</b> ist günstiger</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- C6 Influencer - Code -->
+    <h3 class="task-title">Aufgabe C6 · Influencerin-Einnahmen 💸 <span class="pill">Code nötig</span></h3>
+    <div class="info">
+      Eine Influencerin verdient mit ihrem Kanal gleichmäßig wachsend Geld.<br>
+      Nach <b>2 Monaten</b> hatte sie insgesamt <b>900 €</b> verdient,
+      nach <b>5 Monaten</b> insgesamt <b>2100 €</b>.<br>
+      👉 Finde zuerst heraus: Was ist x? Was ist f(x)?<br>
+      a) Stelle die Funktionsgleichung auf (Tipp: erst m, dann b). &nbsp;
+      b) Wie viel verdient sie nach 12 Monaten? &nbsp;
+      c) Nach wie vielen <b>ganzen Monaten</b> hat sie mindestens 10 000 € verdient?
+    </div>
+    <div class="qa" data-q="C6 Lösungen">
+      <div class="fieldrow"><span class="lab">a) f(x) =</span>
+        <input class="ans" data-name="C6a m" data-answer="400"><span class="lab">· x +</span>
+        <input class="ans" data-name="C6a b" data-answer="100"></div>
+      <div class="ask">b) Verdienst nach 12 Monaten</div>
+      <div class="fieldrow">
+        <input class="ans res" data-name="C6b" data-answer="4900" placeholder="z. B. 2500 €"></div>
+      <div class="ask">c) Monate bis mindestens 10 000 €</div>
+      <div class="fieldrow">
+        <input class="ans res" data-name="C6c" data-answer="25" placeholder="z. B. 14 Monate"></div>
+      <div class="hintwrap">
+        <button class="hbtn" onclick="toggleH(this)">💡 Tipp 1 · Ansatz finden</button>
+        <div class="hint">Du kennst zwei Zeitpunkte mit Beträgen – das ist wie zwei Punkte einer Geraden.</div>
+        <button class="hbtn" onclick="toggleH(this)">💡 Tipp 2 · Mathematischer Ansatz</button>
+        <div class="hint">Berechne erst m mit dem Bruch, dann b durch Einsetzen. c) ist eine „Wert"-Aufgabe.</div>
+      </div>
+      <div class="codebox" data-code="2026">
+        <div class="clab">🔒 Lösung von C6 mit Code freischalten:</div>
+        <input type="text" class="codein">
+        <button class="btn-unlock" onclick="unlock(this)">Freischalten</button>
+        <div class="fb"></div>
+        <div class="hint sollocked">
+          <div class="step">a) m =
+            <span class="frac"><span class="num">2100 − 900</span><span class="den">5 − 2</span></span>
+            =
+            <span class="frac"><span class="num">1200</span><span class="den">3</span></span>
+            = 400</div>
+          <div class="step">&nbsp;&nbsp;&nbsp;900 = 400 · 2 + b → 900 = 800 + b → b = 100 → <b>f(x) = 400x + 100</b></div>
+          <div class="step">b) f(12) = 400·12 + 100 = 4800 + 100 = <b>4900 €</b></div>
+          <div class="step">c) 400x + 100 = 10000 → 400x = 9900 → x = 24,75 → <b>25 Monate</b></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================= LEVEL 4 BONUS ======================= -->
+  <div class="section">
+    <div class="sec-head">
+      <div class="badge b-yellow">4</div>
+      <h2>Level 4 – Bonus für schnelle Profis</h2>
+    </div>
+    <div class="sec-sub">
+      Freiwillig &amp; etwas kniffliger – für alle, die schon fertig sind und Lust auf mehr haben.
+    </div>
+    <div class="calc">
+      🏆 Diese Aufgaben sind <b>freiwillig</b>. Die Lösungen schaltest du mit einem
+      <b>zweiten Code</b> frei – du bekommst ihn von deiner Lehrkraft.
+    </div>
+    <div class="heft">✏️ <b>Ins Heft:</b> Auch hier gilt – erst x und f(x) klären, dann mit Rechenweg lösen.</div>
+
+    <!-- D1 -->
+    <h3 class="task-title">Aufgabe D1 · Streamer-Duell 🎮 <span class="pill gold">Bonus</span></h3>
+    <div class="info">
+      Zwei Twitch-Streamer (x = Zeit in Tagen, f(x) = Anzahl Abonnenten):<br>
+      <b>Max</b> hat <b>3000 Abonnenten</b> und gewinnt <b>50 pro Tag</b> dazu.<br>
+      <b>Lia</b> hat <b>5000 Abonnenten</b>, verliert aber <b>30 pro Tag</b> (sie streamt selten).<br>
+      a) Stelle beide Funktionsgleichungen auf. &nbsp;
+      b) Nach wie vielen Tagen haben beide gleich viele Abonnenten? &nbsp;
+      c) Wie viele Abonnenten hat dann jeder?
+    </div>
+    <div class="qa" data-q="D1 Lösungen (Bonus)">
+      <div class="fieldrow"><span class="lab">a) Max: M(x) =</span>
+        <input class="ans" data-name="D1a Max-m" data-answer="50"><span class="lab">· x +</span>
+        <input class="ans" data-name="D1a Max-b" data-answer="3000"></div>
+      <div class="fieldrow"><span class="lab">a) Lia: L(x) =</span>
+        <input class="ans" data-name="D1a Lia-m" data-answer="-30"><span class="lab">· x +</span>
+        <input class="ans" data-name="D1a Lia-b" data-answer="5000"></div>
+      <div class="ask">b) Tage bis gleiche Abonnentenzahl</div>
+      <div class="fieldrow">
+        <input class="ans res" data-name="D1b" data-answer="25" placeholder="z. B. 12 Tage"></div>
+      <div class="ask">c) Abonnenten zu diesem Zeitpunkt</div>
+      <div class="fieldrow">
+        <input class="ans res" data-name="D1c" data-answer="4250" placeholder="z. B. 3800 Abonnenten"></div>
+      <div class="hintwrap">
+        <button class="hbtn" onclick="toggleH(this)">💡 Tipp 1 · Ansatz finden</button>
+        <div class="hint">Eine Person gewinnt dazu, eine verliert – achte genau auf die Vorzeichen von m.</div>
+        <button class="hbtn" onclick="toggleH(this)">💡 Tipp 2 · Mathematischer Ansatz</button>
+        <div class="hint">Für b): Setze beide Funktionen gleich. Für c): setze dein x in eine Funktion ein.</div>
+      </div>
+      <div class="codebox gold" data-code="2027">
+        <div class="clab">🔒 Lösung von D1 mit dem Bonus-Code freischalten:</div>
+        <input type="text" class="codein">
+        <button class="btn-unlock" onclick="unlock(this)">Freischalten</button>
+        <div class="fb"></div>
+        <div class="hint sollocked">
+          <div class="step">a) M(x) = 50x + 3000 &nbsp;·&nbsp; L(x) = −30x + 5000</div>
+          <div class="step">b) 50x + 3000 = −30x + 5000 &nbsp;| + 30x</div>
+          <div class="step">&nbsp;&nbsp;&nbsp;80x + 3000 = 5000 → 80x = 2000 → x = <b>25 Tage</b></div>
+          <div class="step">c) M(25) = 50·25 + 3000 = <b>4250 Abonnenten</b></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- D2 -->
+    <h3 class="task-title">Aufgabe D2 · Festival-Budget rückwärts 🎪 <span class="pill gold">Bonus</span></h3>
+    <div class="info">
+      Du willst in <b>12 Wochen</b> genau <b>360 €</b> fürs Festival haben.
+      Du hast schon <b>84 €</b> gespart. (x = Zeit in Wochen, f(x) = gespartes Geld in €)<br>
+      a) Wie viel musst du pro Woche sparen? (Das ist die Steigung m!) &nbsp;
+      b) Stelle damit die Funktionsgleichung auf. &nbsp;
+      c) Wie viel Geld hast du nach 7 Wochen?
+    </div>
+    <div class="qa" data-q="D2 Lösungen (Bonus)">
+      <div class="ask">a) Betrag pro Woche</div>
+      <div class="fieldrow">
+        <input class="ans res" data-name="D2a m pro Woche" data-answer="23" placeholder="z. B. 15 €"></div>
+      <div class="fieldrow"><span class="lab">b) f(x) =</span>
+        <input class="ans" data-name="D2b m" data-answer="23"><span class="lab">· x +</span>
+        <input class="ans" data-name="D2b b" data-answer="84"></div>
+      <div class="ask">c) Gespartes Geld nach 7 Wochen</div>
+      <div class="fieldrow">
+        <input class="ans res" data-name="D2c" data-answer="245" placeholder="z. B. 180 €"></div>
+      <div class="hintwrap">
+        <button class="hbtn" onclick="toggleH(this)">💡 Tipp 1 · Ansatz finden</button>
+        <div class="hint">Diesmal ist das Ziel bekannt, aber m fehlt. Stelle die Gleichung mit m als Unbekannter auf.</div>
+        <button class="hbtn" onclick="toggleH(this)">💡 Tipp 2 · Mathematischer Ansatz</button>
+        <div class="hint">Es gilt: 360 = m · 12 + 84. Forme diese Gleichung nach m um.</div>
+      </div>
+      <div class="codebox gold" data-code="2027">
+        <div class="clab">🔒 Lösung von D2 mit dem Bonus-Code freischalten:</div>
+        <input type="text" class="codein">
+        <button class="btn-unlock" onclick="unlock(this)">Freischalten</button>
+        <div class="fb"></div>
+        <div class="hint sollocked">
+          <div class="step">a) 360 = m·12 + 84 &nbsp;| − 84 → 276 = 12m &nbsp;| : 12 → m = <b>23 € pro Woche</b></div>
+          <div class="step">b) f(x) = 23x + 84</div>
+          <div class="step">c) f(7) = 23·7 + 84 = 161 + 84 = <b>245 €</b></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- D3 -->
+    <h3 class="task-title">Aufgabe D3 · Influencer-Wettrennen 📱 <span class="pill gold">Bonus</span></h3>
+    <div class="info">
+      Zwei Influencer (x = Zeit in Monaten, f(x) = Anzahl Abonnenten):<br>
+      <b>Aylin</b> hatte nach <b>3 Monaten 1200 Abonnenten</b> und nach <b>7 Monaten 2200 Abonnenten</b>.<br>
+      <b>Deniz</b> hat schon <b>2050 Abonnenten</b> und gewinnt <b>90 pro Monat</b> dazu.<br>
+      a) Stelle Aylins Funktionsgleichung auf (zwei Wertepaare!). &nbsp;
+      b) Stelle Deniz' Funktionsgleichung auf. &nbsp;
+      c) Nach wie vielen Monaten haben beide gleich viele Abonnenten – und wie viele sind das?
+    </div>
+    <div class="qa" data-q="D3 Lösungen (Bonus)">
+      <div class="fieldrow"><span class="lab">a) Aylin: f(x) =</span>
+        <input class="ans" data-name="D3a m" data-answer="250"><span class="lab">· x +</span>
+        <input class="ans" data-name="D3a b" data-answer="450"></div>
+      <div class="fieldrow"><span class="lab">b) Deniz: g(x) =</span>
+        <input class="ans" data-name="D3b m" data-answer="90"><span class="lab">· x +</span>
+        <input class="ans" data-name="D3b b" data-answer="2050"></div>
+      <div class="ask">c) Monate bis gleiche Abonnentenzahl</div>
+      <div class="fieldrow">
+        <input class="ans res" data-name="D3c Monate" data-answer="10" placeholder="z. B. 6 Monate"></div>
+      <div class="ask">c) Abonnenten zu diesem Zeitpunkt</div>
+      <div class="fieldrow">
+        <input class="ans res" data-name="D3c Abonnenten" data-answer="2950" placeholder="z. B. 2000 Abonnenten"></div>
+      <div class="hintwrap">
+        <button class="hbtn" onclick="toggleH(this)">💡 Tipp 1 · Ansatz finden</button>
+        <div class="hint">Für Aylin hast du zwei Wertepaare – das ist genau wie „zwei Punkte" aus Level 1.</div>
+        <button class="hbtn" onclick="toggleH(this)">💡 Tipp 2 · Mathematischer Ansatz</button>
+        <div class="hint">Berechne Aylins m mit dem Bruch, dann b. Danach beide Funktionen gleichsetzen.</div>
+      </div>
+      <div class="codebox gold" data-code="2027">
+        <div class="clab">🔒 Lösung von D3 mit dem Bonus-Code freischalten:</div>
+        <input type="text" class="codein">
+        <button class="btn-unlock" onclick="unlock(this)">Freischalten</button>
+        <div class="fb"></div>
+        <div class="hint sollocked">
+          <div class="step">a) m =
+            <span class="frac"><span class="num">2200 − 1200</span><span class="den">7 − 3</span></span>
+            =
+            <span class="frac"><span class="num">1000</span><span class="den">4</span></span>
+            = 250</div>
+          <div class="step">&nbsp;&nbsp;&nbsp;1200 = 250·3 + b → 1200 = 750 + b → b = 450 → <b>f(x) = 250x + 450</b></div>
+          <div class="step">b) g(x) = 90x + 2050</div>
+          <div class="step">c) 250x + 450 = 90x + 2050 → 160x = 1600 → x = <b>10 Monate</b></div>
+          <div class="step">&nbsp;&nbsp;&nbsp;f(10) = 250·10 + 450 = <b>2950 Abonnenten</b></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================= QUIZ ======================= -->
+  <div class="section">
+    <div class="sec-head">
+      <div class="badge b-yellow">?</div>
+      <h2>Quiz – Welcher Ansatz passt?</h2>
+    </div>
+    <div class="sec-sub">Lies jede Situation und wähle die richtige Antwort. Die goldenen Fragen sind kniffliger!</div>
+
+    <div class="quizq" data-correct="1">
+      <div class="q">1. „Nach wie vielen Stunden ist dein Handy-Akku leer?"</div>
+      <label><input type="radio" name="q1"> einen Funktionswert berechnen</label>
+      <label><input type="radio" name="q1"> eine Nullstelle berechnen</label>
+      <label><input type="radio" name="q1"> einen Schnittpunkt berechnen</label>
+    </div>
+    <div class="quizq" data-correct="0">
+      <div class="q">2. „Wie viele Likes hast du nach 8 Tagen?"</div>
+      <label><input type="radio" name="q2"> einen Funktionswert berechnen</label>
+      <label><input type="radio" name="q2"> einen Wert berechnen</label>
+      <label><input type="radio" name="q2"> eine Nullstelle berechnen</label>
+    </div>
+    <div class="quizq" data-correct="2">
+      <div class="q">3. „Ab wann ist das Streaming-Abo A günstiger als Abo B?"</div>
+      <label><input type="radio" name="q3"> einen Funktionswert berechnen</label>
+      <label><input type="radio" name="q3"> eine Nullstelle berechnen</label>
+      <label><input type="radio" name="q3"> einen Schnittpunkt berechnen</label>
+    </div>
+    <div class="quizq" data-correct="1">
+      <div class="q">4. „Wann erreichst du genau 500 Abonnenten?"</div>
+      <label><input type="radio" name="q4"> einen Funktionswert berechnen</label>
+      <label><input type="radio" name="q4"> einen Wert berechnen</label>
+      <label><input type="radio" name="q4"> einen Schnittpunkt berechnen</label>
+    </div>
+    <div class="quizq" data-correct="2">
+      <div class="q">5. „Du kennst den Startwert und das tägliche Wachstum. Was tust du?"</div>
+      <label><input type="radio" name="q5"> eine Nullstelle berechnen</label>
+      <label><input type="radio" name="q5"> einen Schnittpunkt berechnen</label>
+      <label><input type="radio" name="q5"> eine Funktionsgleichung aufstellen</label>
+    </div>
+    <div class="quizq" data-correct="2">
+      <div class="q">6. „Wann ist der 600-Liter-Tank halb voll?"</div>
+      <label><input type="radio" name="q6"> eine Nullstelle berechnen (f(x) = 0)</label>
+      <label><input type="radio" name="q6"> einen Funktionswert berechnen</label>
+      <label><input type="radio" name="q6"> einen Wert berechnen (f(x) = 300)</label>
+    </div>
+    <div class="quizq" data-correct="0">
+      <div class="q">7. „Liegt der Punkt P(3 | 20) auf der Geraden f(x) = 5x + 5?" – Wie prüfst du das?</div>
+      <label><input type="radio" name="q7"> f(3) berechnen und mit 20 vergleichen</label>
+      <label><input type="radio" name="q7"> f(20) berechnen und mit 3 vergleichen</label>
+      <label><input type="radio" name="q7"> die Nullstelle berechnen</label>
+    </div>
+
+    <div class="quizq hard" data-correct="1">
+      <div class="q">8. Eine Kerze ist 18 cm lang und brennt 2 cm pro Stunde ab. Welche Funktionsgleichung passt? <span class="pill gold">kniffliger</span></div>
+      <label><input type="radio" name="q8"> f(x) = 2x + 18</label>
+      <label><input type="radio" name="q8"> f(x) = −2x + 18</label>
+      <label><input type="radio" name="q8"> f(x) = 18x − 2</label>
+    </div>
+    <div class="quizq hard" data-correct="0">
+      <div class="q">9. Gegeben ist f(x) = 6x − 24. An welcher Stelle liegt die Nullstelle? <span class="pill gold">kniffliger</span></div>
+      <label><input type="radio" name="q9"> x = 4</label>
+      <label><input type="radio" name="q9"> x = −4</label>
+      <label><input type="radio" name="q9"> x = 24</label>
+    </div>
+    <div class="quizq hard" data-correct="0">
+      <div class="q">10. Zwei Handytarife schneiden sich bei x = 8 Monaten. Was bedeutet das? <span class="pill gold">kniffliger</span></div>
+      <label><input type="radio" name="q10"> Nach 8 Monaten kosten beide Tarife gleich viel.</label>
+      <label><input type="radio" name="q10"> Nach 8 Monaten ist ein Tarif kostenlos.</label>
+      <label><input type="radio" name="q10"> Beide Tarife kosten zusammen 8 €.</label>
+    </div>
+
+    <div style="text-align:center;margin-top:14px;">
+      <button class="btn-check" onclick="checkQuiz()">Quiz auswerten</button>
+    </div>
+    <div class="scorebox" id="quizScore"></div>
+  </div>
+
+  <!-- ======================= ZUORDNUNG ======================= -->
+  <div class="section">
+    <div class="sec-head">
+      <div class="badge b-turq">🔗</div>
+      <h2>Zuordnung – Signalwort &amp; Rechenweg</h2>
+    </div>
+    <div class="sec-sub">Wähle für jede Formulierung den passenden Ansatz.</div>
+
+    <div class="qa" data-q="Zuordnung">
+      <div class="fieldrow" style="justify-content:space-between;">
+        <span class="lab" style="flex:1;min-width:240px;">„Wie viele Follower hast du <b>nach 30 Tagen</b>?"</span>
+        <select class="ans" data-name="Z1" data-answer="einen Funktionswert berechnen">
+          <option value="">– wählen –</option>
+          <option>einen Funktionswert berechnen</option>
+          <option>einen Wert berechnen</option>
+          <option>eine Nullstelle berechnen</option>
+          <option>einen Schnittpunkt berechnen</option>
+          <option>eine Punktprobe machen</option>
+          <option>eine Funktionsgleichung aufstellen</option>
+        </select>
+      </div>
+      <div class="fieldrow" style="justify-content:space-between;">
+        <span class="lab" style="flex:1;min-width:240px;">„Wann ist dein <b>Datenvolumen aufgebraucht</b>?"</span>
+        <select class="ans" data-name="Z2" data-answer="eine Nullstelle berechnen">
+          <option value="">– wählen –</option>
+          <option>einen Funktionswert berechnen</option>
+          <option>einen Wert berechnen</option>
+          <option>eine Nullstelle berechnen</option>
+          <option>einen Schnittpunkt berechnen</option>
+          <option>eine Punktprobe machen</option>
+          <option>eine Funktionsgleichung aufstellen</option>
+        </select>
+      </div>
+      <div class="fieldrow" style="justify-content:space-between;">
+        <span class="lab" style="flex:1;min-width:240px;">„Ab welcher Woche haben Mia und Jana <b>gleich viel</b> gespart?"</span>
+        <select class="ans" data-name="Z3" data-answer="einen Schnittpunkt berechnen">
+          <option value="">– wählen –</option>
+          <option>einen Funktionswert berechnen</option>
+          <option>einen Wert berechnen</option>
+          <option>eine Nullstelle berechnen</option>
+          <option>einen Schnittpunkt berechnen</option>
+          <option>eine Punktprobe machen</option>
+          <option>eine Funktionsgleichung aufstellen</option>
+        </select>
+      </div>
+      <div class="fieldrow" style="justify-content:space-between;">
+        <span class="lab" style="flex:1;min-width:240px;">„Bei welchem Tag erreichst du <b>genau 500 Likes</b>?"</span>
+        <select class="ans" data-name="Z4" data-answer="einen Wert berechnen">
+          <option value="">– wählen –</option>
+          <option>einen Funktionswert berechnen</option>
+          <option>einen Wert berechnen</option>
+          <option>eine Nullstelle berechnen</option>
+          <option>einen Schnittpunkt berechnen</option>
+          <option>eine Punktprobe machen</option>
+          <option>eine Funktionsgleichung aufstellen</option>
+        </select>
+      </div>
+      <div class="fieldrow" style="justify-content:space-between;">
+        <span class="lab" style="flex:1;min-width:240px;">„<b>Liegt</b> der Punkt P(5 | 40) auf der Geraden?"</span>
+        <select class="ans" data-name="Z5" data-answer="eine Punktprobe machen">
+          <option value="">– wählen –</option>
+          <option>einen Funktionswert berechnen</option>
+          <option>einen Wert berechnen</option>
+          <option>eine Nullstelle berechnen</option>
+          <option>einen Schnittpunkt berechnen</option>
+          <option>eine Punktprobe machen</option>
+          <option>eine Funktionsgleichung aufstellen</option>
+        </select>
+      </div>
+      <div class="fieldrow" style="justify-content:space-between;">
+        <span class="lab" style="flex:1;min-width:240px;">„Startwert und Wachstum pro Tag sind gegeben – <b>wie lautet die Formel</b>?"</span>
+        <select class="ans" data-name="Z6" data-answer="eine Funktionsgleichung aufstellen">
+          <option value="">– wählen –</option>
+          <option>einen Funktionswert berechnen</option>
+          <option>einen Wert berechnen</option>
+          <option>eine Nullstelle berechnen</option>
+          <option>einen Schnittpunkt berechnen</option>
+          <option>eine Punktprobe machen</option>
+          <option>eine Funktionsgleichung aufstellen</option>
+        </select>
+      </div>
+      <div class="fieldrow" style="justify-content:space-between;">
+        <span class="lab" style="flex:1;min-width:240px;">„Wann ist die Wasserflasche <b>halb leer</b>?"</span>
+        <select class="ans" data-name="Z7" data-answer="einen Wert berechnen">
+          <option value="">– wählen –</option>
+          <option>einen Funktionswert berechnen</option>
+          <option>einen Wert berechnen</option>
+          <option>eine Nullstelle berechnen</option>
+          <option>einen Schnittpunkt berechnen</option>
+          <option>eine Punktprobe machen</option>
+          <option>eine Funktionsgleichung aufstellen</option>
+        </select>
+      </div>
+      <div style="text-align:center;margin-top:8px;">
+        <button class="btn-check" onclick="checkBox(this)">Zuordnung prüfen</button>
+      </div>
+      <div class="fb"></div>
+    </div>
+  </div>
+
+  <!-- ======================= REFLEXION ======================= -->
+  <div class="section">
+    <div class="sec-head">
+      <div class="badge b-pink">💭</div>
+      <h2>Reflexion</h2>
+    </div>
+    <div class="sec-sub">Sei ehrlich zu dir selbst – das hilft dir beim Lernen. 😀 = sicher · 😐 = geht so · 🙁 = unsicher</div>
+
+    <div id="reflexion">
+      <div class="refrow" data-name="R1">
+        <span class="rtext">Ich erkenne, was in einer Aufgabe x und was f(x) ist.</span>
+        <span class="moods">
+          <button onclick="setMood(this)">😀</button>
+          <button onclick="setMood(this)">😐</button>
+          <button onclick="setMood(this)">🙁</button>
+        </span>
+      </div>
+      <div class="refrow" data-name="R2">
+        <span class="rtext">Ich kann Funktionswerte und Werte (x) berechnen.</span>
+        <span class="moods">
+          <button onclick="setMood(this)">😀</button>
+          <button onclick="setMood(this)">😐</button>
+          <button onclick="setMood(this)">🙁</button>
+        </span>
+      </div>
+      <div class="refrow" data-name="R3">
+        <span class="rtext">Ich kann Nullstellen, Schnittpunkte und die Punktprobe berechnen.</span>
+        <span class="moods">
+          <button onclick="setMood(this)">😀</button>
+          <button onclick="setMood(this)">😐</button>
+          <button onclick="setMood(this)">🙁</button>
+        </span>
+      </div>
+      <div class="refrow" data-name="R4">
+        <span class="rtext">Ich erkenne an den Signalwörtern, was ich rechnen muss.</span>
+        <span class="moods">
+          <button onclick="setMood(this)">😀</button>
+          <button onclick="setMood(this)">😐</button>
+          <button onclick="setMood(this)">🙁</button>
+        </span>
+      </div>
+    </div>
+
+    <div style="margin-top:14px;">
+      <b style="color:var(--purple);">Das habe ich heute gut verstanden:</b>
+      <textarea class="refl" id="reflGut"></textarea>
+    </div>
+    <div style="margin-top:10px;">
+      <b style="color:var(--purple);">Da brauche ich noch Hilfe / das möchte ich üben:</b>
+      <textarea class="refl" id="reflHilfe"></textarea>
+    </div>
+  </div>
+
+  <!-- ======================= DOWNLOAD ======================= -->
+  <div class="section">
+    <div class="sec-head">
+      <div class="badge b-turq">📤</div>
+      <h2>Übersicht herunterladen</h2>
+    </div>
+    <div class="sec-sub">
+      Lade deine Übersicht herunter und schicke sie deiner Lehrkraft.
+      Trag oben deinen Namen ein, bevor du auf den Button klickst!
+    </div>
+    <button class="dlbtn" onclick="downloadOverview()">⬇️ Meine Übersicht herunterladen</button>
+  </div>
+
+  <div class="footer">Selbstlernmodul · Lineare Funktionen – Anwendungsaufgaben · Klasse 8</div>
+
+</div>
+
+<script>
+/* ---------- Hilfsfunktionen ---------- */
+function num(v){
+  if(v===null||v===undefined) return NaN;
+  return parseFloat(String(v).trim().replace(',', '.').replace(/\s+/g,''));
+}
+
+function check1(f){
+  if(f.tagName==='SELECT'){
+    if(f.value==='') return null;
+    var ok = f.value===f.dataset.answer;
+    f.classList.toggle('ok',ok); f.classList.toggle('bad',!ok);
+    return ok;
+  } else {
+    if(f.value.trim()==='') return null;
+    var v = num(f.value);
+    if(isNaN(v)){ f.classList.remove('ok'); f.classList.add('bad'); return false; }
+    var tol = f.dataset.tol ? parseFloat(f.dataset.tol) : 0.01;
+    var ok2 = Math.abs(v - parseFloat(f.dataset.answer)) <= tol;
+    f.classList.toggle('ok',ok2); f.classList.toggle('bad',!ok2);
+    return ok2;
+  }
+}
+
+function checkBox(btn){
+  var box = btn.closest('.findxy') || btn.closest('.qa');
+  var fields = box.querySelectorAll('.ans');
+  var allFilled = true, allRight = true;
+  fields.forEach(function(f){
+    var r = check1(f);
+    if(r===null) allFilled=false;
+    else if(r===false) allRight=false;
+  });
+  var fb = box.querySelector('.fb');
+  if(!fb) return;
+  fb.className = 'fb show';
+  if(!allFilled){
+    fb.classList.add('neutral');
+    fb.innerHTML = '✏️ Fülle erst alle Felder aus.';
+  } else if(allRight){
+    fb.classList.add('right');
+    fb.innerHTML = '✅ Stark gemacht – das ist richtig!';
+  } else {
+    fb.classList.add('wrong');
+    fb.innerHTML = '❌ Da stimmt noch etwas nicht. Schau dir die Tipps an und rechne im Heft nochmal nach.';
+  }
+}
+
+function toggleH(btn){
+  var h = btn.nextElementSibling;
+  h.classList.toggle('open');
+  btn.classList.toggle('active');
+}
+
+function unlock(btn){
+  var box = btn.closest('.codebox');
+  var code = box.querySelector('.codein').value.trim();
+  var want = box.dataset.code;
+  var fb = box.querySelector('.fb');
+  var sol = box.querySelector('.sollocked');
+  fb.className = 'fb show';
+  if(code === want){
+    sol.classList.add('open');
+    fb.classList.add('right');
+    fb.innerHTML = '✅ Code richtig – Lösung freigeschaltet!';
+  } else {
+    sol.classList.remove('open');
+    fb.classList.add('wrong');
+    fb.innerHTML = '❌ Falscher Code. Frag deine Lehrkraft nach dem richtigen Code.';
+  }
+}
+
+/* ---------- Quiz ---------- */
+function checkQuiz(){
+  var qs = document.querySelectorAll('.quizq');
+  var score = 0;
+  qs.forEach(function(q){
+    var correct = parseInt(q.dataset.correct,10);
+    var labels = q.querySelectorAll('label');
+    labels.forEach(function(l){ l.classList.remove('right-a','wrong-a'); });
+    var radios = q.querySelectorAll('input[type=radio]');
+    var picked = -1;
+    radios.forEach(function(r,i){ if(r.checked) picked=i; });
+    labels[correct].classList.add('right-a');
+    if(picked>-1){
+      if(picked===correct) score++;
+      else labels[picked].classList.add('wrong-a');
+    }
+  });
+  var box = document.getElementById('quizScore');
+  box.classList.add('show');
+  var msg = score+' von '+qs.length+' richtig! ';
+  if(score===qs.length) msg += '🎉 Perfekt!';
+  else if(score>=7) msg += '👍 Gut – schau dir die markierten Aufgaben nochmal an.';
+  else msg += '💪 Übe nochmal mit dem Merkkasten.';
+  box.textContent = msg;
+}
+
+/* ---------- Reflexion ---------- */
+function setMood(btn){
+  var row = btn.closest('.moods');
+  row.querySelectorAll('button').forEach(function(b){ b.classList.remove('sel'); });
+  btn.classList.add('sel');
+}
+
+/* ---------- Download ---------- */
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function downloadOverview(){
+  var name = document.getElementById('studentName').value.trim() || 'ohne Namen';
+  var now = new Date();
+  var datum = now.toLocaleDateString('de-DE');
+
+  var html = '<!DOCTYPE html><html lang="de"><head><meta charset="UTF-8">';
+  html += '<title>Übersicht – '+esc(name)+'</title><style>';
+  html += 'body{font-family:Verdana,sans-serif;color:#2a2350;max-width:760px;margin:24px auto;padding:0 16px;}';
+  html += 'h1{color:#8b3dff;font-size:1.4rem;}h2{color:#ff3d8b;font-size:1.1rem;margin-top:22px;border-bottom:2px solid #efeaf9;padding-bottom:4px;}';
+  html += 'table{border-collapse:collapse;width:100%;margin-top:8px;font-size:.9rem;}';
+  html += 'td,th{border:1px solid #ddd;padding:6px 9px;text-align:left;}th{background:#f3eeff;}';
+  html += '.ok{color:#157a38;font-weight:bold;}.no{color:#bb2222;font-weight:bold;}.na{color:#999;}';
+  html += '.meta{background:#f3eeff;padding:10px 14px;border-radius:8px;}</style></head><body>';
+  html += '<h1>📈 Lineare Funktionen – Meine Übersicht</h1>';
+  html += '<div class="meta"><b>Name:</b> '+esc(name)+'<br><b>Datum:</b> '+esc(datum)+'</div>';
+
+  /* Aufgaben */
+  html += '<h2>Aufgaben</h2><table><tr><th>Aufgabe</th><th>Meine Eingabe</th><th>Status</th></tr>';
+  document.querySelectorAll('.qa, .findxy').forEach(function(box){
+    var label = box.dataset.q || (box.classList.contains('findxy') ? 'x / f(x) bestimmen' : 'Aufgabe');
+    var fields = box.querySelectorAll('.ans');
+    if(fields.length===0) return;
+    var parts = [], statusOk = true, anyChecked = false, anyEmpty = false;
+    fields.forEach(function(f){
+      var val = (f.value||'').trim();
+      var nm = f.dataset.name || '';
+      parts.push((nm? nm+': ':'')+(val||'—'));
+      if(val==='') anyEmpty = true;
+      if(f.classList.contains('ok')) anyChecked = true;
+      if(f.classList.contains('bad')){ statusOk=false; anyChecked=true; }
+    });
+    var status;
+    if(!anyChecked) status = '<span class="na">nicht geprüft</span>';
+    else if(statusOk && !anyEmpty) status = '<span class="ok">richtig &#10003;</span>';
+    else status = '<span class="no">noch offen &#10007;</span>';
+    html += '<tr><td>'+esc(label)+'</td><td>'+esc(parts.join(' | '))+'</td><td>'+status+'</td></tr>';
+  });
+  html += '</table>';
+
+  /* Quiz */
+  var qs = document.querySelectorAll('.quizq');
+  var qscore = 0, qpicked = 0;
+  qs.forEach(function(q){
+    var correct = parseInt(q.dataset.correct,10);
+    var radios = q.querySelectorAll('input[type=radio]');
+    var picked = -1;
+    radios.forEach(function(r,i){ if(r.checked) picked=i; });
+    if(picked>-1){ qpicked++; if(picked===correct) qscore++; }
+  });
+  html += '<h2>Quiz</h2><p>Ergebnis: <b>'+qscore+' von '+qs.length+'</b> richtig ';
+  html += '('+qpicked+' Fragen beantwortet).</p>';
+
+  /* Zuordnung */
+  var zFields = document.querySelectorAll('[data-name^="Z"]');
+  var zOk = 0;
+  zFields.forEach(function(f){
+    if(f.value!=='' && f.value===f.dataset.answer) zOk++;
+  });
+  html += '<h2>Zuordnung</h2><p>Ergebnis: <b>'+zOk+' von '+zFields.length+'</b> richtig zugeordnet.</p>';
+
+  /* Reflexion */
+  html += '<h2>Reflexion</h2><table><tr><th>Aussage</th><th>Einschätzung</th></tr>';
+  document.querySelectorAll('#reflexion .refrow').forEach(function(row){
+    var txt = row.querySelector('.rtext').textContent;
+    var sel = row.querySelector('.moods button.sel');
+    var mood = sel ? sel.textContent : '—';
+    html += '<tr><td>'+esc(txt)+'</td><td style="font-size:1.2rem;text-align:center;">'+esc(mood)+'</td></tr>';
+  });
+  html += '</table>';
+  var gut = document.getElementById('reflGut').value.trim() || '—';
+  var hilfe = document.getElementById('reflHilfe').value.trim() || '—';
+  html += '<p><b>Gut verstanden:</b><br>'+esc(gut)+'</p>';
+  html += '<p><b>Brauche noch Hilfe bei:</b><br>'+esc(hilfe)+'</p>';
+  html += '</body></html>';
+
+  var blob = new Blob([html], {type:'text/html'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  var safe = name.replace(/[^a-zA-Z0-9äöüÄÖÜß ]/g,'').replace(/\s+/g,'_');
+  a.download = 'Lineare_Funktionen_Uebersicht_'+safe+'.html';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
+</script>
+</body>
+</html>
