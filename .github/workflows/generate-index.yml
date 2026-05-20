@@ -65,7 +65,7 @@ jobs:
                   parts = file_name.split("-", 1)
                   if parts[0].isdigit():
                       file_id = parts[0]
-                      clean_name = parts[1] # Name ohne die ID vorn
+                      clean_name = parts[1]
                       id_map[file_id] = full_path
                   else:
                       file_id = None
@@ -92,7 +92,6 @@ jobs:
               <script>
                   const idMap = {id_map_json};
 
-                  // Falls ?id=X in der URL steht, sofort weiterleiten
                   const urlParams = new URLSearchParams(window.location.search);
                   const targetId = urlParams.get("id");
                   
@@ -123,11 +122,10 @@ jobs:
                               <div class="list-group list-group-flush mt-3">"""
               
               for clean_name, file_url, file_id in display_structure[folder]:
-                  # Schickes Formatieren des Anzeigenamens
                   display_name = clean_name.replace(".html", "").replace("_", " ").replace("-", " ")
                   
                   badge_html = f"""<span class="badge bg-secondary me-2 id-badge">ID: {file_id}</span>""" if file_id else ""
-                  data_id_attr = f'data-id="{file_id}"' if file_id else 'data-id=""'
+                  data_id_attr = f\'data-id="{file_id}"\' if file_id else \'data-id=""\'
                   
                   output += f"""
                                   <a href="{html.escape(file_url)}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" {data_id_attr} target="_blank">
