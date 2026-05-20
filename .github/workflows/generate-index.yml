@@ -1,0 +1,154 @@
+name: Generate Dynamic Index and Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Generate index.html
+        run: |
+          python -c '
+          import os
+          import html
+          from collections import defaultdict
+
+          # Verzeichnisse und Dateien, die ignoriert werden sollen
+          EXCLUDE_DIRS = {".git", ".github"}
+          EXCLUDE_FILES = {"index.html", "README.md"}
+
+          # Struktur zum Sammeln: { "Ordnername": [ "Dateipfad1", "Dateipfad2" ] }
+          structure = defaultdict(list)
+
+          # Das gesamte Repository rekursiv durchsuchen
+          for root, dirs, files in os.walk("."):
+              # Verhindern, dass in versteckte Git/Action-Ordner geschaut wird
+              dirs[:] = [d for d in dirs if d not in EXCLUDE_DIRS]
+              
+              # Nur den aktuellen Ordnernamen für die Anzeige heraustrennen
+              relative_folder = os.path.relpath(root, ".")
+              
+              if relative_folder == ".":
+                  continue
+                  
+              for file in files:
+                  if file.endswith(".html") and file not in EXCLUDE_FILES:
+                      full_path = os.path.join(relative_folder, file).replace("\\", "/")
+                      structure[relative_folder].append((file, full_path))
+
+          output = """<!DOCTYPE html>
+          <html lang="de">
+          <head>
+              <meta charset="UTF-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <title>Unterrichtsmaterialien Übersicht</title>
+              <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+              <style>
+                  body { background-color: #f8f9fa; padding: 2rem 0; }
+                  .card { border: none; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 1.5rem; }
+                  .list-group-item:hover { background-color: #f1f3f5; }
+                  .folder-title { border-bottom: 2px solid #0d6efd; padding-bottom: 0.5rem; margin-top: 1rem; color: #495057; }
+              </style>
+          </head>
+          <body>
+              <div class="container">
+                  <div class="text-center mb-5">
+                      <h1 class="display-5 fw-bold">📚 Interaktive Lehrunterlagen</h1>
+                      <p class="lead text-muted">Automatisch aktualisierte Übersicht deiner Materialien</p>
+                  </div>
+
+                  <div class="row justify-content-center mb-4">
+                      <div class="col-md-6">
+                          <input type="text" id="searchInput" class="form-control form-control-lg" placeholder="🔍 Nach Fach, Klasse oder Thema suchen..." onkeyup="filterMaterials()">
+                      </div>
+                  </div>
+
+                  <div id="materialsList">
+          """
+
+          # Sortiert nach Ordnernamen ausgeben
+          for folder in sorted(structure.keys()):
+              files = sorted(structure[folder], key=lambda x: x[0])
+              
+              output += f"""
+                      <div class="card material-item" data-search="{html.escape(folder.lower())}">
+                          <div class="card-body">
+                              <h3 class="h4 folder-title">📂 {html.escape(folder)}</h3>
+                              <div class="list-group list-group-flush mt-3">"""
+              
+              for file_name, file_url in files:
+                  # Schickere Anzeige: Entfernt .html und ersetzt Unter-/Bindestriche durch Leerzeichen
+                  display_name = file_name.replace(".html", "").replace("_", " ").replace("-", " ")
+                  
+                  output += f"""
+                                  <a href="{html.escape(file_url)}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" target="_blank">
+                                      📄 {html.escape(display_name)}
+                                      <span class="badge bg-primary rounded-pill">Ansehen</span>
+                                  </a>"""
+              
+              output += """
+                              </div>
+                          </div>
+                      </div>"""
+
+          output += """
+                  </div>
+              </div>
+
+              <script>
+                  function filterMaterials() {
+                      let input = document.getElementById("searchInput").value.toLowerCase();
+                      let items = document.getElementsByClassName("material-item");
+                      
+                      for (let i = 0; i < items.length; i++) {
+                          let item = items[i];
+                          let folderText = item.getAttribute("data-search");
+                          let links = item.getElementsByTagName("a");
+                          let matchFound = folderText.includes(input);
+                          
+                          // Prüfe Inhalt der Links im Ordner
+                          for (let j = 0; j < links.length; j++) {
+                              let linkText = links[j].textContent.toLowerCase();
+                              if (linkText.includes(input) || folderText.includes(input)) {
+                                  links[j].style.setProperty("display", "flex", "important");
+                                  matchFound = true;
+                              } else {
+                                  links[j].style.setProperty("display", "none", "important");
+                              }
+                          }
+                          
+                          if (matchFound) {
+                              item.style.display = "block";
+                          } else {
+                              item.style.display = "none";
+                          }
+                      }
+                  }
+              </script>
+          </body>
+          </html>
+          """
+
+          with open("index.html", "w", encoding="utf-8") as f:
+              f.write(output)
+          '
+
+      - name: Commit and Push index.html
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git diff-index --quiet HEAD || (git commit -m "Auto-generated index.html" && git push)
