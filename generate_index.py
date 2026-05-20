@@ -1,0 +1,141 @@
+import os
+import html
+import json
+from collections import defaultdict
+
+EXCLUDE_DIRS = {".git", ".github"}
+EXCLUDE_FILES = {"index.html", "README.md", "generate_index.py"}
+structure = defaultdict(list)
+
+# 1. Alle Dateien sammeln
+for root, dirs, files in os.walk("."):
+    dirs[:] = [d for d in dirs if d not in EXCLUDE_DIRS]
+    relative_folder = os.path.relpath(root, ".")
+    
+    if relative_folder == ".":
+        continue
+        
+    for file in files:
+        if file.endswith(".html") and file not in EXCLUDE_FILES:
+            structure[relative_folder].append(file)
+
+# 2. IDs vergeben, wenn der Dateiname mit "ZAHL-" beginnt
+id_map = {}
+display_structure = defaultdict(list)
+
+for folder in sorted(structure.keys()):
+    for file_name in sorted(structure[folder]):
+        full_path = os.path.join(folder, file_name).replace("\\", "/")
+        
+        parts = file_name.split("-", 1)
+        if parts[0].isdigit():
+            file_id = parts[0]
+            clean_name = parts[1]
+            id_map[file_id] = full_path
+        else:
+            file_id = None
+            clean_name = file_name
+            
+        display_structure[folder].append((clean_name, full_path, file_id))
+
+id_map_json = json.dumps(id_map)
+
+# 3. HTML-Datei generieren
+output = f"""<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unterrichtsmaterialien Übersicht</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {{ background-color: #f8f9fa; padding: 2rem 0; }}
+        .card {{ border: none; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 1.5rem; }}
+        .list-group-item:hover {{ background-color: #f1f3f5; }}
+        .folder-title {{ border-bottom: 2px solid #0d6efd; padding-bottom: 0.5rem; margin-top: 1rem; color: #495057; }}
+        .id-badge {{ min-width: 55px; text-align: center; font-family: monospace; }}
+    </style>
+    <script>
+        const idMap = {id_map_json};
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const targetId = urlParams.get("id");
+        
+        if (targetId && idMap[targetId]) {{
+            window.location.href = idMap[targetId];
+        }}
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="text-center mb-5">
+            <h1 class="display-5 fw-bold">📚 Interaktive Lehrunterlagen</h1>
+            <p class="lead text-muted">Automatisch aktualisierte Übersicht deiner Materialien</p>
+        </div>
+        <div class="row justify-content-center mb-4">
+            <div class="col-md-6">
+                <input type="text" id="searchInput" class="form-control form-control-lg" placeholder="🔍 Nach Fach, Klasse oder ID suchen..." onkeyup="filterMaterials()">
+            </div>
+        </div>
+        <div id="materialsList">
+"""
+
+for folder in sorted(display_structure.keys()):
+    output += f"""
+            <div class="card material-item" data-search="{html.escape(folder.lower())}">
+                <div class="card-body">
+                    <h3 class="h4 folder-title">📂 {html.escape(folder)}</h3>
+                    <div class="list-group list-group-flush mt-3">"""
+    
+    for clean_name, file_url, file_id in display_structure[folder]:
+        display_name = clean_name.replace(".html", "").replace("_", " ").replace("-", " ")
+        
+        badge_html = f'<span class="badge bg-secondary me-2 id-badge">ID: {file_id}</span>' if file_id else ''
+        data_id_attr = f'data-id="{file_id}"' if file_id else 'data-id=""'
+        
+        output += f"""
+                        <a href="{html.escape(file_url)}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" {data_id_attr} target="_blank">
+                            <div>
+                                {badge_html}
+                                📄 {html.escape(display_name)}
+                            </div>
+                            <span class="badge bg-primary rounded-pill">Ansehen</span>
+                        </a>"""
+    output += """
+                    </div>
+                </div>
+            </div>"""
+
+output += """
+        </div>
+    </div>
+    <script>
+        function filterMaterials() {
+            let input = document.getElementById("searchInput").value.toLowerCase();
+            let items = document.getElementsByClassName("material-item");
+            for (let i = 0; i < items.length; i++) {
+                let item = items[i];
+                let folderText = item.getAttribute("data-search");
+                let links = item.getElementsByTagName("a");
+                let matchFound = folderText.includes(input);
+                for (let j = 0; j < links.length; j++) {
+                    let linkText = links[j].textContent.toLowerCase();
+                    let fileId = links[j].getAttribute("data-id");
+                    if (linkText.includes(input) || folderText.includes(input) || (fileId && fileId === input)) {
+                        links[j].style.setProperty("display", "flex", "important");
+                        matchFound = true;
+                    } else {
+                        links[j].style.setProperty("display", "none", "important");
+                    }
+                }
+                if (matchFound) { item.style.display = "block"; } else { item.style.display = "none"; }
+            }
+        }
+    </script>
+</body>
+</html>
+"""
+
+with open("index.html", "w", encoding="utf-8") as f:
+    f.write(output)
+print("index.html erfolgreich generiert!")
