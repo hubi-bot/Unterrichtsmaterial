@@ -1,0 +1,2272 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+<title>Die Folgen des spanischen Kolonialismus in Amerika — Lernmodul</title>
+<style>
+:root{
+  --parchment:#f1e3c6;--parchment-dark:#e2cfa6;--parchment-shadow:#c9b288;
+  --sepia:#5a3a1a;--sepia-dark:#3a230d;--ink:#2b1d0c;
+  --gold:#b8902d;--gold-light:#d9b54a;
+  --castile-red:#8b1f1f;--castile-red-dark:#5e1313;
+  --olive:#6b6a2c;--jungle:#2f5d3a;--ocean:#2c5a78;
+  --correct:#2d6a3f;--correct-bg:#d4e7d6;
+  --wrong:#a3231f;--wrong-bg:#f1d2cf;
+  --basis:#3b7a5e;--standard:#2c5a78;--vertief:#7a1f5e;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{font-family:"Iowan Old Style","Palatino Linotype","Book Antiqua",Palatino,Georgia,serif;color:var(--ink);
+  background:
+    radial-gradient(ellipse at top left,rgba(255,255,255,0.4),transparent 50%),
+    radial-gradient(ellipse at bottom right,rgba(90,58,26,0.18),transparent 55%),
+    repeating-linear-gradient(0deg,rgba(90,58,26,0.04) 0 2px,transparent 2px 6px),
+    linear-gradient(180deg,var(--parchment) 0%,var(--parchment-dark) 100%);
+  background-attachment:fixed;min-height:100vh;line-height:1.55;}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;
+  background:
+    radial-gradient(circle at 0% 0%,rgba(90,58,26,0.4),transparent 12%),
+    radial-gradient(circle at 100% 0%,rgba(90,58,26,0.4),transparent 12%),
+    radial-gradient(circle at 0% 100%,rgba(90,58,26,0.4),transparent 12%),
+    radial-gradient(circle at 100% 100%,rgba(90,58,26,0.4),transparent 12%);
+  z-index:1;}
+.wrap{max-width:1080px;margin:0 auto;padding:0 18px 60px;position:relative;z-index:2;}
+.progress-bar{position:sticky;top:0;z-index:50;background:linear-gradient(180deg,#3a230d,#5a3a1a);
+  color:var(--parchment);border-bottom:3px solid var(--gold);box-shadow:0 4px 14px rgba(0,0,0,.35);
+  padding:10px 18px;display:flex;align-items:center;gap:16px;font-variant:small-caps;letter-spacing:.5px;}
+.progress-bar .pb-label{font-weight:bold;color:var(--gold-light);font-size:15px;}
+.progress-bar .pb-track{flex:1;height:14px;background:rgba(0,0,0,.4);border:1px solid var(--gold);
+  border-radius:8px;overflow:hidden;box-shadow:inset 0 1px 4px rgba(0,0,0,.6);}
+.progress-bar .pb-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--gold),var(--gold-light));transition:width .4s;}
+.progress-bar .pb-count{font-weight:bold;min-width:120px;text-align:right;font-size:15px;}
+.hero{margin-top:22px;padding:30px 28px 26px;border:2px solid var(--sepia);
+  background:linear-gradient(135deg,rgba(184,144,45,.18),rgba(139,31,31,.10)),radial-gradient(circle at center,#f7ebd0,#e8d2a3 80%);
+  border-radius:6px;box-shadow:0 6px 22px rgba(58,35,13,.35),inset 0 0 30px rgba(90,58,26,.18);position:relative;overflow:hidden;}
+.hero::before{content:"";position:absolute;inset:6px;border:1px dashed rgba(90,58,26,.55);border-radius:3px;pointer-events:none;}
+.hero h1{font-family:"Trajan Pro","Cinzel",Georgia,serif;font-size:30px;margin:6px 0 4px;color:var(--castile-red-dark);letter-spacing:1.5px;text-shadow:1px 1px 0 rgba(255,255,255,.5);}
+.hero h2{font-size:18px;margin:0 0 16px;color:var(--sepia);font-weight:normal;font-style:italic;}
+.hero .intro-text{font-size:15.5px;max-width:760px;}
+.hero .crest{position:absolute;right:18px;top:18px;opacity:.9;}
+.card{background:linear-gradient(180deg,#fbf2dc,#f1e3c6);border:1.5px solid var(--sepia);
+  border-radius:6px;padding:18px 22px;margin:18px 0;box-shadow:0 4px 14px rgba(58,35,13,.18);}
+.card h3{margin:0 0 10px;color:var(--castile-red-dark);font-size:20px;border-bottom:1px dashed var(--sepia);padding-bottom:6px;letter-spacing:.5px;}
+.card.light{background:#fdf8eb;}
+table.overview{width:100%;border-collapse:collapse;margin-top:10px;font-size:14.5px;}
+table.overview th,table.overview td{border:1px solid var(--sepia-dark);padding:7px 9px;text-align:left;vertical-align:top;}
+table.overview th{background:linear-gradient(180deg,#5a3a1a,#3a230d);color:var(--parchment);font-variant:small-caps;letter-spacing:.6px;}
+table.overview tr:nth-child(even) td{background:rgba(184,144,45,.10);}
+.legend-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:10px;}
+.legend-item{display:flex;align-items:center;gap:10px;padding:7px 10px;background:#fdf8eb;border:1px solid var(--parchment-shadow);border-radius:4px;font-size:14px;}
+.legend-swatch{width:18px;height:18px;border-radius:3px;border:1px solid rgba(0,0,0,.25);flex-shrink:0;}
+.info-box{border-left:5px solid var(--gold);background:#fffaee;padding:10px 14px;margin:12px 0;font-size:14.5px;}
+.info-box strong{color:var(--castile-red-dark);}
+.info-box.gesellschaft{border-left-color:var(--vertief);}
+.info-box.wirtschaft{border-left-color:var(--ocean);}
+.station{background:linear-gradient(180deg,#fbf2dc,#f1e3c6);border:1.5px solid var(--sepia);
+  border-radius:6px;margin:14px 0;box-shadow:0 4px 14px rgba(58,35,13,.18);overflow:hidden;}
+.station-head{display:flex;align-items:center;gap:14px;padding:14px 18px;cursor:pointer;
+  background:linear-gradient(180deg,#5a3a1a,#3a230d);color:var(--parchment);user-select:none;transition:background .25s;}
+.station-head:hover{background:linear-gradient(180deg,#6e4720,#4a2c11);}
+.station-head .num{width:38px;height:38px;border-radius:50%;background:var(--gold);color:var(--sepia-dark);
+  font-weight:bold;display:flex;align-items:center;justify-content:center;font-size:18px;border:2px solid var(--gold-light);flex-shrink:0;}
+.station-head .title{flex:1;font-size:17px;font-variant:small-caps;letter-spacing:.8px;}
+.station-head .meta{font-size:12.5px;background:rgba(255,255,255,.12);border:1px solid var(--gold);padding:3px 8px;border-radius:14px;white-space:nowrap;}
+.station-head .status-dot{width:14px;height:14px;border-radius:50%;background:#888;border:2px solid #fff;flex-shrink:0;}
+.station-head .status-dot.ok{background:var(--correct);}
+.station-head .status-dot.bad{background:var(--wrong);}
+.station-head .chev{transition:transform .3s;font-size:18px;}
+.station.open .chev{transform:rotate(180deg);}
+.station-body{display:none;padding:20px 22px 24px;}
+.station.open .station-body{display:block;}
+.station h4{margin:18px 0 8px;color:var(--castile-red-dark);font-size:17px;}
+.station h4:first-child{margin-top:0;}
+.format-badges{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;}
+.badge{display:inline-block;padding:3px 9px;font-size:12px;border-radius:12px;background:var(--castile-red);color:var(--parchment);font-variant:small-caps;letter-spacing:.5px;}
+.badge.time{background:var(--sepia);}
+.badge.format{background:var(--olive);}
+.badge.thema-eco{background:var(--jungle);}
+.badge.thema-wirt{background:var(--ocean);}
+.badge.thema-ges{background:var(--vertief);}
+.niveau{display:inline-block;font-size:12px;padding:2px 8px;border-radius:10px;font-variant:small-caps;letter-spacing:.5px;color:#fff;margin-right:6px;}
+.niveau.basis{background:var(--basis);}
+.niveau.standard{background:var(--standard);}
+.niveau.vertief{background:var(--vertief);}
+.aufgabe{border:1px solid var(--parchment-shadow);background:#fdf8eb;border-radius:6px;padding:12px 14px;margin:12px 0;}
+.aufgabe.basis{border-left:5px solid var(--basis);}
+.aufgabe.standard{border-left:5px solid var(--standard);}
+.aufgabe.vertief{border-left:5px solid var(--vertief);background:#fbf3f6;}
+.aufgabe h5{margin:0 0 8px;color:var(--sepia-dark);font-size:15px;}
+textarea,input[type=text],input[type=number]{width:100%;background:#fffaee;border:1.5px solid var(--sepia);border-radius:4px;padding:9px 11px;font-family:inherit;font-size:15px;color:var(--ink);resize:vertical;}
+textarea{min-height:90px;}
+input[type=text]:focus,textarea:focus,input[type=number]:focus{outline:none;border-color:var(--castile-red);box-shadow:0 0 0 2px rgba(184,144,45,.35);}
+.btn{display:inline-block;background:linear-gradient(180deg,var(--castile-red),var(--castile-red-dark));
+  color:var(--parchment);border:1px solid var(--castile-red-dark);padding:9px 16px;font-family:inherit;
+  font-size:14.5px;font-variant:small-caps;letter-spacing:.8px;border-radius:4px;cursor:pointer;
+  box-shadow:0 2px 6px rgba(0,0,0,.25);transition:transform .1s,filter .15s;}
+.btn:hover{filter:brightness(1.08);}
+.btn:active{transform:translateY(1px);}
+.btn.secondary{background:linear-gradient(180deg,#6b6a2c,#4a4a1e);border-color:#4a4a1e;}
+.btn.ghost{background:transparent;color:var(--sepia-dark);border:1px dashed var(--sepia);box-shadow:none;}
+.btn.gold{background:linear-gradient(180deg,var(--gold-light),var(--gold));color:var(--sepia-dark);border-color:var(--gold);}
+.btn.small{padding:5px 10px;font-size:12.5px;}
+.btn-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;}
+details.tip{margin-top:10px;border:1px solid var(--parchment-shadow);border-radius:4px;padding:6px 12px;background:#fdf8eb;border-left:5px solid var(--gold);}
+details summary{cursor:pointer;font-weight:bold;color:var(--sepia-dark);padding:4px 0;font-variant:small-caps;letter-spacing:.5px;}
+details[open] summary{color:var(--castile-red-dark);}
+.loesung-box{margin-top:12px;border:2px solid var(--jungle);border-radius:6px;padding:12px 14px;background:#f1f9f1;}
+.loesung-box h6{margin:0 0 8px;color:var(--jungle);font-variant:small-caps;font-size:14px;letter-spacing:.6px;display:flex;align-items:center;gap:8px;}
+.loesung-box h6::before{content:"🔒";font-size:18px;}
+.loesung-box.unlocked h6::before{content:"🔓";}
+.loesung-input-row{display:flex;gap:8px;align-items:center;margin:6px 0;flex-wrap:wrap;}
+.loesung-input-row input{max-width:140px;}
+.loesung-content{display:none;border-top:1px dashed var(--jungle);padding-top:10px;margin-top:10px;}
+.loesung-box.unlocked .loesung-content{display:block;}
+.loesung-box.unlocked .loesung-input-row{display:none;}
+.code-hint{font-size:12px;color:var(--sepia-dark);font-style:italic;}
+.option-list{list-style:none;padding:0;margin:6px 0;}
+.option-list li{padding:8px 12px;margin:5px 0;background:#fffaee;border:1.5px solid var(--parchment-shadow);
+  border-radius:4px;cursor:pointer;display:flex;align-items:center;gap:10px;transition:background .15s;}
+.option-list li:hover{background:#f5e8c8;}
+.option-list li.selected{background:rgba(184,144,45,.25);border-color:var(--gold);}
+.option-list li.correct{background:var(--correct-bg);border-color:var(--correct);}
+.option-list li.wrong{background:var(--wrong-bg);border-color:var(--wrong);}
+.option-list li .marker{width:18px;height:18px;border:1.5px solid var(--sepia);border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:13px;color:var(--sepia-dark);}
+.option-list li.selected .marker{background:var(--gold);}
+.option-list li.correct .marker{background:var(--correct);color:#fff;}
+.option-list li.wrong .marker{background:var(--wrong);color:#fff;}
+.gap-text{background:#fffaee;border:1px solid var(--parchment-shadow);padding:10px 14px;border-radius:4px;line-height:2.1;}
+.gap-text input{display:inline-block;width:130px;padding:4px 6px;font-size:14px;border-bottom:2px solid var(--castile-red);
+  border-top:none;border-left:none;border-right:none;background:#fff8e1;border-radius:0;}
+.gap-text input.correct{background:var(--correct-bg);border-bottom-color:var(--correct);}
+.gap-text input.wrong{background:var(--wrong-bg);border-bottom-color:var(--wrong);}
+.wordbank{margin-bottom:10px;padding:8px 10px;background:rgba(184,144,45,.18);border:1px dashed var(--sepia);border-radius:4px;font-style:italic;}
+.tf-row{display:flex;flex-direction:column;gap:8px;margin:8px 0;}
+.tf-item{display:flex;align-items:center;gap:10px;padding:8px 12px;background:#fffaee;border:1px solid var(--parchment-shadow);border-radius:4px;flex-wrap:wrap;}
+.tf-item .stmt{flex:1;min-width:200px;}
+.tf-item .tf-btns{display:flex;gap:6px;}
+.tf-btn{padding:4px 12px;border-radius:4px;border:1.5px solid var(--sepia);background:#fdf8eb;cursor:pointer;font-family:inherit;font-size:13.5px;font-variant:small-caps;}
+.tf-btn.selected{background:var(--gold);border-color:var(--gold);}
+.tf-btn.correct{background:var(--correct);color:#fff;border-color:var(--correct);}
+.tf-btn.wrong{background:var(--wrong);color:#fff;border-color:var(--wrong);}
+.dnd-area{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:8px;}
+@media (max-width:720px){.dnd-area{grid-template-columns:1fr;}}
+.dnd-bank,.dnd-targets{background:#fffaee;border:1.5px dashed var(--sepia);padding:10px;border-radius:6px;min-height:60px;}
+.dnd-bank h5,.dnd-targets h5{margin:0 0 8px;font-variant:small-caps;color:var(--sepia-dark);}
+.dnd-item{display:inline-block;padding:6px 12px;margin:4px;background:var(--gold-light);color:var(--sepia-dark);
+  border:1.5px solid var(--gold);border-radius:14px;cursor:grab;font-size:14px;user-select:none;}
+.dnd-item.dragging{opacity:.5;}
+.dnd-item.tap-selected{outline:3px solid var(--castile-red);outline-offset:2px;}
+.dnd-target{background:#fdf8eb;border:1.5px dashed var(--parchment-shadow);padding:8px 10px;border-radius:4px;margin:6px 0;min-height:38px;}
+.dnd-target.over{background:rgba(184,144,45,.25);border-color:var(--gold);}
+.dnd-target .label{display:block;font-weight:bold;font-size:13.5px;color:var(--sepia-dark);margin-bottom:4px;}
+.dnd-target.correct{background:var(--correct-bg);border-color:var(--correct);}
+.dnd-target.wrong{background:var(--wrong-bg);border-color:var(--wrong);}
+.label-svg-wrap{background:#fffaee;border:1px solid var(--parchment-shadow);padding:14px;border-radius:6px;text-align:center;}
+.label-svg-wrap svg{max-width:100%;height:auto;}
+.label-inputs{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px;margin-top:10px;}
+.label-inputs .lbl{display:flex;flex-direction:column;background:#fffaee;padding:8px 10px;border:1px solid var(--parchment-shadow);border-radius:4px;}
+.label-inputs .lbl strong{font-size:13px;color:var(--castile-red-dark);}
+.label-inputs .lbl.correct{background:var(--correct-bg);border-color:var(--correct);}
+.label-inputs .lbl.wrong{background:var(--wrong-bg);border-color:var(--wrong);}
+.chat-box{background:#fffaee;border:1.5px solid var(--sepia);border-radius:6px;padding:12px;height:320px;overflow-y:auto;margin:10px 0;}
+.chat-msg{margin:6px 0;padding:8px 11px;border-radius:8px;max-width:88%;font-size:14.5px;line-height:1.45;}
+.chat-msg.bot{background:rgba(139,31,31,.12);border-left:3px solid var(--castile-red);}
+.chat-msg.user{background:rgba(184,144,45,.25);border-right:3px solid var(--gold);margin-left:auto;text-align:right;}
+.chat-msg .who{font-size:11px;font-variant:small-caps;letter-spacing:.6px;opacity:.7;display:block;margin-bottom:2px;}
+.chat-input-row{display:flex;gap:6px;}
+.chat-input-row input{flex:1;}
+.chat-suggestions{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
+.chat-suggestions button{background:#fdf8eb;border:1px dashed var(--sepia);padding:4px 8px;border-radius:12px;font-size:12.5px;cursor:pointer;font-family:inherit;}
+.chat-suggestions button:hover{background:rgba(184,144,45,.2);}
+.chat-info{font-size:12.5px;color:var(--sepia-dark);font-style:italic;margin-top:6px;}
+.feedback-banner{margin-top:10px;padding:10px 14px;border-radius:4px;font-size:14.5px;display:none;}
+.feedback-banner.ok{display:block;background:var(--correct-bg);border-left:5px solid var(--correct);}
+.feedback-banner.bad{display:block;background:var(--wrong-bg);border-left:5px solid var(--wrong);}
+.feedback-banner.partial{display:block;background:#fff3d0;border-left:5px solid var(--gold);}
+.keyword-pill{display:inline-block;margin:3px;padding:3px 9px;border-radius:12px;font-size:12.5px;}
+.keyword-pill.found{background:var(--correct-bg);color:var(--correct);border:1px solid var(--correct);}
+.keyword-pill.missing{background:var(--wrong-bg);color:var(--wrong);border:1px solid var(--wrong);}
+table.ce-table{width:100%;border-collapse:collapse;margin-top:6px;}
+table.ce-table th,table.ce-table td{border:1px solid var(--sepia);padding:6px 9px;vertical-align:top;font-size:14.5px;}
+table.ce-table th{background:var(--sepia);color:var(--parchment);font-variant:small-caps;}
+table.ce-table td select,table.ce-table td textarea{width:100%;font-family:inherit;font-size:14px;padding:4px 6px;border:1px solid var(--parchment-shadow);border-radius:3px;background:#fff8e1;}
+table.ce-table td.correct{background:var(--correct-bg);}
+table.ce-table td.wrong{background:var(--wrong-bg);}
+.reflect-block{background:rgba(44,90,120,.10);border-left:5px solid var(--ocean);padding:10px 14px;border-radius:4px;margin:12px 0;}
+.reflect-block strong{color:var(--ocean);}
+.closing{margin-top:30px;padding:26px;background:radial-gradient(circle at top left,rgba(184,144,45,.25),transparent 60%),linear-gradient(180deg,#fbf2dc,#e8d2a3);
+  border:2px solid var(--gold);border-radius:8px;text-align:center;box-shadow:0 6px 20px rgba(58,35,13,.25);}
+.closing h2{margin:0 0 10px;color:var(--castile-red-dark);font-family:"Trajan Pro","Cinzel",Georgia,serif;font-size:24px;letter-spacing:1.2px;}
+.export-box{display:grid;grid-template-columns:1fr auto auto auto;gap:10px;align-items:center;margin-top:10px;}
+@media (max-width:840px){.export-box{grid-template-columns:1fr;}}
+.goals-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px;}
+.goal-card{background:#fffaee;border:1px solid var(--parchment-shadow);border-left:5px solid var(--castile-red);padding:10px 12px;border-radius:4px;font-size:14.5px;}
+.goal-card strong{color:var(--castile-red-dark);font-variant:small-caps;}
+.pop-chart{background:#fffaee;padding:14px;border-radius:6px;border:1px solid var(--parchment-shadow);}
+.glossar-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:10px;}
+.gloss-card{background:#fdf8eb;border:1px solid var(--parchment-shadow);border-left:4px solid var(--sepia);padding:8px 12px;border-radius:4px;font-size:14px;}
+.gloss-card strong{display:block;color:var(--castile-red-dark);font-variant:small-caps;letter-spacing:.5px;margin-bottom:3px;}
+.gn-box{background:#fff1f1;border:2px solid var(--castile-red);border-radius:6px;padding:18px 20px;margin:24px 0;}
+.gn-box h3{color:var(--castile-red-dark);margin:0 0 10px;border-bottom:2px solid var(--castile-red);padding-bottom:6px;}
+.gn-locked{padding:30px;text-align:center;font-size:16px;background:#fffaee;border:2px dashed var(--castile-red);border-radius:6px;margin:14px 0;}
+.gn-locked .key{font-size:38px;display:block;margin-bottom:10px;}
+.print-only{display:none;}
+@media print{
+  body{background:white;color:#000;}
+  .progress-bar,.btn,.btn-row,.dnd-bank,.chat-input-row,.chat-suggestions,.station-head .chev,.station-head .status-dot{display:none !important;}
+  .station-body{display:block !important;}
+  .station-head{background:#eee !important;color:#000 !important;}
+  .station,.card,.gn-box{break-inside:avoid;page-break-inside:avoid;box-shadow:none;}
+  body.print-only-glossar > *:not(.print-only-show){display:none !important;}
+  body.print-only-glossar #glossar-section{display:block !important;}
+  body.print-only-glossar #glossar-section *{visibility:visible;}
+  body.print-only-report .print-report-content{display:block !important;}
+  body.print-only-report > *:not(.print-only-show){display:none !important;}
+  .print-only{display:block !important;}
+}
+</style>
+</head>
+<body>
+<div class="progress-bar" role="status" aria-live="polite">
+  <svg width="34" height="34" viewBox="0 0 60 60" aria-hidden="true">
+    <circle cx="30" cy="30" r="27" fill="#3a230d" stroke="#d9b54a" stroke-width="2"/>
+    <polygon points="30,6 34,30 30,54 26,30" fill="#d9b54a"/>
+    <polygon points="6,30 30,26 54,30 30,34" fill="#b8902d"/>
+    <polygon points="30,6 34,30 30,30" fill="#fff5d4"/>
+    <circle cx="30" cy="30" r="3" fill="#3a230d" stroke="#d9b54a"/>
+    <text x="30" y="11" text-anchor="middle" font-size="6" fill="#d9b54a" font-weight="bold">N</text>
+  </svg>
+  <span class="pb-label">Bordbuch der Entdeckung</span>
+  <div class="pb-track"><div class="pb-fill" id="pbFill"></div></div>
+  <span class="pb-count" id="pbCount">0 / 12 geprüft</span>
+</div>
+
+<div class="wrap">
+
+<section class="hero">
+  <svg class="crest" width="72" height="72" viewBox="0 0 80 80" aria-hidden="true">
+    <defs><linearGradient id="seaGrad" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0%" stop-color="#3a8db0"/><stop offset="100%" stop-color="#1f4a66"/></linearGradient></defs>
+    <circle cx="40" cy="40" r="38" fill="#fbf2dc" stroke="#5a3a1a" stroke-width="2"/>
+    <rect x="6" y="48" width="68" height="22" fill="url(#seaGrad)"/>
+    <path d="M18 50 L62 50 L56 62 L24 62 Z" fill="#5a3a1a" stroke="#3a230d"/>
+    <rect x="38" y="22" width="2" height="28" fill="#3a230d"/>
+    <polygon points="40,22 56,38 40,38" fill="#8b1f1f"/>
+    <polygon points="40,22 24,38 40,38" fill="#fff5d4" stroke="#8b1f1f"/>
+  </svg>
+  <h1>Die Folgen des spanischen Kolonialismus in Amerika</h1>
+  <h2>Ökologie · Wirtschaft · Gesellschaft &mdash; ein interaktives Lernmodul</h2>
+  <p class="intro-text">
+    Mit der Ankunft der Spanier in der „Neuen Welt" ab 1492 prallten zwei Welten aufeinander. In diesem
+    Modul untersuchst du, wie der Kolonialismus nicht nur die <em>Umwelt</em>, sondern auch die
+    <em>Wirtschaft</em> und <em>Gesellschaft</em> Amerikas (und Europas!) für Jahrhunderte verändert hat.
+    Du beobachtest, vermutest, entscheidest, sprichst mit Zeitzeugen &mdash; und zeigst am Ende im
+    Gelingensnachweis, was du wirklich verstanden hast.
+  </p>
+</section>
+
+<section class="card">
+  <h3>Lernziele &mdash; Was du am Ende kannst</h3>
+  <div class="goals-grid">
+    <div class="goal-card"><strong>Beschreiben</strong>Den Kolumbianischen Austausch (Pflanzen, Tiere, Krankheiten) erklären.</div>
+    <div class="goal-card"><strong>Erklären (Ökologie)</strong>Wie Bergbau, Plantagen und Vieh Böden, Wälder und Wasser verändern.</div>
+    <div class="goal-card"><strong>Erklären (Wirtschaft)</strong>Wie der koloniale Welthandel (Silber, Zucker) Europa und Amerika ungleich prägt.</div>
+    <div class="goal-card"><strong>Erklären (Gesellschaft)</strong>Wie Zwangsarbeit, Castas-System und Christianisierung die indigene Gesellschaft umformen.</div>
+    <div class="goal-card"><strong>Analysieren</strong>Ursachen, Verlauf und Folgen des Bevölkerungsrückgangs analysieren.</div>
+    <div class="goal-card"><strong>Perspektiven wechseln</strong>Sichtweisen indigener Menschen, spanischer Kolonisten, der Umwelt einnehmen.</div>
+    <div class="goal-card"><strong>Bewerten</strong>Langfristige Folgen bis in unsere Gegenwart abwägen.</div>
+    <div class="goal-card"><strong>Transferieren</strong>Historische Strukturen mit heutigen Konflikten verknüpfen (Lithium, Soja, Bergbau).</div>
+  </div>
+</section>
+
+<section class="card">
+  <h3>Überblick: Stationen, Niveaus &amp; Selbstkontrolle</h3>
+  <p style="margin:6px 0 8px;"><strong>Gesamtdauer:</strong> 120&ndash;165 Min &nbsp;|&nbsp; <strong>Stationen:</strong> 12 + Gelingensnachweis &nbsp;|&nbsp;
+    <strong>Selbstkontrolle:</strong> nach jeder Aufgabe per Button <em>„Lösung prüfen"</em>.</p>
+
+  <div class="info-box" style="margin-top:8px;">
+    <strong>Differenzierung &mdash; drei Niveaus:</strong> Jede Station hat eine
+    <span class="niveau standard">Standard</span>-Aufgabe (Pflicht).
+    Viele Stationen bieten zusätzlich eine <span class="niveau basis">Basis</span>-Variante mit mehr Hilfen
+    und eine <span class="niveau vertief">Vertiefung</span> für schnelle / starke Lernende.
+    Wähle bewusst, womit du startest!
+  </div>
+
+  <div class="info-box">
+    <strong>Musterlösungen sind durch einen 4-stelligen Zahlencode geschützt.</strong>
+    Du bekommst den Code von deiner Lehrkraft &mdash; <em>erst nach</em> deinem ehrlichen Versuch.
+    So vermeidest du, dass du dich selbst um die Lernchance bringst.
+  </div>
+
+  <table class="overview">
+    <thead><tr><th>#</th><th>Station</th><th>Thema</th><th>Format</th><th>Dauer</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Einstieg: Was siehst du?</td><td>Übergreifend</td><td>Freitext &amp; Vermutung</td><td>8 min</td></tr>
+      <tr><td>2</td><td>Der Kolumbianische Austausch</td><td>Übergreifend</td><td>Lückentext + Wortspeicher</td><td>10 min</td></tr>
+      <tr><td>3</td><td>Reise der Arten</td><td>Ökologie</td><td>Drag-and-Drop</td><td>8 min</td></tr>
+      <tr><td>4</td><td>Boden unter Druck</td><td>Ökologie</td><td>MC + Begründung</td><td>12 min</td></tr>
+      <tr><td>5</td><td>Wälder fallen, Plantagen wachsen</td><td>Ökologie</td><td>Wahr/Falsch + Begründung</td><td>10 min</td></tr>
+      <tr><td>6</td><td>Cerro Rico — Silber</td><td>Ökologie + Wirtschaft</td><td>Info + Quiz + Freitext</td><td>18 min</td></tr>
+      <tr><td>7</td><td>Globales Geld &mdash; Silberinflation &amp; Welthandel</td><td>Wirtschaft</td><td>Info + MC + Freitext</td><td>14 min</td></tr>
+      <tr><td>8</td><td>Eine neue Gesellschaft &mdash; Castas, Sklaverei, Mission</td><td>Gesellschaft</td><td>Zuordnung + Reflexion</td><td>15 min</td></tr>
+      <tr><td>9</td><td>Stilles Sterben: Krankheiten</td><td>Ökologie + Gesellschaft</td><td>Beschriften + MC</td><td>12 min</td></tr>
+      <tr><td>10</td><td>Perspektivwechsel: Sprich mit Zeitzeugen</td><td>Übergreifend</td><td>Rollenspiel-Chatbot</td><td>18 min</td></tr>
+      <tr><td>11</td><td>Ursachen &amp; Folgen ordnen</td><td>Übergreifend</td><td>Tabelle + Begründung</td><td>12 min</td></tr>
+      <tr><td>12</td><td>Damals — Heute (Transfer)</td><td>Übergreifend</td><td>MC + Transfer-Text</td><td>15 min</td></tr>
+      <tr style="background:rgba(139,31,31,.10) !important;"><td>★</td><td><strong>Gelingensnachweis</strong> (Abschluss)</td><td>Prüfung</td><td>Lückentext + MC + Freitext</td><td>20 min</td></tr>
+    </tbody>
+  </table>
+
+  <div class="info-box" style="margin-top:14px;">
+    <strong>Vorwissen:</strong> Kolumbus 1492, Begriff „Kolonialismus", einfache Vorstellungen von
+    Ökosystemen, Boden, Nahrungskette und Welthandel. Wo Spezialwissen nötig ist
+    (z.&nbsp;B. Quecksilber-Amalgamverfahren, Silberinflation, Castas-System), findest du <strong>Info-Kästen</strong>.
+  </div>
+
+  <h4 style="margin-top:14px;">Legende</h4>
+  <div class="legend-grid">
+    <div class="legend-item"><span class="legend-swatch" style="background:#3b7a5e;"></span> <span><strong>Basis:</strong> mehr Hilfe</span></div>
+    <div class="legend-item"><span class="legend-swatch" style="background:#2c5a78;"></span> <span><strong>Standard:</strong> Pflichtaufgabe</span></div>
+    <div class="legend-item"><span class="legend-swatch" style="background:#7a1f5e;"></span> <span><strong>Vertiefung:</strong> Erweiterung</span></div>
+    <div class="legend-item"><span class="legend-swatch" style="background:#2f5d3a;"></span> <span><strong>Grün:</strong> richtig / Lösung</span></div>
+    <div class="legend-item"><span class="legend-swatch" style="background:#a3231f;"></span> <span><strong>Rot:</strong> falsch</span></div>
+    <div class="legend-item"><span class="legend-swatch" style="background:#b8902d;"></span> <span><strong>Gold:</strong> Tipps</span></div>
+    <div class="legend-item"><span class="legend-swatch" style="background:#2f5d3a;"></span> <span><strong>Ökologie</strong>-Thema</span></div>
+    <div class="legend-item"><span class="legend-swatch" style="background:#2c5a78;"></span> <span><strong>Wirtschaft</strong>-Thema</span></div>
+    <div class="legend-item"><span class="legend-swatch" style="background:#7a1f5e;"></span> <span><strong>Gesellschaft</strong>-Thema</span></div>
+  </div>
+</section>
+
+<!-- ============= STATION 1: EINSTIEG ============= -->
+<section class="station open" data-station="s1">
+  <div class="station-head" onclick="toggleStation(this)">
+    <div class="num">1</div><div class="title">Einstieg &mdash; Was siehst du? Was vermutest du?</div>
+    <span class="meta">8 min</span><div class="status-dot"></div><span class="chev">&#9660;</span>
+  </div>
+  <div class="station-body">
+    <div class="format-badges"><span class="badge format">Freitext &amp; Vermutung</span><span class="badge time">8 Min</span></div>
+
+    <div class="card light" style="margin:0 0 12px;">
+      <svg viewBox="0 0 600 280" width="100%" style="max-height:280px;">
+        <defs>
+          <linearGradient id="sky1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#f7d893"/><stop offset="100%" stop-color="#e7a36a"/></linearGradient>
+          <linearGradient id="sea1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#3a8db0"/><stop offset="100%" stop-color="#1d4a66"/></linearGradient>
+        </defs>
+        <rect width="600" height="160" fill="url(#sky1)"/>
+        <rect y="160" width="600" height="120" fill="url(#sea1)"/>
+        <circle cx="500" cy="60" r="30" fill="#fff3b8" opacity=".85"/>
+        <path d="M0 160 Q40 100 80 160 Z" fill="#2f5d3a"/>
+        <path d="M40 160 Q90 80 140 160 Z" fill="#3a7549"/>
+        <path d="M100 160 Q150 90 200 160 Z" fill="#2f5d3a"/>
+        <polygon points="160,160 175,140 190,160" fill="#a8632c"/>
+        <rect x="167" y="150" width="16" height="10" fill="#7a4920"/>
+        <polygon points="195,160 212,138 229,160" fill="#a8632c"/>
+        <rect x="203" y="148" width="18" height="12" fill="#7a4920"/>
+        <g transform="translate(380,150)">
+          <path d="M0 30 L120 30 L108 50 L12 50 Z" fill="#5a3a1a" stroke="#3a230d"/>
+          <rect x="55" y="-25" width="3" height="55" fill="#3a230d"/>
+          <polygon points="56,-25 80,5 56,5" fill="#fff5d4" stroke="#8b1f1f"/>
+          <polygon points="56,-25 32,5 56,5" fill="#fff5d4" stroke="#8b1f1f"/>
+          <line x1="56" y1="-22" x2="56" y2="2" stroke="#8b1f1f" stroke-width="1.5"/>
+          <line x1="46" y1="-10" x2="66" y2="-10" stroke="#8b1f1f" stroke-width="1.5"/>
+        </g>
+      </svg>
+    </div>
+    <p>Eine spanische Galeone trifft 1492 auf eine Küste, an der Menschen leben. <strong>Noch ist nichts passiert</strong>
+      &mdash; aber gleich kommt vieles in Bewegung: neue Tiere, Pflanzen, Bakterien, Werkzeuge.</p>
+
+    <div class="aufgabe basis">
+      <h5><span class="niveau basis">Basis</span> Aufgabe 1a &mdash; Drei Wörter</h5>
+      <p>Schreibe drei Wörter, die dir zu „Spanier in Amerika" einfallen. Begründe eines davon in einem Satz.</p>
+      <textarea id="s1_basis" placeholder="Wort 1: ... &#10;Wort 2: ... &#10;Wort 3: ... &#10;&#10;Begründung: ..."></textarea>
+    </div>
+
+    <div class="aufgabe standard">
+      <h5><span class="niveau standard">Standard</span> Aufgabe 1b &mdash; Drei begründete Vermutungen</h5>
+      <p>Formuliere <strong>drei Vermutungen</strong>, wie sich die Umwelt, die Wirtschaft <em>und</em> die
+        Gesellschaft dieser Region in den nächsten 100 Jahren ändern könnten. Begründe jede Vermutung kurz.</p>
+      <textarea id="s1_text" placeholder="Vermutung 1 (Umwelt): Ich vermute, dass ..., weil ..." rows="6"></textarea>
+    </div>
+
+    <div class="aufgabe vertief">
+      <h5><span class="niveau vertief">Vertiefung</span> Aufgabe 1c &mdash; Doppelperspektive</h5>
+      <p>Formuliere eine zusätzliche Vermutung aus <em>spanischer</em> und eine aus <em>indigener</em> Sicht.
+        Wie unterscheiden sich die Perspektiven auf dasselbe Ereignis?</p>
+      <textarea id="s1_vertief" placeholder="Spanier: ... &#10;Indigene: ..." rows="4"></textarea>
+    </div>
+
+    <details class="tip"><summary>Tipp anzeigen</summary>
+      Denke an drei „Stockwerke": 1) Was bringt das Schiff mit (Tiere, Pflanzen, Bakterien)?
+      2) Was passiert mit Wald, Boden, Bergwerk? 3) Wie verändert sich die Macht zwischen Menschen?
+    </details>
+
+    <div class="btn-row">
+      <button class="btn" onclick="checkS1()">Lösung prüfen</button>
+      <button class="btn ghost" onclick="resetS1()">Zurücksetzen</button>
+    </div>
+    <div id="s1_fb" class="feedback-banner"></div>
+
+    <div class="loesung-box" id="lock_s1" data-code="1492">
+      <h6>Musterlösung &amp; Erklärung</h6>
+      <div class="loesung-input-row">
+        <span class="code-hint">Gib den 4-stelligen Code von deiner Lehrkraft ein, um die Musterlösung zu sehen:</span>
+        <input type="text" inputmode="numeric" maxlength="4" placeholder="Code" onkeydown="if(event.key==='Enter')tryUnlock('s1')">
+        <button class="btn small gold" onclick="tryUnlock('s1')">Freischalten</button>
+      </div>
+      <div class="loesung-content">
+        <p>Eine plausible Antwort verbindet drei Ebenen <em>mit Begründung</em>:</p>
+        <ul>
+          <li><strong>Umwelt:</strong> Neue Tiere (Pferde, Schweine, Rinder) und Pflanzen (Weizen, Zuckerrohr) verändern Landschaften — Mechanismus: Überweidung, Monokultur, Bodenerosion.</li>
+          <li><strong>Wirtschaft:</strong> Reichtum aus Silber und Plantagen fließt nach Europa — Amerika wird Rohstofflieferant.</li>
+          <li><strong>Gesellschaft:</strong> Krankheiten und Zwangsarbeit dezimieren die indigene Bevölkerung; ein neues Castas-System entsteht.</li>
+        </ul>
+        <p><em>Vertiefung:</em> Aus spanischer Sicht ist die Ankunft Fortschritt, Auftrag, Reichtum. Aus indigener Sicht ist es Katastrophe, Verlust und Fremdherrschaft. Dieselbe Tatsache &mdash; <em>verschiedene</em> Bedeutungen.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============= STATION 2: KOLUMBIANISCHER AUSTAUSCH ============= -->
+<section class="station" data-station="s2">
+  <div class="station-head" onclick="toggleStation(this)">
+    <div class="num">2</div><div class="title">Der Kolumbianische Austausch</div>
+    <span class="meta">10 min</span><div class="status-dot"></div><span class="chev">&#9660;</span>
+  </div>
+  <div class="station-body">
+    <div class="format-badges"><span class="badge format">Lückentext + Begründung</span><span class="badge time">10 Min</span></div>
+    <div class="info-box">
+      <strong>Wissensimpuls.</strong> Der Historiker Alfred W. Crosby prägte 1972 den Begriff
+      <em>„Columbian Exchange"</em>. Gemeint ist der massive Austausch von Pflanzen, Tieren,
+      Krankheitserregern und Menschen zwischen Alter und Neuer Welt nach 1492. Die Folgen waren in
+      Amerika weit dramatischer als in Europa.
+    </div>
+
+    <div class="aufgabe standard">
+      <h5><span class="niveau standard">Standard</span> Aufgabe 2a &mdash; Lückentext</h5>
+      <div class="wordbank"><strong>Wortspeicher:</strong> 1492 · Crosby · Kartoffel · Tomate · Mais · Weizen · Pferde · Rinder · Pocken · Zuckerrohr · einseitig · Atlantik · Immunität</div>
+      <div class="gap-text" id="s2_gaps">
+        Im Jahr <input data-correct="1492" size="6"> begann mit Kolumbus der sogenannte Kolumbianische
+        Austausch &mdash; ein Begriff, den der Historiker Alfred <input data-correct="Crosby"> geprägt hat.
+        Über den <input data-correct="Atlantik"> wurden Pflanzen, Tiere und Krankheitserreger transportiert.<br>
+        Aus Amerika gelangten z.&nbsp;B. <input data-correct="Kartoffel">, <input data-correct="Tomate"> und
+        <input data-correct="Mais"> nach Europa. Umgekehrt brachten die Spanier
+        <input data-correct="Weizen">, <input data-correct="Zuckerrohr">, <input data-correct="Rinder"> und
+        <input data-correct="Pferde"> nach Amerika.<br>
+        Besonders dramatisch waren Krankheiten wie <input data-correct="Pocken">, weil die indigene
+        Bevölkerung keine <input data-correct="Immunität"> dagegen besaß. Die Folgen waren deshalb äußerst
+        <input data-correct="einseitig"> verteilt.
+      </div>
+    </div>
+
+    <div class="aufgabe vertief">
+      <h5><span class="niveau vertief">Vertiefung</span> Aufgabe 2b &mdash; Warum „einseitig"?</h5>
+      <p>Erkläre in 2&ndash;3 Sätzen, warum der Austausch <em>nicht</em> symmetrisch wirkte. Nenne mindestens
+        einen Aspekt aus Ökologie <strong>und</strong> einen aus Gesellschaft/Wirtschaft.</p>
+      <textarea id="s2_vertief" placeholder="Der Austausch war einseitig, weil ..."></textarea>
+    </div>
+
+    <details class="tip"><summary>Tipp anzeigen</summary>
+      13 Lücken. Eine Lücke fragt nach einem Jahr, eine nach einem Familiennamen, zwei nach Krankheits-
+      bzw. Schutzbegriffen, der Rest nach Pflanzen oder Tieren. Frage dich: Welche Nutzpflanzen kommen
+      ursprünglich aus Amerika?
+    </details>
+
+    <div class="btn-row"><button class="btn" onclick="checkS2()">Lösung prüfen</button>
+      <button class="btn ghost" onclick="resetS2()">Zurücksetzen</button></div>
+    <div id="s2_fb" class="feedback-banner"></div>
+
+    <div class="loesung-box" id="lock_s2" data-code="1972">
+      <h6>Musterlösung &amp; Erklärung</h6>
+      <div class="loesung-input-row">
+        <span class="code-hint">Code von der Lehrkraft eingeben:</span>
+        <input type="text" inputmode="numeric" maxlength="4" placeholder="Code" onkeydown="if(event.key==='Enter')tryUnlock('s2')">
+        <button class="btn small gold" onclick="tryUnlock('s2')">Freischalten</button>
+      </div>
+      <div class="loesung-content">
+        <p><strong>Lückentext:</strong> 1492 · Crosby · Atlantik · Kartoffel · Tomate · Mais · Weizen · Zuckerrohr · Rinder · Pferde · Pocken · Immunität · einseitig.</p>
+        <p><strong>Warum einseitig?</strong> Europa profitierte vor allem positiv (neue, kalorienreiche
+          Nahrungspflanzen wie Kartoffel und Mais; später Bevölkerungswachstum). Amerika erlitt katastrophale
+          Verluste: bis zu 90 % der indigenen Bevölkerung starben an Krankheiten, traditionelle Anbauformen
+          brachen zusammen, fremde Tiere zerstörten Felder, der Reichtum (Silber, Zucker) floss als Export
+          nach Spanien ab. Ökologisch wie sozial war der „Austausch" extrem ungleich.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============= STATION 3: REISE DER ARTEN ============= -->
+<section class="station" data-station="s3">
+  <div class="station-head" onclick="toggleStation(this)">
+    <div class="num">3</div><div class="title">Reise der Arten &mdash; Wer kam, wer ging?</div>
+    <span class="meta">8 min</span><div class="status-dot"></div><span class="chev">&#9660;</span>
+  </div>
+  <div class="station-body">
+    <div class="format-badges"><span class="badge thema-eco">Ökologie</span><span class="badge format">Drag-and-Drop</span><span class="badge time">8 Min</span></div>
+    <h4><span class="niveau standard">Standard</span> Aufgabe 3 &mdash; Ziehe jede Art in die richtige Richtung</h4>
+    <p>Tap-Bedienung (Tablet): erst Begriff antippen (rot umrandet), dann Ziel-Feld antippen.</p>
+    <div class="dnd-area">
+      <div class="dnd-bank" id="s3_bank">
+        <h5>Wortbank</h5>
+        <span class="dnd-item" draggable="true" data-key="pferd" data-side="EU2AM">Pferd</span>
+        <span class="dnd-item" draggable="true" data-key="rind" data-side="EU2AM">Rind</span>
+        <span class="dnd-item" draggable="true" data-key="schwein" data-side="EU2AM">Schwein</span>
+        <span class="dnd-item" draggable="true" data-key="zuckerrohr" data-side="EU2AM">Zuckerrohr</span>
+        <span class="dnd-item" draggable="true" data-key="weizen" data-side="EU2AM">Weizen</span>
+        <span class="dnd-item" draggable="true" data-key="pocken" data-side="EU2AM">Pocken</span>
+        <span class="dnd-item" draggable="true" data-key="kartoffel" data-side="AM2EU">Kartoffel</span>
+        <span class="dnd-item" draggable="true" data-key="tomate" data-side="AM2EU">Tomate</span>
+        <span class="dnd-item" draggable="true" data-key="mais" data-side="AM2EU">Mais</span>
+        <span class="dnd-item" draggable="true" data-key="kakao" data-side="AM2EU">Kakao</span>
+        <span class="dnd-item" draggable="true" data-key="tabak" data-side="AM2EU">Tabak</span>
+        <span class="dnd-item" draggable="true" data-key="ananas" data-side="AM2EU">Ananas</span>
+      </div>
+      <div class="dnd-targets">
+        <h5>Ziele</h5>
+        <div class="dnd-target" data-side="EU2AM"><span class="label">Europa &nbsp;&rarr;&nbsp; Amerika</span></div>
+        <div class="dnd-target" data-side="AM2EU"><span class="label">Amerika &nbsp;&rarr;&nbsp; Europa</span></div>
+      </div>
+    </div>
+
+    <div class="reflect-block"><strong><span class="niveau standard">Standard</span> Reflexion:</strong> Warum ist
+      der Begriff „Austausch" irreführend? &mdash; 1&ndash;2 Sätze.
+      <textarea id="s3_reflect" placeholder="Mein Gedanke ..."></textarea>
+    </div>
+
+    <div class="aufgabe vertief">
+      <h5><span class="niveau vertief">Vertiefung</span> Aufgabe 3b &mdash; Begründung für 2 Arten</h5>
+      <p>Wähle <strong>zwei</strong> Arten aus der Wortbank, deren Einführung besonders weitreichende
+        ökologische <em>oder</em> wirtschaftliche Folgen hatte. Begründe in je einem Satz, warum.</p>
+      <textarea id="s3_vertief" placeholder="Art 1 (z.B. Rind): ... &#10;Art 2 (z.B. Zuckerrohr): ..."></textarea>
+    </div>
+
+    <details class="tip"><summary>Tipp anzeigen</summary>
+      Welche Arten lebten vor 1492 in Europa? Pferde gab es in Amerika seit der Steinzeit nicht mehr.
+      Tabak und Kakao kannte Europa erst durch den Kontakt.
+    </details>
+    <div class="btn-row"><button class="btn" onclick="checkS3()">Lösung prüfen</button>
+      <button class="btn ghost" onclick="resetS3()">Zurücksetzen</button></div>
+    <div id="s3_fb" class="feedback-banner"></div>
+
+    <div class="loesung-box" id="lock_s3" data-code="7128">
+      <h6>Musterlösung &amp; Erklärung</h6>
+      <div class="loesung-input-row">
+        <span class="code-hint">Code von der Lehrkraft eingeben:</span>
+        <input type="text" inputmode="numeric" maxlength="4" placeholder="Code" onkeydown="if(event.key==='Enter')tryUnlock('s3')">
+        <button class="btn small gold" onclick="tryUnlock('s3')">Freischalten</button>
+      </div>
+      <div class="loesung-content">
+        <p><strong>Europa &rarr; Amerika:</strong> Pferd, Rind, Schwein, Zuckerrohr, Weizen, Pocken.<br>
+          <strong>Amerika &rarr; Europa:</strong> Kartoffel, Tomate, Mais, Kakao, Tabak, Ananas.</p>
+        <p><strong>Warum „Austausch" irreführend ist:</strong> Es klingt nach gleichwertigem Tausch &mdash; tatsächlich
+          waren die Folgen sehr unterschiedlich. Europa bekam neue Nahrung; Amerika bekam tödliche Krankheiten
+          und gewaltsame Veränderung seiner Ökosysteme.</p>
+        <p><strong>Zwei besonders folgenreiche Arten:</strong></p>
+        <ul>
+          <li><em>Rind:</em> Massive Überweidung, Bodenerosion, Verdrängung von Lamas / Vicuñas, ökonomisches
+            Standbein der Hacienda.</li>
+          <li><em>Zuckerrohr:</em> Monokultur in der Karibik → Abholzung tropischer Wälder, brutale
+            Plantagenarbeit (später durch importierte versklavte Afrikaner), Welthandel mit Europa.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============= STATION 4: BODEN UNTER DRUCK ============= -->
+<section class="station" data-station="s4">
+  <div class="station-head" onclick="toggleStation(this)">
+    <div class="num">4</div><div class="title">Boden unter Druck &mdash; Was passiert mit der Erde?</div>
+    <span class="meta">12 min</span><div class="status-dot"></div><span class="chev">&#9660;</span>
+  </div>
+  <div class="station-body">
+    <div class="format-badges"><span class="badge thema-eco">Ökologie</span><span class="badge format">MC + Begründung</span><span class="badge time">12 Min</span></div>
+    <div class="info-box">
+      <strong>Wissensimpuls.</strong> Indigene Völker bauten in <em>Mischkultur</em> an, z.&nbsp;B. die „drei
+      Schwestern" Mais, Bohnen, Kürbis. Mais gibt Halt, Bohnen düngen mit Stickstoff (Knöllchenbakterien),
+      Kürbis beschattet den Boden &mdash; das System ist nährstoffschonend. Spanier führten <em>Monokultur</em>
+      ein (v.&nbsp;a. Zuckerrohr, später Tabak, Indigo) sowie riesige Rinderherden im <em>Encomienda</em>- und
+      <em>Hacienda</em>-System.
+    </div>
+
+    <h4><span class="niveau standard">Standard</span> Aufgabe 4a &mdash; MC (mehrere richtig)</h4>
+    <p>Welche Aussagen beschreiben <em>direkte</em> Folgen für den Boden?</p>
+    <ul class="option-list" id="s4_opts">
+      <li data-correct="true">Monokulturen mit Zuckerrohr laugen den Boden aus, weil immer dieselben Nährstoffe entzogen werden.</li>
+      <li data-correct="false">Indigene Mischkulturen waren ineffizient und führten regelmäßig zu Bodenerosion.</li>
+      <li data-correct="true">Überweidung durch Rinder verdichtet und erodiert Böden, besonders an Hängen.</li>
+      <li data-correct="true">Tropische Böden verlieren ihre Fruchtbarkeit schnell, wenn die schützende Waldschicht entfernt wird.</li>
+      <li data-correct="false">Spanier brachten Düngemittel mit, sodass die Böden langfristig produktiver wurden.</li>
+      <li data-correct="true">Schweine wühlen die obere Bodenschicht auf, beschleunigen Erosion.</li>
+      <li data-correct="false">Die spanische Krone schrieb Fruchtwechsel und Düngung gesetzlich vor.</li>
+    </ul>
+
+    <div class="aufgabe standard">
+      <h5><span class="niveau standard">Standard</span> Aufgabe 4b &mdash; Begründung</h5>
+      <p>Wähle eine der <em>falschen</em> Aussagen oben und erkläre in 2 Sätzen, warum sie nicht stimmt.</p>
+      <textarea id="s4_begruend" placeholder="Die Aussage ... ist falsch, weil ..."></textarea>
+    </div>
+
+    <div class="aufgabe vertief">
+      <h5><span class="niveau vertief">Vertiefung</span> Aufgabe 4c &mdash; „Was wäre wenn?"</h5>
+      <p>Wenn die Spanier die indigene Mischkultur übernommen hätten &mdash; wie wäre die Bodenentwicklung anders
+        verlaufen? Skizziere eine kurze Wirkungskette.</p>
+      <textarea id="s4_vertief" placeholder="Wenn ... übernommen hätten, dann ... → ... → ..."></textarea>
+    </div>
+
+    <details class="tip"><summary>Tipp anzeigen</summary>
+      Achte auf Aussagen, die <em>zu positiv</em> klingen. Frage dich: Hatte Spanien wirklich modernes
+      Wissen über Bodenkunde? Synthetischer Dünger kam erst Anfang des 20. Jahrhunderts.
+    </details>
+    <div class="btn-row"><button class="btn" onclick="checkS4()">Lösung prüfen</button>
+      <button class="btn ghost" onclick="resetS4()">Zurücksetzen</button></div>
+    <div id="s4_fb" class="feedback-banner"></div>
+
+    <div class="loesung-box" id="lock_s4" data-code="3046">
+      <h6>Musterlösung &amp; Erklärung</h6>
+      <div class="loesung-input-row">
+        <span class="code-hint">Code von der Lehrkraft eingeben:</span>
+        <input type="text" inputmode="numeric" maxlength="4" placeholder="Code" onkeydown="if(event.key==='Enter')tryUnlock('s4')">
+        <button class="btn small gold" onclick="tryUnlock('s4')">Freischalten</button>
+      </div>
+      <div class="loesung-content">
+        <p><strong>Richtig:</strong> 1, 3, 4, 6. &nbsp;<strong>Falsch:</strong> 2, 5, 7.</p>
+        <ul>
+          <li><em>Monokultur:</em> Zuckerrohr ist Starkzehrer; ohne Fruchtwechsel sinkt Fruchtbarkeit.</li>
+          <li><em>Überweidung:</em> Tritt Pflanzendecke nieder; Wasserabfluss verstärkt Erosion an Hängen.</li>
+          <li><em>Tropische Böden:</em> Nährstoffe stecken in der Biomasse. Ist der Wald weg, sind sie schnell ausgespült.</li>
+          <li><em>Schweine:</em> Frei laufend, vermehrten sich in einer Welt ohne Fressfeinde explosionsartig — massive Bodenstörung.</li>
+        </ul>
+        <p><strong>Was wäre wenn:</strong> Mit Mischkultur wären Stickstoff (Bohnen) und Beschattung (Kürbis)
+          erhalten geblieben → langsamerer Humus-Verlust → mehr ökologische Stabilität, geringere Erträge
+          pro Hektar in der Exportwirtschaft, aber langfristig nachhaltiger.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============= STATION 5: WÄLDER FALLEN ============= -->
+<section class="station" data-station="s5">
+  <div class="station-head" onclick="toggleStation(this)">
+    <div class="num">5</div><div class="title">Wälder fallen, Plantagen wachsen</div>
+    <span class="meta">10 min</span><div class="status-dot"></div><span class="chev">&#9660;</span>
+  </div>
+  <div class="station-body">
+    <div class="format-badges"><span class="badge thema-eco">Ökologie</span><span class="badge format">Wahr/Falsch + Begründung</span><span class="badge time">10 Min</span></div>
+    <div class="info-box">
+      <strong>Wissensimpuls.</strong> Bereits im 16. Jh. wurden riesige Wälder gerodet: für
+      Zuckerrohrplantagen (Karibik), für Schiffsbau, Häuser, Möbel und vor allem als <em>Brennholz</em>
+      für die Silberverhüttung. Um Potosí verschwanden in wenigen Jahrzehnten ganze Gebirgswälder.
+    </div>
+
+    <h4><span class="niveau standard">Standard</span> Aufgabe 5a &mdash; Wahr oder Falsch?</h4>
+    <div class="tf-row" id="s5_tf">
+      <div class="tf-item" data-correct="W"><span class="stmt">1. Die Zuckerrohrproduktion in der Karibik führte zu großflächiger Abholzung.</span>
+        <div class="tf-btns"><button class="tf-btn" data-val="W">Wahr</button><button class="tf-btn" data-val="F">Falsch</button></div></div>
+      <div class="tf-item" data-correct="F"><span class="stmt">2. Holz wurde nur für den Schiffbau verwendet, nicht für den Bergbau.</span>
+        <div class="tf-btns"><button class="tf-btn" data-val="W">Wahr</button><button class="tf-btn" data-val="F">Falsch</button></div></div>
+      <div class="tf-item" data-correct="W"><span class="stmt">3. Um Potosí waren die Gebirgshänge nach wenigen Jahrzehnten weitgehend entwaldet.</span>
+        <div class="tf-btns"><button class="tf-btn" data-val="W">Wahr</button><button class="tf-btn" data-val="F">Falsch</button></div></div>
+      <div class="tf-item" data-correct="W"><span class="stmt">4. Mit dem Wald gingen auch viele Tier- und Pflanzenarten zurück.</span>
+        <div class="tf-btns"><button class="tf-btn" data-val="W">Wahr</button><button class="tf-btn" data-val="F">Falsch</button></div></div>
+      <div class="tf-item" data-correct="F"><span class="stmt">5. Die spanische Krone schützte Wälder durch ein modernes Forstgesetz.</span>
+        <div class="tf-btns"><button class="tf-btn" data-val="W">Wahr</button><button class="tf-btn" data-val="F">Falsch</button></div></div>
+      <div class="tf-item" data-correct="W"><span class="stmt">6. Indigene Anbausysteme nutzten den Wald oft, ohne ihn vollständig zu zerstören.</span>
+        <div class="tf-btns"><button class="tf-btn" data-val="W">Wahr</button><button class="tf-btn" data-val="F">Falsch</button></div></div>
+      <div class="tf-item" data-correct="F"><span class="stmt">7. Die abgeholzten Wälder erholten sich innerhalb von 50 Jahren von selbst.</span>
+        <div class="tf-btns"><button class="tf-btn" data-val="W">Wahr</button><button class="tf-btn" data-val="F">Falsch</button></div></div>
+    </div>
+
+    <div class="aufgabe standard">
+      <h5><span class="niveau standard">Standard</span> Aufgabe 5b &mdash; Eigene Begründung</h5>
+      <p>Wähle <strong>zwei</strong> falsche Aussagen und erkläre in je einem Satz, warum sie falsch sind.</p>
+      <textarea id="s5_begruend" placeholder="Aussage X ist falsch, weil ... &#10;Aussage Y ist falsch, weil ..."></textarea>
+    </div>
+
+    <div class="aufgabe vertief">
+      <h5><span class="niveau vertief">Vertiefung</span> Aufgabe 5c &mdash; Wirkungskette</h5>
+      <p>Zeichne sprachlich eine Wirkungskette: Silberbergbau → ? → ? → ? → Wasserhaushalt im Hochland.</p>
+      <textarea id="s5_vertief" placeholder="Silberbergbau → ... → ... → ... → Wasserhaushalt"></textarea>
+    </div>
+
+    <details class="tip"><summary>Tipp anzeigen</summary>
+      Achte auf Pauschalaussagen mit „nur" oder „innerhalb von ...". Solche Sätze sind oft zu absolut.
+    </details>
+    <div class="btn-row"><button class="btn" onclick="checkS5()">Lösung prüfen</button>
+      <button class="btn ghost" onclick="resetS5()">Zurücksetzen</button></div>
+    <div id="s5_fb" class="feedback-banner"></div>
+
+    <div class="loesung-box" id="lock_s5" data-code="5841">
+      <h6>Musterlösung &amp; Erklärung</h6>
+      <div class="loesung-input-row">
+        <span class="code-hint">Code von der Lehrkraft eingeben:</span>
+        <input type="text" inputmode="numeric" maxlength="4" placeholder="Code" onkeydown="if(event.key==='Enter')tryUnlock('s5')">
+        <button class="btn small gold" onclick="tryUnlock('s5')">Freischalten</button>
+      </div>
+      <div class="loesung-content">
+        <p><strong>Wahr:</strong> 1, 3, 4, 6. &nbsp;<strong>Falsch:</strong> 2, 5, 7.</p>
+        <p>Holz war ein <em>zentraler</em> Rohstoff: Schiffe, Häuser, vor allem Brennholz für die
+          Silberverhüttung. Die spanische Krone hatte keine Forstpolitik &mdash; sie förderte den Verbrauch
+          indirekt durch das Mita-System.</p>
+        <p><strong>Wirkungskette (Beispiel):</strong> Silberbergbau → riesiger Holzbedarf → Abholzung der
+          Hänge → kein Wurzelschutz → schnelle Wasserabflüsse, Verlust von Quellwasser → trockenere Täler →
+          weniger Trinkwasser für Dörfer.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============= STATION 6: CERRO RICO ============= -->
+<section class="station" data-station="s6">
+  <div class="station-head" onclick="toggleStation(this)">
+    <div class="num">6</div><div class="title">Cerro Rico &mdash; der Berg, der eine Welt erschütterte</div>
+    <span class="meta">18 min</span><div class="status-dot"></div><span class="chev">&#9660;</span>
+  </div>
+  <div class="station-body">
+    <div class="format-badges"><span class="badge thema-eco">Ökologie</span><span class="badge thema-wirt">Wirtschaft</span><span class="badge format">Info + Quiz + Freitext</span><span class="badge time">18 Min</span></div>
+    <div class="card light" style="margin:0 0 12px;">
+      <svg viewBox="0 0 600 240" width="100%">
+        <defs><linearGradient id="mtn" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#a3231f"/><stop offset="100%" stop-color="#5e1313"/></linearGradient>
+          <linearGradient id="grnd" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#c9b288"/><stop offset="100%" stop-color="#8a7548"/></linearGradient></defs>
+        <rect width="600" height="240" fill="#f1e3c6"/>
+        <rect y="170" width="600" height="70" fill="url(#grnd)"/>
+        <polygon points="300,20 430,180 170,180" fill="url(#mtn)" stroke="#3a230d" stroke-width="2"/>
+        <ellipse cx="260" cy="150" rx="10" ry="6" fill="#3a230d"/>
+        <ellipse cx="330" cy="135" rx="10" ry="6" fill="#3a230d"/>
+        <path d="M280 60 Q300 90 270 130" stroke="#dcdcdc" stroke-width="2" fill="none" opacity=".8"/>
+        <g transform="translate(80,180)">
+          <rect x="0" y="-25" width="22" height="25" fill="#fbf2dc" stroke="#5a3a1a"/>
+          <polygon points="0,-25 11,-35 22,-25" fill="#8b1f1f"/>
+          <rect x="30" y="-30" width="22" height="30" fill="#fbf2dc" stroke="#5a3a1a"/>
+          <polygon points="30,-30 41,-42 52,-30" fill="#8b1f1f"/>
+        </g>
+        <g transform="translate(460,180)">
+          <rect x="0" y="-30" width="40" height="30" fill="#8a7548" stroke="#3a230d"/>
+          <circle cx="20" cy="-15" r="9" fill="#5a3a1a" stroke="#3a230d"/>
+          <path d="M45 -30 q5 -10 0 -20 q-5 -10 0 -20" stroke="#888" stroke-width="2" fill="none"/>
+        </g>
+        <text x="300" y="220" text-anchor="middle" font-size="13" fill="#3a230d" font-weight="bold">Cerro Rico de Potosí &mdash; Stollen, Stadt, Amalgam-Mühlen</text>
+      </svg>
+    </div>
+
+    <div class="info-box">
+      <strong>Wissensimpuls 1 (Verfahren).</strong> Potosí wurde ab 1545 erschlossen. Ab ca. 1572 nutzte man das
+      <strong>Quecksilber-Amalgamverfahren</strong>: Erz wird gemahlen, mit Salz, Wasser und Quecksilber
+      (Hg) vermischt. Quecksilber bindet Silber zu <em>Amalgam</em>. Beim Erhitzen verdampft Quecksilber,
+      reines Silber bleibt zurück.<br>
+      <strong>Stoffeigenschaften:</strong> Quecksilber ist bei Raumtemperatur flüssig, hochgiftig, dampft
+      bereits bei moderaten Temperaturen, reichert sich in Lebewesen an (<em>Bioakkumulation</em>).
+    </div>
+
+    <div class="info-box wirtschaft">
+      <strong>Wissensimpuls 2 (Wirtschaft).</strong> Die Arbeit unter Tage wurde im <em>Mita-System</em>
+      erzwungen: indigene Männer waren zu jährlicher Zwangsarbeit verpflichtet. Sterblichkeit: extrem hoch.
+      Das Silber aus Potosí finanzierte Spaniens Kriege, aber auch den Welthandel mit China
+      (sog. „Manila-Galeonen"). Allein zwischen 1500 und 1800 kamen ca. <strong>150&nbsp;000 Tonnen Silber</strong>
+      aus Amerika nach Europa.
+    </div>
+
+    <div class="aufgabe standard">
+      <h5><span class="niveau standard">Standard</span> Aufgabe 6a &mdash; Quiz (mehrere richtig)</h5>
+      <ul class="option-list" id="s6_quiz">
+        <li data-correct="false">Quecksilber wurde verwendet, weil es Silber chemisch zerstören konnte.</li>
+        <li data-correct="true">Quecksilber bindet Silber zu Amalgam, das durch Erhitzen wieder getrennt wird.</li>
+        <li data-correct="true">Die Verbrennung des Quecksilbers setzte hochgiftige Dämpfe frei.</li>
+        <li data-correct="false">Die Krone schaffte die Zwangsarbeit ab, sobald Folgen bekannt wurden.</li>
+        <li data-correct="true">Quecksilber reichert sich in der Nahrungskette an (Bioakkumulation).</li>
+        <li data-correct="true">Der Holzverbrauch für die Verhüttung führte zur Entwaldung um Potosí.</li>
+      </ul>
+    </div>
+
+    <div class="aufgabe standard">
+      <h5><span class="niveau standard">Standard</span> Aufgabe 6b &mdash; Erkläre in eigenen Worten</h5>
+      <p>Warum war Potosí auf <strong>drei Ebenen</strong> problematisch? Verwende: <em>Quecksilber</em>,
+        <em>Wald/Brennholz</em>, <em>Mita</em>, <em>Boden/Wasser</em>. 4&ndash;6 Sätze.</p>
+      <textarea id="s6_text" placeholder="Der Silberbergbau in Potosí war problematisch, weil ..." rows="5"></textarea>
+    </div>
+
+    <div class="aufgabe vertief">
+      <h5><span class="niveau vertief">Vertiefung</span> Aufgabe 6c &mdash; Wirtschaftliche Doppeldeutigkeit</h5>
+      <p>Potosí brachte Spanien enormen Reichtum &mdash; und ruinierte zugleich die Region. Wie kann beides
+        gleichzeitig stimmen? Antworte in 3&ndash;4 Sätzen.</p>
+      <textarea id="s6_vertief" placeholder="Reichtum für Spanien und Verarmung der Region passieren gleichzeitig, weil ..."></textarea>
+    </div>
+
+    <details class="tip"><summary>Tipp anzeigen</summary>
+      Drei Ebenen: 1) Vergiftung durch Hg, 2) Ressourcenverbrauch (Wald, Wasser), 3) sozial-ökologisch
+      (Mita). Für die Wirtschaft: Wo bleibt das Silber? Wer arbeitet?
+    </details>
+    <div class="btn-row"><button class="btn" onclick="checkS6()">Lösung prüfen</button>
+      <button class="btn ghost" onclick="resetS6()">Zurücksetzen</button></div>
+    <div id="s6_fb" class="feedback-banner"></div>
+    <div id="s6_fb_text" class="feedback-banner"></div>
+
+    <div class="loesung-box" id="lock_s6" data-code="2210">
+      <h6>Musterlösung &amp; Erklärung</h6>
+      <div class="loesung-input-row">
+        <span class="code-hint">Code von der Lehrkraft eingeben:</span>
+        <input type="text" inputmode="numeric" maxlength="4" placeholder="Code" onkeydown="if(event.key==='Enter')tryUnlock('s6')">
+        <button class="btn small gold" onclick="tryUnlock('s6')">Freischalten</button>
+      </div>
+      <div class="loesung-content">
+        <p><strong>Quiz:</strong> Richtig 2, 3, 5, 6. Falsch 1, 4. (Quecksilber bindet, nicht zerstört. Mita bestand
+          fort, weil sie der Krone enorme Einnahmen brachte.)</p>
+        <p><strong>Drei Ebenen (Standardlösung):</strong></p>
+        <ul>
+          <li><em>Vergiftung:</em> Hg-Dämpfe schädigen Lunge, Nervensystem; gelangen in Wasser, Boden, Nahrung.</li>
+          <li><em>Ressourcen:</em> Massiver Holzverbrauch &rarr; Wälder weg, Wasserhaushalt zerstört.</li>
+          <li><em>Mita:</em> Zwangsarbeit zerstörte indigene Dörfer und damit ihre nachhaltige Landnutzung.</li>
+        </ul>
+        <p><strong>Doppeldeutigkeit:</strong> Reichtum und Verarmung passieren parallel, weil das Silber
+          <em>nicht in der Region bleibt</em>. Es fließt direkt nach Sevilla, später nach Genua, Antwerpen,
+          China. Bezahlt wird mit Wäldern, Wasser, Leben &mdash; aber die Rendite landet in Europa. Klassisches
+          Muster einer <em>Extraktionsökonomie</em>.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============= STATION 7: WIRTSCHAFT — Silberinflation & Welthandel ============= -->
+<section class="station" data-station="s7">
+  <div class="station-head" onclick="toggleStation(this)">
+    <div class="num">7</div><div class="title">Globales Geld &mdash; Silberinflation &amp; Welthandel</div>
+    <span class="meta">14 min</span><div class="status-dot"></div><span class="chev">&#9660;</span>
+  </div>
+  <div class="station-body">
+    <div class="format-badges"><span class="badge thema-wirt">Wirtschaft</span><span class="badge format">Info + MC + Freitext</span><span class="badge time">14 Min</span></div>
+
+    <div class="info-box wirtschaft">
+      <strong>Wissensimpuls.</strong> Das Silber aus Potosí veränderte die <em>Weltwirtschaft</em>:
+      Spanien wurde reich, gab das Silber aber für Kriege (Türkenkriege, Niederländischer Aufstand,
+      Dreißigjähriger Krieg) aus. So gelangte es nach Genua, Antwerpen, Augsburg, Amsterdam &mdash; und
+      in den Fernhandel mit Ming-China (gegen Seide, Porzellan, Tee). Da plötzlich riesige Mengen Silber
+      im Umlauf waren, verlor es an Wert: die Preise stiegen massiv. Diesen Effekt nennt man
+      <strong>„Preisrevolution"</strong> bzw. <em>Silberinflation</em> des 16. Jahrhunderts.
+      <br><br>
+      <strong>Encomienda:</strong> Lehenssystem &mdash; ein Spanier erhielt das Recht, Tribut und Arbeit
+      einer indigenen Gruppe einzufordern, im Gegenzug sollte er sie christianisieren.
+      <strong>Hacienda:</strong> Großgrundbesitz, später mit Schuldknechtschaft.
+    </div>
+
+    <h4><span class="niveau standard">Standard</span> Aufgabe 7a &mdash; Welche Aussagen stimmen?</h4>
+    <ul class="option-list" id="s7_opts">
+      <li data-correct="true">Das amerikanische Silber finanzierte spanische Kriege in Europa.</li>
+      <li data-correct="true">Durch große Silbermengen sanken Kaufkraft und Wert des Geldes (Inflation).</li>
+      <li data-correct="false">Spanien investierte das Silber überwiegend in Schulen, Straßen und Infrastruktur.</li>
+      <li data-correct="true">Silber wurde bis nach China gehandelt; im Gegenzug kamen Seide, Porzellan, Tee.</li>
+      <li data-correct="false">Die indigene Bevölkerung profitierte wirtschaftlich vom Silber-Boom.</li>
+      <li data-correct="true">Die Encomienda war ein System, in dem Spanier Anrecht auf Arbeit und Tribut indigener Gruppen hatten.</li>
+      <li data-correct="false">Die Hacienda war ein modernes Lohnsystem ohne Zwangsarbeit.</li>
+    </ul>
+
+    <div class="aufgabe basis">
+      <h5><span class="niveau basis">Basis</span> Aufgabe 7b &mdash; Vereinfachte Frage</h5>
+      <p>Setze die Reihenfolge in die richtige Folge (1 = zuerst, 4 = zuletzt):</p>
+      <ol style="background:#fffaee;padding:10px 30px;border:1px solid var(--parchment-shadow);border-radius:4px;">
+        <li>Silber kommt in Sevilla an. &nbsp; Position: <input type="number" min="1" max="4" id="s7b1" data-correct="2" style="width:70px;"></li>
+        <li>Indigene Männer arbeiten unter Zwang in Potosí. &nbsp; Position: <input type="number" min="1" max="4" id="s7b2" data-correct="1" style="width:70px;"></li>
+        <li>Preise steigen in Europa, Bauern verlieren Kaufkraft. &nbsp; Position: <input type="number" min="1" max="4" id="s7b3" data-correct="4" style="width:70px;"></li>
+        <li>Der König finanziert Kriege mit dem Silber. &nbsp; Position: <input type="number" min="1" max="4" id="s7b4" data-correct="3" style="width:70px;"></li>
+      </ol>
+    </div>
+
+    <div class="aufgabe standard">
+      <h5><span class="niveau standard">Standard</span> Aufgabe 7c &mdash; Freitext (4&ndash;6 Sätze)</h5>
+      <p>Erkläre den <strong>Paradox-Effekt</strong>: Spanien wurde durch das Silber <em>reich und arm zugleich</em>.
+        Verwende die Begriffe Inflation, Krieg, Importe, Industrie.</p>
+      <textarea id="s7_text" placeholder="Spanien wurde reich, weil ... — und zugleich arm, weil ..." rows="5"></textarea>
+    </div>
+
+    <div class="aufgabe vertief">
+      <h5><span class="niveau vertief">Vertiefung</span> Aufgabe 7d &mdash; Vergleich mit heute</h5>
+      <p>Welche aktuelle Rohstoff-Region könnte man mit Potosí vergleichen? Begründe in 2&ndash;3 Sätzen.</p>
+      <textarea id="s7_vertief" placeholder="Vergleichbar ist heute z.B. ..., weil ..."></textarea>
+    </div>
+
+    <details class="tip"><summary>Tipp anzeigen</summary>
+      Reich = Schiffsladungen voller Silber. Arm = die Wirtschaft wird nicht produktiver. Frage: Wo wandert
+      das Silber hin, sobald es in Spanien ankommt? Was kauft Spanien damit?
+    </details>
+    <div class="btn-row"><button class="btn" onclick="checkS7()">Lösung prüfen</button>
+      <button class="btn ghost" onclick="resetS7()">Zurücksetzen</button></div>
+    <div id="s7_fb" class="feedback-banner"></div>
+    <div id="s7_fb_text" class="feedback-banner"></div>
+
+    <div class="loesung-box" id="lock_s7" data-code="9374">
+      <h6>Musterlösung &amp; Erklärung</h6>
+      <div class="loesung-input-row">
+        <span class="code-hint">Code von der Lehrkraft eingeben:</span>
+        <input type="text" inputmode="numeric" maxlength="4" placeholder="Code" onkeydown="if(event.key==='Enter')tryUnlock('s7')">
+        <button class="btn small gold" onclick="tryUnlock('s7')">Freischalten</button>
+      </div>
+      <div class="loesung-content">
+        <p><strong>MC:</strong> Richtig 1, 2, 4, 6. Falsch 3, 5, 7.</p>
+        <p><strong>Reihenfolge:</strong> 1) Zwangsarbeit in Potosí → 2) Silber kommt in Sevilla an → 3) König finanziert Kriege → 4) Preise in Europa steigen.</p>
+        <p><strong>Paradox:</strong> Spanien wurde <em>reich</em> an Silber, aber <em>arm</em> an
+          Produktivkraft. Statt eigene Industrie aufzubauen, kaufte es Waren in Antwerpen, Genua, Augsburg
+          oder China. Das Silber zog also direkt wieder ab. Gleichzeitig stiegen die Preise (Inflation),
+          weil zu viel Geld im Umlauf war. Die Folge: andere europäische Länder (Niederlande, England)
+          entwickelten ihre Wirtschaft &mdash; Spanien fiel zurück.</p>
+        <p><strong>Vergleich heute:</strong> Z.&nbsp;B. das „Lithium-Dreieck" (Bolivien, Chile, Argentinien)
+          oder der Erzabbau im Kongo. Auch hier verlässt der Rohstoff das Land oft, ohne dass dauerhafte
+          Industrien entstehen &mdash; man spricht vom „Rohstofffluch".</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============= STATION 8: GESELLSCHAFT — Castas, Sklaverei, Mission ============= -->
+<section class="station" data-station="s8">
+  <div class="station-head" onclick="toggleStation(this)">
+    <div class="num">8</div><div class="title">Eine neue Gesellschaft &mdash; Castas, Sklaverei, Mission</div>
+    <span class="meta">15 min</span><div class="status-dot"></div><span class="chev">&#9660;</span>
+  </div>
+  <div class="station-body">
+    <div class="format-badges"><span class="badge thema-ges">Gesellschaft</span><span class="badge format">Zuordnung + Reflexion</span><span class="badge time">15 Min</span></div>
+
+    <div class="info-box gesellschaft">
+      <strong>Wissensimpuls.</strong> Aus drei Bevölkerungsgruppen &mdash; Spanier, Indigene und versklavte
+      Afrikaner &mdash; entstand in Spanisch-Amerika eine neue, streng nach Herkunft sortierte Gesellschaft.
+      Die Spanier ordneten Menschen in das sogenannte <em>Casta-System</em>: <strong>Peninsular</strong>
+      (in Spanien geboren, höchste Stufe), <strong>Criollo</strong> (in Amerika geborene Spanier),
+      <strong>Mestizo</strong> (Spanier × Indigene), <strong>Mulato</strong> (Spanier × Afrikaner),
+      <strong>Zambo</strong> (Indigene × Afrikaner), <strong>Indígena</strong>, <strong>Esclavo</strong>.
+      Die Stufe entschied über Steuern, Berufe, Eheverbote.<br><br>
+      <strong>Sklaverei:</strong> Da indigene Bevölkerung an Krankheiten starb und durch Mita-Arbeit knapp
+      wurde, importierten die Spanier ab Mitte des 16. Jh. <em>versklavte Afrikaner</em> in die Karibik und
+      nach Brasilien, vor allem für Zuckerplantagen.<br>
+      <strong>Mission:</strong> Mit Schwert und Kreuz &mdash; indigene Religionen wurden verboten, Kirchen auf
+      heiligen Stätten gebaut, Sprachen unterdrückt (aber von Missionaren auch dokumentiert).
+    </div>
+
+    <h4><span class="niveau standard">Standard</span> Aufgabe 8a &mdash; Begriffe zuordnen</h4>
+    <p>Ordne jeden Begriff der richtigen Beschreibung zu.</p>
+    <table class="ce-table" id="s8_table">
+      <thead><tr><th style="width:40%;">Begriff</th><th>Beschreibung</th></tr></thead>
+      <tbody>
+        <tr><td>Peninsular</td>
+          <td><select data-correct="penin"><option value="">&mdash; wählen &mdash;</option>
+            <option value="penin">In Spanien geboren, höchste Stufe der Casta-Hierarchie</option>
+            <option value="criollo">In Amerika geborener Spanier, oft reich, aber politisch benachteiligt</option>
+            <option value="mestizo">Nachkomme von Spanier und Indigener</option>
+            <option value="mulato">Nachkomme von Spanier und Afrikaner</option>
+            <option value="esclavo">Versklavte Person, meist aus Afrika</option>
+            <option value="mission">Christianisierungsprogramm der katholischen Kirche</option>
+          </select></td></tr>
+        <tr><td>Criollo</td>
+          <td><select data-correct="criollo"><option value="">&mdash; wählen &mdash;</option>
+            <option value="penin">In Spanien geboren, höchste Stufe der Casta-Hierarchie</option>
+            <option value="criollo">In Amerika geborener Spanier, oft reich, aber politisch benachteiligt</option>
+            <option value="mestizo">Nachkomme von Spanier und Indigener</option>
+            <option value="mulato">Nachkomme von Spanier und Afrikaner</option>
+            <option value="esclavo">Versklavte Person, meist aus Afrika</option>
+            <option value="mission">Christianisierungsprogramm der katholischen Kirche</option>
+          </select></td></tr>
+        <tr><td>Mestizo</td>
+          <td><select data-correct="mestizo"><option value="">&mdash; wählen &mdash;</option>
+            <option value="penin">In Spanien geboren, höchste Stufe der Casta-Hierarchie</option>
+            <option value="criollo">In Amerika geborener Spanier, oft reich, aber politisch benachteiligt</option>
+            <option value="mestizo">Nachkomme von Spanier und Indigener</option>
+            <option value="mulato">Nachkomme von Spanier und Afrikaner</option>
+            <option value="esclavo">Versklavte Person, meist aus Afrika</option>
+            <option value="mission">Christianisierungsprogramm der katholischen Kirche</option>
+          </select></td></tr>
+        <tr><td>Mulato</td>
+          <td><select data-correct="mulato"><option value="">&mdash; wählen &mdash;</option>
+            <option value="penin">In Spanien geboren, höchste Stufe der Casta-Hierarchie</option>
+            <option value="criollo">In Amerika geborener Spanier, oft reich, aber politisch benachteiligt</option>
+            <option value="mestizo">Nachkomme von Spanier und Indigener</option>
+            <option value="mulato">Nachkomme von Spanier und Afrikaner</option>
+            <option value="esclavo">Versklavte Person, meist aus Afrika</option>
+            <option value="mission">Christianisierungsprogramm der katholischen Kirche</option>
+          </select></td></tr>
+        <tr><td>Esclavo</td>
+          <td><select data-correct="esclavo"><option value="">&mdash; wählen &mdash;</option>
+            <option value="penin">In Spanien geboren, höchste Stufe der Casta-Hierarchie</option>
+            <option value="criollo">In Amerika geborener Spanier, oft reich, aber politisch benachteiligt</option>
+            <option value="mestizo">Nachkomme von Spanier und Indigener</option>
+            <option value="mulato">Nachkomme von Spanier und Afrikaner</option>
+            <option value="esclavo">Versklavte Person, meist aus Afrika</option>
+            <option value="mission">Christianisierungsprogramm der katholischen Kirche</option>
+          </select></td></tr>
+        <tr><td>Misión</td>
+          <td><select data-correct="mission"><option value="">&mdash; wählen &mdash;</option>
+            <option value="penin">In Spanien geboren, höchste Stufe der Casta-Hierarchie</option>
+            <option value="criollo">In Amerika geborener Spanier, oft reich, aber politisch benachteiligt</option>
+            <option value="mestizo">Nachkomme von Spanier und Indigener</option>
+            <option value="mulato">Nachkomme von Spanier und Afrikaner</option>
+            <option value="esclavo">Versklavte Person, meist aus Afrika</option>
+            <option value="mission">Christianisierungsprogramm der katholischen Kirche</option>
+          </select></td></tr>
+      </tbody>
+    </table>
+
+    <div class="aufgabe standard">
+      <h5><span class="niveau standard">Standard</span> Aufgabe 8b &mdash; Reflexion</h5>
+      <p>Warum ist das Casta-System aus heutiger Sicht <strong>rassistisch</strong>? Schreibe in 3&ndash;4 Sätzen
+        und nenne mindestens zwei konkrete Mechanismen (z.&nbsp;B. Eheverbote, Berufsbeschränkungen, Steuerlast).</p>
+      <textarea id="s8_text" placeholder="Das Casta-System ist rassistisch, weil ..." rows="5"></textarea>
+    </div>
+
+    <div class="aufgabe vertief">
+      <h5><span class="niveau vertief">Vertiefung</span> Aufgabe 8c &mdash; Mission: Schutz oder Zerstörung?</h5>
+      <p>Diskutiere &mdash; in 3&ndash;5 Sätzen &mdash; ob die katholische Mission die indigene Bevölkerung
+        <em>nur</em> zerstört hat, oder ob es differenziertere Folgen gab (z.&nbsp;B. Sprachdokumentation
+        durch Missionare, Schutz vor Encomenderos in manchen Fällen).</p>
+      <textarea id="s8_vertief" placeholder="Die Mission hatte mehrere Seiten: ..."></textarea>
+    </div>
+
+    <details class="tip"><summary>Tipp anzeigen</summary>
+      „Rassistisch" heißt: Menschen werden nach Abstammung in höhere und niedrigere Klassen sortiert &mdash;
+      mit echten Konsequenzen für Rechte, Eigentum und Lebenschancen.
+    </details>
+    <div class="btn-row"><button class="btn" onclick="checkS8()">Lösung prüfen</button>
+      <button class="btn ghost" onclick="resetS8()">Zurücksetzen</button></div>
+    <div id="s8_fb" class="feedback-banner"></div>
+    <div id="s8_fb_text" class="feedback-banner"></div>
+
+    <div class="loesung-box" id="lock_s8" data-code="4655">
+      <h6>Musterlösung &amp; Erklärung</h6>
+      <div class="loesung-input-row">
+        <span class="code-hint">Code von der Lehrkraft eingeben:</span>
+        <input type="text" inputmode="numeric" maxlength="4" placeholder="Code" onkeydown="if(event.key==='Enter')tryUnlock('s8')">
+        <button class="btn small gold" onclick="tryUnlock('s8')">Freischalten</button>
+      </div>
+      <div class="loesung-content">
+        <p><strong>Zuordnung:</strong> Peninsular = höchste Stufe / in Spanien geboren · Criollo = in Amerika geb.
+          Spanier · Mestizo = Spanier × Indigene · Mulato = Spanier × Afrikaner · Esclavo = versklavte
+          Person · Misión = Christianisierungsprogramm.</p>
+        <p><strong>Rassistisch:</strong> Das System sortiert Menschen nach Abstammung; daraus folgten
+          Eheverbote, Berufsverbote, unterschiedliche Steuern, eingeschränkte Bildungsmöglichkeiten und
+          willkürliche Gewaltrechte. Der „Wert" eines Menschen wurde an die Herkunft seiner Eltern geknüpft &mdash;
+          unabhängig von Fähigkeiten oder Leistung.</p>
+        <p><strong>Mission &mdash; differenziert:</strong> Sie zerstörte indigene Religionen, Tempel und
+          Riten. Gleichzeitig dokumentierten manche Missionare (z.&nbsp;B. Bernardino de Sahagún) indigene
+          Sprachen und Wissen, ohne das wir heute viel weniger wüssten. Einige Missionare (z.&nbsp;B.
+          Bartolomé de las Casas) wurden zu Anklägern der Encomienda-Gewalt. Das Gesamtbild ist also nicht
+          schwarz-weiß &mdash; aber überwiegend zerstörerisch.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============= STATION 9: KRANKHEITEN ============= -->
+<section class="station" data-station="s9">
+  <div class="station-head" onclick="toggleStation(this)">
+    <div class="num">9</div><div class="title">Stilles Sterben &mdash; Krankheiten als Kraft</div>
+    <span class="meta">12 min</span><div class="status-dot"></div><span class="chev">&#9660;</span>
+  </div>
+  <div class="station-body">
+    <div class="format-badges"><span class="badge thema-eco">Ökologie</span><span class="badge thema-ges">Gesellschaft</span><span class="badge format">Beschriften + MC</span><span class="badge time">12 Min</span></div>
+    <div class="info-box">
+      <strong>Wissensimpuls.</strong> Krankheiten wie Pocken, Masern, Grippe, Typhus waren in Eurasien seit
+      Jahrtausenden endemisch; Europäer hatten teilweise Immunität. Indigene Bevölkerungen hatten diese
+      Erreger nie gesehen. Innerhalb von 100 Jahren nach 1492 verloren viele Regionen 60&ndash;90 % ihrer
+      Einwohner &mdash; mit ökologischen, gesellschaftlichen und politischen Folgen.
+    </div>
+
+    <h4><span class="niveau standard">Standard</span> Aufgabe 9a &mdash; Bevölkerungs-Grafik beschriften</h4>
+    <p>Wortspeicher: <em>Vor Kontakt 1492 (~25 Mio.)</em>, <em>Tief um 1600 (~1 Mio.)</em>,
+      <em>Pocken-Epidemie 1520</em>, <em>Erholung nach 1700</em>.</p>
+    <div class="label-svg-wrap pop-chart">
+      <svg viewBox="0 0 560 240" width="100%">
+        <defs><linearGradient id="popG" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#8b1f1f"/><stop offset="100%" stop-color="#5e1313"/></linearGradient></defs>
+        <rect width="560" height="240" fill="#fffaee"/>
+        <line x1="60" y1="20" x2="60" y2="200" stroke="#3a230d" stroke-width="1.5"/>
+        <line x1="60" y1="200" x2="540" y2="200" stroke="#3a230d" stroke-width="1.5"/>
+        <text x="20" y="40" font-size="11">25 Mio.</text>
+        <text x="20" y="110" font-size="11">10 Mio.</text>
+        <text x="20" y="180" font-size="11">1 Mio.</text>
+        <text x="80" y="220" font-size="11">1492</text>
+        <text x="180" y="220" font-size="11">1520</text>
+        <text x="280" y="220" font-size="11">1600</text>
+        <text x="380" y="220" font-size="11">1700</text>
+        <text x="480" y="220" font-size="11">1800</text>
+        <polyline points="80,30 180,80 280,180 380,160 480,120" stroke="url(#popG)" stroke-width="3" fill="none"/>
+        <circle cx="80" cy="30" r="6" fill="#b8902d" stroke="#3a230d"/>
+        <circle cx="180" cy="80" r="6" fill="#b8902d" stroke="#3a230d"/>
+        <circle cx="280" cy="180" r="6" fill="#b8902d" stroke="#3a230d"/>
+        <circle cx="480" cy="120" r="6" fill="#b8902d" stroke="#3a230d"/>
+        <text x="80" y="20" text-anchor="middle" font-weight="bold" font-size="14" fill="#8b1f1f">A</text>
+        <text x="180" y="70" text-anchor="middle" font-weight="bold" font-size="14" fill="#8b1f1f">B</text>
+        <text x="280" y="200" font-weight="bold" font-size="14" fill="#8b1f1f">C</text>
+        <text x="490" y="115" font-weight="bold" font-size="14" fill="#8b1f1f">D</text>
+      </svg>
+      <div class="label-inputs">
+        <div class="lbl"><strong>Punkt A (1492)</strong>
+          <select data-correct="vor_kontakt"><option value="">&mdash; auswählen &mdash;</option>
+            <option value="vor_kontakt">Vor Kontakt 1492 (~25 Mio.)</option>
+            <option value="pocken">Pocken-Epidemie 1520</option>
+            <option value="tief">Tief um 1600 (~1 Mio.)</option>
+            <option value="erholung">Erholung nach 1700</option></select></div>
+        <div class="lbl"><strong>Punkt B (1520)</strong>
+          <select data-correct="pocken"><option value="">&mdash; auswählen &mdash;</option>
+            <option value="vor_kontakt">Vor Kontakt 1492 (~25 Mio.)</option>
+            <option value="pocken">Pocken-Epidemie 1520</option>
+            <option value="tief">Tief um 1600 (~1 Mio.)</option>
+            <option value="erholung">Erholung nach 1700</option></select></div>
+        <div class="lbl"><strong>Punkt C (1600)</strong>
+          <select data-correct="tief"><option value="">&mdash; auswählen &mdash;</option>
+            <option value="vor_kontakt">Vor Kontakt 1492 (~25 Mio.)</option>
+            <option value="pocken">Pocken-Epidemie 1520</option>
+            <option value="tief">Tief um 1600 (~1 Mio.)</option>
+            <option value="erholung">Erholung nach 1700</option></select></div>
+        <div class="lbl"><strong>Punkt D (1800)</strong>
+          <select data-correct="erholung"><option value="">&mdash; auswählen &mdash;</option>
+            <option value="vor_kontakt">Vor Kontakt 1492 (~25 Mio.)</option>
+            <option value="pocken">Pocken-Epidemie 1520</option>
+            <option value="tief">Tief um 1600 (~1 Mio.)</option>
+            <option value="erholung">Erholung nach 1700</option></select></div>
+      </div>
+    </div>
+
+    <h4><span class="niveau standard">Standard</span> Aufgabe 9b &mdash; „Was wäre wenn?" (2 richtig)</h4>
+    <p>Die indigene Landwirtschaft brach durch den Bevölkerungsverlust vielerorts zusammen. Folgen für die Umwelt?</p>
+    <ul class="option-list" id="s9_quiz">
+      <li data-correct="true">Verlassene Felder wurden von Wildpflanzen oder Wald wieder eingenommen &mdash; manche Forscher sehen darin einen Effekt auf das globale CO&#8322;.</li>
+      <li data-correct="false">Die Böden erholten sich überall vollständig und sind heute besonders fruchtbar.</li>
+      <li data-correct="true">Auf vielen verwaisten Flächen breitete sich europäisches Vieh ungehindert aus.</li>
+      <li data-correct="false">Da niemand mehr Wasser nutzte, blieben Quellen unberührt und sauber.</li>
+    </ul>
+
+    <div class="aufgabe vertief">
+      <h5><span class="niveau vertief">Vertiefung</span> Aufgabe 9c &mdash; Gesellschaftliche Dimension</h5>
+      <p>Was bedeutet ein Verlust von 80 % der Bevölkerung <em>politisch</em>? Wie macht das eine indigene
+        Gesellschaft anfällig für Eroberung? 3&ndash;4 Sätze.</p>
+      <textarea id="s9_vertief" placeholder="Wenn 80% sterben, ..." rows="4"></textarea>
+    </div>
+
+    <details class="tip"><summary>Tipp anzeigen</summary>
+      Für 9a: Welcher Punkt ist <em>oben</em> in der Grafik? Da ist die Bevölkerung am größten.
+      Für 9c: Wer kennt noch das Wissen der Ahnen? Wer kann das Heer aufstellen? Wer ernährt die Stadt?
+    </details>
+    <div class="btn-row"><button class="btn" onclick="checkS9()">Lösung prüfen</button>
+      <button class="btn ghost" onclick="resetS9()">Zurücksetzen</button></div>
+    <div id="s9_fb" class="feedback-banner"></div>
+
+    <div class="loesung-box" id="lock_s9" data-code="8019">
+      <h6>Musterlösung &amp; Erklärung</h6>
+      <div class="loesung-input-row">
+        <span class="code-hint">Code von der Lehrkraft eingeben:</span>
+        <input type="text" inputmode="numeric" maxlength="4" placeholder="Code" onkeydown="if(event.key==='Enter')tryUnlock('s9')">
+        <button class="btn small gold" onclick="tryUnlock('s9')">Freischalten</button>
+      </div>
+      <div class="loesung-content">
+        <p><strong>9a:</strong> A = Vor Kontakt, B = Pocken 1520, C = Tief 1600, D = Erholung nach 1700.</p>
+        <p><strong>9b:</strong> Richtig 1 und 3. Studien (Koch et al. 2019) argumentieren, die Wiederbewaldung
+          habe so viel CO&#8322; gebunden, dass sie zur „Kleinen Eiszeit" beitrug. Gleichzeitig übernahmen
+          Schweine, Rinder, Schafe viele Flächen &mdash; nicht alles erholte sich.</p>
+        <p><strong>Politische Folge:</strong> Ein Bevölkerungsverlust von 80 % zerstört Wissenstradition,
+          Heeresfähigkeit, Verwaltung, Versorgung. Großreiche wie das aztekische oder das Inka-Reich konnten
+          mit so dezimierter Bevölkerung dem Druck einer technologisch ähnlich starken, aber besser
+          organisierten und durch Allianzen verstärkten Eroberungstruppe kaum standhalten.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============= STATION 10: PERSPEKTIVWECHSEL — CHATBOT ============= -->
+<section class="station" data-station="s10">
+  <div class="station-head" onclick="toggleStation(this)">
+    <div class="num">10</div><div class="title">Perspektivwechsel &mdash; Sprich mit Zeitzeugen</div>
+    <span class="meta">18 min</span><div class="status-dot"></div><span class="chev">&#9660;</span>
+  </div>
+  <div class="station-body">
+    <div class="format-badges"><span class="badge format">Rollenspiel-Chatbot (3 Perspektiven)</span><span class="badge time">18 Min</span></div>
+    <p>Wähle eine Person und führe ein <strong>echtes Interview</strong> &mdash; mit eigenen Fragen.
+      Du kannst auch Smalltalk versuchen (z.&nbsp;B. „Wie geht es dir?", „Was machst du heute?", „Was isst du?").
+      Die Vorschlag-Buttons sind nur Hilfestellung &mdash; sie ersetzen nicht deine eigenen Fragen.
+      <strong>Mindestens 6 Fragen</strong> empfehle ich dir, am Ende ein Fazit.</p>
+
+    <div class="btn-row">
+      <button class="btn secondary" onclick="setBot('aymara')">Yana &mdash; Aymara, Mita-Familie</button>
+      <button class="btn secondary" onclick="setBot('konq')">Don Diego &mdash; Hacienda-Besitzer</button>
+      <button class="btn secondary" onclick="setBot('umwelt')">Die Stimme der Anden-Umwelt</button>
+    </div>
+
+    <div class="chat-box" id="s10_chat" aria-live="polite"></div>
+    <div class="chat-input-row">
+      <input type="text" id="s10_input" placeholder="Stelle deine Frage &mdash; in eigenen Worten ..." onkeydown="if(event.key==='Enter')sendChat();">
+      <button class="btn" onclick="sendChat()">Senden</button>
+    </div>
+    <div class="chat-suggestions" id="s10_suggest"></div>
+    <p class="chat-info">Tipp: Frag auch persönliche Dinge — Familie, Glaube, Essen, Sorgen, Hoffnungen.
+      Der Chatbot reagiert auf vielfältige Themen, aber nicht auf alles. Wenn er nicht versteht, frag anders.</p>
+
+    <h4><span class="niveau standard">Standard</span> Aufgabe 10b &mdash; Interview-Fazit (3&ndash;5 Sätze)</h4>
+    <textarea id="s10_text" placeholder="In meinem Interview habe ich gelernt, dass ..." rows="5"></textarea>
+
+    <div class="aufgabe vertief">
+      <h5><span class="niveau vertief">Vertiefung</span> Aufgabe 10c &mdash; Drei Perspektiven vergleichen</h5>
+      <p>Interviewe <em>alle drei</em> und vergleiche: Wo widersprechen sie sich, wo ergänzen sie sich?</p>
+      <textarea id="s10_vertief" placeholder="Yana sieht ..., Don Diego sieht ..., die Umwelt sagt ..." rows="5"></textarea>
+    </div>
+
+    <details class="tip"><summary>Tipp anzeigen</summary>
+      Frag auch: „Wie geht es dir heute?", „Was glaubst du, was passiert in 100 Jahren?", „Wie war dein Tag?",
+      „Was würdest du verändern, wenn du könntest?". Der Bot reagiert auf viele solche Fragen passend.
+    </details>
+    <div class="btn-row"><button class="btn" onclick="checkS10()">Fazit prüfen</button>
+      <button class="btn ghost" onclick="resetS10()">Chat &amp; Fazit zurücksetzen</button>
+      <button class="btn gold" onclick="downloadInterview()">Interview als TXT speichern</button>
+      <button class="btn secondary" onclick="printInterview()">Interview als PDF (drucken)</button></div>
+    <div id="s10_fb" class="feedback-banner"></div>
+
+    <div class="loesung-box" id="lock_s10" data-code="6307">
+      <h6>Was ein gutes Fazit enthält</h6>
+      <div class="loesung-input-row">
+        <span class="code-hint">Code von der Lehrkraft eingeben:</span>
+        <input type="text" inputmode="numeric" maxlength="4" placeholder="Code" onkeydown="if(event.key==='Enter')tryUnlock('s10')">
+        <button class="btn small gold" onclick="tryUnlock('s10')">Freischalten</button>
+      </div>
+      <div class="loesung-content">
+        <p>Ein gutes Fazit verbindet <strong>mindestens zwei</strong> Perspektiven mit einer
+          <strong>konkreten Beobachtung</strong> (Mita, Quecksilber, Wald, Vieh, Krankheit, Castas).
+          Es reflektiert, dass „Fortschritt" aus spanischer Sicht oft Zerstörung aus indigener und
+          ökologischer Sicht bedeutet &mdash; Wahrnehmung hängt von <em>Macht</em> ab.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============= STATION 11: URSACHEN & FOLGEN ============= -->
+<section class="station" data-station="s11">
+  <div class="station-head" onclick="toggleStation(this)">
+    <div class="num">11</div><div class="title">Ursachen &amp; Folgen &mdash; Ordnungstafel</div>
+    <span class="meta">12 min</span><div class="status-dot"></div><span class="chev">&#9660;</span>
+  </div>
+  <div class="station-body">
+    <div class="format-badges"><span class="badge format">Zuordnung + Begründung</span><span class="badge time">12 Min</span></div>
+    <p>Ordne jeder <strong>Ursache</strong> die wichtigste passende <strong>Folge</strong> zu und <em>begründe</em>
+      kurz, warum genau diese Folge am direktesten ist.</p>
+
+    <table class="ce-table" id="s11_table">
+      <thead><tr><th style="width:30%;">Ursache</th><th style="width:35%;">Wichtigste Folge</th><th>Kurze Begründung</th></tr></thead>
+      <tbody>
+        <tr><td>Zuckerrohr-Monokultur Karibik</td>
+          <td><select data-correct="entwald"><option value="">&mdash; wählen &mdash;</option>
+            <option value="entwald">Abholzung tropischer Wälder</option>
+            <option value="erosion">Bodenerosion durch Vieh-Hufe</option>
+            <option value="hg">Quecksilber-Belastung von Flüssen</option>
+            <option value="biodiv">Verdrängung heimischer Pflanzenarten</option>
+            <option value="brachland">Wiederbewaldung verlassener Felder</option>
+            <option value="inflation">Silberinflation in Europa</option>
+            <option value="castas">Casta-System &amp; Diskriminierung</option>
+          </select></td>
+          <td><textarea data-row="r1" placeholder="weil ..." rows="2"></textarea></td></tr>
+        <tr><td>Rinder- &amp; Schafherden</td>
+          <td><select data-correct="erosion"><option value="">&mdash; wählen &mdash;</option>
+            <option value="entwald">Abholzung tropischer Wälder</option>
+            <option value="erosion">Bodenerosion durch Vieh-Hufe</option>
+            <option value="hg">Quecksilber-Belastung von Flüssen</option>
+            <option value="biodiv">Verdrängung heimischer Pflanzenarten</option>
+            <option value="brachland">Wiederbewaldung verlassener Felder</option>
+            <option value="inflation">Silberinflation in Europa</option>
+            <option value="castas">Casta-System &amp; Diskriminierung</option>
+          </select></td>
+          <td><textarea data-row="r2" placeholder="weil ..." rows="2"></textarea></td></tr>
+        <tr><td>Amalgamverfahren Potosí</td>
+          <td><select data-correct="hg"><option value="">&mdash; wählen &mdash;</option>
+            <option value="entwald">Abholzung tropischer Wälder</option>
+            <option value="erosion">Bodenerosion durch Vieh-Hufe</option>
+            <option value="hg">Quecksilber-Belastung von Flüssen</option>
+            <option value="biodiv">Verdrängung heimischer Pflanzenarten</option>
+            <option value="brachland">Wiederbewaldung verlassener Felder</option>
+            <option value="inflation">Silberinflation in Europa</option>
+            <option value="castas">Casta-System &amp; Diskriminierung</option>
+          </select></td>
+          <td><textarea data-row="r3" placeholder="weil ..." rows="2"></textarea></td></tr>
+        <tr><td>Eingeschleppte Pflanzen (Klee, Disteln)</td>
+          <td><select data-correct="biodiv"><option value="">&mdash; wählen &mdash;</option>
+            <option value="entwald">Abholzung tropischer Wälder</option>
+            <option value="erosion">Bodenerosion durch Vieh-Hufe</option>
+            <option value="hg">Quecksilber-Belastung von Flüssen</option>
+            <option value="biodiv">Verdrängung heimischer Pflanzenarten</option>
+            <option value="brachland">Wiederbewaldung verlassener Felder</option>
+            <option value="inflation">Silberinflation in Europa</option>
+            <option value="castas">Casta-System &amp; Diskriminierung</option>
+          </select></td>
+          <td><textarea data-row="r4" placeholder="weil ..." rows="2"></textarea></td></tr>
+        <tr><td>Pocken-Epidemien</td>
+          <td><select data-correct="brachland"><option value="">&mdash; wählen &mdash;</option>
+            <option value="entwald">Abholzung tropischer Wälder</option>
+            <option value="erosion">Bodenerosion durch Vieh-Hufe</option>
+            <option value="hg">Quecksilber-Belastung von Flüssen</option>
+            <option value="biodiv">Verdrängung heimischer Pflanzenarten</option>
+            <option value="brachland">Wiederbewaldung verlassener Felder</option>
+            <option value="inflation">Silberinflation in Europa</option>
+            <option value="castas">Casta-System &amp; Diskriminierung</option>
+          </select></td>
+          <td><textarea data-row="r5" placeholder="weil ..." rows="2"></textarea></td></tr>
+        <tr><td>Silberzufluss aus Amerika</td>
+          <td><select data-correct="inflation"><option value="">&mdash; wählen &mdash;</option>
+            <option value="entwald">Abholzung tropischer Wälder</option>
+            <option value="erosion">Bodenerosion durch Vieh-Hufe</option>
+            <option value="hg">Quecksilber-Belastung von Flüssen</option>
+            <option value="biodiv">Verdrängung heimischer Pflanzenarten</option>
+            <option value="brachland">Wiederbewaldung verlassener Felder</option>
+            <option value="inflation">Silberinflation in Europa</option>
+            <option value="castas">Casta-System &amp; Diskriminierung</option>
+          </select></td>
+          <td><textarea data-row="r6" placeholder="weil ..." rows="2"></textarea></td></tr>
+        <tr><td>Vermischung dreier Bevölkerungsgruppen</td>
+          <td><select data-correct="castas"><option value="">&mdash; wählen &mdash;</option>
+            <option value="entwald">Abholzung tropischer Wälder</option>
+            <option value="erosion">Bodenerosion durch Vieh-Hufe</option>
+            <option value="hg">Quecksilber-Belastung von Flüssen</option>
+            <option value="biodiv">Verdrängung heimischer Pflanzenarten</option>
+            <option value="brachland">Wiederbewaldung verlassener Felder</option>
+            <option value="inflation">Silberinflation in Europa</option>
+            <option value="castas">Casta-System &amp; Diskriminierung</option>
+          </select></td>
+          <td><textarea data-row="r7" placeholder="weil ..." rows="2"></textarea></td></tr>
+      </tbody>
+    </table>
+
+    <details class="tip"><summary>Tipp anzeigen</summary>
+      Frage dich pro Zeile: „Was tut diese Ursache <em>physikalisch oder sozial</em>?" Plantage → Platz → Wald weg.
+      Vieh → Hufe → Boden. Amalgam → Hg → Wasser. Pocken → tote Bauern → Brache. Silber → mehr Geld → Inflation.
+    </details>
+    <div class="btn-row"><button class="btn" onclick="checkS11()">Lösung prüfen</button>
+      <button class="btn ghost" onclick="resetS11()">Zurücksetzen</button></div>
+    <div id="s11_fb" class="feedback-banner"></div>
+
+    <div class="loesung-box" id="lock_s11" data-code="2418">
+      <h6>Musterlösung &amp; Erklärung</h6>
+      <div class="loesung-input-row">
+        <span class="code-hint">Code von der Lehrkraft eingeben:</span>
+        <input type="text" inputmode="numeric" maxlength="4" placeholder="Code" onkeydown="if(event.key==='Enter')tryUnlock('s11')">
+        <button class="btn small gold" onclick="tryUnlock('s11')">Freischalten</button>
+      </div>
+      <div class="loesung-content">
+        <ul>
+          <li>Zuckerrohr → Abholzung &mdash; Plantagen brauchen Platz und Brennholz.</li>
+          <li>Vieh → Bodenerosion &mdash; Hufe verdichten, Überweidung entfernt Vegetation.</li>
+          <li>Amalgam → Hg-Wasserbelastung &mdash; Quecksilberdampf und -reste gelangen in Flüsse.</li>
+          <li>Eingeschleppte Pflanzen → Verdrängung &mdash; sie haben keine natürlichen Gegenspieler.</li>
+          <li>Pocken → Brachland &mdash; ohne Bauern werden Felder wieder Wildnis.</li>
+          <li>Silber → Inflation &mdash; mehr Geld bei gleicher Warenmenge senkt den Geldwert.</li>
+          <li>Vermischung → Casta-System &mdash; die koloniale Ordnung sortiert Menschen nach Abstammung.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============= STATION 12: TRANSFER GEGENWART ============= -->
+<section class="station" data-station="s12">
+  <div class="station-head" onclick="toggleStation(this)">
+    <div class="num">12</div><div class="title">Damals — Heute: Was lebt weiter?</div>
+    <span class="meta">15 min</span><div class="status-dot"></div><span class="chev">&#9660;</span>
+  </div>
+  <div class="station-body">
+    <div class="format-badges"><span class="badge format">Transfer-Freitext + Entscheidung</span><span class="badge time">15 Min</span></div>
+    <div class="info-box">
+      <strong>Wissensimpuls.</strong> Heute ist Lateinamerika eine der wichtigsten Regionen für globale
+      Rohstoffe: Lithium (Batterien), Soja (Tierfutter), Kupfer, Silber, Gold. Vieles davon geht in den
+      Export. Indigene Gemeinden protestieren regelmäßig gegen Bergbau-Projekte (z.&nbsp;B. Salar de Uyuni,
+      Belo Monte). Auch die soziale Ungleichheit Lateinamerikas hat koloniale Wurzeln.
+    </div>
+
+    <h4><span class="niveau standard">Standard</span> Aufgabe 12a &mdash; Entscheidung</h4>
+    <ul class="option-list" id="s12_quiz">
+      <li data-correct="false">Die kolonialen Eingriffe sind heute vollständig erholt; moderne Probleme sind unabhängig davon.</li>
+      <li data-correct="true">Die koloniale Wirtschaftsstruktur &mdash; Rohstoffexport, Monokultur, Bergbau &mdash; wirkt bis heute fort.</li>
+      <li data-correct="false">Heutige Probleme sind allein durch Bevölkerungswachstum nach 1900 entstanden.</li>
+      <li data-correct="false">Die spanische Krone hat alle Schäden bereits ausgeglichen.</li>
+    </ul>
+
+    <div class="aufgabe standard">
+      <h5><span class="niveau standard">Standard</span> Aufgabe 12b &mdash; Transfer-Text (6&ndash;8 Sätze)</h5>
+      <p>Wähle ein aktuelles Beispiel (Lithium-Bergbau Bolivien, Sojaanbau Brasilien, Gold im Amazonas, ...).
+        Beschreibe <em>strukturelle</em> Ähnlichkeiten zur Kolonialzeit. Nenne mindestens drei Aspekte aus:
+        Monokultur, Rohstoffexport, Bodenerosion/Vergiftung, Wald, indigene Bevölkerung, Casta-Erbe.</p>
+      <textarea id="s12_text" placeholder="Beispiel ... &mdash; Strukturelle Ähnlichkeit: ..." rows="6"></textarea>
+    </div>
+
+    <div class="aufgabe vertief">
+      <h5><span class="niveau vertief">Vertiefung</span> Aufgabe 12c &mdash; Eigene Position</h5>
+      <p>Welche Verantwortung haben wir als Konsumenten in Europa (Lithium-Akkus im Handy, Soja im Tierfutter)?
+        Schreibe eine kurze Stellungnahme (3&ndash;5 Sätze).</p>
+      <textarea id="s12_vertief" placeholder="Meine Position: ..."></textarea>
+    </div>
+
+    <h4>Aufgabe 12d &mdash; Abschluss-Reflexion (ein Satz)</h4>
+    <textarea id="s12_reflect" placeholder="Ich werde mir merken, dass ..."></textarea>
+
+    <details class="tip"><summary>Tipp anzeigen</summary>
+      Drei Leitfragen: Wer bekommt den Rohstoff am Ende? Wer trägt die ökologische Last? Wer entscheidet über die Region?
+    </details>
+    <div class="btn-row"><button class="btn" onclick="checkS12()">Lösung prüfen</button>
+      <button class="btn ghost" onclick="resetS12()">Zurücksetzen</button></div>
+    <div id="s12_fb" class="feedback-banner"></div>
+    <div id="s12_fb_text" class="feedback-banner"></div>
+
+    <div class="loesung-box" id="lock_s12" data-code="7853">
+      <h6>Musterlösung &amp; Erklärung</h6>
+      <div class="loesung-input-row">
+        <span class="code-hint">Code von der Lehrkraft eingeben:</span>
+        <input type="text" inputmode="numeric" maxlength="4" placeholder="Code" onkeydown="if(event.key==='Enter')tryUnlock('s12')">
+        <button class="btn small gold" onclick="tryUnlock('s12')">Freischalten</button>
+      </div>
+      <div class="loesung-content">
+        <p><strong>12a:</strong> Aussage 2 ist richtig.</p>
+        <p><strong>12b &mdash; Beispiel Lithium:</strong> Im „Lithium-Dreieck" (Bolivien, Chile, Argentinien) wird
+          salzhaltiges Grundwasser hochgepumpt. Strukturell ähnlich wie damals beim Silber: Wasserverbrauch,
+          Auswirkungen auf indigene Aymara-Gemeinden, massiver Rohstoffexport ohne dauerhaften Aufbau lokaler
+          Industrie. Sojaanbau wirkt wie Mega-Monokultur &mdash; vergleichbar mit Zuckerrohrplantagen. Das
+          Casta-Erbe zeigt sich in ungleichen Lebenschancen entlang ethnischer Linien.</p>
+        <p><strong>12c &mdash; Verantwortung:</strong> Wer Lithium-Akkus oder Soja-gefüttertes Fleisch kauft,
+          ist Teil dieser Kette. Verantwortung bedeutet nicht Schuld &mdash; aber bewussten Konsum, politischen
+          Druck (z.&nbsp;B. Lieferkettengesetz), und ein Wissen um historische Strukturen.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============= GLOSSAR ============= -->
+<section class="card" id="glossar-section">
+  <h3>Glossar &mdash; die wichtigsten Begriffe</h3>
+  <p>Speichere dieses Glossar in deiner digitalen Mappe. Du kannst es als PDF drucken oder als Text-Datei
+    herunterladen.</p>
+  <div class="btn-row">
+    <button class="btn gold" onclick="printGlossar()">Glossar als PDF drucken</button>
+    <button class="btn secondary" onclick="downloadGlossar()">Glossar als TXT herunterladen</button>
+  </div>
+
+  <div class="glossar-grid" style="margin-top:14px;" id="glossar-grid">
+    <div class="gloss-card"><strong>Amalgamverfahren</strong>Ab ca. 1572 in Potosí angewandtes Verfahren: Silbererz wird mit Quecksilber, Salz, Wasser vermischt. Hg bindet Silber zu Amalgam; durch Erhitzen verdampft Hg, reines Silber bleibt zurück.</div>
+    <div class="gloss-card"><strong>Bioakkumulation</strong>Anreicherung eines Stoffes (z.&nbsp;B. Quecksilber) in Lebewesen über die Nahrungskette. Spitzenprädatoren enthalten am Ende höhere Konzentrationen als die Umgebung.</div>
+    <div class="gloss-card"><strong>Casta-System</strong>Streng hierarchische koloniale Gesellschaftsordnung in Spanisch-Amerika, sortiert Menschen nach Abstammung (Peninsular, Criollo, Mestizo, Mulato, Zambo, Indígena, Esclavo).</div>
+    <div class="gloss-card"><strong>Cerro Rico</strong>„Reicher Berg" bei Potosí (heutiges Bolivien). Größte Silberquelle der Welt von ca. 1545 bis ins 18. Jh.</div>
+    <div class="gloss-card"><strong>Criollo</strong>In Amerika geborener Spanier — wirtschaftlich oft mächtig, politisch aber hinter Peninsulares.</div>
+    <div class="gloss-card"><strong>Encomienda</strong>Spanisches Lehenssystem: ein Spanier (Encomendero) erhielt das Recht auf Tribut und Arbeit indigener Gruppen; im Gegenzug sollte er sie christianisieren.</div>
+    <div class="gloss-card"><strong>Esclavo</strong>Versklavte Person, meist aus Afrika importiert. Hauptsächlich für Plantagenarbeit (Zucker, Tabak).</div>
+    <div class="gloss-card"><strong>Hacienda</strong>Großgrundbesitz in Spanisch-Amerika. Vieh, Plantagen, oft Schuldknechtschaft.</div>
+    <div class="gloss-card"><strong>Indigene Bevölkerung</strong>Die ursprüngliche, vor 1492 in Amerika lebende Bevölkerung (z.&nbsp;B. Inka, Azteken, Maya, Aymara).</div>
+    <div class="gloss-card"><strong>Kolumbianischer Austausch</strong>Begriff von Alfred W. Crosby (1972) für den massiven Austausch von Pflanzen, Tieren, Krankheitserregern, Menschen, Ideen zwischen Alter und Neuer Welt nach 1492. Asymmetrisch.</div>
+    <div class="gloss-card"><strong>Kleine Eiszeit</strong>Klimatische Abkühlung ca. 1300&ndash;1850. Neuere Forschung sieht in der Wiederbewaldung verlassener indigener Felder einen Verstärker.</div>
+    <div class="gloss-card"><strong>Mestizo</strong>Nachkomme von Spaniern und Indigenen. Im Casta-System rechtlich schlechter gestellt als Criollos.</div>
+    <div class="gloss-card"><strong>Misión / Mission</strong>Christianisierungsprogramm der katholischen Kirche; verbot indigene Religionen, dokumentierte aber auch Sprachen und Wissen.</div>
+    <div class="gloss-card"><strong>Mita</strong>Inka-Arbeitsverpflichtung, von Spaniern als System der Zwangsarbeit (v.&nbsp;a. Bergbau Potosí) übernommen. Hohe Sterblichkeit.</div>
+    <div class="gloss-card"><strong>Mischkultur</strong>Indigenes Anbausystem: mehrere Arten zusammen (z.&nbsp;B. „drei Schwestern": Mais, Bohnen, Kürbis). Nährstoffschonend.</div>
+    <div class="gloss-card"><strong>Monokultur</strong>Anbau einer einzigen Pflanzenart auf großer Fläche über lange Zeit. Spanier führten sie für Exportprodukte ein. Auslaugung der Böden, Schädlingsanfälligkeit.</div>
+    <div class="gloss-card"><strong>Mulato</strong>Nachkomme von Spaniern und Afrikanern; im Casta-System diskriminiert.</div>
+    <div class="gloss-card"><strong>Neobiota</strong>Arten, die durch Menschen in neue Regionen gelangen und sich dort etablieren.</div>
+    <div class="gloss-card"><strong>Peninsular</strong>In Spanien geborener Spanier; höchste Stufe im Casta-System.</div>
+    <div class="gloss-card"><strong>Pocken (Variola)</strong>Hochansteckende Viruskrankheit. Indigene Bevölkerung hatte keine Immunität. Epidemien ab 1518 / 1520 / 1525.</div>
+    <div class="gloss-card"><strong>Polylepis</strong>Hochlandbaum der Anden (bis 5000 m). Wurde für Silberverhüttung in Potosí großflächig abgeholzt; kaum regeneriert.</div>
+    <div class="gloss-card"><strong>Preisrevolution / Silberinflation</strong>Massive Preissteigerungen im Europa des 16. Jh. durch den Zustrom amerikanischen Silbers.</div>
+    <div class="gloss-card"><strong>Quecksilber (Hg)</strong>Flüssiges Schwermetall, hochgiftig, dampft schon bei niedrigen Temperaturen. Zentral im Amalgamverfahren. Reichert sich in Wasser, Boden und Nahrungsketten an.</div>
+    <div class="gloss-card"><strong>Rohstofffluch</strong>Phänomen: rohstoffreiche Regionen entwickeln sich oft schlechter als rohstoffarme, weil Reichtum exportiert wird und keine Industrie entsteht.</div>
+    <div class="gloss-card"><strong>Überweidung</strong>Schaden an Vegetation und Boden durch zu hohe Tierzahl je Fläche. In den Anden nach Einführung von Rind und Schaf weit verbreitet.</div>
+    <div class="gloss-card"><strong>Zambo</strong>Nachkomme von Indigenen und Afrikanern; im Casta-System sehr niedrig eingestuft.</div>
+  </div>
+</section>
+
+<!-- ============= ERGEBNIS-EXPORT ============= -->
+<section class="card" id="exportSection">
+  <h3>Dein Bordbuch sichern</h3>
+  <p>Gib deinen Namen ein und lade deine vollständigen Antworten herunter. Du kannst sie als TXT-Datei
+    oder als PDF (über Drucken) in deine digitale Mappe legen.</p>
+  <div class="export-box">
+    <input type="text" id="studentName" placeholder="Dein Name (z. B. Lina Hoffmann)" />
+    <button class="btn gold" onclick="downloadResults()">Bericht als TXT</button>
+    <button class="btn secondary" onclick="printReport()">Bericht als PDF (drucken)</button>
+    <button class="btn" onclick="mailResults()">Per E-Mail senden</button>
+  </div>
+  <p style="font-size:13px;margin-top:8px;color:var(--sepia-dark);">
+    „Per E-Mail" öffnet dein Mailprogramm mit vorbereiteter Nachricht. Lade die Datei zusätzlich herunter und hänge sie an.
+  </p>
+</section>
+
+<!-- ============= GELINGENSNACHWEIS ============= -->
+<section class="gn-box" id="gn-section">
+  <h3>★ Gelingensnachweis &mdash; Was hast du verstanden?</h3>
+  <p>Der Gelingensnachweis prüft am Ende, ob du das Modul wirklich durchdrungen hast. Du brauchst dafür
+    keinen Code von der Lehrkraft. <strong>Wichtig:</strong> Bei diesem Test bekommst du <em>keine</em> Rückmeldung
+    angezeigt &mdash; deine Antworten werden nur an deine Lehrkraft übermittelt (per Mail oder Datei).
+    So zeigst du dein <em>eigenes</em> Können.</p>
+
+  <div class="gn-locked" id="gn-locked">
+    <span class="key">🔐</span>
+    Der Gelingensnachweis ist freigeschaltet, sobald du <strong>mindestens 8 von 12 Stationen</strong> geprüft hast.
+    <br>Aktuell: <strong id="gn-progress">0 / 12</strong>.
+    <br><button class="btn small gold" style="margin-top:10px;" onclick="checkGnUnlock()">Erneut prüfen</button>
+  </div>
+
+  <div id="gn-content" style="display:none;">
+    <p style="background:#fffaee;padding:8px 12px;border-left:5px solid var(--castile-red);">
+      <strong>Hinweis:</strong> Beantworte alle Aufgaben in eigenen Worten. Beim Abschicken erhältst du nur
+      die Bestätigung „abgeschickt" &mdash; keine Lösung, kein Häkchen. Deine Lehrkraft sieht die vollständige
+      Auswertung mit allen Antworten und der automatischen Schlagwortprüfung.
+    </p>
+
+    <h4>Teil A &mdash; Lückentext (5 Lücken)</h4>
+    <div class="wordbank"><strong>Wortspeicher:</strong> Crosby · Quecksilber · Mita · Casta · Inflation</div>
+    <div class="gap-text" id="gn_gaps">
+      Der Begriff „Kolumbianischer Austausch" stammt von Alfred <input data-correct="Crosby">. Beim
+      Silberbergbau in Potosí wurde <input data-correct="Quecksilber"> verwendet, um Silber aus dem Erz
+      zu lösen. Die indigene Zwangsarbeit nannte man <input data-correct="Mita">. Die Gesellschaft wurde
+      nach Abstammung im sogenannten <input data-correct="Casta">-System sortiert. Wegen der riesigen
+      Silbermengen kam es in Europa zur <input data-correct="Inflation">.
+    </div>
+
+    <h4>Teil B &mdash; Multiple Choice (mehrere richtig)</h4>
+    <ul class="option-list" id="gn_mc">
+      <li data-correct="true">Das Amalgamverfahren setzte hochgiftige Quecksilberdämpfe frei.</li>
+      <li data-correct="false">Spanien investierte das Silber überwiegend in eigene Industrie und Infrastruktur.</li>
+      <li data-correct="true">Pocken töteten in Amerika bis zu 90 % der indigenen Bevölkerung.</li>
+      <li data-correct="true">Monokulturen wie Zuckerrohr laugten den Boden aus und verlangten ständige Erweiterung.</li>
+      <li data-correct="false">Die Encomienda war ein modernes Lohnsystem mit Tarifvertrag.</li>
+      <li data-correct="true">Die indigene Bevölkerung verlor durch Krankheiten <em>und</em> Zwangsarbeit massiv an Zahl.</li>
+      <li data-correct="false">Wiederbewaldung verlassener Felder hatte keine globalen Klima-Effekte.</li>
+      <li data-correct="true">Bis heute folgen viele lateinamerikanische Wirtschaften dem kolonialen Muster Rohstoff-Export.</li>
+    </ul>
+
+    <h4>Teil C &mdash; Freitext (Pflicht!)</h4>
+    <p><strong>C1 (Ökologie):</strong> Erkläre in eigenen Worten (3&ndash;5 Sätze), warum der Silberbergbau in Potosí
+      <em>nicht nur</em> ein Bergbauproblem, sondern auch ein ökologisches und soziales Problem war.</p>
+    <textarea id="gn_c1" placeholder="Eigene Erklärung ..." rows="5"></textarea>
+
+    <p style="margin-top:14px;"><strong>C2 (Wirtschaft):</strong> Was bedeutet der Begriff „Silberinflation" &mdash;
+      und warum machte das viele Silber Spanien <em>nicht</em> dauerhaft mächtig? (3&ndash;5 Sätze)</p>
+    <textarea id="gn_c2" placeholder="..." rows="5"></textarea>
+
+    <p style="margin-top:14px;"><strong>C3 (Gesellschaft / Transfer):</strong> Welche koloniale Struktur findest du
+      bis heute in Lateinamerika? Wähle ein Beispiel und begründe (4&ndash;6 Sätze).</p>
+    <textarea id="gn_c3" placeholder="Beispiel ... &mdash; bis heute zeigt sich, dass ..." rows="5"></textarea>
+
+    <p style="margin-top:14px;"><strong>C4 (eigene Stellungnahme):</strong> Welcher Aspekt des Moduls hat dich
+      <em>persönlich</em> am meisten zum Nachdenken gebracht? Warum? (3 Sätze)</p>
+    <textarea id="gn_c4" placeholder="Mich hat ... am meisten beschäftigt, weil ..." rows="4"></textarea>
+
+    <div class="btn-row" style="margin-top:18px;">
+      <input type="text" id="gn_name" placeholder="Dein Name" style="flex:1;min-width:200px;">
+      <button class="btn gold" onclick="submitGn()">Gelingensnachweis abschicken (Download)</button>
+      <button class="btn secondary" onclick="mailGn()">Direkt an Lehrkraft senden</button>
+    </div>
+    <div id="gn_status" class="feedback-banner"></div>
+  </div>
+</section>
+
+<section class="closing">
+  <h2>Du hast die Neue Welt durchquert!</h2>
+  <p style="max-width:680px;margin:0 auto;font-size:15.5px;">
+    Du hast verstanden, dass der spanische Kolonialismus die <em>Umwelt</em>, die <em>Wirtschaft</em> und die
+    <em>Gesellschaft</em> dreier Kontinente verändert hat. Dieses Wissen bleibt &mdash; und du erkennst es
+    in vielen heutigen Debatten wieder.
+  </p>
+  <p style="margin-top:12px;font-style:italic;">„Wer die Vergangenheit kennt, erkennt die Gegenwart wieder."</p>
+</section>
+
+</div>
+
+<script>
+/* ===== GLOBAL STATE ===== */
+const STATE = { results:{}, totalStations:12, locks:{} };
+const CODES = {s1:"1492",s2:"1972",s3:"7128",s4:"3046",s5:"5841",s6:"2210",s7:"9374",s8:"4655",s9:"8019",s10:"6307",s11:"2418",s12:"7853"};
+
+function setResult(id, payload){
+  STATE.results[id] = Object.assign({}, STATE.results[id]||{}, payload);
+  updateProgress();
+  const dot = document.querySelector('[data-station="'+id+'"] .status-dot');
+  if(dot){
+    dot.classList.remove("ok","bad");
+    if(payload.allCorrect===true) dot.classList.add("ok");
+    else if(payload.allCorrect===false) dot.classList.add("bad");
+  }
+  checkGnUnlock();
+}
+function updateProgress(){
+  const checked = Object.values(STATE.results).filter(r=>r.checked).length;
+  document.getElementById("pbCount").textContent = checked+" / "+STATE.totalStations+" geprüft";
+  document.getElementById("pbFill").style.width = (checked/STATE.totalStations*100)+"%";
+  document.getElementById("gn-progress").textContent = checked+" / "+STATE.totalStations;
+}
+function toggleStation(el){ el.closest(".station").classList.toggle("open"); }
+
+function tryUnlock(stationId){
+  const box = document.getElementById("lock_"+stationId);
+  const expected = box.dataset.code;
+  const inp = box.querySelector("input");
+  if(inp.value.trim() === expected){
+    box.classList.add("unlocked");
+    STATE.locks[stationId] = true;
+  } else {
+    inp.style.borderColor = "#a3231f";
+    inp.placeholder = "Falscher Code";
+    inp.value = "";
+    setTimeout(()=>{ inp.style.borderColor=""; inp.placeholder="Code"; }, 1500);
+  }
+}
+
+function normalize(s){
+  return (s||"").toString().toLowerCase()
+    .replace(/ä/g,"a").replace(/ö/g,"o").replace(/ü/g,"u").replace(/ß/g,"ss")
+    .replace(/[^a-z0-9 ]/g," ").replace(/\s+/g," ").trim();
+}
+function countKeywords(text, keywords){
+  const h = normalize(text);
+  const found=[], missing=[];
+  keywords.forEach(g=>{
+    const vs = Array.isArray(g.variants)?g.variants:[g.label];
+    if(vs.some(v=> h.indexOf(normalize(v))>=0)) found.push(g.label); else missing.push(g.label);
+  });
+  return {found, missing};
+}
+function showTextFeedback(banner, found, missing){
+  let cls="partial", msg="";
+  if(missing.length===0){ cls="ok"; msg="Sehr gut &mdash; du hast die zentralen Aspekte angesprochen:"; }
+  else if(found.length===0){ cls="bad"; msg="Wichtige Aspekte fehlen noch:"; }
+  else { cls="partial"; msg="Teilweise auf der richtigen Spur. Erkannt / fehlend:"; }
+  let html = "<strong>Automatische, stichwortbasierte Rückmeldung:</strong><br>"+msg+"<div style='margin-top:6px;'>";
+  found.forEach(f=> html += "<span class='keyword-pill found'>+ "+f+"</span>");
+  missing.forEach(m=> html += "<span class='keyword-pill missing'>? "+m+"</span>");
+  html += "</div><div style='font-size:12px;margin-top:6px;font-style:italic;'>Nur Schlüsselbegriffe &mdash; keine inhaltliche Bewertung.</div>";
+  banner.innerHTML = html;
+  banner.className = "feedback-banner "+cls;
+}
+
+/* ===== STATION 1 ===== */
+function checkS1(){
+  const text = document.getElementById("s1_text").value;
+  const basis = document.getElementById("s1_basis").value;
+  const vert = document.getElementById("s1_vertief").value;
+  const banner = document.getElementById("s1_fb");
+  const fullText = text + " " + basis + " " + vert;
+  if(fullText.trim().length<20){ banner.className="feedback-banner bad"; banner.innerHTML="Bitte fülle mindestens eine der Aufgaben (Basis oder Standard) aus."; return;}
+  const keywords = [
+    {label:"Umwelt (Pflanzen/Tiere/Boden/Wald)", variants:["pflanze","tier","boden","wald","umwelt","pferd","rind","zuckerrohr","monokultur","mais"]},
+    {label:"Wirtschaft (Silber/Handel/Reichtum)", variants:["silber","handel","reichtum","wirtschaft","gold","export","monokultur"]},
+    {label:"Gesellschaft (Indigene/Casta/Sklaverei/Krankheit)", variants:["indigen","casta","sklave","krankheit","pocken","mita","spanier","bevolkerung"]},
+    {label:"Begründung erkennbar", variants:["weil","denn","da ","aufgrund","aus diesem grund"]}
+  ];
+  const r = countKeywords(fullText, keywords);
+  showTextFeedback(banner, r.found, r.missing);
+  setResult("s1",{checked:true, allCorrect:r.missing.length<=1, format:"freitext", text:text, basis:basis, vertief:vert, feedback:r});
+}
+function resetS1(){ ["s1_text","s1_basis","s1_vertief"].forEach(id=>document.getElementById(id).value=""); document.getElementById("s1_fb").className="feedback-banner"; setResult("s1",{checked:false}); }
+
+/* ===== STATION 2 ===== */
+function checkS2(){
+  const inputs = document.querySelectorAll("#s2_gaps input");
+  let ok=0; const items=[];
+  inputs.forEach(inp=>{
+    const corr = inp.dataset.correct;
+    const val = inp.value.trim();
+    inp.classList.remove("correct","wrong");
+    if(val==="") items.push({given:"",correct:corr,status:"-"});
+    else if(normalize(val)===normalize(corr)){ inp.classList.add("correct"); ok++; items.push({given:val,correct:corr,status:"v"});}
+    else { inp.classList.add("wrong"); items.push({given:val,correct:corr,status:"x"});}
+  });
+  const banner = document.getElementById("s2_fb");
+  const vert = document.getElementById("s2_vertief").value;
+  banner.className = "feedback-banner "+(ok===inputs.length?"ok":(ok>0?"partial":"bad"));
+  banner.innerHTML = ok+" / "+inputs.length+" Lücken richtig.";
+  setResult("s2",{checked:true, allCorrect:ok===inputs.length, format:"luecke",items:items,vertief:vert});
+}
+function resetS2(){ document.querySelectorAll("#s2_gaps input").forEach(i=>{i.value=""; i.classList.remove("correct","wrong");}); document.getElementById("s2_vertief").value=""; document.getElementById("s2_fb").className="feedback-banner"; setResult("s2",{checked:false}); }
+
+/* ===== DnD ===== */
+let DRAGGED=null;
+function setupDnD(){
+  document.querySelectorAll(".dnd-item").forEach(it=>{
+    it.addEventListener("dragstart",e=>{ DRAGGED=it; it.classList.add("dragging"); e.dataTransfer.setData("text/plain",it.dataset.key);});
+    it.addEventListener("dragend",()=>it.classList.remove("dragging"));
+    it.addEventListener("click",e=>{ e.stopPropagation();
+      document.querySelectorAll(".dnd-item.tap-selected").forEach(x=>x.classList.remove("tap-selected"));
+      it.classList.add("tap-selected");
+    });
+  });
+  document.querySelectorAll(".dnd-target, #s3_bank").forEach(tgt=>{
+    tgt.addEventListener("dragover",e=>{e.preventDefault(); tgt.classList.add("over");});
+    tgt.addEventListener("dragleave",()=>tgt.classList.remove("over"));
+    tgt.addEventListener("drop",e=>{ e.preventDefault(); tgt.classList.remove("over"); if(DRAGGED){tgt.appendChild(DRAGGED); DRAGGED.classList.remove("tap-selected"); DRAGGED=null;}});
+    tgt.addEventListener("click",e=>{ const sel=document.querySelector(".dnd-item.tap-selected"); if(sel && !e.target.classList.contains("dnd-item")){ tgt.appendChild(sel); sel.classList.remove("tap-selected");}});
+  });
+}
+function checkS3(){
+  let ok=0,total=0; const items=[];
+  document.querySelectorAll(".dnd-targets .dnd-target").forEach(t=>{
+    const side=t.dataset.side; t.classList.remove("correct","wrong");
+    let zoneOk=true;
+    t.querySelectorAll(".dnd-item").forEach(it=>{
+      total++;
+      const right = it.dataset.side===side;
+      items.push({item:it.textContent.trim(),in:side,correct:it.dataset.side,status:right?"v":"x"});
+      if(right) ok++; else zoneOk=false;
+    });
+    if(t.querySelectorAll(".dnd-item").length>0) t.classList.add(zoneOk?"correct":"wrong");
+  });
+  document.querySelectorAll("#s3_bank .dnd-item").forEach(it=>{ total++; items.push({item:it.textContent.trim(),in:"Wortbank",correct:it.dataset.side,status:"-"});});
+  const banner=document.getElementById("s3_fb");
+  banner.className="feedback-banner "+(ok===total?"ok":(ok>0?"partial":"bad"));
+  banner.innerHTML="Richtig zugeordnet: <strong>"+ok+" / "+total+"</strong>.";
+  const reflect=document.getElementById("s3_reflect").value;
+  const vert=document.getElementById("s3_vertief").value;
+  setResult("s3",{checked:true, allCorrect:ok===total, format:"dnd", items:items, reflect:reflect, vertief:vert});
+}
+function resetS3(){ const bank=document.getElementById("s3_bank"); document.querySelectorAll(".dnd-targets .dnd-item").forEach(it=>bank.appendChild(it)); document.querySelectorAll(".dnd-target").forEach(t=>t.classList.remove("correct","wrong")); document.getElementById("s3_fb").className="feedback-banner"; setResult("s3",{checked:false}); }
+
+/* ===== MC ===== */
+function setupMC(listId){
+  document.querySelectorAll("#"+listId+" li").forEach(li=>{
+    if(!li.querySelector(".marker")){ const m=document.createElement("span"); m.className="marker"; li.prepend(m);}
+    li.addEventListener("click",()=>{ li.classList.toggle("selected"); const m=li.querySelector(".marker"); if(m) m.textContent=li.classList.contains("selected")?"✔":"";});
+  });
+}
+function checkMC(listId, fbId, stationKey){
+  const lis=document.querySelectorAll("#"+listId+" li");
+  let ok=0,total=0,wrongSel=0,missed=0; const items=[];
+  lis.forEach(li=>{
+    const corr=li.dataset.correct==="true"; const sel=li.classList.contains("selected");
+    li.classList.remove("correct","wrong");
+    if(corr) total++;
+    if(corr && sel){ li.classList.add("correct"); ok++; items.push({option:li.textContent.trim(),selected:true,correct:true,status:"v"});}
+    else if(!corr && sel){ li.classList.add("wrong"); wrongSel++; items.push({option:li.textContent.trim(),selected:true,correct:false,status:"x"});}
+    else if(corr && !sel){ li.classList.add("wrong"); missed++; items.push({option:li.textContent.trim(),selected:false,correct:true,status:"x"});}
+    else items.push({option:li.textContent.trim(),selected:false,correct:false,status:"v"});
+  });
+  const allOk=wrongSel===0 && missed===0;
+  const banner=document.getElementById(fbId);
+  banner.className="feedback-banner "+(allOk?"ok":(ok>0?"partial":"bad"));
+  banner.innerHTML="Richtig: <strong>"+ok+" / "+total+"</strong>."+(wrongSel>0?" Falsch: "+wrongSel+".":"")+(missed>0?" Übersehen: "+missed+".":"");
+  setResult(stationKey,{checked:true, allCorrect:allOk, format:"mc", items:items});
+}
+function checkS4(){
+  checkMC("s4_opts","s4_fb","s4_partA");
+  const beg = document.getElementById("s4_begruend").value;
+  const vert = document.getElementById("s4_vertief").value;
+  const mc = STATE.results["s4_partA"]||{};
+  setResult("s4",{checked:true, allCorrect:mc.allCorrect===true && beg.trim().length>=20, format:"mc+text", items:mc.items||[], text:beg, vertief:vert});
+}
+function resetS4(){ document.querySelectorAll("#s4_opts li").forEach(li=>{li.classList.remove("selected","correct","wrong"); const m=li.querySelector(".marker"); if(m) m.textContent="";}); document.getElementById("s4_begruend").value=""; document.getElementById("s4_vertief").value=""; document.getElementById("s4_fb").className="feedback-banner"; setResult("s4",{checked:false}); }
+
+/* ===== TF Station 5 ===== */
+function setupTF(){
+  document.querySelectorAll("#s5_tf .tf-btn").forEach(b=>{
+    b.addEventListener("click",()=>{ const row=b.closest(".tf-item"); row.querySelectorAll(".tf-btn").forEach(x=>x.classList.remove("selected")); b.classList.add("selected"); row.dataset.given=b.dataset.val;});
+  });
+}
+function checkS5(){
+  const rows=document.querySelectorAll("#s5_tf .tf-item");
+  let ok=0,total=rows.length; const items=[];
+  rows.forEach((row,idx)=>{
+    const corr=row.dataset.correct; const given=row.dataset.given;
+    row.querySelectorAll(".tf-btn").forEach(b=>b.classList.remove("correct","wrong"));
+    if(!given){ items.push({nr:idx+1,given:"-",correct:corr,status:"-"}); return;}
+    const btn=row.querySelector('.tf-btn[data-val="'+given+'"]');
+    if(given===corr){ btn.classList.add("correct"); ok++; items.push({nr:idx+1,given:given,correct:corr,status:"v"});}
+    else { btn.classList.add("wrong"); items.push({nr:idx+1,given:given,correct:corr,status:"x"});}
+  });
+  const banner=document.getElementById("s5_fb");
+  banner.className="feedback-banner "+(ok===total?"ok":(ok>0?"partial":"bad"));
+  banner.innerHTML="<strong>"+ok+" / "+total+"</strong> Aussagen korrekt.";
+  const beg=document.getElementById("s5_begruend").value;
+  const vert=document.getElementById("s5_vertief").value;
+  setResult("s5",{checked:true, allCorrect:ok===total && beg.trim().length>=20, format:"truefalse", items:items, text:beg, vertief:vert});
+}
+function resetS5(){ document.querySelectorAll("#s5_tf .tf-item").forEach(r=>{ delete r.dataset.given; r.querySelectorAll(".tf-btn").forEach(b=>b.classList.remove("selected","correct","wrong"));}); document.getElementById("s5_begruend").value=""; document.getElementById("s5_vertief").value=""; document.getElementById("s5_fb").className="feedback-banner"; setResult("s5",{checked:false}); }
+
+/* ===== STATION 6 ===== */
+function checkS6(){
+  checkMC("s6_quiz","s6_fb","s6_partA");
+  const text=document.getElementById("s6_text").value;
+  const vert=document.getElementById("s6_vertief").value;
+  const banner=document.getElementById("s6_fb_text");
+  const keywords=[
+    {label:"Quecksilber/Amalgam",variants:["quecksilber","hg","amalgam"]},
+    {label:"Wald/Brennholz",variants:["wald","brennholz","holz","rodung","abholz"]},
+    {label:"Mita/Zwangsarbeit",variants:["mita","zwangsarbeit","sklave"]},
+    {label:"Boden/Wasser/Vergiftung",variants:["boden","wasser","fluss","vergiftung","verschmutzung"]},
+    {label:"Folgen heute/Bioakkumulation",variants:["bioakkumulation","nahrungskette","heute","lange","langfristig"]}
+  ];
+  if(text.trim().length<20){ banner.className="feedback-banner bad"; banner.innerHTML="Bitte schreibe mindestens 3 Sätze."; }
+  else { const r=countKeywords(text,keywords); showTextFeedback(banner,r.found,r.missing); }
+  const r=countKeywords(text,keywords);
+  const mc=STATE.results["s6_partA"]||{};
+  setResult("s6",{checked:true, allCorrect: mc.allCorrect===true && text.trim().length>=20 && r.missing.length<=1, format:"quiz+text", items:mc.items||[], text:text, vertief:vert, feedback:r});
+}
+function resetS6(){ document.querySelectorAll("#s6_quiz li").forEach(li=>{li.classList.remove("selected","correct","wrong"); const m=li.querySelector(".marker"); if(m) m.textContent="";}); document.getElementById("s6_text").value=""; document.getElementById("s6_vertief").value=""; document.getElementById("s6_fb").className="feedback-banner"; document.getElementById("s6_fb_text").className="feedback-banner"; setResult("s6",{checked:false}); }
+
+/* ===== STATION 7 (Wirtschaft) ===== */
+function checkS7(){
+  checkMC("s7_opts","s7_fb","s7_partA");
+  // Reihenfolge prüfen
+  const orderInputs = ["s7b1","s7b2","s7b3","s7b4"].map(i=>document.getElementById(i));
+  let orderOk=0;
+  orderInputs.forEach(inp=>{ if(parseInt(inp.value)===parseInt(inp.dataset.correct)) orderOk++; });
+  const text=document.getElementById("s7_text").value;
+  const vert=document.getElementById("s7_vertief").value;
+  const banner=document.getElementById("s7_fb_text");
+  const keywords=[
+    {label:"Inflation/Preisrevolution",variants:["inflation","preis","geldwert","kaufkraft"]},
+    {label:"Krieg/Militär",variants:["krieg","militar","kriege","heer","soldat"]},
+    {label:"Importe/Industrie/Wirtschaft",variants:["import","industrie","wirtschaft","produktion","aufbau","handel"]},
+    {label:"Welthandel/China/Genua",variants:["welthandel","china","genua","amsterdam","antwerpen","ming"]},
+    {label:"Mita/Zwangsarbeit",variants:["mita","zwangsarbeit","indigen","arbeit"]}
+  ];
+  if(text.trim().length<25){ banner.className="feedback-banner bad"; banner.innerHTML="Bitte schreibe einen ausführlicheren Text."; }
+  else { const r=countKeywords(text,keywords); showTextFeedback(banner,r.found,r.missing); }
+  const r=countKeywords(text,keywords);
+  const mc=STATE.results["s7_partA"]||{};
+  setResult("s7",{checked:true, allCorrect: mc.allCorrect===true && orderOk===4 && text.trim().length>=25 && r.missing.length<=2, format:"mc+order+text", items:mc.items||[], order:orderOk+"/4", text:text, vertief:vert, feedback:r});
+}
+function resetS7(){ document.querySelectorAll("#s7_opts li").forEach(li=>{li.classList.remove("selected","correct","wrong"); const m=li.querySelector(".marker"); if(m) m.textContent="";}); ["s7b1","s7b2","s7b3","s7b4"].forEach(i=>document.getElementById(i).value=""); document.getElementById("s7_text").value=""; document.getElementById("s7_vertief").value=""; document.getElementById("s7_fb").className="feedback-banner"; document.getElementById("s7_fb_text").className="feedback-banner"; setResult("s7",{checked:false}); }
+
+/* ===== STATION 8 (Gesellschaft) ===== */
+function checkS8(){
+  let ok=0,total=0; const items=[];
+  document.querySelectorAll("#s8_table tbody tr").forEach(tr=>{
+    total++;
+    const sel=tr.querySelector("select"); const corr=sel.dataset.correct;
+    const begriff=tr.cells[0].textContent.trim(); const td=tr.cells[1];
+    td.classList.remove("correct","wrong");
+    if(!sel.value){ items.push({begriff,given:"-",correct:corr,status:"-"}); return;}
+    if(sel.value===corr){ td.classList.add("correct"); ok++; items.push({begriff,given:sel.options[sel.selectedIndex].text,correct:corr,status:"v"});}
+    else { td.classList.add("wrong"); items.push({begriff,given:sel.options[sel.selectedIndex].text,correct:sel.querySelector('option[value="'+corr+'"]').text,status:"x"});}
+  });
+  const banner=document.getElementById("s8_fb");
+  banner.className="feedback-banner "+(ok===total?"ok":(ok>0?"partial":"bad"));
+  banner.innerHTML="<strong>"+ok+" / "+total+"</strong> Zuordnungen richtig.";
+
+  const text=document.getElementById("s8_text").value;
+  const vert=document.getElementById("s8_vertief").value;
+  const banner2=document.getElementById("s8_fb_text");
+  const keywords=[
+    {label:"Abstammung/Herkunft",variants:["abstammung","herkunft","eltern","geburt"]},
+    {label:"Mechanismen (Eheverbote/Beruf/Steuer)",variants:["ehe","beruf","steuer","recht","besitz","bildung"]},
+    {label:"Diskriminierung/Hierarchie",variants:["diskriminier","hierarchie","ungerecht","ungleich","sortier"]},
+    {label:"Rassismus erkannt",variants:["rassismus","rassist","abwert","minderwertig"]}
+  ];
+  if(text.trim().length<20){ banner2.className="feedback-banner bad"; banner2.innerHTML="Bitte schreibe 3-4 Sätze."; }
+  else { const r=countKeywords(text,keywords); showTextFeedback(banner2,r.found,r.missing); }
+  const r=countKeywords(text,keywords);
+  setResult("s8",{checked:true, allCorrect:ok===total && text.trim().length>=20 && r.missing.length<=2, format:"matching+text", items:items, text:text, vertief:vert, feedback:r});
+}
+function resetS8(){ document.querySelectorAll("#s8_table select").forEach(s=>{s.value=""; s.closest("td").classList.remove("correct","wrong");}); document.getElementById("s8_text").value=""; document.getElementById("s8_vertief").value=""; document.getElementById("s8_fb").className="feedback-banner"; document.getElementById("s8_fb_text").className="feedback-banner"; setResult("s8",{checked:false}); }
+
+/* ===== STATION 9 ===== */
+function checkS9(){
+  let ok=0,total=0; const items=[];
+  document.querySelectorAll(".label-inputs select").forEach(sel=>{
+    total++; const corr=sel.dataset.correct; const row=sel.closest(".lbl"); row.classList.remove("correct","wrong");
+    const lbl=row.querySelector("strong").textContent;
+    if(!sel.value){ items.push({label:lbl,given:"-",correct:corr,status:"-"}); return;}
+    if(sel.value===corr){ row.classList.add("correct"); ok++; items.push({label:lbl,given:sel.value,correct:corr,status:"v"});}
+    else { row.classList.add("wrong"); items.push({label:lbl,given:sel.value,correct:corr,status:"x"});}
+  });
+  let mcOk=0,mcTotal=0;
+  document.querySelectorAll("#s9_quiz li").forEach(li=>{
+    const corr=li.dataset.correct==="true"; const sel=li.classList.contains("selected");
+    li.classList.remove("correct","wrong");
+    if(corr) mcTotal++;
+    if(corr && sel){ li.classList.add("correct"); mcOk++; items.push({option:li.textContent.trim(),selected:true,status:"v"});}
+    else if(!corr && sel){ li.classList.add("wrong"); items.push({option:li.textContent.trim(),selected:true,status:"x"});}
+    else if(corr && !sel){ li.classList.add("wrong"); items.push({option:li.textContent.trim(),selected:false,status:"x"});}
+  });
+  const banner=document.getElementById("s9_fb");
+  const allOk=ok===total && mcOk===mcTotal;
+  banner.className="feedback-banner "+(allOk?"ok":((ok+mcOk)>0?"partial":"bad"));
+  banner.innerHTML="Beschriftung: <strong>"+ok+"/"+total+"</strong>, Quiz: <strong>"+mcOk+"/"+mcTotal+"</strong>.";
+  const vert=document.getElementById("s9_vertief").value;
+  setResult("s9",{checked:true, allCorrect:allOk, format:"label+mc", items:items, vertief:vert});
+}
+function resetS9(){ document.querySelectorAll(".label-inputs select").forEach(s=>{s.value=""; s.closest(".lbl").classList.remove("correct","wrong");}); document.querySelectorAll("#s9_quiz li").forEach(li=>{li.classList.remove("selected","correct","wrong"); const m=li.querySelector(".marker"); if(m) m.textContent="";}); document.getElementById("s9_vertief").value=""; document.getElementById("s9_fb").className="feedback-banner"; setResult("s9",{checked:false}); }
+
+/* ===== STATION 10 — REICHER CHATBOT ===== */
+const BOTS = {
+  aymara: {
+    name: "Yana (Aymara, ca. 1580)",
+    intro: "Buen día, Joven. Ich bin Yana, ich lebe in einem Aymara-Dorf nahe Potosí, am Fuß des großen Berges. Mein Mann ist in der Mita. Ich habe drei Kinder. Frag mich, was du willst — aber halte das, was ich sage, in deinem Herzen.",
+    rules: [
+      {k:["wie geht","wie geht es dir","gehts","gehst du","befind"], a:"Heute ist ein schwerer Tag. Mein Mann ist seit zwei Wochen unter Tage. Wir wissen nicht, ob er zurückkommt. Aber meine Tochter hat gelacht heute morgen, das ist auch etwas."},
+      {k:["alter","wie alt","jahre","jahr"], a:"Ich glaube, ich bin so 27 oder 28 Sommer alt. Wir zählen die Jahre nicht so genau wie ihr. Ich zähle eher in Ernten."},
+      {k:["familie","kind","kinder","mann","ehemann","frau","mutter","vater","eltern","geschwister"], a:"Ich habe drei Kinder. Mein Mann Tupac ist in der Mine. Meine Mutter lebt bei uns, sie ist eine Heilerin. Mein Vater starb, als die Spanier seine Felder nahmen."},
+      {k:["essen","hungrig","trinken","speise","mahlzeit","brot","mais","kartoffel","fleisch"], a:"Wir essen Quinoa, Kartoffel, Mais — was die Erde uns gibt. Manchmal gibt es ein bisschen Llamafleisch. Brot, das die Spanier essen, schmeckt uns nicht — es ist trocken."},
+      {k:["mita","zwangsarbeit","arbeit","beruf","tag","tagesablauf"], a:"Die Mita ist ein Schatten über jedem Dorf. Sieben von zehn Männern kommen nicht zurück. Sie atmen Quecksilberdampf, ihre Lungen werden schwarz, ihre Zähne fallen aus. Mein Tag: aufstehen vor der Sonne, Wasser holen, Kinder, Feld, Wolle, Kochen, dann der Mond."},
+      {k:["cerro","silber","mine","bergwerk","berg","stollen"], a:"Der Cerro ist nicht nur ein Berg. Er ist ein Wesen, mit eigenem Willen. Die Spanier sehen nur das Silber. Wir sehen das Blut, das ihm entrinnt — und unser Blut, das wir ihm geben."},
+      {k:["wald","baum","holz","brennholz","rodung"], a:"Die Hänge waren früher voll mit Polylepis-Bäumen. Heilige Bäume. Jetzt sind sie kahl. Die Spanier verbrennen alles, um das Silber zu schmelzen. Der Wind ist anders, der Regen ist anders."},
+      {k:["pocken","krankheit","seuche","sterben","tod","epidemie","fieber"], a:"Mein Großvater erzählt: Die Krankheit kam wie ein Sturm. Ganze Dörfer leer in einem Monat. Niemand wusste, was es war. Die Spanier nannten es 'viruela'. Wir sagten: 'das Ende der Welt'."},
+      {k:["pferd","rind","tier","vieh","schwein","schaf","llama","alpaka"], a:"Pferde sind seltsame, große Tiere. Die Schafe der Spanier fressen das Gras, wo unsere Llamas weideten. Wo die Schafe gehen, wird die Erde hart und nackt."},
+      {k:["boden","feld","ernte","landwirtschaft","saat","pflug","mais","kartoffel","quinoa"], a:"Unsere Mütter wussten, wie man auf Terrassen anbaut. Mais, Kartoffel, Quinoa, Bohnen — alles in Schichten, alles im Gleichgewicht. Die Spanier verlangen nur Weizen. Der Boden weint."},
+      {k:["spanier","kolonist","spanien","koenig","krone"], a:"Sie kamen mit Kreuz und Schwert. Sie sagen, sie bringen Gott und Ordnung. Aber unsere Götter waren hier vor ihnen. Was sie 'Ordnung' nennen, ist für uns Verlust."},
+      {k:["religion","gott","glaube","kirche","christ","priester","mission"], a:"Sie sagen, wir sollen Christen sein. Wir gehen in ihre Kirche, weil wir müssen. Aber wenn die Sonne aufgeht, bete ich zur Pachamama — der Mutter Erde. Sie spricht zu uns leise, aber jeden Tag."},
+      {k:["zukunft","kind","heute","morgen","spater","spaeter","100 jahre"], a:"In 100 Jahren? Ich weiß nicht. Vielleicht weiß meine Tochter dann nicht mehr, wie Quinoa wächst. Vielleicht erinnert sich niemand mehr an unseren Großvater. Das wäre der größte Verlust."},
+      {k:["wasser","fluss","quelle","trinken","brunnen","see"], a:"Der Fluss unten ist trüb. Die Fische schmecken seltsam. Die Alten sagen: Trink ihn nicht. Wir glauben ihnen. Wir gehen weiter oben zur Quelle, aber sie wird kleiner jeden Sommer."},
+      {k:["umwelt","natur","oekosystem","biodiv","artenvielfalt"], a:"Wir denken nicht in 'Umwelt' und 'Mensch' getrennt. Der Berg ist eine Person, der Fluss ist eine Person. Wenn der Berg krank wird, werden wir krank. Das sehen wir gerade."},
+      {k:["geld","silber","gold","reichtum","arm","reich","handel"], a:"Geld? Wir hatten kein Geld. Wir tauschten Wolle gegen Mais, Lamafleisch gegen Salz. Jetzt sagen sie uns: Du schuldest. Du musst Steuer zahlen. Wovon? Von der Mita-Arbeit, die niemand bezahlt?"},
+      {k:["traurig","weinen","schmerz","wut","wuetend","angst","furcht","sorge"], a:"Manchmal weine ich, ja. Wenn ich meinen Mann denke. Aber meine Mutter sagt: Tränen wässern die Erde, auch das ist gut. Wir tragen weiter."},
+      {k:["hoffnung","hoff","wunsch","traum","wuensch"], a:"Ich hoffe, dass meine Tochter unsere Sprache spricht. Dass sie Quinoa sät. Dass sie weiß, wer ihre Großmutter war. Vielleicht ist Hoffnung das einzige, was kein Spanier mir nehmen kann."},
+      {k:["sprache","aymara","quechua","kichwa","spanisch","lernen"], a:"Wir sprechen Aymara. Die Spanier verbieten es manchmal, aber zu Hause sprechen wir es. Mein Sohn lernt Spanisch in der Kirchenschule, das ist seltsam — er kommt heim und sagt 'Sí, padre' statt 'jiwa, jila'."},
+      {k:["fest","feier","tanz","musik","brauch","tradition"], a:"Wir feiern die Pachamama im August. Wir tanzen, wir geben der Erde Coca, Schnaps, Maiskörner. Die Spanier nennen das 'Aberglaube'. Wir nennen es 'das Leben'."},
+      {k:["coca","kraut","heilen","medizin","krank"], a:"Coca-Blätter helfen gegen Müdigkeit, gegen Höhenkrankheit. Wir kauen sie täglich, schon meine Großmutter. Die Spanier verbieten sie manchmal, brauchen sie aber selbst für die Mita-Arbeiter."},
+      {k:["herrscher","inka","azteke","reich","vorher","frueher"], a:"Vor den Spaniern gab es das Tawantinsuyu — das Inka-Reich. Großes Reich, gute Straßen, Speicher voll Quinoa. Es war auch nicht frei von Zwang. Aber es war unser. Jetzt sind wir Untertanen von etwas, das wir nicht verstehen."},
+      {k:["heimat","dorf","ort","leben","wohn"], a:"Mein Dorf heißt Pacaje. Vierzig Häuser, ein Brunnen, eine Kapelle (die Spanier haben sie gebaut). Hinter dem Dorf steigt der Pfad zum Cerro. Es ist nicht groß — aber es ist alles."},
+      {k:["wer bist du","name","heisst","ich bin","stell dich vor","stellen"], a:"Ich bin Yana, Tochter von Mama Sisa, Frau von Tupac, Mutter von Inti, Killa und Mayu. Aymara aus Pacaje, Hochland nahe Potosí. Mehr brauchst du nicht zu wissen."},
+      {k:["danke","dank","ade","tschuess","bye","auf wiedersehen"], a:"Geh in Frieden. Trag, was du gehört hast, weiter. Pachamama begleite dich."},
+      {k:["hallo","hi","guten","tag","morgen","abend","sali","sup","servus"], a:"Suma uru — guten Tag. Komm näher. Setz dich. Was möchtest du wissen?"},
+      {k:["sklave","sklaverei","afrika","afrikaner"], a:"Ich habe einen Sklaven gesehen, einmal. Schwarze Haut, traurige Augen. Sie kommen über das große Wasser, von einem Ort, den niemand kennt. Die Spanier zwingen sie auf Plantagen. Es ist nicht meine Welt, aber sie tun mir leid."},
+      {k:["castas","casta","kaste","klasse","stand"], a:"Die Spanier sortieren uns in Klassen. Ich bin 'India', das ist eine niedrige Klasse. Mein Sohn mit einer Spanierin wäre 'Mestizo'. Selbst die Spanier untereinander sortieren sich — 'Peninsular' ist mehr wert als 'Criollo'. Es ist absurd."}
+    ],
+    def: "Das verstehe ich nicht ganz, oder es liegt außerhalb meiner Welt. Frag mich nach: meinem Tag, meiner Familie, dem Cerro Rico, der Mita, unseren Pflanzen und Tieren, Krankheiten, Hoffnungen, oder dem, was sich verändert hat."
+  },
+  konq: {
+    name: "Don Diego de Salazar (Hacienda-Besitzer, ca. 1600)",
+    intro: "Buenos días, joven! Don Diego de Salazar, geboren 1558 in Sevilla, lebe seit zwanzig Jahren auf meiner Hacienda im Hochland. Tausend Rinder, fünfhundert Schafe, dreißig indianische Familien, die mir dienen. Was möchtest du wissen?",
+    rules: [
+      {k:["wie geht","wie geht es dir","gehts","gehst du","befind"], a:"Es geht. Die Ernte ist gut, der Wein aus Spanien ist da, die Krone hat meine Encomienda erneuert. Was will man mehr?"},
+      {k:["alter","wie alt","jahre","jahr"], a:"Zweiundvierzig Jahre. Lebe gesund, dank des Klimas hier. In Spanien wäre ich schon dreimal an Fieber gestorben."},
+      {k:["familie","kind","kinder","frau","ehefrau","mann","vater","mutter"], a:"Meine Frau Isabel ist Criolla, hier geboren. Wir haben drei Söhne, alle in Spanien zur Ausbildung. Mein Vater war Hidalgo in Sevilla, niedriger Adel."},
+      {k:["essen","speise","mahlzeit","trinken","brot","fleisch","wein"], a:"Wir essen wie zu Hause — Brot aus Weizen (den lasse ich anbauen!), Wein aus Spanien, gutes Rind- und Schaffleisch. Die indianische Kost — Mais, Kartoffel — ist nichts für meinen Magen."},
+      {k:["rind","vieh","tier","schaf","schwein","pferd","esel"], a:"Mein Vieh ist mein Reichtum. Tausend Rinder, fünfhundert Schafe! Vor mir gab es hier keine Rinder. Wer das Vieh kontrolliert, kontrolliert das Land. So einfach."},
+      {k:["boden","feld","ernte","landwirtschaft","weide"], a:"Wir bauen Weizen an, Wein, Zuckerrohr in den Tälern. Der Boden ermüdet manchmal — dann gibt es eben neuen Boden. Davon haben wir hier reichlich."},
+      {k:["erosion","umwelt","schaden","oekosystem"], a:"Erosion? Pah. Land ist genug da. Das ist die Sache mit dem Neuen Kontinent — er ist groß. Wenn ein Stück erschöpft ist, gehen wir weiter. Das Land erholt sich, oder wir nehmen das nächste."},
+      {k:["mita","arbeit","indio","sklave","zwang","encomienda","hacienda"], a:"Die Encomienda ist mein Recht von der Krone. Dreißig Familien arbeiten für mich, ich beschütze sie, lasse sie unterrichten, lasse sie taufen. Es ist ein <em>System</em>, junger Freund, kein Unrecht. Die Mita brauchen wir für die Mine, ohne sie kein Silber."},
+      {k:["silber","cerro","potosi","bergbau","mine","amalgam","quecksilber"], a:"Potosí! Der Berg aus reinem Silber. Aus seinem Bauch fließt Reichtum nach Sevilla, nach Genua, bis nach China. Ich kaufe dort Anteile, das vermehrt mein Vermögen. Quecksilber? Eine geniale Erfindung. Ja, gefährlich für die Arbeiter, aber wirtschaftlich unverzichtbar."},
+      {k:["wald","baum","brennholz","rodung","holz"], a:"Wälder sind eine Ressource. Holz für die Öfen, Schiffe, Häuser. Wo Bäume fallen, wachsen Reichtum und Zivilisation. Das ist Fortschritt, junger Freund. Wer sollte das bezweifeln?"},
+      {k:["krankheit","pocken","tod","seuche","epidemie","fieber"], a:"Eine Tragödie, ja. Aber wir Spanier können nichts dafür. Die Indios haben einfach keine starke Konstitution. Es muss ein göttlicher Plan sein — vielleicht damit Platz für unsere Mission entsteht."},
+      {k:["zukunft","spaeter","morgen","100 jahre","kind","sohn"], a:"Meine Söhne erben die Hacienda. Mein Enkel wahrscheinlich auch. Diese Erde gehört uns nun, das ist klar. Ob die Indios in 200 Jahren noch hier sind? Tja, das weiß nur Gott."},
+      {k:["pflanze","weizen","zuckerrohr","mais","monokultur","feld"], a:"Wir bringen die Pflanzen aus Spanien. Weizen für gutes Brot, Zuckerrohr für die Karibik — riesiges Geschäft. Mais — das fressen die Indios. Wir fressen es nicht."},
+      {k:["religion","gott","kirche","kreuz","christ","mission","priester"], a:"Wir bringen den wahren Glauben. Das ist meine größte Pflicht. Mein Hauspriester tauft jeden Indio. Wenn dabei auch Wälder fallen oder Indios sterben: Ihre Seelen sind gerettet. Das ist mehr wert als ein Wald."},
+      {k:["natur","umwelt","oekologie","oekosystem"], a:"'Umwelt' — was für ein seltsames Wort. Gottes Schöpfung ist uns gegeben, damit wir sie nutzen. Genesis 1,28. Das steht in der Bibel. Punkt."},
+      {k:["geld","gold","reichtum","handel","wirtschaft","welt"], a:"Reichtum? Hmmmm. Ich besitze viel, aber das Silber fließt durch meine Hände, nicht in sie. Es geht nach Spanien, nach Genua, nach China. Was wir hier behalten, ist Land, Vieh, Wein und ein bisschen Geld."},
+      {k:["traurig","sorge","angst","wut"], a:"Sorgen? Ich sorge mich um die nächste Schiffsladung aus Sevilla. Und ich sorge mich um die Engländer — diese Piraten kapern unsere Galeonen. Sonst? Wenig."},
+      {k:["hoffnung","wunsch","traum","wuensch"], a:"Ich hoffe, mein ältester Sohn übernimmt einmal die Hacienda. Dass die Krone mir weiterhin gewogen bleibt. Und dass die Indios christlich werden, ehrlich."},
+      {k:["sprache","spanisch","aymara","quechua","lernen"], a:"Wir sprechen Spanisch, natürlich. Mein Priester predigt manchmal in Quechua, das ist nützlich. Aber unsere Hochkultur — Cervantes, das Goldene Zeitalter — kommt aus Sevilla. Spanisch ist die Sprache der Bildung."},
+      {k:["castas","casta","kaste","klasse","stand","mestizo","mulato","peninsular","criollo"], a:"Wir Spanier achten auf Reinheit des Blutes. Ich bin Peninsular — in Spanien geboren. Meine Frau ist Criolla, ein bisschen darunter. Mestizos, Mulatos, Zambos — alle wichtig für die Hierarchie, jeder hat seinen Platz."},
+      {k:["sklave","sklaverei","afrika","afrikaner"], a:"Sklaven aus Afrika? Brauchen wir, ja. Vor allem für die Zuckerplantagen in der Karibik. Die Indios sterben zu schnell, die Afrikaner sind kräftiger. Klingt hart? Es ist ein Geschäft, Sohn."},
+      {k:["fest","feier","musik","tanz"], a:"Wir feiern die Heiligen. Wir tanzen, ja, manchmal — Pavane, Galliarda, was eben in Spanien Mode war, als ich aufbrach. Die indianischen Tänze interessieren mich nicht."},
+      {k:["wo","heimat","sevilla","spanien","amerika","peru","mexiko"], a:"Ich kam aus Sevilla, lebe jetzt im Hochland — drei Tagesritte von Potosí. Sevilla ist meine Heimat im Herzen. Hier ist mein Werk."},
+      {k:["wer bist du","name","heisst","ich bin","stell dich","vorstell"], a:"Don Diego de Salazar y Mendoza, Hidalgo von Sevilla, Encomendero, Besitzer der Hacienda Santa Catalina, treuer Diener Seiner katholischen Majestät Philipp II."},
+      {k:["danke","dank","ade","tschuess","bye"], a:"Vaya con Dios, junger Freund. Möge die Reise dir Bildung bringen."},
+      {k:["hallo","hi","guten tag","guten morgen","servus"], a:"Buenos días! Treten Sie ein. Möchten Sie einen Wein aus Sevilla? Ich habe gerade frischen erhalten."},
+      {k:["wasser","fluss","quelle","brunnen"], a:"Wasser? Hier oben genug, in der trockenen Zeit weniger. Wir haben einen Brunnen am Haus. Die Indios müssen weiter laufen, gewiss."}
+    ],
+    def: "Diese Frage verstehe ich nicht recht, oder sie ist mir gleichgültig. Frag mich nach meinem Besitz, der Encomienda, dem Silber, der Krone, dem Glauben, oder der Zukunft meiner Hacienda."
+  },
+  umwelt: {
+    name: "Die Stimme der Anden-Umwelt",
+    intro: "Ich bin keine einzelne Person. Ich bin Wald, Fluss, Boden, Tier, Stein — die Stimme einer Region, die nicht sprechen kann. Ich erinnere mich an alles. Frag mich.",
+    rules: [
+      {k:["wie geht","wie gehts","befinden"], a:"Ich bin geschwächt. Wo gestern Wald stand, ist Hang. Wo Wasser klar war, ist Schlamm. Aber ich bin nicht tot — ich ändere nur meine Form."},
+      {k:["alter","wie alt","jahre"], a:"Älter als jede Erinnerung. Älter als die Inka, älter als die Maya. Ich war hier, als die ersten Menschen kamen. Ich werde hier sein, wenn die letzten gehen."},
+      {k:["wald","baum","abholz","rodung","brennholz","polylepis"], a:"Wo gestern tausendjährige Polylepis-Wälder standen, ist heute karger Hang. Innerhalb von 80 Jahren wurden die Berge um Potosí kahl. Ohne Wurzeln rutscht der Boden, ohne Schatten verdunstet das Wasser. Es dauert Jahrhunderte, bis ich mich erhole."},
+      {k:["boden","erosion","fruchtbarkeit","weide","humus"], a:"Mein Boden war dünn, aber lebendig. Mit tausenden Hufen wurde er hart, verlor seine schützende Schicht. Auf vielen Hängen ist heute kein Anbau mehr möglich. Erosion arbeitet still, aber ewig."},
+      {k:["wasser","fluss","quelle","quecksilber","gift","verschmutzung"], a:"Quecksilber, das vor 400 Jahren in meinen Flüssen versickerte, ist noch dort. Es reichert sich in Fischen, in Vögeln, in Menschen an (Bioakkumulation). Ich kann es nicht abbauen — es geht nur durch die Nahrungskette weiter."},
+      {k:["tier","vieh","fauna","art","verdrangung","lama","vicuna"], a:"Lamas und Vicuñas wichen Schafen und Rindern. Heimische Vögel verloren ihre Nistplätze, als die Wälder fielen. Manche Arten gibt es heute nur noch in unzugänglichen Gebieten — oder gar nicht mehr."},
+      {k:["pflanze","biodiversitat","artenvielfalt","neophyt","klee","distel"], a:"Eingeführte Pflanzen wie Klee, Disteln, fremde Gräser haben sich ausgebreitet. Über ein Drittel der heutigen Pflanzenwelt Amerikas ist eingeführt. Manche Landschaften sind kaum noch wiedererkennbar."},
+      {k:["mensch","indigene","bevoelkerung","kultur","wissen","verlust"], a:"Mit den Menschen verschwand ihr Wissen. Wer baut heute noch Mais, Bohnen und Kürbis zusammen an? Wer kennt die richtige Brachzeit für tropische Böden? Ökologisches Wissen ist auch verloren gegangen — nicht nur Wälder."},
+      {k:["heute","zukunft","klima","co2","kleine eiszeit"], a:"Manche Folgen wirken bis heute. Die Wiederbewaldung verlassener indigener Felder trug laut neueren Studien zur 'Kleinen Eiszeit' bei — durch CO₂-Bindung. Heute folgen Bergbau, Sojaanbau und Lithium-Förderung den gleichen kolonialen Mustern."},
+      {k:["bergbau","silber","mine","lithium","kupfer","gold"], a:"Über 400 Jahre Bergbau hinterlassen Spuren. Halden, Stollen, vergiftete Flüsse. Heute wiederholt sich das Muster mit Lithium und Kupfer — wieder werden meine Ökosysteme für globale Märkte angeritzt."},
+      {k:["wirtschaft","handel","geld","welt","global","kolonial"], a:"Aus mir wird Reichtum gemacht, der andernorts verzehrt wird. Mein Silber baute Sevillas Kathedralen. Mein Wald wurde zu Schiffsplanken in Cadiz. Mein Boden zu Zucker in Antwerpen. Mein Lithium wird zu Akkus in Berlin."},
+      {k:["religion","gott","kirche","mission"], a:"Die Spanier haben Kirchen auf meinen heiligen Stätten gebaut. Auf dem Inka-Sonnentempel von Cuzco steht heute eine Kathedrale. Aber die Pachamama hört nicht auf, zu existieren, nur weil man sie übermalt."},
+      {k:["familie","kinder","ehe","gesellschaft","castas"], a:"Eure menschlichen Ordnungen sind mir fern — aber ich sehe: Wo die Casta sortiert, da sortiert sich auch die Landnutzung. Die Reichen besitzen die fruchtbaren Täler. Die Armen wohnen am steilen Hang, wo die Erosion frisst."},
+      {k:["pocken","krankheit","virus","epidemie"], a:"Die Krankheit war nicht meine Stimme. Sie kam von außen, kleiner Reisender mit großen Folgen. Sie tötete 60-90 Prozent der Menschen — aber sie veränderte auch mich, weil Felder verwilderten und Wald wiederkam."},
+      {k:["hoffnung","heilung","erholung","regeneration"], a:"Ich erhole mich, langsam. Wo Schutzgebiete entstehen, kommt der Polylepis-Wald zurück. Wo indigenes Wissen geehrt wird, kommt der Boden wieder ins Gleichgewicht. Aber ich brauche Generationen, nicht Jahre."},
+      {k:["sklave","sklaverei","afrika","plantage"], a:"Versklavte Afrikaner brachten Pflanzen, Wissen, Tiere mit nach Amerika — auch sie haben mich verändert. Manioka, bestimmte Reissorten, Yams. Tragisch: Selbst in Ketten gestaltet der Mensch die Erde mit."},
+      {k:["geist","stimme","seele","leben","tod"], a:"Bin ich Geist? Vielleicht. Bin ich Stimme? Du hörst mich. Lebe ich? Solange du fragst, ja."},
+      {k:["danke","tschuess","ade","bye","abschied"], a:"Geh, aber vergiss nicht: Du atmest in einer Welt, die durch Tausende solcher Geschichten geformt wurde. Atme bewusst."},
+      {k:["hallo","hi","guten","servus","tag"], a:"Bleib stehen. Hör. Der Wind hier ist anders als anderswo. Frag mich, was du wissen willst."},
+      {k:["wer bist du","name","stell dich","ich bin"], a:"Ich habe keinen Namen, den du sprechen könntest. Ich bin Cerro, Lago, Bosque, Pacha — alles und nichts. Ich bin das, was bleibt, wenn die Menschen gegangen sind."}
+    ],
+    def: "Diese Frage erreicht mich nicht direkt. Frag mich nach Wald, Boden, Wasser, Tieren, Pflanzen, dem Verlust, der Hoffnung, oder den langen Wirkungen bis heute."
+  }
+};
+let CURRENT_BOT=null;
+let CHAT_LOG=[];
+function setBot(key){
+  CURRENT_BOT=BOTS[key]; CHAT_LOG=[];
+  document.getElementById("s10_chat").innerHTML="";
+  appendChat("bot",CURRENT_BOT.name,CURRENT_BOT.intro);
+  const sug=document.getElementById("s10_suggest"); sug.innerHTML="";
+  const sugList=["Wie geht es dir heute?","Erzähl mir von deiner Familie","Was isst du normalerweise?","Wie sieht dein Alltag aus?","Was glaubst du, was in 100 Jahren ist?","Was bedeutet der Cerro Rico für dich?"];
+  sugList.forEach(s=>{ const b=document.createElement("button"); b.textContent=s;
+    b.onclick=()=>{ document.getElementById("s10_input").value=s; sendChat();}; sug.appendChild(b);});
+}
+function appendChat(who,name,text){
+  const box=document.getElementById("s10_chat");
+  const div=document.createElement("div");
+  div.className="chat-msg "+who;
+  div.innerHTML="<span class='who'>"+name+"</span>"+text;
+  box.appendChild(div); box.scrollTop=box.scrollHeight;
+  CHAT_LOG.push({who,name,text});
+}
+function sendChat(){
+  if(!CURRENT_BOT){ appendChat("bot","Hinweis","Wähle zuerst eine Person oben."); return; }
+  const inp=document.getElementById("s10_input"); const q=inp.value.trim();
+  if(!q) return;
+  appendChat("user","Du",q); inp.value="";
+  const qN=normalize(q);
+  let answer=null;
+  for(const rule of CURRENT_BOT.rules){
+    if(rule.k.some(w=> qN.indexOf(normalize(w))>=0)){ answer=rule.a; break; }
+  }
+  if(!answer) answer=CURRENT_BOT.def;
+  setTimeout(()=> appendChat("bot",CURRENT_BOT.name,answer), 280);
+}
+function checkS10(){
+  const text=document.getElementById("s10_text").value;
+  const vert=document.getElementById("s10_vertief").value;
+  const banner=document.getElementById("s10_fb");
+  const keywords=[
+    {label:"Indigene Sicht/Yana",variants:["yana","aymara","mita","indigen","mutter","frau","arbeiter"]},
+    {label:"Spanische Sicht/Don Diego",variants:["diego","spani","kolonist","hacienda","krone","reichtum"]},
+    {label:"Umwelt-Sicht",variants:["umwelt","natur","wald","fluss","boden","oekosystem","pachamama"]},
+    {label:"Konkretes Beispiel",variants:["cerro","quecksilber","amalgam","silber","pocken","vieh","krankheit","castas","encomienda"]},
+    {label:"Reflexion/Vergleich",variants:["uberrascht","gelernt","verstanden","perspektive","macht","gegensatz","unterschied"]}
+  ];
+  if(text.trim().length<20){ banner.className="feedback-banner bad"; banner.innerHTML="Bitte schreibe wenigstens 3 Sätze für ein Fazit."; return;}
+  if(CHAT_LOG.filter(m=>m.who==="user").length<3){ banner.className="feedback-banner bad"; banner.innerHTML="Bitte stelle dem Bot mindestens 3 eigene Fragen, bevor du das Fazit prüfst."; return;}
+  const r=countKeywords(text,keywords);
+  showTextFeedback(banner,r.found,r.missing);
+  setResult("s10",{checked:true, allCorrect:r.missing.length<=2 && CHAT_LOG.filter(m=>m.who==="user").length>=4, format:"chat+text", chat:CHAT_LOG.slice(), text:text, vertief:vert, feedback:r});
+}
+function resetS10(){ document.getElementById("s10_chat").innerHTML=""; document.getElementById("s10_text").value=""; document.getElementById("s10_vertief").value=""; document.getElementById("s10_fb").className="feedback-banner"; CURRENT_BOT=null; CHAT_LOG=[]; setResult("s10",{checked:false}); }
+function downloadInterview(){
+  if(CHAT_LOG.length===0){ alert("Noch kein Interview geführt."); return; }
+  let txt = "INTERVIEW-PROTOKOLL\nDatum: "+dateStr()+"\n";
+  if(CURRENT_BOT) txt += "Befragte Person: "+CURRENT_BOT.name+"\n";
+  txt += "================================\n\n";
+  CHAT_LOG.forEach(m=> txt += (m.who==="user"?"DU":"BOT")+" ("+m.name+"):\n"+m.text.replace(/<[^>]+>/g,"")+"\n\n");
+  txt += "\n--- Fazit des Schülers ---\n" + (document.getElementById("s10_text").value||"(noch nicht ausgefüllt)") + "\n";
+  const blob=new Blob([txt],{type:"text/plain;charset=utf-8"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a"); a.href=url;
+  a.download="Interview_"+(CURRENT_BOT?CURRENT_BOT.name.split(" ")[0]:"unbekannt")+"_"+dateStr()+".txt";
+  document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(url); a.remove();},200);
+}
+function printInterview(){
+  if(CHAT_LOG.length===0){ alert("Noch kein Interview geführt."); return; }
+  const w=window.open("","_blank");
+  let html="<html><head><title>Interview-Protokoll</title><style>body{font-family:Georgia,serif;padding:30px;}h1{color:#5e1313;}.bot{background:#f5e8e8;padding:8px;margin:6px 0;border-left:3px solid #8b1f1f;}.user{background:#fff3d0;padding:8px;margin:6px 0;border-right:3px solid #b8902d;text-align:right;}</style></head><body>";
+  html += "<h1>Interview-Protokoll</h1><p><strong>Befragte Person:</strong> "+(CURRENT_BOT?CURRENT_BOT.name:"")+"<br><strong>Datum:</strong> "+dateStr()+"</p>";
+  CHAT_LOG.forEach(m=> html += "<div class='"+m.who+"'><strong>"+m.name+":</strong><br>"+m.text+"</div>");
+  html += "<h2>Fazit</h2><p>"+(document.getElementById("s10_text").value||"(noch nicht ausgefüllt)").replace(/\n/g,"<br>")+"</p>";
+  html += "</body></html>";
+  w.document.write(html); w.document.close();
+  setTimeout(()=>w.print(),500);
+}
+
+/* ===== STATION 11 ===== */
+function checkS11(){
+  let ok=0,total=0; const items=[];
+  document.querySelectorAll("#s11_table tbody tr").forEach(tr=>{
+    total++;
+    const sel=tr.querySelector("select"); const corr=sel.dataset.correct;
+    const cause=tr.cells[0].textContent.trim(); const td=tr.cells[1];
+    const begText=tr.querySelector("textarea").value;
+    td.classList.remove("correct","wrong");
+    if(!sel.value){ items.push({cause,given:"-",correct:corr,status:"-",begruendung:begText}); return;}
+    if(sel.value===corr){ td.classList.add("correct"); ok++; items.push({cause,given:sel.options[sel.selectedIndex].text,correct:corr,status:"v",begruendung:begText});}
+    else { td.classList.add("wrong"); items.push({cause,given:sel.options[sel.selectedIndex].text,correct:sel.querySelector('option[value="'+corr+'"]').text,status:"x",begruendung:begText});}
+  });
+  const banner=document.getElementById("s11_fb");
+  banner.className="feedback-banner "+(ok===total?"ok":(ok>0?"partial":"bad"));
+  banner.innerHTML="<strong>"+ok+" / "+total+"</strong> Zuordnungen richtig.";
+  setResult("s11",{checked:true, allCorrect:ok===total, format:"matching", items:items});
+}
+function resetS11(){ document.querySelectorAll("#s11_table select").forEach(s=>{s.value=""; s.closest("td").classList.remove("correct","wrong");}); document.querySelectorAll("#s11_table textarea").forEach(t=>t.value=""); document.getElementById("s11_fb").className="feedback-banner"; setResult("s11",{checked:false}); }
+
+/* ===== STATION 12 ===== */
+function checkS12(){
+  checkMC("s12_quiz","s12_fb","s12_partA");
+  const text=document.getElementById("s12_text").value;
+  const vert=document.getElementById("s12_vertief").value;
+  const reflect=document.getElementById("s12_reflect").value;
+  const banner=document.getElementById("s12_fb_text");
+  const keywords=[
+    {label:"Aktuelles Beispiel",variants:["lithium","soja","bergbau","amazon","kupfer","gold","palmol"]},
+    {label:"Rohstoffexport/globaler Markt",variants:["export","rohstoff","markt","global","weltmarkt"]},
+    {label:"Monokultur/Plantage",variants:["monokultur","plantage","mega","industriell"]},
+    {label:"Umweltschäden",variants:["boden","wasser","wald","vergift","erosion","abholz","entwald"]},
+    {label:"Indigene heute",variants:["indigen","gemeinde","betroffen","vertrieb","aymara"]}
+  ];
+  if(text.trim().length<30){ banner.className="feedback-banner bad"; banner.innerHTML="Bitte schreibe einen ausführlicheren Transfertext (mind. 6 Sätze)."; }
+  else { const r=countKeywords(text,keywords); showTextFeedback(banner,r.found,r.missing); }
+  const r=countKeywords(text,keywords);
+  const mc=STATE.results["s12_partA"]||{};
+  setResult("s12",{checked:true, allCorrect:mc.allCorrect===true && text.trim().length>=30 && r.missing.length<=2, format:"mc+text", items:mc.items||[], text:text, vertief:vert, reflect:reflect, feedback:r});
+}
+function resetS12(){ document.querySelectorAll("#s12_quiz li").forEach(li=>{li.classList.remove("selected","correct","wrong"); const m=li.querySelector(".marker"); if(m) m.textContent="";}); document.getElementById("s12_text").value=""; document.getElementById("s12_vertief").value=""; document.getElementById("s12_reflect").value=""; document.getElementById("s12_fb").className="feedback-banner"; document.getElementById("s12_fb_text").className="feedback-banner"; setResult("s12",{checked:false}); }
+
+/* ===== EXPORT ===== */
+function dateStr(){ const d=new Date(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
+function buildReport(){
+  const name=(document.getElementById("studentName").value||"unbenannt").trim();
+  const today=dateStr();
+  let txt="";
+  txt+="=========================================================\n  BORDBUCH: Spanischer Kolonialismus in Amerika\n=========================================================\n";
+  txt+="Name:    "+name+"\nDatum:   "+today+"\n";
+  const checked=Object.values(STATE.results).filter(r=>r.checked).length;
+  const allOk=Object.values(STATE.results).filter(r=>r.allCorrect===true).length;
+  txt+="Geprüft: "+checked+" / "+STATE.totalStations+", vollständig richtig: "+allOk+"\nLegende: [v] richtig  [x] falsch  [-] nicht bearbeitet\n\n";
+  const titles={s1:"Einstieg",s2:"Kolumbianischer Austausch",s3:"Reise der Arten",s4:"Boden unter Druck",s5:"Wälder fallen",s6:"Cerro Rico",s7:"Globales Geld (Wirtschaft)",s8:"Eine neue Gesellschaft (Castas)",s9:"Stilles Sterben (Krankheiten)",s10:"Perspektivwechsel (Chat)",s11:"Ursachen & Folgen",s12:"Damals & Heute (Transfer)"};
+  for(let i=1;i<=12;i++){
+    const id="s"+i; const r=STATE.results[id];
+    txt+="---------------------------------------------------------\nStation "+i+" — "+titles[id]+"\n---------------------------------------------------------\n";
+    if(!r || !r.checked){ txt+="[-] Noch nicht geprüft.\n\n"; continue; }
+    txt+="Status: "+(r.allCorrect?"[v] vollständig":"[x] noch nicht vollständig")+"\n";
+    if(r.items){ r.items.forEach(it=>{
+      if(it.label) txt+="  ["+it.status+"] "+it.label+": "+it.given+(it.status==="x"?"  richtig: "+it.correct:"")+"\n";
+      else if(it.option) txt+="  ["+it.status+"] "+(it.selected?"angekreuzt":"nicht gewählt")+" — "+it.option+"\n";
+      else if(it.cause) txt+="  ["+it.status+"] "+it.cause+" → "+it.given+(it.status==="x"?"  richtig: "+it.correct:"")+(it.begruendung?"\n      Begründung: "+it.begruendung:"")+"\n";
+      else if(it.begriff) txt+="  ["+it.status+"] "+it.begriff+" → "+it.given+(it.status==="x"?"  richtig: "+it.correct:"")+"\n";
+      else if(it.nr) txt+="  ["+it.status+"] Aussage "+it.nr+": "+it.given+(it.status==="x"?"  richtig: "+it.correct:"")+"\n";
+      else if(it.item) txt+="  ["+it.status+"] "+it.item+" → "+it.in+(it.status==="x"?"  richtig: "+it.correct:"")+"\n";
+      else if(it.given!==undefined) txt+="  ["+it.status+"] '"+it.given+"'"+(it.status==="x"?"  richtig: '"+it.correct+"'":"")+"\n";
+    });}
+    if(r.text) txt+="\nFreitext:\n"+r.text+"\n";
+    if(r.basis) txt+="\nBasis-Antwort:\n"+r.basis+"\n";
+    if(r.vertief) txt+="\nVertiefung:\n"+r.vertief+"\n";
+    if(r.reflect) txt+="\nReflexion: "+r.reflect+"\n";
+    if(r.feedback){ txt+="\nAutom. Rückmeldung:\n  erkannt:  "+(r.feedback.found.join(", ")||"(keine)")+"\n  fehlend:  "+(r.feedback.missing.join(", ")||"(keine)")+"\n"; }
+    if(r.chat && r.chat.length){ txt+="\nChat-Protokoll:\n"; r.chat.forEach(m=> txt+="  "+(m.who==="user"?"DU":"BOT")+" ("+m.name+"): "+m.text.replace(/<[^>]+>/g,"")+"\n"); }
+    txt+="\n";
+  }
+  txt+="=========================================================\n  Ende. Buen viaje!\n=========================================================\n";
+  return {txt,name,today};
+}
+function downloadResults(){
+  const r=buildReport();
+  const safeName=r.name.replace(/[^A-Za-z0-9-_äöüÄÖÜß ]/g,"").replace(/\s+/g,"_")||"unbenannt";
+  const blob=new Blob([r.txt],{type:"text/plain;charset=utf-8"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a"); a.href=url;
+  a.download="Bordbuch_"+safeName+"_"+r.today+".txt";
+  document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(url); a.remove();},200);
+}
+function printReport(){
+  const r=buildReport();
+  const w=window.open("","_blank");
+  let html="<html><head><title>Bordbuch — "+r.name+"</title><style>body{font-family:Georgia,serif;padding:30px;line-height:1.5;}h1{color:#5e1313;border-bottom:2px solid #5e1313;}pre{white-space:pre-wrap;font-family:Georgia,serif;}</style></head><body>";
+  html += "<h1>Bordbuch — Spanischer Kolonialismus</h1><pre>"+r.txt.replace(/</g,"&lt;")+"</pre></body></html>";
+  w.document.write(html); w.document.close();
+  setTimeout(()=>w.print(),500);
+}
+function mailResults(){
+  const r=buildReport();
+  const subj=encodeURIComponent("Bordbuch Kolonialismus — "+r.name+" — "+r.today);
+  const body=encodeURIComponent("Liebe Lehrkraft,\n\nhier sind meine Ergebnisse.\nDie vollständige Datei habe ich heruntergeladen und füge sie bei.\n\n--- Kurzfassung ---\n\n"+r.txt.substring(0,1500)+"\n\n[... vollständige Datei im Anhang ...]");
+  window.location.href="mailto:huber.93@icloud.com?subject="+subj+"&body="+body;
+}
+
+/* ===== GLOSSAR ===== */
+function buildGlossarText(){
+  let t="GLOSSAR — Spanischer Kolonialismus in Amerika\nDatum: "+dateStr()+"\n=========================================\n\n";
+  document.querySelectorAll("#glossar-grid .gloss-card").forEach(c=>{
+    const strong=c.querySelector("strong");
+    const term=strong.textContent.trim();
+    const def=c.textContent.replace(term,"").trim();
+    t += term+":\n  "+def+"\n\n";
+  });
+  return t;
+}
+function downloadGlossar(){
+  const blob=new Blob([buildGlossarText()],{type:"text/plain;charset=utf-8"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a"); a.href=url; a.download="Glossar_SpanischerKolonialismus_"+dateStr()+".txt";
+  document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(url); a.remove();},200);
+}
+function printGlossar(){
+  const w=window.open("","_blank");
+  let html="<html><head><title>Glossar</title><style>body{font-family:Georgia,serif;padding:30px;}h1{color:#5e1313;border-bottom:2px solid #5e1313;}.term{margin:14px 0;padding:8px 12px;border-left:4px solid #5a3a1a;background:#fdf8eb;}.term strong{display:block;color:#5e1313;font-variant:small-caps;letter-spacing:.5px;margin-bottom:4px;}</style></head><body>";
+  html += "<h1>Glossar — Spanischer Kolonialismus in Amerika</h1>";
+  document.querySelectorAll("#glossar-grid .gloss-card").forEach(c=>{
+    html += "<div class='term'>"+c.innerHTML+"</div>";
+  });
+  html += "</body></html>";
+  w.document.write(html); w.document.close();
+  setTimeout(()=>w.print(),500);
+}
+
+/* ===== GELINGENSNACHWEIS ===== */
+function checkGnUnlock(){
+  const checked=Object.values(STATE.results).filter(r=>r.checked).length;
+  if(checked>=8){
+    document.getElementById("gn-locked").style.display="none";
+    document.getElementById("gn-content").style.display="block";
+  }
+}
+function submitGn(){
+  // Sammle Antworten (alles still — Schüler sieht nur "abgeschickt")
+  const gn = collectGn();
+  const safeName=gn.name.replace(/[^A-Za-z0-9-_äöüÄÖÜß ]/g,"").replace(/\s+/g,"_")||"unbenannt";
+  const blob=new Blob([gn.txt],{type:"text/plain;charset=utf-8"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a"); a.href=url; a.download="Gelingensnachweis_"+safeName+"_"+dateStr()+".txt";
+  document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(url); a.remove();},200);
+  // Schüler-Rückmeldung (neutral, keine Bewertung sichtbar)
+  document.getElementById("gn_status").className="feedback-banner ok";
+  document.getElementById("gn_status").innerHTML = "✓ Dein Gelingensnachweis wurde gespeichert. Bitte gib die Datei an deine Lehrkraft weiter (oder nutze den E-Mail-Button).";
+}
+function mailGn(){
+  const gn = collectGn();
+  const subj=encodeURIComponent("GELINGENSNACHWEIS Kolonialismus — "+gn.name+" — "+dateStr());
+  const body=encodeURIComponent("Liebe Lehrkraft,\n\nhier ist mein Gelingensnachweis. Die vollständige Datei habe ich heruntergeladen — bitte beachten Sie sie als Anhang.\n\n--- Kurzform ---\n\n"+gn.txt.substring(0,1800));
+  window.location.href="mailto:huber.93@icloud.com?subject="+subj+"&body="+body;
+  // Schüler sieht nur:
+  document.getElementById("gn_status").className="feedback-banner ok";
+  document.getElementById("gn_status").innerHTML = "✓ Dein Gelingensnachweis wurde zum Versand vorbereitet. Bitte hänge zusätzlich die heruntergeladene Datei an.";
+}
+function collectGn(){
+  const name=(document.getElementById("gn_name").value||"unbenannt").trim();
+  // Lückentext
+  const lInputs=document.querySelectorAll("#gn_gaps input");
+  let lOk=0; const lItems=[];
+  lInputs.forEach(inp=>{
+    const corr=inp.dataset.correct; const val=inp.value.trim();
+    if(val==="") lItems.push({given:"",correct:corr,status:"-"});
+    else if(normalize(val)===normalize(corr)){ lOk++; lItems.push({given:val,correct:corr,status:"v"});}
+    else lItems.push({given:val,correct:corr,status:"x"});
+  });
+  // MC
+  const lis=document.querySelectorAll("#gn_mc li");
+  let mcOk=0,mcTot=0,mcWrong=0,mcMiss=0; const mcItems=[];
+  lis.forEach(li=>{
+    const corr=li.dataset.correct==="true"; const sel=li.classList.contains("selected");
+    if(corr) mcTot++;
+    if(corr && sel){ mcOk++; mcItems.push({option:li.textContent.trim(),sel:true,corr:true,status:"v"});}
+    else if(!corr && sel){ mcWrong++; mcItems.push({option:li.textContent.trim(),sel:true,corr:false,status:"x"});}
+    else if(corr && !sel){ mcMiss++; mcItems.push({option:li.textContent.trim(),sel:false,corr:true,status:"x"});}
+  });
+  // Freitext
+  const c1=document.getElementById("gn_c1").value, c2=document.getElementById("gn_c2").value, c3=document.getElementById("gn_c3").value, c4=document.getElementById("gn_c4").value;
+  const kwSets = [
+    {label:"C1 Ökologie",keys:[{label:"Quecksilber/Hg",variants:["quecksilber","hg","amalgam"]},{label:"Wald/Holz",variants:["wald","holz","brennholz","rodung"]},{label:"Mita",variants:["mita","zwang"]},{label:"Boden/Wasser",variants:["boden","wasser","fluss","vergift"]},{label:"sozial-ökologisch",variants:["sozial","mensch","indigen"]}], text:c1},
+    {label:"C2 Wirtschaft",keys:[{label:"Inflation",variants:["inflation","preis","wert"]},{label:"Kriege",variants:["krieg","militar"]},{label:"Importe statt Industrie",variants:["import","industrie","aufbau"]},{label:"Welthandel",variants:["welt","china","genua","handel"]}], text:c2},
+    {label:"C3 Transfer",keys:[{label:"Aktuelles Bsp.",variants:["lithium","soja","bergbau","amazon","gold","kupfer"]},{label:"Rohstoffexport",variants:["export","rohstoff","global","markt"]},{label:"Monokultur",variants:["monokultur","plantage","mega"]},{label:"Umwelt",variants:["boden","wasser","wald","vergift","erosion"]},{label:"Indigene",variants:["indigen","gemeinde","betroffen"]}], text:c3}
+  ];
+  const fbBlocks=kwSets.map(s=>({label:s.label, ...countKeywords(s.text,s.keys), text:s.text, len:s.text.trim().length}));
+  // Schreibe Lehrkraft-Bericht
+  let txt="";
+  txt+="=========================================================\n  GELINGENSNACHWEIS — Spanischer Kolonialismus in Amerika\n  (Auswertung NUR für die Lehrkraft)\n=========================================================\n";
+  txt+="Name:    "+name+"\nDatum:   "+dateStr()+"\n\n";
+  txt+="ZUSAMMENFASSUNG\n---------------\nTeil A (Lückentext): "+lOk+" / "+lInputs.length+" richtig\nTeil B (MC): "+mcOk+" / "+mcTot+" richtig, "+mcWrong+" falsch gewählt, "+mcMiss+" übersehen\nTeil C (Freitexte): siehe unten — Stichwort-Check\n\n";
+  txt+="TEIL A — LÜCKENTEXT\n-------------------\n";
+  lItems.forEach((it,i)=> txt+="  ["+it.status+"] Lücke "+(i+1)+": '"+it.given+"' (richtig: '"+it.correct+"')\n");
+  txt+="\nTEIL B — MULTIPLE CHOICE\n------------------------\n";
+  mcItems.forEach(it=> txt+="  ["+it.status+"] "+(it.sel?"angekreuzt":"nicht gewählt")+" — "+it.option+(it.corr?" (richtig)":" (falsch)")+"\n");
+  txt+="\nTEIL C — FREITEXTE\n------------------\n";
+  fbBlocks.forEach(b=>{
+    txt+="\n"+b.label+" (Länge: "+b.len+" Zeichen):\n"+b.text+"\n";
+    txt+="  → Erkannte Stichworte:  "+(b.found.join(", ")||"(keine)")+"\n";
+    txt+="  → Fehlende Stichworte:  "+(b.missing.join(", ")||"(keine)")+"\n";
+  });
+  txt+="\nC4 — persönliche Stellungnahme:\n"+c4+"\n";
+  txt+="\n=========================================================\nHinweis für die Lehrkraft: Der Stichwort-Check ersetzt KEINE inhaltliche Bewertung.\nEr zeigt nur, welche Begriffe der Schüler benutzt hat. Tiefe und Argumentation muss von Ihnen bewertet werden.\n=========================================================\n";
+  return {txt,name};
+}
+
+/* ===== INIT ===== */
+window.addEventListener("DOMContentLoaded",function(){
+  setupDnD();
+  setupMC("s4_opts"); setupMC("s6_quiz"); setupMC("s7_opts"); setupMC("s9_quiz"); setupMC("s12_quiz"); setupMC("gn_mc");
+  setupTF();
+  updateProgress();
+});
+</script>
+</body>
+</html>
