@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Übung – Siedetemperaturen begründen (Selbstkontrolle)</title>
+<style>
+:root{
+  --bg-1:#0f0c29;--bg-2:#302b63;--bg-3:#24243e;
+  --pink:#ff2e63;--cyan:#08d9d6;--yellow:#ffd93d;--green:#6bcf7f;--purple:#a18cd1;
+  --text:#fff;--text-dim:#b0b0c8;--card:rgba(255,255,255,.08);--bd:rgba(255,255,255,.18);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,sans-serif;color:var(--text);min-height:100vh;line-height:1.6;
+  background:linear-gradient(135deg,var(--bg-1) 0%,var(--bg-2) 50%,var(--bg-3) 100%);
+  background-attachment:fixed;padding:0 0 60px;-webkit-font-smoothing:antialiased}
+.wrap{max-width:960px;margin:0 auto;padding:0 20px}
+header{text-align:center;padding:44px 20px 14px}
+.kicker{display:inline-block;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;font-weight:800;
+  color:var(--cyan);background:rgba(8,217,214,.14);border:1px solid rgba(8,217,214,.5);
+  padding:6px 14px;border-radius:25px;margin-bottom:12px}
+h1{font-size:clamp(1.7rem,4.5vw,2.4rem);font-weight:800;letter-spacing:-1px;
+  background:linear-gradient(135deg,var(--pink),var(--cyan));
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+header p{color:var(--text-dim);max-width:680px;margin:10px auto 0;font-size:1rem}
+.card{background:var(--card);backdrop-filter:blur(10px);border:1px solid var(--bd);
+  border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 8px 32px rgba(0,0,0,.3)}
+h2{font-size:1.25rem;color:var(--text);margin-bottom:8px}
+
+/* 5-Schritte-Header */
+.steps{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:10px}
+.steps .step{background:rgba(255,255,255,.06);border:1px solid var(--bd);border-radius:10px;
+  padding:10px 8px;text-align:center;color:var(--text);font-size:.82rem}
+.steps .step .num{display:inline-block;width:24px;height:24px;border-radius:50%;
+  background:linear-gradient(135deg,var(--pink),var(--purple));color:#fff;font-weight:800;
+  line-height:24px;margin-bottom:4px;font-size:.78rem}
+.steps .step b{display:block;color:var(--cyan);font-size:.92rem;margin-top:2px}
+@media(max-width:700px){.steps{grid-template-columns:repeat(2,1fr)}}
+
+/* Akkordeon */
+.ex{background:var(--card);backdrop-filter:blur(10px);border:1px solid var(--bd);
+  border-radius:16px;margin-bottom:14px;overflow:hidden;box-shadow:0 6px 26px rgba(0,0,0,.2)}
+.ex-head{display:flex;align-items:center;gap:14px;padding:16px 20px;cursor:pointer;user-select:none;transition:.2s}
+.ex-head:hover{background:rgba(255,255,255,.04)}
+.ex-num{flex-shrink:0;width:42px;height:42px;border-radius:12px;
+  background:linear-gradient(135deg,var(--pink),var(--purple));
+  color:#fff;font-weight:800;font-size:1.15rem;display:flex;align-items:center;justify-content:center}
+.ex-head .ti{flex:1}
+.ex-head h3{font-size:1.05rem;font-weight:700;color:var(--text)}
+.ex-head .sub{font-size:.85rem;color:var(--text-dim);margin-top:3px}
+.tag{font-size:.7rem;font-weight:700;padding:3px 9px;border-radius:20px;
+  background:rgba(8,217,214,.16);color:var(--cyan);border:1px solid rgba(8,217,214,.4);margin-right:6px}
+.tag.done{background:rgba(107,207,127,.2);color:var(--green);border-color:var(--green)}
+.chev{flex-shrink:0;width:22px;height:22px;color:var(--cyan);transition:transform .3s}
+.ex.open .chev{transform:rotate(180deg)}
+.ex-body{display:none;padding:0 20px 22px}
+.ex.open .ex-body{display:block;animation:fade .3s ease}
+@keyframes fade{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+
+/* Aufgabe-Daten + Lewis-Abbildung */
+.task-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+@media(max-width:700px){.task-grid{grid-template-columns:1fr}}
+.mol-card{background:#f4f6f9;border:1px solid var(--bd);border-radius:11px;padding:10px;text-align:center}
+.mol-card h4{color:#1f2a33;font-size:.95rem;margin-bottom:6px}
+.mol-card .bp{color:#0b7d72;font-weight:800;font-size:.95rem;margin-top:6px}
+.mol-card svg{max-width:100%;height:auto;display:block;margin:0 auto}
+
+/* Q+selects+textarea */
+.q{font-weight:700;color:var(--text);margin:14px 0 8px}
+.field{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 0}
+.field label{font-size:.92rem;color:var(--text-dim);min-width:230px}
+select.pick{font-family:inherit;font-size:.9rem;padding:9px 11px;border-radius:9px;border:2px solid var(--bd);
+  background:#26233f;color:var(--text);font-weight:600;cursor:pointer;flex:1;min-width:200px}
+select.pick.ok{border-color:var(--green);background:rgba(107,207,127,.22)}
+select.pick.no{border-color:var(--pink);background:rgba(255,46,99,.2)}
+.opt{display:flex;gap:10px;padding:10px 13px;margin:6px 0;background:rgba(255,255,255,.04);
+  border:2px solid var(--bd);border-radius:10px;cursor:pointer;color:var(--text);font-size:.92rem;transition:.15s}
+.opt:hover{border-color:var(--cyan);background:rgba(8,217,214,.08)}
+.opt input{margin-top:3px;accent-color:var(--cyan);width:16px;height:16px;flex-shrink:0}
+.opt.ok{border-color:var(--green);background:rgba(107,207,127,.16)}
+.opt.no{border-color:var(--pink);background:rgba(255,46,99,.14)}
+textarea.free{width:100%;min-height:120px;font-family:inherit;font-size:.94rem;
+  border:2px solid var(--bd);border-radius:12px;padding:12px 14px;resize:vertical;
+  color:var(--text);background:rgba(255,255,255,.06);margin-top:10px}
+textarea.free:focus{outline:none;border-color:var(--cyan)}
+.btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.btn{font-family:inherit;font-weight:700;font-size:.88rem;padding:10px 18px;border-radius:22px;cursor:pointer;
+  border:none;color:#fff;background:linear-gradient(135deg,var(--pink),var(--purple));transition:.15s}
+.btn-check{color:#0f0c29;background:linear-gradient(135deg,var(--green),var(--cyan))}
+.btn-sol{background:rgba(161,140,209,.22);color:var(--purple);border:1px solid var(--purple)}
+.btn:hover{transform:scale(1.04)}
+.fb{margin-top:12px;padding:12px 15px;border-radius:10px;font-size:.9rem;font-weight:600;display:none}
+.fb.show{display:block}
+.fb.good{background:rgba(107,207,127,.16);color:var(--green);border:1px solid var(--green)}
+.fb.part{background:rgba(255,217,61,.13);color:var(--yellow);border:1px solid var(--yellow)}
+.fb.bad{background:rgba(255,46,99,.14);color:#ff8a9a;border:1px solid var(--pink)}
+.fb ul{margin:8px 0 2px 18px;font-weight:500}
+.fb li{margin:3px 0}
+.fb .rh{font-weight:800}
+.fb .sub{display:block;font-weight:700;color:var(--yellow);margin:10px 0 4px}
+.sol{display:none;margin-top:12px;background:rgba(161,140,209,.12);border-left:4px solid var(--purple);
+  border-radius:5px;padding:14px 17px;font-size:.91rem;color:var(--text)}
+.sol.show{display:block}
+.sol h4{color:var(--purple);margin-bottom:7px;font-size:.95rem}
+.sol p{margin-bottom:7px}.sol b{color:#fff}
+.summary{display:none;background:linear-gradient(135deg,rgba(8,217,214,.16),rgba(161,140,209,.16));
+  border:1px solid var(--cyan);border-radius:14px;padding:16px 18px;margin:12px 0}
+.summary.show{display:block;animation:fade .35s ease}
+.summary h4{color:var(--cyan);margin-bottom:6px}.summary p{color:var(--text);margin-bottom:7px;font-size:.94rem}
+.guide{background:rgba(255,217,61,.08);border:1px solid var(--yellow);border-radius:12px;
+  padding:13px 17px;margin:8px 0 12px;font-size:.9rem;color:var(--text)}
+.guide b{color:var(--yellow)}
+.progress{margin-bottom:18px;position:sticky;top:8px;z-index:50;background:rgba(15,12,41,.92);
+  backdrop-filter:blur(10px);border:1px solid var(--bd);border-radius:14px;padding:11px 16px;
+  display:flex;align-items:center;gap:13px;box-shadow:0 4px 20px rgba(0,0,0,.35)}
+.progress .bar{flex:1;height:10px;background:rgba(255,255,255,.1);border-radius:20px;overflow:hidden}
+.progress .fill{height:100%;width:0;background:linear-gradient(90deg,var(--pink),var(--cyan));transition:width .5s;border-radius:20px}
+.progress .lbl{font-size:.84rem;font-weight:800;color:var(--text-dim);white-space:nowrap}
+.export-box{background:linear-gradient(135deg,rgba(8,217,214,.14),rgba(161,140,209,.14));
+  border:2px dashed var(--cyan);border-radius:18px;padding:24px;margin:18px 0;text-align:center}
+.export-box h2{color:var(--cyan);margin-bottom:8px}
+.export-box p{color:var(--text-dim);margin:0 auto 14px;max-width:600px;font-size:.93rem}
+.namefield{display:flex;flex-direction:column;align-items:center;gap:12px}
+.namefield input{background:rgba(255,255,255,.1);border:2px solid var(--bd);border-radius:8px;
+  padding:11px 16px;color:var(--text);font-size:1rem;font-family:inherit;width:240px;text-align:center}
+.namefield input:focus{outline:none;border-color:var(--cyan)}
+.foot{text-align:center;color:var(--text-dim);font-size:.8rem;margin-top:20px}
+.step.done{background:rgba(107,207,127,.16);border-color:var(--green)}
+.step.locked{opacity:.45;filter:grayscale(.5);pointer-events:none}
+.step .stitle{display:flex;align-items:center;gap:10px;font-weight:700;color:var(--text);margin-bottom:8px;text-align:left}
+.step .snum{width:26px;height:26px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;
+  font-weight:800;font-size:.82rem;color:#fff;background:linear-gradient(135deg,var(--pink),var(--purple));flex-shrink:0}
+.step.done .snum{background:var(--green);color:#0f0c29}
+</style>
+</head>
+<body>
+<header><span class="kicker">Chemie · Klasse 10 · Selbstkontrolle</span>
+<h1>Siedetemperaturen begründen – Selbstständig</h1>
+<p>Wähle die richtigen Antworten aus und formuliere eine Begründung. „Lösung prüfen" markiert deine Auswahl farbig. Über „Musterlösung anzeigen" vergleichst du deinen Text mit dem Erwartungstext.</p></header>
+<div class="wrap">
+<div class="progress"><div class="bar"><div class="fill" id="pfill"></div></div><div class="lbl" id="plabel">0 / 4 Aufgaben geprüft</div></div>
+
+<section class="card">
+  <h2>📋 So gehst du vor – die 5 Schritte</h2>
+  <p style="color:var(--text-dim);font-size:.93rem">
+    Wende für jede Aufgabe dasselbe Schema an: erst den Bau ansehen, dann Polarität bestimmen,
+    daraus die wirkende Wechselwirkung ableiten, ihre Stärke vergleichen und am Ende die
+    Siedetemperatur begründen.
+  </p>
+  <div class="steps">
+    <div class="step"><span class="num">1</span><b>Bau</b>Strukturformel, an welchen Atomen sitzt H?</div>
+    <div class="step"><span class="num">2</span><b>Polarität</b>polar oder unpolar?</div>
+    <div class="step"><span class="num">3</span><b>WW</b>FON-Regel: H an F/O/N? sonst Dipol-Dipol? sonst London</div>
+    <div class="step"><span class="num">4</span><b>Stärke</b>Größe / Elektronenzahl / Verzweigung vergleichen</div>
+    <div class="step"><span class="num">5</span><b>Siede-T</b>stärkere WW → höhere Siedetemperatur</div>
+  </div>
+</section>
+<section class="ex" data-ex="1">
+  <div class="ex-head" onclick="toggleEx(this)">
+    <div class="ex-num">1</div>
+    <div class="ti"><h3>Butan vs. Octan – Kettenlänge</h3><div class="sub">Londonkräfte mit unterschiedlicher Kettenlänge</div></div>
+    <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 9l7 7 7-7"/></svg>
+  </div>
+  <div class="ex-body">
+    <div class="task-grid"><div class="mol-card"><h4>Butan (C₄H₁₀)</h4><svg viewBox="0 0 156 80" xmlns="http://www.w3.org/2000/svg"><line x1="30" y1="32.0" x2="62" y2="48.0" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="62" y1="48.0" x2="94" y2="32.0" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="94" y1="32.0" x2="126" y2="48.0" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="30" y1="32.0" x2="30" y2="10.0" stroke="#7b8794" stroke-width="2.5" stroke-linecap="round"/><circle cx="30" cy="10.0" r="7" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="30" y="12.8" text-anchor="middle" font-size="8" font-weight="700" fill="#3a4350">H</text><line x1="30" y1="32.0" x2="30" y2="54.0" stroke="#7b8794" stroke-width="2.5" stroke-linecap="round"/><circle cx="30" cy="54.0" r="7" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="30" y="56.8" text-anchor="middle" font-size="8" font-weight="700" fill="#3a4350">H</text><line x1="30" y1="32.0" x2="12" y2="32.0" stroke="#7b8794" stroke-width="2.5" stroke-linecap="round"/><circle cx="12" cy="32.0" r="7" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="12" y="34.8" text-anchor="middle" font-size="8" font-weight="700" fill="#3a4350">H</text><line x1="62" y1="48.0" x2="62" y2="26.0" stroke="#7b8794" stroke-width="2.5" stroke-linecap="round"/><circle cx="62" cy="26.0" r="7" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="62" y="28.8" text-anchor="middle" font-size="8" font-weight="700" fill="#3a4350">H</text><line x1="62" y1="48.0" x2="62" y2="70.0" stroke="#7b8794" stroke-width="2.5" stroke-linecap="round"/><circle cx="62" cy="70.0" r="7" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="62" y="72.8" text-anchor="middle" font-size="8" font-weight="700" fill="#3a4350">H</text><line x1="94" y1="32.0" x2="94" y2="10.0" stroke="#7b8794" stroke-width="2.5" stroke-linecap="round"/><circle cx="94" cy="10.0" r="7" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="94" y="12.8" text-anchor="middle" font-size="8" font-weight="700" fill="#3a4350">H</text><line x1="94" y1="32.0" x2="94" y2="54.0" stroke="#7b8794" stroke-width="2.5" stroke-linecap="round"/><circle cx="94" cy="54.0" r="7" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="94" y="56.8" text-anchor="middle" font-size="8" font-weight="700" fill="#3a4350">H</text><line x1="126" y1="48.0" x2="126" y2="26.0" stroke="#7b8794" stroke-width="2.5" stroke-linecap="round"/><circle cx="126" cy="26.0" r="7" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="126" y="28.8" text-anchor="middle" font-size="8" font-weight="700" fill="#3a4350">H</text><line x1="126" y1="48.0" x2="126" y2="70.0" stroke="#7b8794" stroke-width="2.5" stroke-linecap="round"/><circle cx="126" cy="70.0" r="7" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="126" y="72.8" text-anchor="middle" font-size="8" font-weight="700" fill="#3a4350">H</text><line x1="126" y1="48.0" x2="144" y2="48.0" stroke="#7b8794" stroke-width="2.5" stroke-linecap="round"/><circle cx="144" cy="48.0" r="7" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="144" y="50.8" text-anchor="middle" font-size="8" font-weight="700" fill="#3a4350">H</text><circle cx="30" cy="32.0" r="11" fill="#3a4350" stroke="#2a3340" stroke-width="1.2"/><text x="30" y="35.15" text-anchor="middle" font-size="9" font-weight="700" fill="#fff">C</text><circle cx="62" cy="48.0" r="11" fill="#3a4350" stroke="#2a3340" stroke-width="1.2"/><text x="62" y="51.15" text-anchor="middle" font-size="9" font-weight="700" fill="#fff">C</text><circle cx="94" cy="32.0" r="11" fill="#3a4350" stroke="#2a3340" stroke-width="1.2"/><text x="94" y="35.15" text-anchor="middle" font-size="9" font-weight="700" fill="#fff">C</text><circle cx="126" cy="48.0" r="11" fill="#3a4350" stroke="#2a3340" stroke-width="1.2"/><text x="126" y="51.15" text-anchor="middle" font-size="9" font-weight="700" fill="#fff">C</text></svg><div class="bp">Sdp.: −1 °C</div></div><div class="mol-card"><h4>Octan (C₈H₁₈)</h4><svg viewBox="0 0 284 80" xmlns="http://www.w3.org/2000/svg"><line x1="30" y1="32.0" x2="62" y2="48.0" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="62" y1="48.0" x2="94" y2="32.0" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="94" y1="32.0" x2="126" y2="48.0" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="126" y1="48.0" x2="158" y2="32.0" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="158" y1="32.0" x2="190" y2="48.0" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="190" y1="48.0" x2="222" y2="32.0" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="222" y1="32.0" x2="254" y2="48.0" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="30" y1="32.0" x2="30" y2="10.0" stroke="#7b8794" stroke-width="2.5" stroke-linecap="round"/><circle cx="30" cy="10.0" r="7" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="30" y="12.8" text-anchor="middle" font-size="8" font-weight="700" fill="#3a4350">H</text><line x1="30" y1="32.0" x2="30" y2="54.0" stroke="#7b8794" stroke-width="2.5" stroke-linecap="round"/><circle cx="30" cy="54.0" r="7" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="30" y="56.8" text-anchor="middle" font-size="8" font-weight="700" fill="#3a4350">H</text><line x1="30" y1="32.0" x2="12" y2="32.0" stroke="#7b8794" stroke-width="2.5" stroke-linecap="round"/><circle cx="12" cy="32.0" r="7" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="12" y="34.8" text-anchor="middle" font-size="8" font-weight="700" fill="#3a4350">H</text><line x1="62" y1="48.0" x2="62" y2="26.0" stroke="#7b8794" stroke-width="2.5" stroke-linecap="round"/><circle cx="62" cy="26.0" r="7" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="62" y="28.8" text-anchor="middle" font-size="8" font-weight="700" fill="#3a4350">H</text><line x1="62" y1="48.0" x2="62" y2="70.0" stroke="#7b8794" stroke-width="2.5" stroke-linecap="round"/><circle cx="62" cy="70.0" r="7" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="62" y="72.8" text-anchor="middle" font-size="8" font-weight="700" fill="#3a4350">H</text><line x1="94" y1="32.0" x2="94" y2="10.0" stroke="#7b8794" stroke-width="2.5" stroke-linecap="round"/><circle cx="94" cy="10.0" r="7" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="94" y="12.8" text-anchor="middle" font-size="8" font-weight="700" fill="#3a4350">H</text><line x1="94" y1="32.0" x2="94" y2="54.0" stroke="#7b8794" stroke-width="2.5" stroke-linecap="round"/><circle cx="94" cy="54.0" r="7" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="94" y="56.8" text-anchor="middle" font-size="8" font-weight="700" fill="#3a4350">H</text><line x1="126" y1="48.0" x2="126" y2="26.0" stroke="#7b8794" stroke-width="2.5" stroke-linecap="round"/><circle cx="126" cy="26.0" r="7" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="126" y="28.8" text-anchor="middle" font-size="8" font-weight="700" fill="#3a4350">H</text><line x1="126" y1="48.0" x2="126" y2="70.0" stroke="#7b8794" stroke-width="2.5" stroke-linecap="round"/><circle cx="126" cy="70.0" r="7" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="126" y="72.8" text-anchor="middle" font-size="8" font-weight="700" fill="#3a4350">H</text><line x1="158" y1="32.0" x2="158" y2="10.0" stroke="#7b8794" stroke-width="2.5" stroke-linecap="round"/><circle cx="158" cy="10.0" r="7" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="158" y="12.8" text-anchor="middle" font-size="8" font-weight="700" fill="#3a4350">H</text><line x1="158" y1="32.0" x2="158" y2="54.0" stroke="#7b8794" stroke-width="2.5" stroke-linecap="round"/><circle cx="158" cy="54.0" r="7" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="158" y="56.8" text-anchor="middle" font-size="8" font-weight="700" fill="#3a4350">H</text><line x1="190" y1="48.0" x2="190" y2="26.0" stroke="#7b8794" stroke-width="2.5" stroke-linecap="round"/><circle cx="190" cy="26.0" r="7" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="190" y="28.8" text-anchor="middle" font-size="8" font-weight="700" fill="#3a4350">H</text><line x1="190" y1="48.0" x2="190" y2="70.0" stroke="#7b8794" stroke-width="2.5" stroke-linecap="round"/><circle cx="190" cy="70.0" r="7" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="190" y="72.8" text-anchor="middle" font-size="8" font-weight="700" fill="#3a4350">H</text><line x1="222" y1="32.0" x2="222" y2="10.0" stroke="#7b8794" stroke-width="2.5" stroke-linecap="round"/><circle cx="222" cy="10.0" r="7" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="222" y="12.8" text-anchor="middle" font-size="8" font-weight="700" fill="#3a4350">H</text><line x1="222" y1="32.0" x2="222" y2="54.0" stroke="#7b8794" stroke-width="2.5" stroke-linecap="round"/><circle cx="222" cy="54.0" r="7" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="222" y="56.8" text-anchor="middle" font-size="8" font-weight="700" fill="#3a4350">H</text><line x1="254" y1="48.0" x2="254" y2="26.0" stroke="#7b8794" stroke-width="2.5" stroke-linecap="round"/><circle cx="254" cy="26.0" r="7" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="254" y="28.8" text-anchor="middle" font-size="8" font-weight="700" fill="#3a4350">H</text><line x1="254" y1="48.0" x2="254" y2="70.0" stroke="#7b8794" stroke-width="2.5" stroke-linecap="round"/><circle cx="254" cy="70.0" r="7" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="254" y="72.8" text-anchor="middle" font-size="8" font-weight="700" fill="#3a4350">H</text><line x1="254" y1="48.0" x2="272" y2="48.0" stroke="#7b8794" stroke-width="2.5" stroke-linecap="round"/><circle cx="272" cy="48.0" r="7" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="272" y="50.8" text-anchor="middle" font-size="8" font-weight="700" fill="#3a4350">H</text><circle cx="30" cy="32.0" r="11" fill="#3a4350" stroke="#2a3340" stroke-width="1.2"/><text x="30" y="35.15" text-anchor="middle" font-size="9" font-weight="700" fill="#fff">C</text><circle cx="62" cy="48.0" r="11" fill="#3a4350" stroke="#2a3340" stroke-width="1.2"/><text x="62" y="51.15" text-anchor="middle" font-size="9" font-weight="700" fill="#fff">C</text><circle cx="94" cy="32.0" r="11" fill="#3a4350" stroke="#2a3340" stroke-width="1.2"/><text x="94" y="35.15" text-anchor="middle" font-size="9" font-weight="700" fill="#fff">C</text><circle cx="126" cy="48.0" r="11" fill="#3a4350" stroke="#2a3340" stroke-width="1.2"/><text x="126" y="51.15" text-anchor="middle" font-size="9" font-weight="700" fill="#fff">C</text><circle cx="158" cy="32.0" r="11" fill="#3a4350" stroke="#2a3340" stroke-width="1.2"/><text x="158" y="35.15" text-anchor="middle" font-size="9" font-weight="700" fill="#fff">C</text><circle cx="190" cy="48.0" r="11" fill="#3a4350" stroke="#2a3340" stroke-width="1.2"/><text x="190" y="51.15" text-anchor="middle" font-size="9" font-weight="700" fill="#fff">C</text><circle cx="222" cy="32.0" r="11" fill="#3a4350" stroke="#2a3340" stroke-width="1.2"/><text x="222" y="35.15" text-anchor="middle" font-size="9" font-weight="700" fill="#fff">C</text><circle cx="254" cy="48.0" r="11" fill="#3a4350" stroke="#2a3340" stroke-width="1.2"/><text x="254" y="51.15" text-anchor="middle" font-size="9" font-weight="700" fill="#fff">C</text></svg><div class="bp">Sdp.: +126 °C</div></div></div>
+<div class="match" id="match1"><p class="q">1) Wähle die richtigen Antworten:</p><div class="field" data-answer="unpolar"><label>Beide Moleküle sind …</label><select class="pick"><option value="">— wählen —</option><option value="polar">polar (Dipole)</option><option value="unpolar">unpolar</option><option value="gem">eines polar, eines unpolar</option></select></div><div class="field" data-answer="london"><label>Stärkste wirkende Wechselwirkung:</label><select class="pick"><option value="">— wählen —</option><option value="london">Londonkräfte</option><option value="dipol">Dipol-Dipol-Kräfte</option><option value="wb">Wasserstoffbrücken</option></select></div><div class="field" data-answer="octan"><label>Welches Molekül hat mehr Elektronen / längere Kette?</label><select class="pick"><option value="">— wählen —</option><option value="butan">Butan</option><option value="octan">Octan</option><option value="gleich">beide gleich</option></select></div><div class="field" data-answer="octan"><label>Welcher Stoff hat die höhere Siedetemperatur?</label><select class="pick"><option value="">— wählen —</option><option value="butan">Butan</option><option value="octan">Octan</option><option value="gleich">beide gleich</option></select></div></div><p class="q">2) Formuliere deine Begründung in vollständigen Sätzen.</p><textarea class="free" id="free1" placeholder="Deine Begründung …"></textarea><div class="btns">
+  <button class="btn btn-check" onclick="checkExercise(1)">Lösung prüfen</button>
+  <button class="btn btn-sol" onclick="toggleSol(1)">Musterlösung anzeigen</button>
+</div>
+<div class="fb" id="fb1"></div>
+<div class="sol" id="sol1"><h4>💡 Musterlösung</h4><p>Butan und Octan sind beide unpolare Kohlenwasserstoffe. Zwischen ihren Molekülen wirken deshalb ausschließlich <b>Londonkräfte</b>.</p>
+<p>Octan-Moleküle besitzen eine längere Kette und mehr Elektronen als Butan-Moleküle. Dadurch entstehen größere temporäre Dipole und mehr Kontaktstellen; die Londonkräfte <b>summieren sich auf</b> und sind insgesamt deutlich stärker.</p>
+<p>Stärkere Wechselwirkungen brauchen mehr Energie zum Trennen. Deshalb hat <b>Octan (+126 °C) eine höhere Siedetemperatur als Butan (−1 °C)</b>.</p></div>
+</div></section><section class="ex" data-ex="2">
+  <div class="ex-head" onclick="toggleEx(this)">
+    <div class="ex-num">2</div>
+    <div class="ti"><h3>n-Pentan vs. 2,2-Dimethylpropan – Verzweigung</h3><div class="sub">Londonkräfte bei linearen vs. verzweigten Molekülen</div></div>
+    <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 9l7 7 7-7"/></svg>
+  </div>
+  <div class="ex-body">
+    <div class="task-grid"><div class="mol-card"><h4>n-Pentan (C₅H₁₂)</h4><svg viewBox="0 0 188 80" xmlns="http://www.w3.org/2000/svg"><line x1="30" y1="32.0" x2="62" y2="48.0" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="62" y1="48.0" x2="94" y2="32.0" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="94" y1="32.0" x2="126" y2="48.0" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="126" y1="48.0" x2="158" y2="32.0" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="30" y1="32.0" x2="30" y2="10.0" stroke="#7b8794" stroke-width="2.5" stroke-linecap="round"/><circle cx="30" cy="10.0" r="7" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="30" y="12.8" text-anchor="middle" font-size="8" font-weight="700" fill="#3a4350">H</text><line x1="30" y1="32.0" x2="30" y2="54.0" stroke="#7b8794" stroke-width="2.5" stroke-linecap="round"/><circle cx="30" cy="54.0" r="7" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="30" y="56.8" text-anchor="middle" font-size="8" font-weight="700" fill="#3a4350">H</text><line x1="30" y1="32.0" x2="12" y2="32.0" stroke="#7b8794" stroke-width="2.5" stroke-linecap="round"/><circle cx="12" cy="32.0" r="7" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="12" y="34.8" text-anchor="middle" font-size="8" font-weight="700" fill="#3a4350">H</text><line x1="62" y1="48.0" x2="62" y2="26.0" stroke="#7b8794" stroke-width="2.5" stroke-linecap="round"/><circle cx="62" cy="26.0" r="7" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="62" y="28.8" text-anchor="middle" font-size="8" font-weight="700" fill="#3a4350">H</text><line x1="62" y1="48.0" x2="62" y2="70.0" stroke="#7b8794" stroke-width="2.5" stroke-linecap="round"/><circle cx="62" cy="70.0" r="7" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="62" y="72.8" text-anchor="middle" font-size="8" font-weight="700" fill="#3a4350">H</text><line x1="94" y1="32.0" x2="94" y2="10.0" stroke="#7b8794" stroke-width="2.5" stroke-linecap="round"/><circle cx="94" cy="10.0" r="7" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="94" y="12.8" text-anchor="middle" font-size="8" font-weight="700" fill="#3a4350">H</text><line x1="94" y1="32.0" x2="94" y2="54.0" stroke="#7b8794" stroke-width="2.5" stroke-linecap="round"/><circle cx="94" cy="54.0" r="7" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="94" y="56.8" text-anchor="middle" font-size="8" font-weight="700" fill="#3a4350">H</text><line x1="126" y1="48.0" x2="126" y2="26.0" stroke="#7b8794" stroke-width="2.5" stroke-linecap="round"/><circle cx="126" cy="26.0" r="7" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="126" y="28.8" text-anchor="middle" font-size="8" font-weight="700" fill="#3a4350">H</text><line x1="126" y1="48.0" x2="126" y2="70.0" stroke="#7b8794" stroke-width="2.5" stroke-linecap="round"/><circle cx="126" cy="70.0" r="7" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="126" y="72.8" text-anchor="middle" font-size="8" font-weight="700" fill="#3a4350">H</text><line x1="158" y1="32.0" x2="158" y2="10.0" stroke="#7b8794" stroke-width="2.5" stroke-linecap="round"/><circle cx="158" cy="10.0" r="7" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="158" y="12.8" text-anchor="middle" font-size="8" font-weight="700" fill="#3a4350">H</text><line x1="158" y1="32.0" x2="158" y2="54.0" stroke="#7b8794" stroke-width="2.5" stroke-linecap="round"/><circle cx="158" cy="54.0" r="7" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="158" y="56.8" text-anchor="middle" font-size="8" font-weight="700" fill="#3a4350">H</text><line x1="158" y1="32.0" x2="176" y2="32.0" stroke="#7b8794" stroke-width="2.5" stroke-linecap="round"/><circle cx="176" cy="32.0" r="7" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="176" y="34.8" text-anchor="middle" font-size="8" font-weight="700" fill="#3a4350">H</text><circle cx="30" cy="32.0" r="11" fill="#3a4350" stroke="#2a3340" stroke-width="1.2"/><text x="30" y="35.15" text-anchor="middle" font-size="9" font-weight="700" fill="#fff">C</text><circle cx="62" cy="48.0" r="11" fill="#3a4350" stroke="#2a3340" stroke-width="1.2"/><text x="62" y="51.15" text-anchor="middle" font-size="9" font-weight="700" fill="#fff">C</text><circle cx="94" cy="32.0" r="11" fill="#3a4350" stroke="#2a3340" stroke-width="1.2"/><text x="94" y="35.15" text-anchor="middle" font-size="9" font-weight="700" fill="#fff">C</text><circle cx="126" cy="48.0" r="11" fill="#3a4350" stroke="#2a3340" stroke-width="1.2"/><text x="126" y="51.15" text-anchor="middle" font-size="9" font-weight="700" fill="#fff">C</text><circle cx="158" cy="32.0" r="11" fill="#3a4350" stroke="#2a3340" stroke-width="1.2"/><text x="158" y="35.15" text-anchor="middle" font-size="9" font-weight="700" fill="#fff">C</text></svg><div class="bp">Sdp.: +36 °C</div></div><div class="mol-card"><h4>2,2-Dimethylpropan (C₅H₁₂)</h4><svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><line x1="100" y1="100" x2="100" y2="45" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="100" y1="100" x2="100" y2="155" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="100" y1="100" x2="45" y2="100" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="100" y1="100" x2="155" y2="100" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><circle cx="100" cy="100" r="11" fill="#3a4350" stroke="#2a3340" stroke-width="1.2"/><text x="100" y="103.15" text-anchor="middle" font-size="9" font-weight="700" fill="#fff">C</text><circle cx="100" cy="45" r="11" fill="#3a4350" stroke="#2a3340" stroke-width="1.2"/><text x="100" y="48.15" text-anchor="middle" font-size="9" font-weight="700" fill="#fff">C</text><line x1="100" y1="45" x2="85" y2="35" stroke="#7b8794" stroke-width="2.5" stroke-linecap="round"/><circle cx="85" cy="35" r="6" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="85" y="37.45" text-anchor="middle" font-size="7" font-weight="700" fill="#3a4350">H</text><line x1="100" y1="45" x2="115" y2="35" stroke="#7b8794" stroke-width="2.5" stroke-linecap="round"/><circle cx="115" cy="35" r="6" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="115" y="37.45" text-anchor="middle" font-size="7" font-weight="700" fill="#3a4350">H</text><line x1="100" y1="45" x2="100" y2="27" stroke="#7b8794" stroke-width="2.5" stroke-linecap="round"/><circle cx="100" cy="27" r="6" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="100" y="29.45" text-anchor="middle" font-size="7" font-weight="700" fill="#3a4350">H</text><circle cx="100" cy="155" r="11" fill="#3a4350" stroke="#2a3340" stroke-width="1.2"/><text x="100" y="158.15" text-anchor="middle" font-size="9" font-weight="700" fill="#fff">C</text><line x1="100" y1="155" x2="85" y2="165" stroke="#7b8794" stroke-width="2.5" stroke-linecap="round"/><circle cx="85" cy="165" r="6" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="85" y="167.45" text-anchor="middle" font-size="7" font-weight="700" fill="#3a4350">H</text><line x1="100" y1="155" x2="115" y2="165" stroke="#7b8794" stroke-width="2.5" stroke-linecap="round"/><circle cx="115" cy="165" r="6" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="115" y="167.45" text-anchor="middle" font-size="7" font-weight="700" fill="#3a4350">H</text><line x1="100" y1="155" x2="100" y2="173" stroke="#7b8794" stroke-width="2.5" stroke-linecap="round"/><circle cx="100" cy="173" r="6" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="100" y="175.45" text-anchor="middle" font-size="7" font-weight="700" fill="#3a4350">H</text><circle cx="45" cy="100" r="11" fill="#3a4350" stroke="#2a3340" stroke-width="1.2"/><text x="45" y="103.15" text-anchor="middle" font-size="9" font-weight="700" fill="#fff">C</text><line x1="45" y1="100" x2="35" y2="85" stroke="#7b8794" stroke-width="2.5" stroke-linecap="round"/><circle cx="35" cy="85" r="6" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="35" y="87.45" text-anchor="middle" font-size="7" font-weight="700" fill="#3a4350">H</text><line x1="45" y1="100" x2="35" y2="115" stroke="#7b8794" stroke-width="2.5" stroke-linecap="round"/><circle cx="35" cy="115" r="6" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="35" y="117.45" text-anchor="middle" font-size="7" font-weight="700" fill="#3a4350">H</text><line x1="45" y1="100" x2="27" y2="100" stroke="#7b8794" stroke-width="2.5" stroke-linecap="round"/><circle cx="27" cy="100" r="6" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="27" y="102.45" text-anchor="middle" font-size="7" font-weight="700" fill="#3a4350">H</text><circle cx="155" cy="100" r="11" fill="#3a4350" stroke="#2a3340" stroke-width="1.2"/><text x="155" y="103.15" text-anchor="middle" font-size="9" font-weight="700" fill="#fff">C</text><line x1="155" y1="100" x2="165" y2="85" stroke="#7b8794" stroke-width="2.5" stroke-linecap="round"/><circle cx="165" cy="85" r="6" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="165" y="87.45" text-anchor="middle" font-size="7" font-weight="700" fill="#3a4350">H</text><line x1="155" y1="100" x2="165" y2="115" stroke="#7b8794" stroke-width="2.5" stroke-linecap="round"/><circle cx="165" cy="115" r="6" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="165" y="117.45" text-anchor="middle" font-size="7" font-weight="700" fill="#3a4350">H</text><line x1="155" y1="100" x2="173" y2="100" stroke="#7b8794" stroke-width="2.5" stroke-linecap="round"/><circle cx="173" cy="100" r="6" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="173" y="102.45" text-anchor="middle" font-size="7" font-weight="700" fill="#3a4350">H</text></svg><div class="bp">Sdp.: +10 °C</div></div></div>
+<div class="match" id="match2"><p class="q">1) Wähle die richtigen Antworten:</p><div class="field" data-answer="unpolar"><label>Beide Moleküle sind …</label><select class="pick"><option value="">— wählen —</option><option value="polar">polar (Dipole)</option><option value="unpolar">unpolar</option><option value="gem">eines polar, eines unpolar</option></select></div><div class="field" data-answer="london"><label>Stärkste wirkende Wechselwirkung:</label><select class="pick"><option value="">— wählen —</option><option value="london">Londonkräfte</option><option value="dipol">Dipol-Dipol-Kräfte</option><option value="wb">Wasserstoffbrücken</option></select></div><div class="field" data-answer="npentan"><label>Welches Molekül hat eine größere Berührungsfläche / mehr Kontaktstellen?</label><select class="pick"><option value="">— wählen —</option><option value="npentan">n-Pentan (linear)</option><option value="neopent">2,2-Dimethylpropan (verzweigt)</option><option value="gleich">beide gleich</option></select></div><div class="field" data-answer="npentan"><label>Welcher Stoff hat die höhere Siedetemperatur?</label><select class="pick"><option value="">— wählen —</option><option value="npentan">n-Pentan</option><option value="neopent">2,2-Dimethylpropan</option><option value="gleich">beide gleich</option></select></div></div><p class="q">2) Formuliere deine Begründung in vollständigen Sätzen.</p><textarea class="free" id="free2" placeholder="Deine Begründung …"></textarea><div class="btns">
+  <button class="btn btn-check" onclick="checkExercise(2)">Lösung prüfen</button>
+  <button class="btn btn-sol" onclick="toggleSol(2)">Musterlösung anzeigen</button>
+</div>
+<div class="fb" id="fb2"></div>
+<div class="sol" id="sol2"><h4>💡 Musterlösung</h4><p>n-Pentan und 2,2-Dimethylpropan haben die <b>gleiche Summenformel C₅H₁₂</b> und sind beide unpolar. Zwischen ihren Molekülen wirken nur <b>Londonkräfte</b>.</p>
+<p>n-Pentan ist linear gebaut – die Moleküle können sich entlang ihrer Ketten gut aneinanderlegen. Dadurch entstehen viele Kontaktstellen, an denen Londonkräfte wirken. 2,2-Dimethylpropan ist dagegen kompakt und „kugelig" – es gibt weniger Berührungsfläche und damit weniger Kontaktstellen.</p>
+<p>Folge: Die Londonkräfte sind beim linearen n-Pentan stärker. <b>n-Pentan (+36 °C) hat die höhere Siedetemperatur als 2,2-Dimethylpropan (+10 °C)</b>.</p></div>
+</div></section><section class="ex" data-ex="3">
+  <div class="ex-head" onclick="toggleEx(this)">
+    <div class="ex-num">3</div>
+    <div class="ti"><h3>Methan – Chlormethan – Methanol</h3><div class="sub">Drei Moleküle, drei verschiedene Wechselwirkungen</div></div>
+    <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 9l7 7 7-7"/></svg>
+  </div>
+  <div class="ex-body">
+    <div class="task-grid"><div class="mol-card"><h4>Methan (CH₄)</h4><svg viewBox="0 0 140 140" xmlns="http://www.w3.org/2000/svg"><line x1="70" y1="70" x2="70" y2="30" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="70" y1="70" x2="70" y2="110" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="70" y1="70" x2="30" y2="70" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="70" y1="70" x2="110" y2="70" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><circle cx="70" cy="70" r="16" fill="#3a4350" stroke="#2a3340" stroke-width="1.2"/><text x="70" y="74.55" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">C</text><circle cx="70" cy="30" r="11" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="70" y="33.5" text-anchor="middle" font-size="10" font-weight="700" fill="#3a4350">H</text><circle cx="70" cy="110" r="11" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="70" y="113.5" text-anchor="middle" font-size="10" font-weight="700" fill="#3a4350">H</text><circle cx="30" cy="70" r="11" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="30" y="73.5" text-anchor="middle" font-size="10" font-weight="700" fill="#3a4350">H</text><circle cx="110" cy="70" r="11" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="110" y="73.5" text-anchor="middle" font-size="10" font-weight="700" fill="#3a4350">H</text></svg><div class="bp">Sdp.: −161 °C</div></div><div class="mol-card"><h4>Chlormethan (CH₃Cl)</h4><svg viewBox="0 0 140 140" xmlns="http://www.w3.org/2000/svg"><line x1="70" y1="75" x2="38" y2="53" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="70" y1="75" x2="38" y2="97" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="70" y1="75" x2="70" y2="113" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="70" y1="75" x2="108" y2="47" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><circle cx="70" cy="75" r="15" fill="#3a4350" stroke="#2a3340" stroke-width="1.2"/><text x="70" y="79.2" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">C</text><circle cx="38" cy="53" r="10" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="38" y="56.15" text-anchor="middle" font-size="9" font-weight="700" fill="#3a4350">H</text><circle cx="38" cy="97" r="10" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="38" y="100.15" text-anchor="middle" font-size="9" font-weight="700" fill="#3a4350">H</text><circle cx="70" cy="113" r="10" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="70" y="116.15" text-anchor="middle" font-size="9" font-weight="700" fill="#3a4350">H</text><circle cx="108" cy="47" r="16" fill="#71ad3f" stroke="#2a3340" stroke-width="1.2"/><text x="108" y="50.85" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">Cl</text></svg><div class="bp">Sdp.: −24 °C</div></div><div class="mol-card"><h4>Methanol (CH₃OH)</h4><svg viewBox="0 0 170 140" xmlns="http://www.w3.org/2000/svg"><line x1="60" y1="75" x2="28" y2="53" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="60" y1="75" x2="28" y2="97" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="60" y1="75" x2="60" y2="113" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="60" y1="75" x2="94" y2="53" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><circle cx="60" cy="75" r="15" fill="#3a4350" stroke="#2a3340" stroke-width="1.2"/><text x="60" y="79.2" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">C</text><circle cx="28" cy="53" r="10" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="28" y="56.15" text-anchor="middle" font-size="9" font-weight="700" fill="#3a4350">H</text><circle cx="28" cy="97" r="10" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="28" y="100.15" text-anchor="middle" font-size="9" font-weight="700" fill="#3a4350">H</text><circle cx="60" cy="113" r="10" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="60" y="116.15" text-anchor="middle" font-size="9" font-weight="700" fill="#3a4350">H</text><circle cx="94" cy="53" r="14" fill="#e0533d" stroke="#2a3340" stroke-width="1.2"/><text x="94" y="56.85" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">O</text><line x1="94" y1="53" x2="122" y2="31" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><circle cx="122" cy="31" r="10" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="122" y="34.15" text-anchor="middle" font-size="9" font-weight="700" fill="#3a4350">H</text></svg><div class="bp">Sdp.: +65 °C</div></div></div>
+<div class="match" id="match3"><p class="q">1) Wähle die richtige Wechselwirkung pro Stoff und die Reihenfolge der Siedetemperaturen:</p><div class="field" data-answer="london"><label>Zwischen Methan-Molekülen:</label><select class="pick"><option value="">— wählen —</option><option value="london">Londonkräfte</option><option value="dipol">Dipol-Dipol-Kräfte</option><option value="wb">Wasserstoffbrücken</option></select></div><div class="field" data-answer="dipol"><label>Zwischen Chlormethan-Molekülen:</label><select class="pick"><option value="">— wählen —</option><option value="london">Londonkräfte</option><option value="dipol">Dipol-Dipol-Kräfte</option><option value="wb">Wasserstoffbrücken</option></select></div><div class="field" data-answer="wb"><label>Zwischen Methanol-Molekülen:</label><select class="pick"><option value="">— wählen —</option><option value="london">Londonkräfte</option><option value="dipol">Dipol-Dipol-Kräfte</option><option value="wb">Wasserstoffbrücken</option></select></div><div class="field" data-answer="m-c-mol"><label>Reihenfolge (niedrig → hoch):</label><select class="pick"><option value="">— wählen —</option><option value="m-c-mol">Methan < Chlormethan < Methanol</option><option value="mol-c-m">Methanol < Chlormethan < Methan</option><option value="c-m-mol">Chlormethan < Methan < Methanol</option><option value="gleich">alle drei etwa gleich</option></select></div></div><p class="q">2) Formuliere deine Begründung in vollständigen Sätzen.</p><textarea class="free" id="free3" placeholder="Deine Begründung …"></textarea><div class="btns">
+  <button class="btn btn-check" onclick="checkExercise(3)">Lösung prüfen</button>
+  <button class="btn btn-sol" onclick="toggleSol(3)">Musterlösung anzeigen</button>
+</div>
+<div class="fb" id="fb3"></div>
+<div class="sol" id="sol3"><h4>💡 Musterlösung</h4><p><b>Methan (CH₄)</b>: enthält nur C–H-Bindungen (kleine EN-Differenz), Molekül ist symmetrisch und unpolar. Es wirken nur schwache <b>Londonkräfte</b> → niedrigste Siedetemperatur.</p>
+<p><b>Chlormethan (CH₃Cl)</b>: die C–Cl-Bindung ist polar, das Molekül ist ein permanenter Dipol. H ist nicht an F/O/N gebunden – also keine Wasserstoffbrücken, aber <b>Dipol-Dipol-Kräfte</b>. Sie sind stärker als Londonkräfte → mittlere Siedetemperatur.</p>
+<p><b>Methanol (CH₃OH)</b>: H ist an O gebunden – zwischen den Molekülen bilden sich <b>Wasserstoffbrücken</b>, die stärkste der drei Wechselwirkungen → höchste Siedetemperatur.</p>
+<p>Reihenfolge: <b>Methan &lt; Chlormethan &lt; Methanol</b>.</p></div>
+</div></section><section class="ex" data-ex="4">
+  <div class="ex-head" onclick="toggleEx(this)">
+    <div class="ex-num">4</div>
+    <div class="ti"><h3>Ammoniak vs. Phosphan – N-H-Brücken</h3><div class="sub">H-Brücken auch zwischen NH₃-Molekülen</div></div>
+    <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 9l7 7 7-7"/></svg>
+  </div>
+  <div class="ex-body">
+    <div class="task-grid"><div class="mol-card"><h4>Ammoniak (NH₃)</h4><svg viewBox="0 0 140 140" xmlns="http://www.w3.org/2000/svg"><line x1="70" y1="70" x2="36" y2="48" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="70" y1="70" x2="104" y2="48" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="70" y1="70" x2="70" y2="108" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><circle cx="70" cy="70" r="15" fill="#3b6fb5" stroke="#2a3340" stroke-width="1.2"/><text x="70" y="74.2" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">N</text><circle cx="36" cy="48" r="11" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="36" y="51.5" text-anchor="middle" font-size="10" font-weight="700" fill="#3a4350">H</text><circle cx="104" cy="48" r="11" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="104" y="51.5" text-anchor="middle" font-size="10" font-weight="700" fill="#3a4350">H</text><circle cx="70" cy="108" r="11" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="70" y="111.5" text-anchor="middle" font-size="10" font-weight="700" fill="#3a4350">H</text></svg><div class="bp">Sdp.: −33 °C</div></div><div class="mol-card"><h4>Phosphan (PH₃)</h4><svg viewBox="0 0 140 140" xmlns="http://www.w3.org/2000/svg"><line x1="70" y1="70" x2="32" y2="48" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="70" y1="70" x2="108" y2="48" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="70" y1="70" x2="70" y2="112" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><circle cx="70" cy="70" r="18" fill="#d97435" stroke="#2a3340" stroke-width="1.2"/><text x="70" y="74.55" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">P</text><circle cx="32" cy="48" r="11" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="32" y="51.5" text-anchor="middle" font-size="10" font-weight="700" fill="#3a4350">H</text><circle cx="108" cy="48" r="11" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="108" y="51.5" text-anchor="middle" font-size="10" font-weight="700" fill="#3a4350">H</text><circle cx="70" cy="112" r="11" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="70" y="115.5" text-anchor="middle" font-size="10" font-weight="700" fill="#3a4350">H</text></svg><div class="bp">Sdp.: −87 °C</div></div></div>
+<div class="match" id="match4"><p class="q">1) Wähle die richtigen Antworten:</p><div class="field" data-answer="polar"><label>Beide Moleküle sind …</label><select class="pick"><option value="">— wählen —</option><option value="polar">beide sind permanente Dipole</option><option value="unpolar">beide unpolar</option><option value="gem">nur NH₃ ist ein Dipol</option></select></div><div class="field" data-answer="wb"><label>Stärkste Wechselwirkung zwischen NH₃-Molekülen:</label><select class="pick"><option value="">— wählen —</option><option value="london">Londonkräfte</option><option value="dipol">Dipol-Dipol-Kräfte</option><option value="wb">Wasserstoffbrücken</option></select></div><div class="field" data-answer="dipol"><label>Stärkste Wechselwirkung zwischen PH₃-Molekülen:</label><select class="pick"><option value="">— wählen —</option><option value="london">Londonkräfte</option><option value="dipol">Dipol-Dipol-Kräfte</option><option value="wb">Wasserstoffbrücken</option></select></div><div class="field" data-answer="nh3"><label>Welcher Stoff hat die höhere Siedetemperatur?</label><select class="pick"><option value="">— wählen —</option><option value="nh3">Ammoniak (NH₃)</option><option value="ph3">Phosphan (PH₃)</option><option value="gleich">beide gleich</option></select></div></div><p class="q">2) Formuliere deine Begründung in vollständigen Sätzen.</p><textarea class="free" id="free4" placeholder="Deine Begründung …"></textarea><div class="btns">
+  <button class="btn btn-check" onclick="checkExercise(4)">Lösung prüfen</button>
+  <button class="btn btn-sol" onclick="toggleSol(4)">Musterlösung anzeigen</button>
+</div>
+<div class="fb" id="fb4"></div>
+<div class="sol" id="sol4"><h4>💡 Musterlösung</h4><p>NH₃ und PH₃ sind beide permanente Dipole. Der entscheidende Unterschied:</p>
+<p>Im <b>Ammoniak (NH₃)</b> ist H an Stickstoff (N) gebunden – N gehört zu <b>FON</b>. Zwischen NH₃-Molekülen bilden sich also <b>Wasserstoffbrücken</b> (zwischen dem δ+ H-Atom des einen und dem freien Elektronenpaar am δ− N-Atom des anderen Moleküls).</p>
+<p>Im <b>Phosphan (PH₃)</b> ist H an Phosphor (P) gebunden – P gehört <b>nicht</b> zu FON, und die H–P-Bindung ist nur schwach polar. Zwischen PH₃-Molekülen wirken deshalb nur schwache <b>Dipol-Dipol-Kräfte</b> (plus Londonkräfte).</p>
+<p>Wasserstoffbrücken sind viel stärker als Dipol-Dipol-Kräfte. Deshalb hat <b>NH₃ (−33 °C)</b> eine deutlich höhere Siedetemperatur als <b>PH₃ (−87 °C)</b> – obwohl PH₃ schwerer ist und stärkere Londonkräfte hätte.</p></div>
+</div></section>
+<section class="export-box">
+  <h2>📤 Ergebnisse sichern</h2>
+  <p>Trage deinen Namen ein und lade deinen Bearbeitungsstand als Textdatei herunter. Richtige Antworten sind mit einem Haken ✓ markiert.</p>
+  <div class="namefield">
+    <input type="text" id="student-name" placeholder="Dein Name">
+    <button class="btn" onclick="exportResults()">📥 Ergebnisse herunterladen</button>
+  </div>
+</section>
+<p class="foot">Selbstständige Übung mit Selbstkontrolle</p></div><script>
+function toggleEx(h){h.parentElement.classList.toggle('open');}
+function toggleSol(n){document.getElementById('sol'+n).classList.toggle('show');}
+const results={};const checked=new Set();
+const TITLES={1:"Aufgabe 1 · Butan vs. Octan – Kettenlänge",2:"Aufgabe 2 · n-Pentan vs. 2,2-Dimethylpropan – Verzweigung",3:"Aufgabe 3 · Methan – Chlormethan – Methanol",4:"Aufgabe 4 · Ammoniak vs. Phosphan – N-H-Brücken"};
+function checkExercise(n){
+  const fields=document.querySelectorAll('#match'+n+' .field');
+  let c=0;const items=[];
+  fields.forEach(f=>{
+    const sel=f.querySelector('select.pick');sel.classList.remove('ok','no');
+    const ok=sel.value===f.dataset.answer;
+    if(ok){sel.classList.add('ok');c++;}else sel.classList.add('no');
+    items.push({label:f.querySelector('label').textContent,
+      given:sel.value?sel.options[sel.selectedIndex].text:'(keine Auswahl)',
+      correct:[...sel.options].find(o=>o.value===f.dataset.answer)?.text||f.dataset.answer,ok});
+  });
+  const total=fields.length;
+  let cls='good',msg='🌟 Alle Auswahlen richtig! ';
+  if(c<total){cls=c>=Math.ceil(total/2)?'part':'bad';msg=c+' von '+total+' richtig – schau dir die rot markierten Felder noch einmal an. ';}
+  // Freitext-Analyse
+  const rev=reviewFreeText(n,'free'+n);
+  const fb=document.getElementById('fb'+n);
+  let combined='<span class="rh">'+msg+'</span><div style="height:6px"></div>'+rev.html;
+  fb.className='fb show '+(rev.cls==='bad'&&cls==='good'?'part':(cls==='good'&&rev.cls!=='bad'?rev.cls:cls));
+  fb.innerHTML=combined;
+  results[n]={score:c,max:total,items,freeText:rev.text||document.getElementById('free'+n).value.trim(),review:rev};
+  checked.add(n);
+  document.getElementById('pfill').style.width=Math.round(checked.size/4*100)+'%';
+  document.getElementById('plabel').textContent=checked.size+' / 4 Aufgaben geprüft';
+  const meta=document.querySelector('section.ex[data-ex="'+n+'"] .ti .sub');
+  if(meta && !meta.querySelector('.tag.done')){
+    const t=document.createElement('span');t.className='tag done';t.textContent='✓ geprüft';
+    meta.appendChild(document.createElement('br'));meta.appendChild(t);
+  }
+}
+
+const FREE_CFG={
+ 1:{min:50,concepts:[
+   {name:'Beide unpolar (Kohlenwasserstoffe, C–H kaum polar)',kw:['unpolar','kohlenwasserstoff','elektronegativ']},
+   {name:'Londonkräfte als wirkende Wechselwirkung',kw:['london','van der waals']},
+   {name:'Octan ist größer / längere Kette / mehr Elektronen',kw:['länger','lange kette','größer','mehr elektron']},
+   {name:'Londonkräfte summieren sich / mehr Kontaktstellen',kw:['summier','aufsummier','kontakt']},
+   {name:'Octan höhere Siedetemperatur',kw:['octan','höher']},
+ ],struct:[
+   {name:'Wechselwirkung benannt',kw:['london','van der waals']},
+   {name:'Polarität / Bau erklärt',kw:['unpolar','elektronegativ','c-h','kohlenwasserstoff']},
+   {name:'Stärke verglichen (Größe/Elektronen)',kw:['länger','mehr elektron','größer','summier','kontakt']},
+   {name:'Bezug zur Siedetemperatur',kw:['siedetemperatur','energie','höher','überwinden']},
+ ]},
+ 2:{min:50,concepts:[
+   {name:'Beide unpolar / gleiche Summenformel',kw:['unpolar','c5h12','summenformel','gleich']},
+   {name:'Londonkräfte wirken',kw:['london','van der waals']},
+   {name:'Verzweigung verringert Kontaktfläche',kw:['verzweig','kompakt','kugelig','oberfläche','kontakt','linear']},
+   {name:'n-Pentan höhere Siedetemperatur',kw:['n-pentan','pentan','höher']},
+ ],struct:[
+   {name:'Wechselwirkung benannt',kw:['london']},
+   {name:'Verzweigung vs. linear angesprochen',kw:['verzweig','linear','kompakt','kugelig']},
+   {name:'Stärke verglichen',kw:['stärker','schwächer','kontakt','oberfläche','aufsummier']},
+   {name:'Bezug zur Siedetemperatur',kw:['siedetemperatur','höher','energie']},
+ ]},
+ 3:{min:80,concepts:[
+   {name:'Methan: unpolar → nur Londonkräfte → niedrigste bp',kw:['methan']},
+   {name:'Chlormethan: polar → Dipol-Dipol (Cl ≠ FON)',kw:['chlormethan']},
+   {name:'Methanol: O–H → Wasserstoffbrücken → höchste bp',kw:['methanol']},
+   {name:'Begriff Londonkräfte verwendet',kw:['london']},
+   {name:'Begriff Dipol-Dipol-Kräfte verwendet',kw:['dipol-dipol','dipol dipol']},
+   {name:'Begriff Wasserstoffbrücken verwendet',kw:['wasserstoffbrück','h-brück']},
+   {name:'Hierarchie erläutert',kw:['stärker','schwächer','stärkst','schwächst']},
+   {name:'Bezug zur Siedetemperatur',kw:['siedetemperatur','energie','überwinden']},
+ ],struct:[
+   {name:'Jeden der drei Stoffe einzeln betrachtet',kw:['methan','chlormethan','methanol']},
+   {name:'Wechselwirkungen benannt',kw:['london','dipol','wasserstoffbrück','h-brück']},
+   {name:'Polarität / FON erklärt',kw:['polar','unpolar','elektronegativ','fon','gebunden']},
+   {name:'Stärken verglichen',kw:['stärker','schwächer','stärkst','schwächst']},
+   {name:'Klare Reihenfolge formuliert',kw:['reihenfolge','höchste','niedrigste','< methanol','methan <']},
+ ]},
+ 4:{min:60,concepts:[
+   {name:'NH₃ bildet Wasserstoffbrücken (H an N)',kw:['nh','ammoniak','wasserstoffbrück']},
+   {name:'PH₃ bildet KEINE Wasserstoffbrücken (P ≠ FON)',kw:['ph','phosphan']},
+   {name:'PH₃ nur Dipol-Dipol-Kräfte',kw:['dipol-dipol','dipol dipol']},
+   {name:'Wasserstoffbrücken stärker als Dipol-Dipol',kw:['stärker','wasserstoffbrück']},
+   {name:'NH₃ höhere Siedetemperatur',kw:['nh','höher','siede']},
+ ],struct:[
+   {name:'Beide Stoffe einzeln betrachtet',kw:['ammoniak','phosphan','nh','ph']},
+   {name:'FON-Regel angewendet',kw:['fon','f,o','f o','f, o','gebunden','stickstoff','phosphor']},
+   {name:'Wechselwirkungen benannt',kw:['london','dipol','wasserstoffbrück']},
+   {name:'Bezug zur Siedetemperatur',kw:['siedetemperatur','höher','energie']},
+ ]}
+};
+function _analyse(low,list){return list.map(c=>({name:c.name,found:c.kw.some(k=>low.includes(k.toLowerCase()))}));}
+function reviewFreeText(n, txtId){
+  const cfg=FREE_CFG[n];if(!cfg) return {html:'', cls:'', hit:0,total:0,sHit:0,sTotal:0,content:[],struct:[],text:''};
+  const ta=document.getElementById(txtId);const txt=(ta?ta.value:'').trim();
+  if(txt.length<cfg.min){
+    return {html:'<span class="rh">✏️ Bitte schreibe noch etwas ausführlicher</span>Folge der 5-Schritte-Struktur (Bau → Polarität → Wechselwirkung → Stärke → Folgerung).',
+            cls:'bad',hit:0,total:cfg.concepts.length,sHit:0,sTotal:cfg.struct.length,content:[],struct:[],text:txt};
+  }
+  const low=txt.toLowerCase();
+  const content=_analyse(low,cfg.concepts);
+  const struct=_analyse(low,cfg.struct);
+  const hit=content.filter(c=>c.found).length,total=content.length;
+  const sHit=struct.filter(c=>c.found).length,sTotal=struct.length;
+  const ratio=hit/total;
+  const cls=ratio>=0.85?'good':(ratio>=0.5?'part':'bad');
+  let html='<span class="rh">📝 Automatische Rückmeldung zu deinem Text</span>'
+    +'Stichwortbasiert – als Orientierung. Du hast <b>'+hit+' von '+total+'</b> Kernaspekte angesprochen:<ul>';
+  content.forEach(c=>{html+='<li>'+(c.found?'✓ ':'◦ ')+c.name+'</li>';});
+  html+='</ul><span class="sub">🧭 Strukturierung – '+sHit+' von '+sTotal+':</span><ul>';
+  struct.forEach(c=>{html+='<li>'+(c.found?'✓ ':'◦ ')+c.name+'</li>';});
+  html+='</ul>';
+  if(cls==='good')html+='<div style="margin-top:8px;">Sehr gut – inhaltlich rund und strukturiert.</div>';
+  else if(cls==='part')html+='<div style="margin-top:8px;">Solide Grundlage. Ergänze die mit ◦ markierten Punkte.</div>';
+  else html+='<div style="margin-top:8px;">Da fehlt noch viel. Arbeite die 5 Schritte ab.</div>';
+  return {html,cls,hit,total,sHit,sTotal,content,struct,text:txt};
+}
+
+function exportResults(){
+  const name=(document.getElementById('student-name').value||'').trim()||'Unbekannt';
+  const d=new Date().toLocaleString('de-DE');
+  const L=[],bar='==================================================',sub='--------------------------------------------------';
+  L.push(bar);L.push('  SELBSTKONTROLLE · SIEDETEMPERATUREN BEGRÜNDEN');L.push(bar);
+  L.push('Name:   '+name);L.push('Datum:  '+d);L.push('Bearbeitete Aufgaben: '+checked.size+' / 4');L.push('');
+  [1,2,3,4].forEach(n=>{
+    const r=results[n];L.push(sub);L.push(TITLES[n]);L.push(sub);
+    if(!r){L.push('  noch nicht geprüft');L.push('');return;}
+    L.push('Richtige Auswahlen: '+r.score+' / '+r.max);
+    r.items.forEach(it=>{
+      const m=it.ok?'✓':(it.given&&it.given.charAt(0)!=='('?'✗':'–');
+      let line='  ['+m+'] '+it.label+': '+it.given;
+      if(!it.ok)line+='   → richtig: '+it.correct;L.push(line);
+    });
+    L.push('');L.push('Begründungstext:');
+    const t=r.freeText||'(keine Eingabe)';t.split('\n').forEach(li=>L.push('   '+li));
+    if(r.review && r.review.content && r.review.content.length){
+      L.push('');L.push('Automatische Rückmeldung – Inhalt: '+r.review.hit+' / '+r.review.total);
+      r.review.content.forEach(c=>L.push('   ['+(c.found?'✓':' ')+'] '+c.name));
+      L.push('Strukturierung: '+r.review.sHit+' / '+r.review.sTotal);
+      r.review.struct.forEach(c=>L.push('   ['+(c.found?'✓':' ')+'] '+c.name));
+    }
+    L.push('');
+  });
+  L.push(bar);L.push('  ENDE · '+name);L.push(bar);
+  const text=L.join('\r\n');
+  const blob=new Blob([text],{type:'text/plain;charset=utf-8'});
+  const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;
+  const safe=name.replace(/[^a-zA-Z0-9äöüÄÖÜß_-]/g,'_');
+  a.download='Siedetemperatur_Selbstkontrolle_'+safe+'_'+d.split(',')[0].trim().replace(/\./g,'-')+'.txt';
+  document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
+}
+</script></body></html>
