@@ -1,0 +1,1516 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lernumgebung Redoxreaktionen – Wiederholung</title>
+<style>
+:root{
+  --bg-1:#0f0c29;--bg-2:#302b63;--bg-3:#24243e;
+  --pink:#ff2e63;--cyan:#08d9d6;--yellow:#ffd93d;--green:#6bcf7f;--purple:#a18cd1;
+  --text:#fff;--text-dim:#b0b0c8;--card:rgba(255,255,255,.08);--bd:rgba(255,255,255,.18);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,sans-serif;color:var(--text);min-height:100vh;line-height:1.55;
+  background:linear-gradient(135deg,var(--bg-1) 0%,var(--bg-2) 50%,var(--bg-3) 100%);
+  background-attachment:fixed;padding:0 0 50px;-webkit-font-smoothing:antialiased}
+.wrap{max-width:920px;margin:0 auto;padding:0 20px}
+header{text-align:center;padding:38px 20px 14px}
+.kicker{display:inline-block;font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;font-weight:800;
+  color:var(--cyan);background:rgba(8,217,214,.14);border:1px solid rgba(8,217,214,.5);
+  padding:5px 13px;border-radius:25px;margin-bottom:10px}
+h1{font-size:clamp(1.6rem,4.4vw,2.3rem);font-weight:800;letter-spacing:-1px;line-height:1.18;
+  background:linear-gradient(135deg,var(--pink),var(--cyan));
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+header p.lead{color:var(--text-dim);max-width:680px;margin:8px auto 0;font-size:.95rem}
+p,li{text-align:justify;hyphens:auto}
+p{color:var(--text-dim);margin-bottom:8px;font-size:.94rem}
+b,strong{color:var(--text)}
+.card{background:var(--card);backdrop-filter:blur(10px);border:1px solid var(--bd);
+  border-radius:16px;padding:22px;margin-bottom:14px;box-shadow:0 6px 26px rgba(0,0,0,.25)}
+.progress{position:sticky;top:8px;z-index:50;background:rgba(15,12,41,.92);
+  backdrop-filter:blur(10px);border:1px solid var(--bd);border-radius:14px;padding:11px 16px;
+  display:flex;align-items:center;gap:13px;box-shadow:0 4px 20px rgba(0,0,0,.35);margin-bottom:14px}
+.progress .bar{flex:1;height:10px;background:rgba(255,255,255,.1);border-radius:20px;overflow:hidden}
+.progress .fill{height:100%;width:0;background:linear-gradient(90deg,var(--pink),var(--cyan));transition:width .5s;border-radius:20px}
+.progress .lbl{font-size:.84rem;font-weight:800;color:var(--text-dim);white-space:nowrap}
+.toc{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:10px}
+.toc .item{background:rgba(255,255,255,.04);border:1px solid var(--bd);border-radius:10px;
+  padding:11px 13px;color:var(--text);font-size:.86rem}
+.toc .item b{display:block;color:var(--cyan);font-size:.92rem;margin-bottom:3px}
+.ex{background:var(--card);backdrop-filter:blur(10px);border:1px solid var(--bd);
+  border-radius:16px;margin-bottom:14px;overflow:hidden;box-shadow:0 6px 26px rgba(0,0,0,.2)}
+.ex-head{display:flex;align-items:center;gap:14px;padding:16px 20px;cursor:pointer;user-select:none;transition:.2s}
+.ex-head:hover{background:rgba(255,255,255,.04)}
+.ex-num{flex-shrink:0;width:42px;height:42px;border-radius:12px;
+  background:linear-gradient(135deg,var(--pink),var(--purple));
+  color:#fff;font-weight:800;font-size:1.15rem;display:flex;align-items:center;justify-content:center}
+.ex-head .ti{flex:1}
+.ex-head h3{font-size:1.08rem;font-weight:700;color:var(--text)}
+.ex-head .sub{font-size:.85rem;color:var(--text-dim);margin-top:3px}
+.tag{font-size:.7rem;font-weight:700;padding:3px 9px;border-radius:20px;
+  background:rgba(8,217,214,.16);color:var(--cyan);border:1px solid rgba(8,217,214,.4);margin-right:6px}
+.tag.done{background:rgba(107,207,127,.2);color:var(--green);border-color:var(--green)}
+.tag.lock{background:rgba(255,217,61,.16);color:var(--yellow);border-color:var(--yellow)}
+.chev{flex-shrink:0;width:22px;height:22px;color:var(--cyan);transition:transform .3s}
+.ex.open .chev{transform:rotate(180deg)}
+.ex-body{display:none;padding:0 20px 22px}
+.ex.open .ex-body{display:block;animation:fade .3s ease}
+@keyframes fade{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+h2{font-size:1.18rem;color:var(--text);margin-bottom:8px}
+h3.sub{font-size:1rem;color:var(--cyan);margin:14px 0 6px}
+h4{color:var(--cyan);font-size:.95rem;margin:10px 0 5px}
+.callout{display:flex;gap:14px;background:rgba(8,217,214,.1);border:1px solid var(--cyan);
+  border-left:5px solid var(--cyan);border-radius:10px;padding:13px 16px;margin:10px 0}
+.callout .ic{flex-shrink:0;font-size:1.4rem;line-height:1}
+.callout .body{flex:1}
+.callout h4{color:var(--cyan);font-size:.95rem;margin-bottom:5px;font-weight:800}
+.callout p{color:var(--text);font-size:.92rem;margin-bottom:5px}
+.callout p:last-child{margin-bottom:0}
+.callout.green{background:rgba(107,207,127,.1);border-color:var(--green);border-left-color:var(--green)}
+.callout.green h4{color:var(--green)}
+.callout.purple{background:rgba(161,140,209,.1);border-color:var(--purple);border-left-color:var(--purple)}
+.callout.purple h4{color:var(--purple)}
+.callout.yellow{background:rgba(255,217,61,.08);border-color:var(--yellow);border-left-color:var(--yellow)}
+.callout.yellow h4{color:var(--yellow)}
+.merksatz{background:linear-gradient(135deg,rgba(8,217,214,.18),rgba(161,140,209,.18));
+  border:1px solid var(--cyan);border-radius:14px;padding:18px 22px;margin:14px 0;position:relative;overflow:hidden}
+.merksatz::before{content:"MERKE";position:absolute;top:0;left:0;
+  background:var(--cyan);color:#0f0c29;font-weight:800;font-size:.72rem;letter-spacing:.12em;
+  padding:5px 14px;border-radius:0 0 10px 0}
+.merksatz .body{margin-top:18px}
+.merksatz p{color:var(--text);font-size:1rem;font-weight:600;margin-bottom:7px}
+.merksatz p:last-child{margin-bottom:0}
+.merksatz b{color:var(--cyan)}
+table.t{width:100%;border-collapse:separate;border-spacing:0;font-size:.88rem;margin:10px 0;
+  border-radius:10px;overflow:hidden;border:1px solid var(--bd)}
+table.t th{background:rgba(8,217,214,.18);color:var(--cyan);text-align:left;padding:9px 12px;
+  font-weight:700;font-size:.78rem;text-transform:uppercase;letter-spacing:.4px}
+table.t td{padding:8px 12px;border-bottom:1px solid var(--bd);color:var(--text);vertical-align:top}
+table.t tr:last-child td{border-bottom:none}
+table.t tr:nth-child(even) td{background:rgba(255,255,255,.04)}
+.oxlbl{display:inline-block;font-size:.78rem;font-weight:800;color:#c9a4ff;background:rgba(161,140,209,.18);padding:1px 6px;border-radius:6px;margin:0 2px}
+.versuch{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:12px 0}
+@media(max-width:700px){.versuch{grid-template-columns:1fr}}
+.versuch .v-card{background:rgba(255,255,255,.04);border:1px solid var(--bd);border-radius:12px;padding:12px;text-align:center}
+.versuch .v-card h4{color:var(--cyan);margin-bottom:5px}
+.versuch .v-card .label-sub{color:var(--text-dim);font-size:.86rem;margin-top:4px}
+.q{font-weight:700;color:var(--text);margin:14px 0 8px}
+.q-help{color:var(--text-dim);font-size:.86rem;margin:0 0 6px;font-style:italic}
+textarea.free{width:100%;min-height:90px;font-family:inherit;font-size:.94rem;
+  border:2px solid var(--bd);border-radius:12px;padding:11px 13px;resize:vertical;
+  color:var(--text);background:rgba(255,255,255,.06);margin-top:8px}
+textarea.free:focus{outline:none;border-color:var(--cyan)}
+input.text,input.code{font-family:inherit;font-size:.94rem;padding:9px 12px;
+  border:2px solid var(--bd);border-radius:10px;background:rgba(255,255,255,.06);color:var(--text);
+  font-weight:600}
+input.text:focus,input.code:focus{outline:none;border-color:var(--cyan)}
+select.pick{font-family:inherit;font-size:.9rem;padding:8px 10px;border-radius:8px;
+  border:2px solid var(--bd);background:#26233f;color:var(--text);font-weight:600;cursor:pointer;min-width:90px}
+.btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.btn{font-family:inherit;font-weight:700;font-size:.88rem;padding:10px 18px;border-radius:22px;cursor:pointer;
+  border:none;color:#0f0c29;background:linear-gradient(135deg,var(--green),var(--cyan));transition:.15s}
+.btn:hover:not(:disabled){transform:scale(1.04)}
+.btn:disabled{opacity:.55;cursor:not-allowed}
+.btn-purple{background:rgba(161,140,209,.22);color:var(--purple);border:1px solid var(--purple)}
+.btn-sec{background:rgba(255,255,255,.08);color:var(--text);border:1px solid var(--bd)}
+.fb{margin-top:11px;padding:11px 14px;border-radius:10px;font-size:.9rem;font-weight:600;display:none}
+.fb.show{display:block}
+.fb.good{background:rgba(107,207,127,.16);color:var(--green);border:1px solid var(--green)}
+.fb.bad{background:rgba(255,46,99,.14);color:#ff8a9a;border:1px solid var(--pink)}
+.fb.part{background:rgba(255,217,61,.14);color:var(--yellow);border:1px solid var(--yellow)}
+.fb .rh{font-weight:800;display:block;margin-bottom:6px}
+.fb ul{margin:6px 0 4px 18px;font-weight:500}
+.fb li{margin:3px 0}
+.sol{display:none;margin-top:12px;background:rgba(161,140,209,.12);border-left:4px solid var(--purple);
+  border-radius:5px;padding:14px 17px;font-size:.92rem;color:var(--text)}
+.sol.show{display:block;animation:fade .3s ease}
+.sol h4{color:var(--purple);margin-bottom:6px;font-size:.95rem}
+.sol p{color:var(--text);margin-bottom:5px}
+.sol b{color:#fff}
+.lewis-card{background:#f4f6f9;border-radius:10px;padding:10px;text-align:center}
+.lewis-card svg{max-width:100%;height:auto;display:block;margin:0 auto}
+.step{background:rgba(255,255,255,.04);border:1px solid var(--bd);border-radius:12px;
+  padding:12px 14px;margin:8px 0}
+.step .stitle{display:flex;align-items:center;gap:10px;font-weight:700;color:var(--text);margin-bottom:8px}
+.step .snum{width:26px;height:26px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;
+  font-weight:800;font-size:.82rem;color:#fff;background:linear-gradient(135deg,var(--pink),var(--purple));flex-shrink:0}
+.ox-card{background:rgba(255,255,255,.05);border:1px solid var(--bd);border-radius:12px;
+  padding:14px 16px;margin:10px 0}
+.ox-card .head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.ox-card .head h4{color:var(--cyan);margin:0;font-size:1rem}
+.ox-card .head .form{color:var(--text);font-size:.92rem;font-weight:800;background:rgba(8,217,214,.12);padding:3px 10px;border-radius:6px}
+.ox-fields{display:flex;flex-wrap:wrap;gap:10px;margin:8px 0 4px}
+.ox-fields .pair{display:flex;align-items:center;gap:5px;background:rgba(255,255,255,.04);padding:5px 8px;border-radius:8px}
+.ox-fields .pair label{color:var(--text-dim);font-size:.86rem;font-weight:600}
+.tips{display:flex;flex-direction:column;gap:8px;margin:10px 0 4px}
+.tip{border:1px solid var(--yellow);border-radius:10px;background:rgba(255,217,61,.08);overflow:hidden}
+.tipbtn{width:100%;text-align:left;background:none;border:none;font-family:inherit;font-weight:700;
+  font-size:.88rem;color:var(--yellow);padding:10px 14px;cursor:pointer;display:flex;align-items:center;gap:8px}
+.tipbtn .arw{margin-left:auto;font-size:.62rem;transition:transform .25s}
+.tip.open .tipbtn .arw{transform:rotate(180deg)}
+.tiptext{display:none;padding:0 14px 12px;font-size:.89rem;color:var(--text)}
+.tip.open .tiptext{display:block;animation:fade .25s ease}
+.timer-box{display:flex;align-items:center;gap:10px;background:rgba(255,217,61,.06);
+  border:1px dashed var(--yellow);border-radius:10px;padding:8px 12px;margin-top:8px;
+  color:var(--yellow);font-size:.85rem;font-weight:700}
+.bot-box{background:rgba(255,255,255,.04);border:1px solid var(--bd);border-radius:12px;padding:12px;margin-top:10px}
+.bot-chat{max-height:320px;overflow-y:auto;padding-right:6px;margin-bottom:10px}
+.bot-msg{margin:8px 0;padding:10px 13px;border-radius:10px;font-size:.92rem;line-height:1.55}
+.bot-msg.user{background:rgba(8,217,214,.12);border:1px solid rgba(8,217,214,.4);color:var(--text);margin-left:30px}
+.bot-msg.bot{background:rgba(161,140,209,.14);border:1px solid rgba(161,140,209,.4);color:var(--text);margin-right:30px}
+.bot-msg.bot b{color:var(--purple)}
+.bot-input{display:flex;gap:8px}
+.bot-input textarea{flex:1;min-height:60px;font-family:inherit;font-size:.93rem;
+  border:2px solid var(--bd);border-radius:10px;padding:9px 12px;color:var(--text);
+  background:rgba(255,255,255,.06);resize:vertical}
+.bot-input textarea:focus{outline:none;border-color:var(--cyan)}
+.redoxreihe{background:#f4f6f9;border-radius:12px;padding:14px;margin:10px 0;text-align:center}
+.redoxreihe svg{max-width:100%;height:auto;display:block;margin:0 auto}
+.redoxreihe figcaption{color:#4a5560;font-size:.84rem;margin-top:8px;font-style:italic}
+.export-box{background:linear-gradient(135deg,rgba(8,217,214,.14),rgba(161,140,209,.14));
+  border:2px dashed var(--cyan);border-radius:18px;padding:24px;margin:18px 0;text-align:center}
+.export-box h2{color:var(--cyan);margin-bottom:8px}
+.export-box p{color:var(--text-dim);margin:0 auto 14px;max-width:600px;font-size:.93rem}
+.namefield{display:flex;flex-direction:column;align-items:center;gap:12px}
+.namefield input{background:rgba(255,255,255,.1);border:2px solid var(--bd);border-radius:8px;
+  padding:11px 16px;color:var(--text);font-size:1rem;font-family:inherit;width:240px;text-align:center}
+.namefield input:focus{outline:none;border-color:var(--cyan)}
+.foot{text-align:center;color:var(--text-dim);font-size:.8rem;margin-top:20px}
+</style>
+</head>
+<body>
+<header>
+  <span class="kicker">Chemie · Wiederholung · Redoxreaktionen</span>
+  <h1>Redoxreaktionen – verstehen, anwenden,<br>Oxidationszahlen sicher bestimmen</h1>
+  <p class="lead">Wiederhole Oxidation, Reduktion und Redoxreihe an einem Experiment. Übe das Bestimmen von Oxidationszahlen aus Lewisformeln und unterscheide Säure-Base- von Redoxreaktionen.</p>
+</header>
+<div class="wrap">
+  <div class="progress"><div class="bar"><div class="fill" id="pfill"></div></div><div class="lbl" id="plabel">0 / 6 Stationen bearbeitet</div></div>
+  
+<section class="card">
+  <h2>🧭 Dein Lernweg</h2>
+  <p>Du arbeitest in 6 Stationen. Klick eine an, um sie aufzuklappen.</p>
+  <div class="toc">
+    <div class="item"><b>0 · Input</b>Edle/unedle Metalle, Oxidation, Reduktion, Redoxreihe</div>
+    <div class="item"><b>1 · Versuch</b>Cu/FeSO4 und Fe/CuSO4 + Auswertung</div>
+    <div class="item"><b>2 · Regeln</b>für Oxidationszahlen + Beispiele Regel 6</div>
+    <div class="item"><b>3 · Beispiel</b>Oxidationszahlen Schritt für Schritt (HClO)</div>
+    <div class="item"><b>4 · Hilfe-Bot</b>Fragen zum Thema</div>
+    <div class="item"><b>5 · Übungen</b>Oxidationszahlen (Code-geschützt)</div>
+    <div class="item"><b>6 · Anwendung</b>Säure-Base oder Redox? (Code-geschützt)</div>
+  </div>
+</section>
+
+<section class="ex" data-ex="0">
+  <div class="ex-head" onclick="toggleEx(this)">
+    <div class="ex-num">0</div>
+    <div class="ti"><h3>Input: Edle &amp; unedle Metalle, Oxidation &amp; Reduktion</h3>
+      <div class="sub">Vorwissen kurz wiederholen, bevor du an den Versuch gehst</div></div>
+    <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 9l7 7 7-7"/></svg>
+  </div>
+  <div class="ex-body">
+
+    <div class="callout">
+      <div class="ic">⚗️</div>
+      <div class="body">
+        <h4>Oxidation und Reduktion</h4>
+        <p><b>Oxidation</b> ist die <b>Abgabe</b> von Elektronen. Das Teilchen verliert Elektronen, seine Oxidationszahl <b>steigt</b>.</p>
+        <p><b>Reduktion</b> ist die <b>Aufnahme</b> von Elektronen. Das Teilchen gewinnt Elektronen, seine Oxidationszahl <b>sinkt</b>.</p>
+        <p>Eselsbrücke <b>OilRig</b>: <i>Oxidation is loss, Reduction is gain</i> (von Elektronen).</p>
+        <p>Eine <b>Redoxreaktion</b> ist die Kombination aus beidem: Die Elektronen, die das eine Teilchen abgibt, nimmt das andere auf.</p>
+      </div>
+    </div>
+
+    <div class="callout green">
+      <div class="ic">👑</div>
+      <div class="body">
+        <h4>Edle und unedle Metalle</h4>
+        <p><b>Unedle Metalle</b> (z. B. Li, Mg, Zn, Fe) geben ihre Außenelektronen <b>leicht ab</b>. Sie werden gerne oxidiert.</p>
+        <p><b>Edle Metalle</b> (z. B. Cu, Ag, Au) geben Elektronen nur sehr ungern ab. Ihre Kationen werden dagegen leicht reduziert.</p>
+        <p>In der <b>Redoxreihe der Metalle</b> stehen die unedelsten oben, die edelsten unten. Ein unedles Metall kann ein Kation eines edleren Metalls aus der Lösung verdrängen - umgekehrt nicht.</p>
+      </div>
+    </div>
+
+    <h3 class="sub">Redoxreihe der Metalle</h3>
+    <figure class="redoxreihe">
+      <svg viewBox="0 0 320 520" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="0" width="320" height="520" fill="#f7f8fb" rx="14"/><polygon points="95,60 145,60 120,480" fill="#f4a261" opacity="0.6"/><polygon points="200,60 175,480 225,480" fill="#5b8def" opacity="0.55"/><text x="40" y="48" text-anchor="middle" font-size="13" font-weight="800" fill="#0b4f6c">unedel</text><text x="40" y="502" text-anchor="middle" font-size="13" font-weight="800" fill="#0b4f6c">edel</text><text x="120" y="78" text-anchor="middle" font-size="10.5" font-weight="700" fill="#7a3505">guter</text><text x="120" y="92" text-anchor="middle" font-size="10.5" font-weight="700" fill="#7a3505">Donator</text><text x="200" y="455" text-anchor="middle" font-size="10.5" font-weight="700" fill="#143678">guter</text><text x="200" y="468" text-anchor="middle" font-size="10.5" font-weight="700" fill="#143678">Akzeptor</text><text x="78" y="65.0" text-anchor="middle" font-size="14" font-weight="700" fill="#1f2a33">Li</text><text x="270" y="65.0" text-anchor="middle" font-size="13" font-weight="700" fill="#1f2a33">Li⁺</text><text x="78" y="103.18181818181819" text-anchor="middle" font-size="14" font-weight="700" fill="#1f2a33">Ca</text><text x="270" y="103.18181818181819" text-anchor="middle" font-size="13" font-weight="700" fill="#1f2a33">Ca²⁺</text><text x="78" y="141.36363636363637" text-anchor="middle" font-size="14" font-weight="700" fill="#1f2a33">Mg</text><text x="270" y="141.36363636363637" text-anchor="middle" font-size="13" font-weight="700" fill="#1f2a33">Mg²⁺</text><text x="78" y="179.54545454545453" text-anchor="middle" font-size="14" font-weight="700" fill="#1f2a33">Al</text><text x="270" y="179.54545454545453" text-anchor="middle" font-size="13" font-weight="700" fill="#1f2a33">Al³⁺</text><text x="78" y="217.72727272727272" text-anchor="middle" font-size="14" font-weight="700" fill="#1f2a33">Zn</text><text x="270" y="217.72727272727272" text-anchor="middle" font-size="13" font-weight="700" fill="#1f2a33">Zn²⁺</text><text x="78" y="255.9090909090909" text-anchor="middle" font-size="14" font-weight="700" fill="#1f2a33">Fe</text><text x="270" y="255.9090909090909" text-anchor="middle" font-size="13" font-weight="700" fill="#1f2a33">Fe²⁺</text><text x="78" y="294.09090909090907" text-anchor="middle" font-size="14" font-weight="700" fill="#1f2a33">Sn</text><text x="270" y="294.09090909090907" text-anchor="middle" font-size="13" font-weight="700" fill="#1f2a33">Sn²⁺</text><text x="78" y="332.27272727272725" text-anchor="middle" font-size="14" font-weight="700" fill="#1f2a33">Pb</text><text x="270" y="332.27272727272725" text-anchor="middle" font-size="13" font-weight="700" fill="#1f2a33">Pb²⁺</text><text x="78" y="370.45454545454544" text-anchor="middle" font-size="14" font-weight="700" fill="#1f2a33">Cu</text><text x="270" y="370.45454545454544" text-anchor="middle" font-size="13" font-weight="700" fill="#1f2a33">Cu²⁺</text><text x="78" y="408.6363636363636" text-anchor="middle" font-size="14" font-weight="700" fill="#1f2a33">Ag</text><text x="270" y="408.6363636363636" text-anchor="middle" font-size="13" font-weight="700" fill="#1f2a33">Ag⁺</text><text x="78" y="446.8181818181818" text-anchor="middle" font-size="14" font-weight="700" fill="#1f2a33">Pt</text><text x="270" y="446.8181818181818" text-anchor="middle" font-size="13" font-weight="700" fill="#1f2a33">Pt²⁺</text><text x="78" y="485.0" text-anchor="middle" font-size="14" font-weight="700" fill="#1f2a33">Au</text><text x="270" y="485.0" text-anchor="middle" font-size="13" font-weight="700" fill="#1f2a33">Au³⁺</text></svg>
+      <figcaption>Redoxreihe der Metalle (links: elementare Atome) und die zugehörigen Metall-Ionen (rechts). Je weiter oben, desto unedler – das Metall gibt seine Elektronen leichter ab. Je weiter unten, desto edler – das Kation nimmt Elektronen umso lieber an.</figcaption>
+    </figure>
+
+    <div class="merksatz">
+      <div class="body">
+        <p>Ein <b>unedleres</b> Metall reduziert die Kationen eines <b>edleren</b> Metalls (zum elementaren Metall) und wird selbst oxidiert. Umgekehrt findet keine Reaktion statt.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="ex" data-ex="1">
+  <div class="ex-head" onclick="toggleEx(this)">
+    <div class="ex-num">1</div>
+    <div class="ti"><h3>Versuch &amp; Auswertung – Redoxreihe an Cu / Fe</h3>
+      <div class="sub">Erst durchführen, dann auswerten. Stell den Versuch anschließend deinen Mitschüler:innen vor.</div></div>
+    <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 9l7 7 7-7"/></svg>
+  </div>
+  <div class="ex-body">
+
+    <div class="callout yellow">
+      <div class="ic">🧪</div>
+      <div class="body">
+        <h4>Vorgehen</h4>
+        <p><b>1.</b> Notiere zuerst den Versuchsaufbau in deinem Heft (Skizze beider Bechergläser).</p>
+        <p><b>2.</b> Stelle deine Hypothese auf: Was erwartest du in welchem Becher? Begründe mit der Redoxreihe.</p>
+        <p><b>3.</b> Führt den Versuch durch und beobachtet sorgfältig.</p>
+        <p><b>4.</b> Bearbeite anschließend die Auswertung hier in der Lernumgebung.</p>
+        <p><b>5.</b> Stellt euren <b>gesamten Versuch</b> (Aufbau, Hypothese, Beobachtung, Auswertung) den anderen Schüler:innen vor.</p>
+      </div>
+    </div>
+
+    <h3 class="sub">Versuchsaufbau</h3>
+    <div class="versuch">
+      <div class="v-card">
+        <h4>Versuch A</h4>
+        <svg viewBox="0 0 260 260" xmlns="http://www.w3.org/2000/svg"><path d="M 50 60 L 50 200 Q 50 220 70 220 L 190 220 Q 210 220 210 200 L 210 60" stroke="#fff" stroke-width="2.5" fill="none"/><path d="M 52 95 L 52 200 Q 52 218 70 218 L 190 218 Q 208 218 208 200 L 208 95 Z" fill="#5b8def" opacity="0.45"/><text x="62" y="165" font-size="10" font-weight="700" fill="#5b8def">Cu²⁺</text><text x="62" y="190" font-size="10" font-weight="700" fill="#cfd6e0">SO₄²⁻</text><text x="198" y="208" text-anchor="end" font-size="10" font-weight="700" fill="#cfd6e0">SO₄²⁻</text><rect x="120" y="20" width="20" height="175" fill="#cd7f32" stroke="#2a3340" stroke-width="1"/><text x="130" y="14" text-anchor="middle" font-size="11" font-weight="700" fill="#cd7f32">Eisennagel</text><text x="130" y="248" text-anchor="middle" font-size="13" font-weight="800" fill="#5b8def">CuSO₄-Lösung</text></svg>
+        <p class="label-sub">Eisennagel in Kupfersulfat-Lösung. In der Lösung: Cu²⁺ und SO₄²⁻.</p>
+      </div>
+      <div class="v-card">
+        <h4>Versuch B</h4>
+        <svg viewBox="0 0 260 260" xmlns="http://www.w3.org/2000/svg"><path d="M 50 60 L 50 200 Q 50 220 70 220 L 190 220 Q 210 220 210 200 L 210 60" stroke="#fff" stroke-width="2.5" fill="none"/><path d="M 52 95 L 52 200 Q 52 218 70 218 L 190 218 Q 208 218 208 200 L 208 95 Z" fill="#86c882" opacity="0.45"/><text x="62" y="165" font-size="10" font-weight="700" fill="#86c882">Fe²⁺</text><text x="62" y="190" font-size="10" font-weight="700" fill="#f0d49a">SO₄²⁻</text><text x="198" y="208" text-anchor="end" font-size="10" font-weight="700" fill="#f0d49a">SO₄²⁻</text><rect x="120" y="20" width="20" height="175" fill="#d4a373" stroke="#2a3340" stroke-width="1"/><text x="130" y="14" text-anchor="middle" font-size="11" font-weight="700" fill="#d4a373">Kupferblech</text><text x="130" y="248" text-anchor="middle" font-size="13" font-weight="800" fill="#86c882">FeSO₄-Lösung</text></svg>
+        <p class="label-sub">Kupferblech in Eisensulfat-Lösung. In der Lösung: Fe²⁺ und SO₄²⁻.</p>
+      </div>
+    </div>
+
+    <div class="timer-box" id="timer-aus" style="margin-top:14px">
+      ⏳ <b>Prüfen</b> und <b>Musterlösungen</b> der Auswertung werden in <b id="t-aus">25:00</b> freigeschaltet – nutze die Zeit zum eigenständigen Bearbeiten.
+    </div>
+
+    <h3 class="sub">1) Deine Hypothese</h3>
+    <p class="q-help">Schreibe jeweils 1–2 Sätze und begründe mit der Redoxreihe (edler / unedler, Elektronen).</p>
+
+    <p class="q">Hypothese zu Versuch A (Eisennagel in CuSO₄-Lösung):</p>
+    <textarea class="free" id="ver-hypo-a" placeholder="In Versuch A erwarte ich ... weil ..."></textarea>
+    <div class="btns">
+      <button class="btn check-aus" data-fn="checkHypoA" disabled style="opacity:.5">🔒 Hypothese A prüfen</button>
+    </div>
+    <div class="fb" id="fb-hypo-a"></div>
+
+    <p class="q" style="margin-top:14px">Hypothese zu Versuch B (Kupferblech in FeSO₄-Lösung):</p>
+    <textarea class="free" id="ver-hypo-b" placeholder="In Versuch B erwarte ich ... weil ..."></textarea>
+    <div class="btns">
+      <button class="btn check-aus" data-fn="checkHypoB" disabled style="opacity:.5">🔒 Hypothese B prüfen</button>
+      <button class="btn btn-purple sol-aus" data-target="sol-hypo" disabled style="opacity:.5">🔒 Musterlösung beider Hypothesen</button>
+    </div>
+    <div class="fb" id="fb-hypo-b"></div>
+    <div class="sol" id="sol-hypo">
+      <h4>Musterlösung Hypothese</h4>
+      <p><b>Versuch A:</b> Eisen ist unedler als Kupfer und gibt Elektronen leichter ab. Ich erwarte, dass der Eisennagel mit den Cu²⁺-Ionen reagiert: Cu wird sich als rötlich-brauner Belag auf dem Nagel abscheiden, weil Fe oxidiert und Cu²⁺ reduziert wird.</p>
+      <p><b>Versuch B:</b> Kupfer ist edler als Eisen und gibt Elektronen <i>nicht</i> leicht ab. Ich erwarte deshalb, dass keine erkennbare Reaktion stattfindet.</p>
+    </div>
+
+    <h3 class="sub">2) Deine Beobachtung</h3>
+    <p class="q-help">Notiere für beide Versuche getrennt, was du wirklich sehen kannst.</p>
+
+    <p class="q">Beobachtung Versuch A (Eisennagel in CuSO₄-Lösung):</p>
+    <textarea class="free" id="ver-beob-a" placeholder="In Versuch A ist zu sehen ..."></textarea>
+    <div class="btns">
+      <button class="btn check-aus" data-fn="checkBeobA" disabled style="opacity:.5">🔒 Beobachtung A prüfen</button>
+    </div>
+    <div class="fb" id="fb-beob-a"></div>
+
+    <p class="q" style="margin-top:14px">Beobachtung Versuch B (Kupferblech in FeSO₄-Lösung):</p>
+    <textarea class="free" id="ver-beob-b" placeholder="In Versuch B ist zu sehen ..."></textarea>
+    <div class="btns">
+      <button class="btn check-aus" data-fn="checkBeobB" disabled style="opacity:.5">🔒 Beobachtung B prüfen</button>
+      <button class="btn btn-purple sol-aus" data-target="sol-beob" disabled style="opacity:.5">🔒 Musterlösung beider Beobachtungen</button>
+    </div>
+    <div class="fb" id="fb-beob-b"></div>
+    <div class="sol" id="sol-beob">
+      <h4>Musterlösung Beobachtung</h4>
+      <p><b>Versuch A:</b> Auf dem Eisennagel bildet sich ein <b>rötlich-brauner Belag</b>; die blaue CuSO₄-Lösung wird langsam blasser (weniger Cu²⁺-Ionen).</p>
+      <p><b>Versuch B:</b> Es ist <b>keine erkennbare Veränderung</b> zu sehen. Das Kupferblech behält seine Farbe, die hellgrüne FeSO₄-Lösung verändert sich nicht.</p>
+    </div>
+
+    <h3 class="sub">3) Auswertung Versuch A (Eisennagel in CuSO₄-Lsg.)</h3>
+    <p>Formuliere die beiden Teilgleichungen sowie die Redoxgleichung. Achte auf die richtige Notation.</p>
+
+    <div class="callout">
+      <div class="ic">✏️</div>
+      <div class="body">
+        <h4>So sehen Teilgleichungen aus (Beispiel mit anderen Stoffen)</h4>
+        <p><b>Oxidation:</b> Zn → Zn²⁺ + 2 e⁻ &nbsp;<i>(die abgegebenen Elektronen stehen rechts)</i></p>
+        <p><b>Reduktion:</b> Ag⁺ + e⁻ → Ag &nbsp;<i>(die aufgenommenen Elektronen stehen links)</i></p>
+        <p>Übertrage dieses Schema jetzt auf Versuch A.</p>
+      </div>
+    </div>
+
+    <p class="q">Oxidation:</p>
+    <input type="text" class="text" id="ox-glei" placeholder="z. B. Element -> Ion + e-" style="width:100%"/>
+    <p class="q">Reduktion:</p>
+    <input type="text" class="text" id="red-glei" placeholder="z. B. Ion + e- -> Element" style="width:100%"/>
+
+    <div class="callout yellow">
+      <div class="ic">💡</div>
+      <div class="body">
+        <h4>Tipp Gesamtgleichung</h4>
+        <p>In der Redox-Gesamtgleichung schreibst du <b>alle Edukte links und alle Produkte rechts</b>. Die Elektronen tauchen auf beiden Seiten auf und werden weggelassen.</p>
+        <p><b>Achte auf den Elektronen-Ausgleich:</b> Stimmt die Anzahl der abgegebenen Elektronen (Oxidation) nicht mit der Anzahl der aufgenommenen Elektronen (Reduktion) überein, multipliziert man die Teilgleichungen mit passenden Faktoren, bevor man sie kombiniert.</p>
+      </div>
+    </div>
+
+    <p class="q">Redox-Gesamtgleichung:</p>
+    <input type="text" class="text" id="redox-glei" placeholder="Edukte -> Produkte" style="width:100%"/>
+
+    <div class="btns">
+      <button class="btn check-aus" data-fn="checkVersuchA" disabled style="opacity:.5">🔒 Gleichungen prüfen</button>
+      <button class="btn btn-purple sol-aus" data-target="sol-versuch-a" disabled style="opacity:.5">🔒 Musterlösung</button>
+    </div>
+    <div class="fb" id="fb-versuch-a"></div>
+    <div class="sol" id="sol-versuch-a">
+      <h4>Musterlösung Versuch A</h4>
+      <p><b>Oxidation:</b> Fe → Fe²⁺ + 2 e⁻  &nbsp;<i>(Abgabe von 2 Elektronen)</i></p>
+      <p><b>Reduktion:</b> Cu²⁺ + 2 e⁻ → Cu  &nbsp;<i>(Aufnahme von 2 Elektronen)</i></p>
+      <p>Hier passen die Elektronenzahlen direkt zusammen (je 2 e⁻). Sie tauchen auf beiden Seiten auf und werden gekürzt.</p>
+      <p><b>Redoxreaktion:</b> Fe + Cu²⁺ → Fe²⁺ + Cu</p>
+      <p>Eisen ist unedler als Kupfer und gibt seine Elektronen leichter ab. Die Cu²⁺-Ionen werden zu elementarem Kupfer reduziert und scheiden sich als rötlich-brauner Belag am Eisennagel ab.</p>
+    </div>
+
+    <h3 class="sub">4) Auswertung Versuch B (Kupferblech in FeSO₄-Lsg.)</h3>
+    <p>Erkläre deine Beobachtung in Versuch B mithilfe der Redoxreihe der Metalle. (1–3 Sätze)</p>
+    <textarea class="free" id="ver-b-beg" placeholder="Schreibe deine Erklärung ..."></textarea>
+    <div class="btns">
+      <button class="btn check-aus" data-fn="checkBegB" disabled style="opacity:.5">🔒 Erklärung prüfen</button>
+      <button class="btn btn-purple sol-aus" data-target="sol-versuch-b" disabled style="opacity:.5">🔒 Musterlösung</button>
+    </div>
+    <div class="fb" id="fb-versuch-b"></div>
+    <div class="sol" id="sol-versuch-b">
+      <h4>Musterlösung Versuch B</h4>
+      <p><b>Es findet keine Reaktion statt.</b> Kupfer ist <b>edler</b> als Eisen und gibt seine Elektronen nicht ab. Es kann die Fe²⁺-Ionen also nicht reduzieren – die Reaktion läuft nur in die andere Richtung (siehe Versuch A).</p>
+    </div>
+
+    <div class="callout purple" style="margin-top:14px;">
+      <div class="ic">🗣️</div>
+      <div class="body">
+        <h4>Präsentation</h4>
+        <p>Stellt jetzt euren <b>gesamten Versuch</b> (Aufbau, Hypothese, Beobachtung, Auswertung) den anderen Schüler:innen vor.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="ex" data-ex="2">
+  <div class="ex-head" onclick="toggleEx(this)">
+    <div class="ex-num">2</div>
+    <div class="ti"><h3>Regeln für Oxidationszahlen</h3>
+      <div class="sub">Die sechs Regeln mit Beispielen und eingetragenen Oxidationszahlen</div></div>
+    <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 9l7 7 7-7"/></svg>
+  </div>
+  <div class="ex-body">
+    <table class="t">
+      <tr><th style="width:50%">Regel</th><th>Beispiele (mit Oxidationszahlen)</th></tr>
+      <tr><td><b>1.</b> Atome in elementaren Stoffen haben die Oxidationszahl <b>0</b>.</td>
+          <td><span class="oxlbl">0</span>Zn &nbsp; <span class="oxlbl">0</span>Fe &nbsp; <span class="oxlbl">0</span>Cu &nbsp; <span class="oxlbl">0</span>H₂ &nbsp; <span class="oxlbl">0</span>O₂ &nbsp; <span class="oxlbl">0</span>Cl₂</td></tr>
+      <tr><td><b>2.</b> Bei einfachen Ionen entspricht die Oxidationszahl der <b>Ionenladung</b>.</td>
+          <td><span class="oxlbl">+II</span>Zn²⁺ &nbsp; <span class="oxlbl">+III</span>Fe³⁺ &nbsp; <span class="oxlbl">+I</span>Cu⁺ &nbsp; <span class="oxlbl">+I</span>H⁺ &nbsp; <span class="oxlbl">-II</span>O²⁻ &nbsp; <span class="oxlbl">-I</span>Cl⁻</td></tr>
+      <tr><td><b>3.</b> Fluor hat in Verbindungen immer <b>-I</b>.</td>
+          <td><span class="oxlbl">-I</span>HF &nbsp; <span class="oxlbl">-I</span>CaF₂ &nbsp; <span class="oxlbl">-I</span>AlF₃ &nbsp; <span class="oxlbl">-I</span>OF₂</td></tr>
+      <tr><td><b>4.</b> Wasserstoff hat in Verbindungen <b>+I</b> (Ausnahme: Hydride mit Metallen → -I).</td>
+          <td><span class="oxlbl">+I</span>HCl &nbsp; <span class="oxlbl">+I</span>H₂O &nbsp; <span class="oxlbl">+I</span>NH₃ &nbsp; <span class="oxlbl">+I</span>CH₄<br>
+              Ausnahmen: <span class="oxlbl">-I</span>NaH &nbsp; <span class="oxlbl">-I</span>CaH₂</td></tr>
+      <tr><td><b>5.</b> Sauerstoff hat in Verbindungen <b>-II</b> (Ausnahmen: Peroxide → -I, Fluoride → +II).</td>
+          <td><span class="oxlbl">-II</span>SO₂ &nbsp; <span class="oxlbl">-II</span>SO₃ &nbsp; <span class="oxlbl">-II</span>H₂SO₄ &nbsp; <span class="oxlbl">-II</span>Al₂O₃<br>
+              Ausnahmen: <span class="oxlbl">-I</span>H₂O₂ &nbsp; <span class="oxlbl">+II</span>OF₂</td></tr>
+      <tr><td><b>6.</b> Die Summe aller Oxidationszahlen entspricht der <b>Gesamtladung</b> des Teilchens.</td>
+          <td><i>Beispiele werden unten durchgerechnet.</i></td></tr>
+    </table>
+
+    <h3 class="sub">Regel 6 in Aktion</h3>
+
+    <div class="callout green">
+      <div class="ic">🧮</div>
+      <div class="body">
+        <h4>Beispiel 1: ungeladenes Molekül – CO₂</h4>
+        <p>CO₂ ist ein <b>neutrales</b> Molekül (Gesamtladung 0). Sauerstoff hat (Regel 5) jeweils <b>-II</b>. Damit:</p>
+        <p style="text-align:center;font-family:'Cambria Math',serif;font-size:1.05rem">Ox(C) + 2 · (-II) = 0  ⇒  Ox(C) = <b>+IV</b></p>
+        <p>Probe: (+IV) + 2 · (-II) = 0 ✓</p>
+      </div>
+    </div>
+
+    <div class="callout purple">
+      <div class="ic">🧮</div>
+      <div class="body">
+        <h4>Beispiel 2: geladenes Ion – Sulfat-Ion SO₄²⁻</h4>
+        <p>SO₄²⁻ ist ein <b>zweifach negativ geladenes</b> Ion (Gesamtladung -2). Sauerstoff hat wieder -II. Damit:</p>
+        <p style="text-align:center;font-family:'Cambria Math',serif;font-size:1.05rem">Ox(S) + 4 · (-II) = -2  ⇒  Ox(S) = <b>+VI</b></p>
+        <p>Probe: (+VI) + 4 · (-II) = +6 - 8 = -2 ✓</p>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="ic">💡</div>
+      <div class="body">
+        <h4>Tipp zur Schreibweise</h4>
+        <p>Oxidationszahlen schreibt man als <b>römische Zahlen mit Vorzeichen</b>, also +I, +II, +III, -I, -II, ... - damit man sie nicht mit Ionenladungen (arabisch, z. B. Ca²⁺) verwechselt.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="ex" data-ex="3">
+  <div class="ex-head" onclick="toggleEx(this)">
+    <div class="ex-num">3</div>
+    <div class="ti"><h3>Beispiel Schritt für Schritt: Oxidationszahlen in HClO</h3>
+      <div class="sub">Wie geht man systematisch vor? Hier in 4 Schritten.</div></div>
+    <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 9l7 7 7-7"/></svg>
+  </div>
+  <div class="ex-body">
+
+    <div class="callout">
+      <div class="ic">✏️</div>
+      <div class="body">
+        <h4>Kurze Auffrischung: Wie zeichnet man eine Lewisformel?</h4>
+        <p><b>1.</b> Bestimme, welches Atom in der Mitte sitzt (meist das mit der geringsten Elektronegativität, häufig C, N, S, P).</p>
+        <p><b>2.</b> Zähle alle Valenzelektronen aller Atome zusammen (für Ionen: -1 pro positive Ladung, +1 pro negative).</p>
+        <p><b>3.</b> Verbinde die Atome mit Einfachbindungen (jede Bindung = 2 Elektronen).</p>
+        <p><b>4.</b> Verteile die übrigen Elektronen so auf die Außenatome, dass jedes (außer H) die Oktettregel erfüllt - 8 Außenelektronen. H bekommt nur 2.</p>
+        <p><b>5.</b> Wenn am Zentralatom noch Elektronen fehlen, bildest du eine Doppel- oder Dreifachbindung. Freie Elektronenpaare zeichnest du als <b>Striche</b> am Atom.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="stitle"><span class="snum">1</span>Lewisformel zeichnen</div>
+      <p>Zeichne zuerst die Lewisformel des Moleküls. Bei HClO bindet H an O, und O bindet an Cl.</p>
+      <div class="lewis-card" style="max-width:300px;margin:8px auto"><svg viewBox="0 0 180 130" xmlns="http://www.w3.org/2000/svg"><line x1="30" y1="75" x2="75" y2="75" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="75" y1="75" x2="130" y2="50" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="75.9" y1="55.4" x2="66.2" y2="57.5" stroke="#2e62c4" stroke-width="2.6" stroke-linecap="round"/><line x1="74.1" y1="94.6" x2="83.8" y2="92.5" stroke="#2e62c4" stroke-width="2.6" stroke-linecap="round"/><line x1="150.2" y1="46.1" x2="146.0" y2="37.0" stroke="#2e62c4" stroke-width="2.6" stroke-linecap="round"/><line x1="126.1" y1="29.8" x2="117.0" y2="34.0" stroke="#2e62c4" stroke-width="2.6" stroke-linecap="round"/><line x1="133.9" y1="70.2" x2="143.0" y2="66.0" stroke="#2e62c4" stroke-width="2.6" stroke-linecap="round"/><circle cx="30" cy="75" r="11" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="30" y="78.5" text-anchor="middle" font-size="10" font-weight="700" fill="#3a4350">H</text><circle cx="75" cy="75" r="13" fill="#e0533d" stroke="#2a3340" stroke-width="1.2"/><text x="75" y="78.85" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">O</text><circle cx="130" cy="50" r="14" fill="#71ad3f" stroke="#2a3340" stroke-width="1.2"/><text x="130" y="54.2" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">Cl</text></svg></div>
+      <p style="color:var(--text-dim);font-size:.86rem;text-align:center">H - O - Cl   (mit freien Elektronenpaaren an O und Cl, als Striche eingezeichnet)</p>
+    </div>
+
+    <div class="step">
+      <div class="stitle"><span class="snum">2</span>Elektronegativitäten betrachten</div>
+      <p>Schau dir für jede Bindung die <b>Elektronegativität</b> (EN) an. Das Atom mit der <b>größeren</b> EN zieht die Bindungselektronen stärker zu sich - sie werden <b>diesem</b> Atom <b>zugeordnet</b> (mitgezählt).</p>
+      <ul style="color:var(--text-dim);font-size:.92rem;margin:6px 0 0 18px">
+        <li>EN(H) = 2,2 · EN(O) = 3,4 · EN(Cl) = 3,2</li>
+        <li>Bindung <b>H-O</b>: O zieht stärker → beide Bindungselektronen werden dem O zugeordnet.</li>
+        <li>Bindung <b>O-Cl</b>: O zieht stärker als Cl → beide Bindungselektronen werden dem O zugeordnet.</li>
+      </ul>
+    </div>
+
+    <div class="step">
+      <div class="stitle"><span class="snum">3</span>Valenzelektronen zählen und vergleichen</div>
+      <p>Jetzt zählst du für jedes Atom, wie viele Valenzelektronen es <b>jetzt formal</b> besitzt, und vergleichst mit der <b>Hauptgruppen-Zahl</b> (denn so viele Valenzelektronen hätte das neutrale Atom).</p>
+      <ul style="color:var(--text-dim);font-size:.92rem;margin:6px 0 0 18px">
+        <li><b>H</b> (1. HG, normalerweise 1 e⁻): hat nach Zuordnung <b>0</b> e⁻ → <b>1 zu wenig</b> → Oxidationszahl <b>+I</b>.</li>
+        <li><b>O</b> (6. HG, normalerweise 6 e⁻): bekommt von H-O zwei Elektronen, von O-Cl zwei Elektronen, plus 2 freie Elektronenpaare = <b>8</b> e⁻ → <b>2 zu viel</b> → Oxidationszahl <b>-II</b>.</li>
+        <li><b>Cl</b> (7. HG, normalerweise 7 e⁻): behält seine 3 freien Elektronenpaare (6 e⁻), die Bindungselektronen zum O hat es <b>verloren</b> → <b>6</b> e⁻ → <b>1 zu wenig</b> → Oxidationszahl <b>+I</b>.</li>
+      </ul>
+      <div class="callout green" style="margin-top:10px">
+        <div class="ic">🔍</div>
+        <div class="body">
+          <h4>Probe mit Regel 6</h4>
+          <p>Summe aller Oxidationszahlen muss der Gesamtladung entsprechen. Bei HClO (neutrales Molekül, Ladung 0):</p>
+          <p><b>+I + (-II) + (+I) = 0</b> ✓</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="stitle"><span class="snum">4</span>Ergebnis: Oxidationszahlen eintragen</div>
+      <p>Trage die Oxidationszahlen als <b>römische Zahlen mit Vorzeichen</b> über die jeweiligen Atome.</p>
+      <div class="lewis-card" style="max-width:320px;margin:8px auto"><svg viewBox="0 0 180 130" xmlns="http://www.w3.org/2000/svg"><line x1="30" y1="75" x2="75" y2="75" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="75" y1="75" x2="130" y2="50" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="75.9" y1="55.4" x2="66.2" y2="57.5" stroke="#2e62c4" stroke-width="2.6" stroke-linecap="round"/><line x1="74.1" y1="94.6" x2="83.8" y2="92.5" stroke="#2e62c4" stroke-width="2.6" stroke-linecap="round"/><line x1="150.2" y1="46.1" x2="146.0" y2="37.0" stroke="#2e62c4" stroke-width="2.6" stroke-linecap="round"/><line x1="126.1" y1="29.8" x2="117.0" y2="34.0" stroke="#2e62c4" stroke-width="2.6" stroke-linecap="round"/><line x1="133.9" y1="70.2" x2="143.0" y2="66.0" stroke="#2e62c4" stroke-width="2.6" stroke-linecap="round"/><circle cx="30" cy="75" r="11" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="30" y="78.5" text-anchor="middle" font-size="10" font-weight="700" fill="#3a4350">H</text><circle cx="75" cy="75" r="13" fill="#e0533d" stroke="#2a3340" stroke-width="1.2"/><text x="75" y="78.85" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">O</text><circle cx="130" cy="50" r="14" fill="#71ad3f" stroke="#2a3340" stroke-width="1.2"/><text x="130" y="54.2" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">Cl</text><text x="30" y="100" text-anchor="middle" font-size="11" font-weight="800" fill="#9b27b0">+I</text><text x="75" y="105" text-anchor="middle" font-size="11" font-weight="800" fill="#9b27b0">−II</text><text x="150" y="78" text-anchor="middle" font-size="11" font-weight="800" fill="#9b27b0">+I</text></svg></div>
+    </div>
+
+    <div class="callout">
+      <div class="ic">💡</div>
+      <div class="body">
+        <h4>Faustregeln, die fast immer passen</h4>
+        <p>F&nbsp;=&nbsp;<b>-I</b> &nbsp;&nbsp;&nbsp; O&nbsp;=&nbsp;<b>-II</b> (Ausnahmen: Peroxide, F-Verbindungen) &nbsp;&nbsp;&nbsp; H&nbsp;=&nbsp;<b>+I</b> (Ausnahme: Hydride)</p>
+        <p>Hauptgruppen-Metalle&nbsp;=&nbsp;Gruppennummer (Na&nbsp;=&nbsp;+I, Ca&nbsp;=&nbsp;+II, Al&nbsp;=&nbsp;+III) &nbsp;&nbsp;&nbsp; Halogene in Halogenwasserstoffen&nbsp;=&nbsp;<b>-I</b></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="ex" data-ex="4">
+  <div class="ex-head" onclick="toggleEx(this)">
+    <div class="ex-num">4</div>
+    <div class="ti"><h3>Typische Fragen &amp; Hilfe-Bot</h3>
+      <div class="sub">Erst die FAQ durchklicken – passt nichts, frag den Bot.</div></div>
+    <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 9l7 7 7-7"/></svg>
+  </div>
+  <div class="ex-body">
+
+    <h3 class="sub">Häufige Fragen</h3>
+    <p>Klick auf eine Frage, um die Antwort anzuzeigen. Vielleicht ist dein Thema schon dabei.</p>
+    <div class="tips"><div class="tip"><button class="tipbtn" onclick="toggleTip(this)">❓ Wie zeichne ich eine Lewisformel?<span class="arw">▼</span></button><div class="tiptext"><b>1.</b> Zentralatom wählen (meist das mit der niedrigsten EN, oft C, N, S, P). H sitzt nie in der Mitte. <b>2.</b> Alle Valenzelektronen zusammenzählen (für Ionen: −1 pro positive, +1 pro negative Ladung). <b>3.</b> Atome mit Einfachbindungen verbinden (jede Bindung = 2 Elektronen). <b>4.</b> Restliche Elektronen so an die Außenatome verteilen, dass jedes (außer H) das Oktett erfüllt. H bekommt nur 2. <b>5.</b> Fehlen am Zentralatom noch Elektronen, bildest du eine Doppel- oder Dreifachbindung. Freie Elektronenpaare zeichnest du als Striche am Atom.</div></div><div class="tip"><button class="tipbtn" onclick="toggleTip(this)">❓ Was sind Valenzelektronen und wie zähle ich sie?<span class="arw">▼</span></button><div class="tiptext">Valenzelektronen sind die Elektronen auf der äußersten Schale eines Atoms. Bei Hauptgruppen-Elementen entspricht ihre Zahl der Hauptgruppen-Nummer: H, Li, Na = 1 · Be, Mg, Ca = 2 · B, Al = 3 · C = 4 · N, P = 5 · O, S = 6 · F, Cl, Br = 7. Edelgase haben 8 (außer He: 2).</div></div><div class="tip"><button class="tipbtn" onclick="toggleTip(this)">❓ Was sind freie Elektronenpaare?<span class="arw">▼</span></button><div class="tiptext">Freie (nichtbindende) Elektronenpaare sind Valenzelektronen, die nicht an einer Bindung beteiligt sind. Du zeichnest sie als kurze Striche direkt am Atom. Beim Bestimmen der Oxidationszahl werden sie voll dem jeweiligen Atom angerechnet.</div></div><div class="tip"><button class="tipbtn" onclick="toggleTip(this)">❓ Wie bestimme ich die Oxidationszahl?<span class="arw">▼</span></button><div class="tiptext"><b>1.</b> Lewisformel zeichnen. <b>2.</b> Bindungselektronen dem elektronegativeren Partner zuordnen (freie Elektronenpaare bleiben am Atom). <b>3.</b> Anzahl zugeordneter Elektronen mit der Hauptgruppennummer vergleichen: zu viele → negative Ox-Zahl, zu wenige → positive Ox-Zahl. <b>4.</b> Probe: Summe aller Oxidationszahlen = Gesamtladung des Teilchens.</div></div><div class="tip"><button class="tipbtn" onclick="toggleTip(this)">❓ Was ist Oxidation, was Reduktion?<span class="arw">▼</span></button><div class="tiptext"><b>Oxidation</b> = Abgabe von Elektronen → Oxidationszahl steigt. <b>Reduktion</b> = Aufnahme von Elektronen → Oxidationszahl sinkt. Eselsbrücke <b>OilRig</b>: Oxidation is loss, Reduction is gain. Beides zusammen ergibt eine Redoxreaktion.</div></div><div class="tip"><button class="tipbtn" onclick="toggleTip(this)">❓ Wie unterscheide ich Säure-Base- und Redoxreaktion?<span class="arw">▼</span></button><div class="tiptext">Bestimme die Oxidationszahlen aller Atome vor und nach der Reaktion. Bei einer <b>Säure-Base-Reaktion</b> bleiben alle Oxidationszahlen gleich (es wird nur ein Proton übertragen). Bei einer <b>Redoxreaktion</b> ändern sich Oxidationszahlen: Mindestens ein Atom wird oxidiert (Ox-Zahl steigt) <b>und</b> ein anderes reduziert (Ox-Zahl sinkt) – beides immer gleichzeitig.</div></div><div class="tip"><button class="tipbtn" onclick="toggleTip(this)">❓ Wie stelle ich Teilgleichungen auf?<span class="arw">▼</span></button><div class="tiptext">Eine Teilgleichung der <b>Oxidation</b> hat das Schema „Element → Ion + n e⁻" – die abgegebenen Elektronen stehen rechts. Eine Teilgleichung der <b>Reduktion</b>: „Ion + n e⁻ → Element". Stimmt die Elektronenanzahl in beiden Teilgleichungen nicht überein, multiplizierst du sie mit passenden Faktoren, bevor du sie addierst.</div></div><div class="tip"><button class="tipbtn" onclick="toggleTip(this)">❓ Was ist die Elektronegativität (EN)?<span class="arw">▼</span></button><div class="tiptext">Die EN gibt an, wie stark ein Atom in einer Bindung die gemeinsamen Elektronen zu sich zieht. Wichtige Werte: F 4,0 · O 3,4 · Cl 3,2 · N 3,0 · C 2,55 · H 2,2 · S 2,6 · P 2,2 · Ca 1,0 · Na 0,9. Für die Oxidationszahl gilt: Bindungselektronen werden formal dem Atom mit der <b>höheren</b> EN zugeordnet.</div></div><div class="tip"><button class="tipbtn" onclick="toggleTip(this)">❓ Was ist mit edel und unedel gemeint?<span class="arw">▼</span></button><div class="tiptext"><b>Unedle Metalle</b> (Li, Na, Mg, Zn, Fe …) geben ihre Elektronen leicht ab und werden gerne oxidiert – gute Elektronendonatoren. <b>Edle Metalle</b> (Cu, Ag, Au, Pt) geben Elektronen nur ungern ab. Ihre Kationen lassen sich umgekehrt leicht reduzieren. Die Redoxreihe ordnet die Metalle von oben (unedel) nach unten (edel).</div></div><div class="tip"><button class="tipbtn" onclick="toggleTip(this)">❓ Warum hat H in NaH die Oxidationszahl −I?<span class="arw">▼</span></button><div class="tiptext">Normalerweise hat H die Oxidationszahl +I. In Hydriden (z. B. NaH, CaH₂) ist H aber elektronegativer als das Metall (EN(H)=2,2 vs. EN(Na)=0,9). Deshalb bekommt H die Bindungselektronen zugeordnet und hat <b>−I</b>.</div></div></div>
+
+    <h3 class="sub">Hilfe-Bot</h3>
+    <div class="callout">
+      <div class="ic">🤖</div>
+      <div class="body">
+        <h4>So funktioniert der Bot</h4>
+        <p>Wenn deine Frage oben nicht dabei ist, tippe sie ins Feld und klicke <b>Frage senden</b>. Du bekommst eine Antwort zu Begriffen, Vorgehen oder Beispielen.</p>
+        <p>Nicht erlaubt: Fragen, die direkt die Übungsaufgaben aus Station 5 oder 6 lösen. Frau Huber ist nicht blöd 😉</p>
+      </div>
+    </div>
+
+    <div class="bot-box">
+      <div class="bot-chat" id="bot-chat">
+        <div class="bot-msg bot"><b>Bot:</b> Hi! Ich helfe dir gerne bei allem rund um Oxidation, Reduktion, Lewisformeln und Oxidationszahlen. Was möchtest du wissen?</div>
+      </div>
+      <div class="bot-input">
+        <textarea id="bot-q" placeholder="Tippe deine Frage ... (z. B. Wie zeichne ich eine Lewisformel?)"></textarea>
+      </div>
+      <div class="btns">
+        <button class="btn" onclick="askBot()">Frage senden</button>
+        <button class="btn btn-sec" onclick="clearBot()">Verlauf löschen</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="ex" data-ex="5">
+  <div class="ex-head" onclick="toggleEx(this)">
+    <div class="ex-num">5</div>
+    <div class="ti"><h3>Übungen: Oxidationszahlen bestimmen</h3>
+      <div class="sub">Lewisformel zeichnen · Oxidationszahlen eintragen · Anzahl prüfen</div></div>
+    <span class="tag lock" id="lock-tag-ox">🔒 Lösungen verschlossen</span>
+    <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 9l7 7 7-7"/></svg>
+  </div>
+  <div class="ex-body">
+    <div class="callout yellow">
+      <div class="ic">🔐</div>
+      <div class="body">
+        <h4>Lösungs-Code eingeben</h4>
+        <p>Du kannst dir die Anzahl deiner richtigen Antworten jederzeit prüfen lassen. <b>Welche</b> Werte falsch sind, verrät dir das Tool aber nicht - sonst wäre Raten zu leicht. Die <b>Musterlösungen mit Erklärung</b> werden erst freigeschaltet, wenn du den Code von deiner Lehrkraft eingibst.</p>
+        <div class="btns" style="margin-top:8px">
+          <input type="password" class="code" id="code-ox" placeholder="Lösungs-Code" maxlength="6" style="width:160px"/>
+          <button class="btn btn-sec" onclick="unlockOx()">Code prüfen</button>
+        </div>
+        <p id="code-ox-msg" style="margin-top:6px;font-size:.85rem"></p>
+      </div>
+    </div>
+    
+<div class="ox-card" data-sub="alf3">
+  <div class="head">
+    <h4>Aluminiumfluorid</h4>
+    <span class="form">AlF3</span>
+  </div>
+  <p style="color:var(--text-dim);font-size:.88rem;margin-top:4px">Zeichne die Lewisformel in dein Heft. Trage dann die Oxidationszahlen jedes Atomtyps ein (römische Zahl mit Vorzeichen) und prüfe.</p>
+  <div class="ox-fields"><div class="pair"><label>Al:</label><select class="pick" data-correct="+III" data-name="Al"><option value="—">—</option><option value="-IV">-IV</option><option value="-III">-III</option><option value="-II">-II</option><option value="-I">-I</option><option value="0">0</option><option value="+I">+I</option><option value="+II">+II</option><option value="+III">+III</option><option value="+IV">+IV</option><option value="+V">+V</option><option value="+VI">+VI</option><option value="+VII">+VII</option></select></div><div class="pair"><label>F:</label><select class="pick" data-correct="-I" data-name="F"><option value="—">—</option><option value="-IV">-IV</option><option value="-III">-III</option><option value="-II">-II</option><option value="-I">-I</option><option value="0">0</option><option value="+I">+I</option><option value="+II">+II</option><option value="+III">+III</option><option value="+IV">+IV</option><option value="+V">+V</option><option value="+VI">+VI</option><option value="+VII">+VII</option></select></div></div>
+  <div class="btns">
+    <button class="btn" onclick="checkOx(this)">Anzahl prüfen</button>
+    <button class="btn btn-purple sol-btn" data-sid="alf3" disabled style="opacity:.5">🔒 Musterlösung</button>
+  </div>
+  <div class="fb"></div>
+  <div class="sol">
+    <h4>Musterlösung – Aluminiumfluorid (AlF3)</h4>
+    <div class="lewis-card" style="max-width:300px;margin:8px auto"><svg viewBox="0 0 180 140" xmlns="http://www.w3.org/2000/svg"><line x1="90" y1="70" x2="90" y2="30" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="90" y1="70" x2="55" y2="92" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="90" y1="70" x2="125" y2="92" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="109.0" y1="35.0" x2="109.0" y2="25.0" stroke="#2e62c4" stroke-width="2.6" stroke-linecap="round"/><line x1="95.0" y1="11.0" x2="85.0" y2="11.0" stroke="#2e62c4" stroke-width="2.6" stroke-linecap="round"/><line x1="71.0" y1="25.0" x2="71.0" y2="35.0" stroke="#2e62c4" stroke-width="2.6" stroke-linecap="round"/><line x1="49.8" y1="73.0" x2="41.2" y2="78.0" stroke="#2e62c4" stroke-width="2.6" stroke-linecap="round"/><line x1="36.0" y1="97.2" x2="41.0" y2="105.8" stroke="#2e62c4" stroke-width="2.6" stroke-linecap="round"/><line x1="60.2" y1="111.0" x2="68.8" y2="106.0" stroke="#2e62c4" stroke-width="2.6" stroke-linecap="round"/><line x1="138.8" y1="78.0" x2="130.2" y2="73.0" stroke="#2e62c4" stroke-width="2.6" stroke-linecap="round"/><line x1="139.0" y1="105.8" x2="144.0" y2="97.2" stroke="#2e62c4" stroke-width="2.6" stroke-linecap="round"/><line x1="111.2" y1="106.0" x2="119.8" y2="111.0" stroke="#2e62c4" stroke-width="2.6" stroke-linecap="round"/><circle cx="90" cy="70" r="14" fill="#b0bec5" stroke="#2a3340" stroke-width="1.2"/><text x="90" y="73.85" text-anchor="middle" font-size="11" font-weight="700" fill="#3a4350">Al</text><circle cx="90" cy="30" r="13" fill="#71ad3f" stroke="#2a3340" stroke-width="1.2"/><text x="90" y="34.2" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">F</text><circle cx="55" cy="92" r="13" fill="#71ad3f" stroke="#2a3340" stroke-width="1.2"/><text x="55" y="96.2" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">F</text><circle cx="125" cy="92" r="13" fill="#71ad3f" stroke="#2a3340" stroke-width="1.2"/><text x="125" y="96.2" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">F</text><text x="90" y="75" text-anchor="middle" font-size="11" font-weight="800" fill="#9b27b0">+III</text><text x="90" y="5" text-anchor="middle" font-size="11" font-weight="800" fill="#9b27b0">−I</text><text x="25" y="100" text-anchor="middle" font-size="11" font-weight="800" fill="#9b27b0">−I</text><text x="155" y="100" text-anchor="middle" font-size="11" font-weight="800" fill="#9b27b0">−I</text></svg></div>
+    <p style="margin-top:8px">Al gehoert zur 3. Hauptgruppe (3 Valenzelektronen), F zur 7. Hauptgruppe (7 Valenzelektronen). F ist viel elektronegativer als Al (EN: F 4,0 vs. Al 1,6), deshalb werden die Bindungselektronen formal vollstaendig dem F-Atom zugeordnet. F hat dann formal 8 Elektronen -> 1 zu viel -> -I. Al verliert formal alle 3 Bindungselektronen -> 3 zu wenig -> +III. Probe: (+III) + 3 * (-I) = 0.</p>
+  </div>
+</div>
+
+<div class="ox-card" data-sub="cah2">
+  <div class="head">
+    <h4>Calciumhydrid</h4>
+    <span class="form">CaH2</span>
+  </div>
+  <p style="color:var(--text-dim);font-size:.88rem;margin-top:4px">Zeichne die Lewisformel in dein Heft. Trage dann die Oxidationszahlen jedes Atomtyps ein (römische Zahl mit Vorzeichen) und prüfe.</p>
+  <div class="ox-fields"><div class="pair"><label>Ca:</label><select class="pick" data-correct="+II" data-name="Ca"><option value="—">—</option><option value="-IV">-IV</option><option value="-III">-III</option><option value="-II">-II</option><option value="-I">-I</option><option value="0">0</option><option value="+I">+I</option><option value="+II">+II</option><option value="+III">+III</option><option value="+IV">+IV</option><option value="+V">+V</option><option value="+VI">+VI</option><option value="+VII">+VII</option></select></div><div class="pair"><label>H:</label><select class="pick" data-correct="-I" data-name="H"><option value="—">—</option><option value="-IV">-IV</option><option value="-III">-III</option><option value="-II">-II</option><option value="-I">-I</option><option value="0">0</option><option value="+I">+I</option><option value="+II">+II</option><option value="+III">+III</option><option value="+IV">+IV</option><option value="+V">+V</option><option value="+VI">+VI</option><option value="+VII">+VII</option></select></div></div>
+  <div class="btns">
+    <button class="btn" onclick="checkOx(this)">Anzahl prüfen</button>
+    <button class="btn btn-purple sol-btn" data-sid="cah2" disabled style="opacity:.5">🔒 Musterlösung</button>
+  </div>
+  <div class="fb"></div>
+  <div class="sol">
+    <h4>Musterlösung – Calciumhydrid (CaH2)</h4>
+    <div class="lewis-card" style="max-width:300px;margin:8px auto"><svg viewBox="0 0 190 130" xmlns="http://www.w3.org/2000/svg"><text x="55" y="78" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">[Ca]</text><text x="85" y="72" font-size="11" font-weight="800" fill="#d8483a">2+</text><text x="130" y="78" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">2 [H]</text><text x="160" y="72" font-size="11" font-weight="800" fill="#2e62c4">−</text><text x="55" y="108" text-anchor="middle" font-size="11" font-weight="800" fill="#9b27b0">+II</text><text x="135" y="108" text-anchor="middle" font-size="11" font-weight="800" fill="#9b27b0">−I</text></svg></div>
+    <p style="margin-top:8px">Ca (2. Hauptgruppe) ist sehr unedel; H ist hier elektronegativer als Ca (EN: H 2,2 vs. Ca 1,0). Die Bindungselektronen werden also dem H zugeordnet -> H bekommt 2 Elektronen -> 1 zu viel -> -I (Hydrid!). Ca gibt seine 2 Aussenelektronen ab -> +II. Probe: (+II) + 2 * (-I) = 0.</p>
+  </div>
+</div>
+
+<div class="ox-card" data-sub="c2h4">
+  <div class="head">
+    <h4>Ethen</h4>
+    <span class="form">C2H4</span>
+  </div>
+  <p style="color:var(--text-dim);font-size:.88rem;margin-top:4px">Zeichne die Lewisformel in dein Heft. Trage dann die Oxidationszahlen jedes Atomtyps ein (römische Zahl mit Vorzeichen) und prüfe.</p>
+  <div class="ox-fields"><div class="pair"><label>C:</label><select class="pick" data-correct="-II" data-name="C"><option value="—">—</option><option value="-IV">-IV</option><option value="-III">-III</option><option value="-II">-II</option><option value="-I">-I</option><option value="0">0</option><option value="+I">+I</option><option value="+II">+II</option><option value="+III">+III</option><option value="+IV">+IV</option><option value="+V">+V</option><option value="+VI">+VI</option><option value="+VII">+VII</option></select></div><div class="pair"><label>H:</label><select class="pick" data-correct="+I" data-name="H"><option value="—">—</option><option value="-IV">-IV</option><option value="-III">-III</option><option value="-II">-II</option><option value="-I">-I</option><option value="0">0</option><option value="+I">+I</option><option value="+II">+II</option><option value="+III">+III</option><option value="+IV">+IV</option><option value="+V">+V</option><option value="+VI">+VI</option><option value="+VII">+VII</option></select></div></div>
+  <div class="btns">
+    <button class="btn" onclick="checkOx(this)">Anzahl prüfen</button>
+    <button class="btn btn-purple sol-btn" data-sid="c2h4" disabled style="opacity:.5">🔒 Musterlösung</button>
+  </div>
+  <div class="fb"></div>
+  <div class="sol">
+    <h4>Musterlösung – Ethen (C2H4)</h4>
+    <div class="lewis-card" style="max-width:300px;margin:8px auto"><svg viewBox="0 0 200 130" xmlns="http://www.w3.org/2000/svg"><line x1="70.0" y1="75.0" x2="130.0" y2="75.0" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="70.0" y1="65.0" x2="130.0" y2="65.0" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="70" y1="70" x2="50" y2="45" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="70" y1="70" x2="50" y2="95" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="130" y1="70" x2="150" y2="45" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="130" y1="70" x2="150" y2="95" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><circle cx="70" cy="70" r="13" fill="#3a4350" stroke="#2a3340" stroke-width="1.2"/><text x="70" y="73.85" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">C</text><circle cx="130" cy="70" r="13" fill="#3a4350" stroke="#2a3340" stroke-width="1.2"/><text x="130" y="73.85" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">C</text><circle cx="50" cy="45" r="10" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="50" y="48.5" text-anchor="middle" font-size="10" font-weight="700" fill="#3a4350">H</text><circle cx="50" cy="95" r="10" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="50" y="98.5" text-anchor="middle" font-size="10" font-weight="700" fill="#3a4350">H</text><circle cx="150" cy="45" r="10" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="150" y="48.5" text-anchor="middle" font-size="10" font-weight="700" fill="#3a4350">H</text><circle cx="150" cy="95" r="10" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="150" y="98.5" text-anchor="middle" font-size="10" font-weight="700" fill="#3a4350">H</text><text x="70" y="110" text-anchor="middle" font-size="11" font-weight="800" fill="#9b27b0">−II</text><text x="130" y="110" text-anchor="middle" font-size="11" font-weight="800" fill="#9b27b0">−II</text><text x="40" y="36" text-anchor="middle" font-size="11" font-weight="800" fill="#9b27b0">+I</text><text x="40" y="110" text-anchor="middle" font-size="11" font-weight="800" fill="#9b27b0">+I</text><text x="160" y="36" text-anchor="middle" font-size="11" font-weight="800" fill="#9b27b0">+I</text><text x="160" y="110" text-anchor="middle" font-size="11" font-weight="800" fill="#9b27b0">+I</text></svg></div>
+    <p style="margin-top:8px">C ist elektronegativer als H (EN: 2,55 vs. 2,2). Jedes C hat 4 Valenzelektronen (4. Hauptgruppe). Die C-H-Bindungselektronen werden dem C zugeordnet, die C=C-Bindungselektronen zwischen den beiden C-Atomen geteilt. Jedes C bekommt 2+2+1+1 = 6 Elektronen -> 2 zu viel -> -II. H hat 0 Elektronen -> 1 zu wenig -> +I. Probe: 2 * (-II) + 4 * (+I) = 0.</p>
+  </div>
+</div>
+
+<div class="ox-card" data-sub="ccl4">
+  <div class="head">
+    <h4>Tetrachlormethan</h4>
+    <span class="form">CCl4</span>
+  </div>
+  <p style="color:var(--text-dim);font-size:.88rem;margin-top:4px">Zeichne die Lewisformel in dein Heft. Trage dann die Oxidationszahlen jedes Atomtyps ein (römische Zahl mit Vorzeichen) und prüfe.</p>
+  <div class="ox-fields"><div class="pair"><label>C:</label><select class="pick" data-correct="+IV" data-name="C"><option value="—">—</option><option value="-IV">-IV</option><option value="-III">-III</option><option value="-II">-II</option><option value="-I">-I</option><option value="0">0</option><option value="+I">+I</option><option value="+II">+II</option><option value="+III">+III</option><option value="+IV">+IV</option><option value="+V">+V</option><option value="+VI">+VI</option><option value="+VII">+VII</option></select></div><div class="pair"><label>Cl:</label><select class="pick" data-correct="-I" data-name="Cl"><option value="—">—</option><option value="-IV">-IV</option><option value="-III">-III</option><option value="-II">-II</option><option value="-I">-I</option><option value="0">0</option><option value="+I">+I</option><option value="+II">+II</option><option value="+III">+III</option><option value="+IV">+IV</option><option value="+V">+V</option><option value="+VI">+VI</option><option value="+VII">+VII</option></select></div></div>
+  <div class="btns">
+    <button class="btn" onclick="checkOx(this)">Anzahl prüfen</button>
+    <button class="btn btn-purple sol-btn" data-sid="ccl4" disabled style="opacity:.5">🔒 Musterlösung</button>
+  </div>
+  <div class="fb"></div>
+  <div class="sol">
+    <h4>Musterlösung – Tetrachlormethan (CCl4)</h4>
+    <div class="lewis-card" style="max-width:300px;margin:8px auto"><svg viewBox="0 0 180 150" xmlns="http://www.w3.org/2000/svg"><line x1="90" y1="70" x2="90" y2="32" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="90" y1="70" x2="90" y2="108" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="90" y1="70" x2="52" y2="70" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="90" y1="70" x2="128" y2="70" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="109.0" y1="37.0" x2="109.0" y2="27.0" stroke="#2e62c4" stroke-width="2.6" stroke-linecap="round"/><line x1="95.0" y1="13.0" x2="85.0" y2="13.0" stroke="#2e62c4" stroke-width="2.6" stroke-linecap="round"/><line x1="71.0" y1="27.0" x2="71.0" y2="37.0" stroke="#2e62c4" stroke-width="2.6" stroke-linecap="round"/><line x1="109.0" y1="113.0" x2="109.0" y2="103.0" stroke="#2e62c4" stroke-width="2.6" stroke-linecap="round"/><line x1="71.0" y1="103.0" x2="71.0" y2="113.0" stroke="#2e62c4" stroke-width="2.6" stroke-linecap="round"/><line x1="85.0" y1="127.0" x2="95.0" y2="127.0" stroke="#2e62c4" stroke-width="2.6" stroke-linecap="round"/><line x1="57.0" y1="51.0" x2="47.0" y2="51.0" stroke="#2e62c4" stroke-width="2.6" stroke-linecap="round"/><line x1="33.0" y1="65.0" x2="33.0" y2="75.0" stroke="#2e62c4" stroke-width="2.6" stroke-linecap="round"/><line x1="47.0" y1="89.0" x2="57.0" y2="89.0" stroke="#2e62c4" stroke-width="2.6" stroke-linecap="round"/><line x1="147.0" y1="75.0" x2="147.0" y2="65.0" stroke="#2e62c4" stroke-width="2.6" stroke-linecap="round"/><line x1="133.0" y1="51.0" x2="123.0" y2="51.0" stroke="#2e62c4" stroke-width="2.6" stroke-linecap="round"/><line x1="123.0" y1="89.0" x2="133.0" y2="89.0" stroke="#2e62c4" stroke-width="2.6" stroke-linecap="round"/><circle cx="90" cy="70" r="13" fill="#3a4350" stroke="#2a3340" stroke-width="1.2"/><text x="90" y="73.85" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">C</text><circle cx="90" cy="32" r="13" fill="#71ad3f" stroke="#2a3340" stroke-width="1.2"/><text x="90" y="35.85" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">Cl</text><circle cx="90" cy="108" r="13" fill="#71ad3f" stroke="#2a3340" stroke-width="1.2"/><text x="90" y="111.85" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">Cl</text><circle cx="52" cy="70" r="13" fill="#71ad3f" stroke="#2a3340" stroke-width="1.2"/><text x="52" y="73.85" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">Cl</text><circle cx="128" cy="70" r="13" fill="#71ad3f" stroke="#2a3340" stroke-width="1.2"/><text x="128" y="73.85" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">Cl</text><text x="90" y="75" text-anchor="middle" font-size="11" font-weight="800" fill="#9b27b0">+IV</text><text x="90" y="-2" text-anchor="middle" font-size="11" font-weight="800" fill="#9b27b0">−I</text><text x="90" y="144" text-anchor="middle" font-size="11" font-weight="800" fill="#9b27b0">−I</text><text x="16" y="75" text-anchor="middle" font-size="11" font-weight="800" fill="#9b27b0">−I</text><text x="164" y="75" text-anchor="middle" font-size="11" font-weight="800" fill="#9b27b0">−I</text></svg></div>
+    <p style="margin-top:8px">Cl ist elektronegativer als C (EN: 3,2 vs. 2,55). Alle 4 C-Cl-Bindungselektronen werden den Cl-Atomen zugeordnet. Cl bekommt 8 Elektronen -> 1 zu viel -> -I. C verliert formal alle 4 Bindungselektronen -> 4 zu wenig -> +IV. Probe: (+IV) + 4 * (-I) = 0.</p>
+  </div>
+</div>
+
+<div class="ox-card" data-sub="hcho">
+  <div class="head">
+    <h4>Methanal</h4>
+    <span class="form">HCHO</span>
+  </div>
+  <p style="color:var(--text-dim);font-size:.88rem;margin-top:4px">Zeichne die Lewisformel in dein Heft. Trage dann die Oxidationszahlen jedes Atomtyps ein (römische Zahl mit Vorzeichen) und prüfe.</p>
+  <div class="ox-fields"><div class="pair"><label>H:</label><select class="pick" data-correct="+I" data-name="H"><option value="—">—</option><option value="-IV">-IV</option><option value="-III">-III</option><option value="-II">-II</option><option value="-I">-I</option><option value="0">0</option><option value="+I">+I</option><option value="+II">+II</option><option value="+III">+III</option><option value="+IV">+IV</option><option value="+V">+V</option><option value="+VI">+VI</option><option value="+VII">+VII</option></select></div><div class="pair"><label>C:</label><select class="pick" data-correct="0" data-name="C"><option value="—">—</option><option value="-IV">-IV</option><option value="-III">-III</option><option value="-II">-II</option><option value="-I">-I</option><option value="0">0</option><option value="+I">+I</option><option value="+II">+II</option><option value="+III">+III</option><option value="+IV">+IV</option><option value="+V">+V</option><option value="+VI">+VI</option><option value="+VII">+VII</option></select></div><div class="pair"><label>O:</label><select class="pick" data-correct="-II" data-name="O"><option value="—">—</option><option value="-IV">-IV</option><option value="-III">-III</option><option value="-II">-II</option><option value="-I">-I</option><option value="0">0</option><option value="+I">+I</option><option value="+II">+II</option><option value="+III">+III</option><option value="+IV">+IV</option><option value="+V">+V</option><option value="+VI">+VI</option><option value="+VII">+VII</option></select></div></div>
+  <div class="btns">
+    <button class="btn" onclick="checkOx(this)">Anzahl prüfen</button>
+    <button class="btn btn-purple sol-btn" data-sid="hcho" disabled style="opacity:.5">🔒 Musterlösung</button>
+  </div>
+  <div class="fb"></div>
+  <div class="sol">
+    <h4>Musterlösung – Methanal (HCHO)</h4>
+    <div class="lewis-card" style="max-width:300px;margin:8px auto"><svg viewBox="0 0 170 130" xmlns="http://www.w3.org/2000/svg"><line x1="40" y1="75" x2="80" y2="75" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="80" y1="75" x2="120" y2="75" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="85.0" y1="75.0" x2="85.0" y2="35.0" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="75.0" y1="75.0" x2="75.0" y2="35.0" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="99.0" y1="29.8" x2="94.0" y2="21.2" stroke="#2e62c4" stroke-width="2.6" stroke-linecap="round"/><line x1="66.0" y1="21.2" x2="61.0" y2="29.8" stroke="#2e62c4" stroke-width="2.6" stroke-linecap="round"/><circle cx="40" cy="75" r="11" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="40" y="78.5" text-anchor="middle" font-size="10" font-weight="700" fill="#3a4350">H</text><circle cx="120" cy="75" r="11" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="120" y="78.5" text-anchor="middle" font-size="10" font-weight="700" fill="#3a4350">H</text><circle cx="80" cy="75" r="13" fill="#3a4350" stroke="#2a3340" stroke-width="1.2"/><text x="80" y="78.85" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">C</text><circle cx="80" cy="35" r="13" fill="#e0533d" stroke="#2a3340" stroke-width="1.2"/><text x="80" y="38.85" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">O</text><text x="40" y="100" text-anchor="middle" font-size="11" font-weight="800" fill="#9b27b0">+I</text><text x="120" y="100" text-anchor="middle" font-size="11" font-weight="800" fill="#9b27b0">+I</text><text x="80" y="105" text-anchor="middle" font-size="11" font-weight="800" fill="#9b27b0">0</text><text x="80" y="15" text-anchor="middle" font-size="11" font-weight="800" fill="#9b27b0">−II</text></svg></div>
+    <p style="margin-top:8px">EN: O (3,4) > C (2,55) > H (2,2). C-H-Bindungen: Elektronen werden dem C zugeordnet (2 Elektronen Gewinn pro Bindung, 2 Bindungen -> +2). C=O-Doppelbindung: 4 Elektronen werden dem O zugeordnet (-4 fuer C). Bilanz fuer C: 4 (normal) + 2 - 4 = 4 -> 0. H: 0 Elektronen -> +I. O: 6 + 2 = 8 -> 2 zu viel -> -II. Probe: 2 * (+I) + 0 + (-II) = 0.</p>
+  </div>
+</div>
+
+<div class="ox-card" data-sub="c2h6">
+  <div class="head">
+    <h4>Ethan</h4>
+    <span class="form">CH3CH3</span>
+  </div>
+  <p style="color:var(--text-dim);font-size:.88rem;margin-top:4px">Zeichne die Lewisformel in dein Heft. Trage dann die Oxidationszahlen jedes Atomtyps ein (römische Zahl mit Vorzeichen) und prüfe.</p>
+  <div class="ox-fields"><div class="pair"><label>C:</label><select class="pick" data-correct="-III" data-name="C"><option value="—">—</option><option value="-IV">-IV</option><option value="-III">-III</option><option value="-II">-II</option><option value="-I">-I</option><option value="0">0</option><option value="+I">+I</option><option value="+II">+II</option><option value="+III">+III</option><option value="+IV">+IV</option><option value="+V">+V</option><option value="+VI">+VI</option><option value="+VII">+VII</option></select></div><div class="pair"><label>H:</label><select class="pick" data-correct="+I" data-name="H"><option value="—">—</option><option value="-IV">-IV</option><option value="-III">-III</option><option value="-II">-II</option><option value="-I">-I</option><option value="0">0</option><option value="+I">+I</option><option value="+II">+II</option><option value="+III">+III</option><option value="+IV">+IV</option><option value="+V">+V</option><option value="+VI">+VI</option><option value="+VII">+VII</option></select></div></div>
+  <div class="btns">
+    <button class="btn" onclick="checkOx(this)">Anzahl prüfen</button>
+    <button class="btn btn-purple sol-btn" data-sid="c2h6" disabled style="opacity:.5">🔒 Musterlösung</button>
+  </div>
+  <div class="fb"></div>
+  <div class="sol">
+    <h4>Musterlösung – Ethan (CH3CH3)</h4>
+    <div class="lewis-card" style="max-width:300px;margin:8px auto"><svg viewBox="0 0 190 130" xmlns="http://www.w3.org/2000/svg"><line x1="70" y1="75" x2="110" y2="75" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="70" y1="75" x2="50" y2="50" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="70" y1="75" x2="50" y2="100" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="70" y1="75" x2="38" y2="75" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="110" y1="75" x2="130" y2="50" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="110" y1="75" x2="130" y2="100" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="110" y1="75" x2="142" y2="75" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><circle cx="70" cy="75" r="13" fill="#3a4350" stroke="#2a3340" stroke-width="1.2"/><text x="70" y="78.85" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">C</text><circle cx="110" cy="75" r="13" fill="#3a4350" stroke="#2a3340" stroke-width="1.2"/><text x="110" y="78.85" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">C</text><circle cx="50" cy="50" r="10" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="50" y="53.5" text-anchor="middle" font-size="10" font-weight="700" fill="#3a4350">H</text><circle cx="50" cy="100" r="10" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="50" y="103.5" text-anchor="middle" font-size="10" font-weight="700" fill="#3a4350">H</text><circle cx="38" cy="75" r="10" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="38" y="78.5" text-anchor="middle" font-size="10" font-weight="700" fill="#3a4350">H</text><circle cx="130" cy="50" r="10" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="130" y="53.5" text-anchor="middle" font-size="10" font-weight="700" fill="#3a4350">H</text><circle cx="130" cy="100" r="10" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="130" y="103.5" text-anchor="middle" font-size="10" font-weight="700" fill="#3a4350">H</text><circle cx="142" cy="75" r="10" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="142" y="78.5" text-anchor="middle" font-size="10" font-weight="700" fill="#3a4350">H</text><text x="70" y="115" text-anchor="middle" font-size="11" font-weight="800" fill="#9b27b0">−III</text><text x="110" y="115" text-anchor="middle" font-size="11" font-weight="800" fill="#9b27b0">−III</text></svg></div>
+    <p style="margin-top:8px">Jedes C hat drei C-H-Bindungen (Elektronen kommen zum C) und eine C-C-Bindung (Elektronen werden geteilt, je 1 fuer jedes C). C bekommt 3*2 + 1 = 7 Elektronen -> 3 zu viel -> -III. H: 0 Elektronen -> +I. Probe: 2 * (-III) + 6 * (+I) = 0.</p>
+  </div>
+</div>
+
+<div class="ox-card" data-sub="hcooh">
+  <div class="head">
+    <h4>Methansaeure</h4>
+    <span class="form">HCOOH</span>
+  </div>
+  <p style="color:var(--text-dim);font-size:.88rem;margin-top:4px">Zeichne die Lewisformel in dein Heft. Trage dann die Oxidationszahlen jedes Atomtyps ein (römische Zahl mit Vorzeichen) und prüfe.</p>
+  <div class="ox-fields"><div class="pair"><label>H (an C):</label><select class="pick" data-correct="+I" data-name="H (an C)"><option value="—">—</option><option value="-IV">-IV</option><option value="-III">-III</option><option value="-II">-II</option><option value="-I">-I</option><option value="0">0</option><option value="+I">+I</option><option value="+II">+II</option><option value="+III">+III</option><option value="+IV">+IV</option><option value="+V">+V</option><option value="+VI">+VI</option><option value="+VII">+VII</option></select></div><div class="pair"><label>C:</label><select class="pick" data-correct="+II" data-name="C"><option value="—">—</option><option value="-IV">-IV</option><option value="-III">-III</option><option value="-II">-II</option><option value="-I">-I</option><option value="0">0</option><option value="+I">+I</option><option value="+II">+II</option><option value="+III">+III</option><option value="+IV">+IV</option><option value="+V">+V</option><option value="+VI">+VI</option><option value="+VII">+VII</option></select></div><div class="pair"><label>O (=O):</label><select class="pick" data-correct="-II" data-name="O (=O)"><option value="—">—</option><option value="-IV">-IV</option><option value="-III">-III</option><option value="-II">-II</option><option value="-I">-I</option><option value="0">0</option><option value="+I">+I</option><option value="+II">+II</option><option value="+III">+III</option><option value="+IV">+IV</option><option value="+V">+V</option><option value="+VI">+VI</option><option value="+VII">+VII</option></select></div><div class="pair"><label>O (-O-H):</label><select class="pick" data-correct="-II" data-name="O (-O-H)"><option value="—">—</option><option value="-IV">-IV</option><option value="-III">-III</option><option value="-II">-II</option><option value="-I">-I</option><option value="0">0</option><option value="+I">+I</option><option value="+II">+II</option><option value="+III">+III</option><option value="+IV">+IV</option><option value="+V">+V</option><option value="+VI">+VI</option><option value="+VII">+VII</option></select></div><div class="pair"><label>H (an O):</label><select class="pick" data-correct="+I" data-name="H (an O)"><option value="—">—</option><option value="-IV">-IV</option><option value="-III">-III</option><option value="-II">-II</option><option value="-I">-I</option><option value="0">0</option><option value="+I">+I</option><option value="+II">+II</option><option value="+III">+III</option><option value="+IV">+IV</option><option value="+V">+V</option><option value="+VI">+VI</option><option value="+VII">+VII</option></select></div></div>
+  <div class="btns">
+    <button class="btn" onclick="checkOx(this)">Anzahl prüfen</button>
+    <button class="btn btn-purple sol-btn" data-sid="hcooh" disabled style="opacity:.5">🔒 Musterlösung</button>
+  </div>
+  <div class="fb"></div>
+  <div class="sol">
+    <h4>Musterlösung – Methansaeure (HCOOH)</h4>
+    <div class="lewis-card" style="max-width:300px;margin:8px auto"><svg viewBox="0 0 170 130" xmlns="http://www.w3.org/2000/svg"><line x1="20" y1="80" x2="55" y2="80" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="60.0" y1="80.0" x2="60.0" y2="40.0" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="50.0" y1="80.0" x2="50.0" y2="40.0" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="55" y1="80" x2="95" y2="80" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="95" y1="80" x2="130" y2="50" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="74.0" y1="34.8" x2="69.0" y2="26.2" stroke="#2e62c4" stroke-width="2.6" stroke-linecap="round"/><line x1="41.0" y1="26.2" x2="36.0" y2="34.8" stroke="#2e62c4" stroke-width="2.6" stroke-linecap="round"/><line x1="93.2" y1="60.4" x2="83.8" y2="63.9" stroke="#2e62c4" stroke-width="2.6" stroke-linecap="round"/><line x1="96.8" y1="99.6" x2="106.2" y2="96.1" stroke="#2e62c4" stroke-width="2.6" stroke-linecap="round"/><circle cx="20" cy="80" r="11" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="20" y="83.5" text-anchor="middle" font-size="10" font-weight="700" fill="#3a4350">H</text><circle cx="55" cy="80" r="13" fill="#3a4350" stroke="#2a3340" stroke-width="1.2"/><text x="55" y="83.85" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">C</text><circle cx="55" cy="40" r="13" fill="#e0533d" stroke="#2a3340" stroke-width="1.2"/><text x="55" y="43.85" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">O</text><circle cx="95" cy="80" r="13" fill="#e0533d" stroke="#2a3340" stroke-width="1.2"/><text x="95" y="83.85" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">O</text><circle cx="130" cy="50" r="11" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="130" y="53.5" text-anchor="middle" font-size="10" font-weight="700" fill="#3a4350">H</text><text x="20" y="105" text-anchor="middle" font-size="11" font-weight="800" fill="#9b27b0">+I</text><text x="55" y="110" text-anchor="middle" font-size="11" font-weight="800" fill="#9b27b0">+II</text><text x="55" y="20" text-anchor="middle" font-size="11" font-weight="800" fill="#9b27b0">−II</text><text x="110" y="110" text-anchor="middle" font-size="11" font-weight="800" fill="#9b27b0">−II</text><text x="145" y="40" text-anchor="middle" font-size="11" font-weight="800" fill="#9b27b0">+I</text></svg></div>
+    <p style="margin-top:8px">C ist mit 1 H und 2 O verbunden. C-H: 2 Elektronen zum C. C=O: 4 Elektronen zum O. C-O: 2 Elektronen zum O. C-Bilanz: 4 + 2 - 4 - 2 = 0? Korrekt rueckwaerts: Es bleiben 4 - 2 = 2 -> 2 zu wenig -> +II. O an Doppelbindung: 4 + 2 LE = 8 -> -II. O an Einfachbindung (mit H): 2 (von C) + 0 (von H, denn O ist elektronegativer) + 4 LE = 8 -> -II. H an C: 0 e- -> +I. H an O: 0 e- -> +I.</p>
+  </div>
+</div>
+
+<div class="ox-card" data-sub="co3">
+  <div class="head">
+    <h4>Carbonat-Ion</h4>
+    <span class="form">CO3^2-</span>
+  </div>
+  <p style="color:var(--text-dim);font-size:.88rem;margin-top:4px">Zeichne die Lewisformel in dein Heft. Trage dann die Oxidationszahlen jedes Atomtyps ein (römische Zahl mit Vorzeichen) und prüfe.</p>
+  <div class="ox-fields"><div class="pair"><label>C:</label><select class="pick" data-correct="+IV" data-name="C"><option value="—">—</option><option value="-IV">-IV</option><option value="-III">-III</option><option value="-II">-II</option><option value="-I">-I</option><option value="0">0</option><option value="+I">+I</option><option value="+II">+II</option><option value="+III">+III</option><option value="+IV">+IV</option><option value="+V">+V</option><option value="+VI">+VI</option><option value="+VII">+VII</option></select></div><div class="pair"><label>O:</label><select class="pick" data-correct="-II" data-name="O"><option value="—">—</option><option value="-IV">-IV</option><option value="-III">-III</option><option value="-II">-II</option><option value="-I">-I</option><option value="0">0</option><option value="+I">+I</option><option value="+II">+II</option><option value="+III">+III</option><option value="+IV">+IV</option><option value="+V">+V</option><option value="+VI">+VI</option><option value="+VII">+VII</option></select></div></div>
+  <div class="btns">
+    <button class="btn" onclick="checkOx(this)">Anzahl prüfen</button>
+    <button class="btn btn-purple sol-btn" data-sid="co3" disabled style="opacity:.5">🔒 Musterlösung</button>
+  </div>
+  <div class="fb"></div>
+  <div class="sol">
+    <h4>Musterlösung – Carbonat-Ion (CO3^2-)</h4>
+    <div class="lewis-card" style="max-width:300px;margin:8px auto"><svg viewBox="0 0 195 140" xmlns="http://www.w3.org/2000/svg"><line x1="95.0" y1="70.0" x2="95.0" y2="35.0" stroke="#7b8794" stroke-width="3" stroke-linecap="round"/><line x1="85.0" y1="70.0" x2="85.0" y2="35.0" stroke="#7b8794" stroke-width="3" stroke-linecap="round"/><line x1="90" y1="70" x2="58" y2="92" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="90" y1="70" x2="122" y2="92" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="109.0" y1="29.8" x2="104.0" y2="21.2" stroke="#2e62c4" stroke-width="2.6" stroke-linecap="round"/><line x1="76.0" y1="21.2" x2="71.0" y2="29.8" stroke="#2e62c4" stroke-width="2.6" stroke-linecap="round"/><line x1="49.6" y1="74.2" x2="42.0" y2="80.7" stroke="#2e62c4" stroke-width="2.6" stroke-linecap="round"/><line x1="40.2" y1="100.4" x2="46.7" y2="108.0" stroke="#2e62c4" stroke-width="2.6" stroke-linecap="round"/><line x1="66.4" y1="109.8" x2="74.0" y2="103.3" stroke="#2e62c4" stroke-width="2.6" stroke-linecap="round"/><line x1="138.0" y1="80.7" x2="130.4" y2="74.2" stroke="#2e62c4" stroke-width="2.6" stroke-linecap="round"/><line x1="106.0" y1="103.3" x2="113.6" y2="109.8" stroke="#2e62c4" stroke-width="2.6" stroke-linecap="round"/><line x1="133.3" y1="108.0" x2="139.8" y2="100.4" stroke="#2e62c4" stroke-width="2.6" stroke-linecap="round"/><circle cx="90" cy="70" r="13" fill="#3a4350" stroke="#2a3340" stroke-width="1.2"/><text x="90" y="73.85" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">C</text><circle cx="90" cy="35" r="13" fill="#e0533d" stroke="#2a3340" stroke-width="1.2"/><text x="90" y="38.85" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">O</text><circle cx="58" cy="92" r="13" fill="#e0533d" stroke="#2a3340" stroke-width="1.2"/><text x="58" y="95.85" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">O</text><circle cx="122" cy="92" r="13" fill="#e0533d" stroke="#2a3340" stroke-width="1.2"/><text x="122" y="95.85" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">O</text><text x="172" y="40" font-size="14" font-weight="800" fill="#2e62c4">2−</text><text x="90" y="75" text-anchor="middle" font-size="11" font-weight="800" fill="#9b27b0">+IV</text><text x="90" y="10" text-anchor="middle" font-size="11" font-weight="800" fill="#9b27b0">−II</text><text x="35" y="115" text-anchor="middle" font-size="11" font-weight="800" fill="#9b27b0">−II</text><text x="145" y="115" text-anchor="middle" font-size="11" font-weight="800" fill="#9b27b0">−II</text></svg></div>
+    <p style="margin-top:8px">C ist von 3 O umgeben. Alle Bindungselektronen werden dem O zugeordnet (O elektronegativer). C verliert formal alle 4 Bindungselektronen -> +IV. Jedes O hat formal 8 Elektronen -> -II. Probe: (+IV) + 3 * (-II) = -2 = Ladung des Ions.</p>
+  </div>
+</div>
+
+<div class="ox-card" data-sub="hclo">
+  <div class="head">
+    <h4>Hypochlorige Saeure</h4>
+    <span class="form">HClO</span>
+  </div>
+  <p style="color:var(--text-dim);font-size:.88rem;margin-top:4px">Zeichne die Lewisformel in dein Heft. Trage dann die Oxidationszahlen jedes Atomtyps ein (römische Zahl mit Vorzeichen) und prüfe.</p>
+  <div class="ox-fields"><div class="pair"><label>H:</label><select class="pick" data-correct="+I" data-name="H"><option value="—">—</option><option value="-IV">-IV</option><option value="-III">-III</option><option value="-II">-II</option><option value="-I">-I</option><option value="0">0</option><option value="+I">+I</option><option value="+II">+II</option><option value="+III">+III</option><option value="+IV">+IV</option><option value="+V">+V</option><option value="+VI">+VI</option><option value="+VII">+VII</option></select></div><div class="pair"><label>Cl:</label><select class="pick" data-correct="+I" data-name="Cl"><option value="—">—</option><option value="-IV">-IV</option><option value="-III">-III</option><option value="-II">-II</option><option value="-I">-I</option><option value="0">0</option><option value="+I">+I</option><option value="+II">+II</option><option value="+III">+III</option><option value="+IV">+IV</option><option value="+V">+V</option><option value="+VI">+VI</option><option value="+VII">+VII</option></select></div><div class="pair"><label>O:</label><select class="pick" data-correct="-II" data-name="O"><option value="—">—</option><option value="-IV">-IV</option><option value="-III">-III</option><option value="-II">-II</option><option value="-I">-I</option><option value="0">0</option><option value="+I">+I</option><option value="+II">+II</option><option value="+III">+III</option><option value="+IV">+IV</option><option value="+V">+V</option><option value="+VI">+VI</option><option value="+VII">+VII</option></select></div></div>
+  <div class="btns">
+    <button class="btn" onclick="checkOx(this)">Anzahl prüfen</button>
+    <button class="btn btn-purple sol-btn" data-sid="hclo" disabled style="opacity:.5">🔒 Musterlösung</button>
+  </div>
+  <div class="fb"></div>
+  <div class="sol">
+    <h4>Musterlösung – Hypochlorige Saeure (HClO)</h4>
+    <div class="lewis-card" style="max-width:300px;margin:8px auto"><svg viewBox="0 0 180 130" xmlns="http://www.w3.org/2000/svg"><line x1="30" y1="75" x2="75" y2="75" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="75" y1="75" x2="130" y2="50" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="75.9" y1="55.4" x2="66.2" y2="57.5" stroke="#2e62c4" stroke-width="2.6" stroke-linecap="round"/><line x1="74.1" y1="94.6" x2="83.8" y2="92.5" stroke="#2e62c4" stroke-width="2.6" stroke-linecap="round"/><line x1="150.2" y1="46.1" x2="146.0" y2="37.0" stroke="#2e62c4" stroke-width="2.6" stroke-linecap="round"/><line x1="126.1" y1="29.8" x2="117.0" y2="34.0" stroke="#2e62c4" stroke-width="2.6" stroke-linecap="round"/><line x1="133.9" y1="70.2" x2="143.0" y2="66.0" stroke="#2e62c4" stroke-width="2.6" stroke-linecap="round"/><circle cx="30" cy="75" r="11" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="30" y="78.5" text-anchor="middle" font-size="10" font-weight="700" fill="#3a4350">H</text><circle cx="75" cy="75" r="13" fill="#e0533d" stroke="#2a3340" stroke-width="1.2"/><text x="75" y="78.85" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">O</text><circle cx="130" cy="50" r="14" fill="#71ad3f" stroke="#2a3340" stroke-width="1.2"/><text x="130" y="54.2" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">Cl</text><text x="30" y="100" text-anchor="middle" font-size="11" font-weight="800" fill="#9b27b0">+I</text><text x="75" y="105" text-anchor="middle" font-size="11" font-weight="800" fill="#9b27b0">−II</text><text x="150" y="78" text-anchor="middle" font-size="11" font-weight="800" fill="#9b27b0">+I</text></svg></div>
+    <p style="margin-top:8px">EN: O (3,4) > Cl (3,2) > H (2,2). H-O: Elektronen zum O. O-Cl: Elektronen zum O (O ist auch hier elektronegativer!). H verliert sein Elektron -> +I. O bekommt insgesamt 8 e- -> -II. Cl verliert das Bindungselektron, behaelt aber 3 freie Elektronenpaare (6 e-) -> 1 zu wenig -> +I. Probe: (+I) + (+I) + (-II) = 0.</p>
+  </div>
+</div>
+
+<div class="ox-card" data-sub="h2s">
+  <div class="head">
+    <h4>Schwefelwasserstoff</h4>
+    <span class="form">H2S</span>
+  </div>
+  <p style="color:var(--text-dim);font-size:.88rem;margin-top:4px">Zeichne die Lewisformel in dein Heft. Trage dann die Oxidationszahlen jedes Atomtyps ein (römische Zahl mit Vorzeichen) und prüfe.</p>
+  <div class="ox-fields"><div class="pair"><label>H:</label><select class="pick" data-correct="+I" data-name="H"><option value="—">—</option><option value="-IV">-IV</option><option value="-III">-III</option><option value="-II">-II</option><option value="-I">-I</option><option value="0">0</option><option value="+I">+I</option><option value="+II">+II</option><option value="+III">+III</option><option value="+IV">+IV</option><option value="+V">+V</option><option value="+VI">+VI</option><option value="+VII">+VII</option></select></div><div class="pair"><label>S:</label><select class="pick" data-correct="-II" data-name="S"><option value="—">—</option><option value="-IV">-IV</option><option value="-III">-III</option><option value="-II">-II</option><option value="-I">-I</option><option value="0">0</option><option value="+I">+I</option><option value="+II">+II</option><option value="+III">+III</option><option value="+IV">+IV</option><option value="+V">+V</option><option value="+VI">+VI</option><option value="+VII">+VII</option></select></div></div>
+  <div class="btns">
+    <button class="btn" onclick="checkOx(this)">Anzahl prüfen</button>
+    <button class="btn btn-purple sol-btn" data-sid="h2s" disabled style="opacity:.5">🔒 Musterlösung</button>
+  </div>
+  <div class="fb"></div>
+  <div class="sol">
+    <h4>Musterlösung – Schwefelwasserstoff (H2S)</h4>
+    <div class="lewis-card" style="max-width:300px;margin:8px auto"><svg viewBox="0 0 140 140" xmlns="http://www.w3.org/2000/svg"><line x1="60" y1="90" x2="35" y2="60" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="60" y1="90" x2="85" y2="60" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="43.3" y1="102.1" x2="51.0" y2="108.5" stroke="#2e62c4" stroke-width="2.6" stroke-linecap="round"/><line x1="69.0" y1="108.5" x2="76.7" y2="102.1" stroke="#2e62c4" stroke-width="2.6" stroke-linecap="round"/><circle cx="60" cy="90" r="14" fill="#e6c93d" stroke="#2a3340" stroke-width="1.2"/><text x="60" y="94.2" text-anchor="middle" font-size="12" font-weight="700" fill="#3a4350">S</text><circle cx="35" cy="60" r="10" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="35" y="63.5" text-anchor="middle" font-size="10" font-weight="700" fill="#3a4350">H</text><circle cx="85" cy="60" r="10" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="85" y="63.5" text-anchor="middle" font-size="10" font-weight="700" fill="#3a4350">H</text><text x="60" y="122" text-anchor="middle" font-size="11" font-weight="800" fill="#9b27b0">−II</text><text x="25" y="50" text-anchor="middle" font-size="11" font-weight="800" fill="#9b27b0">+I</text><text x="95" y="50" text-anchor="middle" font-size="11" font-weight="800" fill="#9b27b0">+I</text></svg></div>
+    <p style="margin-top:8px">S (6. HG) ist elektronegativer als H. Beide H-S-Bindungselektronen werden dem S zugeordnet. S hat 6 + 2 = 8 e- -> -II. H: 0 e- -> +I. Probe: 2 * (+I) + (-II) = 0.</p>
+  </div>
+</div>
+
+<div class="ox-card" data-sub="hso3">
+  <div class="head">
+    <h4>Hydrogensulfit-Ion</h4>
+    <span class="form">HSO3^-</span>
+  </div>
+  <p style="color:var(--text-dim);font-size:.88rem;margin-top:4px">Zeichne die Lewisformel in dein Heft. Trage dann die Oxidationszahlen jedes Atomtyps ein (römische Zahl mit Vorzeichen) und prüfe.</p>
+  <div class="ox-fields"><div class="pair"><label>H:</label><select class="pick" data-correct="+I" data-name="H"><option value="—">—</option><option value="-IV">-IV</option><option value="-III">-III</option><option value="-II">-II</option><option value="-I">-I</option><option value="0">0</option><option value="+I">+I</option><option value="+II">+II</option><option value="+III">+III</option><option value="+IV">+IV</option><option value="+V">+V</option><option value="+VI">+VI</option><option value="+VII">+VII</option></select></div><div class="pair"><label>S:</label><select class="pick" data-correct="+IV" data-name="S"><option value="—">—</option><option value="-IV">-IV</option><option value="-III">-III</option><option value="-II">-II</option><option value="-I">-I</option><option value="0">0</option><option value="+I">+I</option><option value="+II">+II</option><option value="+III">+III</option><option value="+IV">+IV</option><option value="+V">+V</option><option value="+VI">+VI</option><option value="+VII">+VII</option></select></div><div class="pair"><label>O:</label><select class="pick" data-correct="-II" data-name="O"><option value="—">—</option><option value="-IV">-IV</option><option value="-III">-III</option><option value="-II">-II</option><option value="-I">-I</option><option value="0">0</option><option value="+I">+I</option><option value="+II">+II</option><option value="+III">+III</option><option value="+IV">+IV</option><option value="+V">+V</option><option value="+VI">+VI</option><option value="+VII">+VII</option></select></div></div>
+  <div class="btns">
+    <button class="btn" onclick="checkOx(this)">Anzahl prüfen</button>
+    <button class="btn btn-purple sol-btn" data-sid="hso3" disabled style="opacity:.5">🔒 Musterlösung</button>
+  </div>
+  <div class="fb"></div>
+  <div class="sol">
+    <h4>Musterlösung – Hydrogensulfit-Ion (HSO3^-)</h4>
+    <div class="lewis-card" style="max-width:300px;margin:8px auto"><svg viewBox="0 0 195 140" xmlns="http://www.w3.org/2000/svg"><line x1="90" y1="70" x2="90" y2="35" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="86.92177979013843" y1="66.05987813137719" x2="54.92177979013842" y2="91.05987813137719" stroke="#7b8794" stroke-width="3" stroke-linecap="round"/><line x1="93.07822020986157" y1="73.94012186862281" x2="61.07822020986158" y2="98.94012186862281" stroke="#7b8794" stroke-width="3" stroke-linecap="round"/><line x1="90" y1="70" x2="122" y2="95" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="90" y1="35" x2="118" y2="15" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="110.2" y1="66.1" x2="106.0" y2="57.0" stroke="#2e62c4" stroke-width="2.6" stroke-linecap="round"/><line x1="88.2" y1="15.4" x2="78.8" y2="18.9" stroke="#2e62c4" stroke-width="2.6" stroke-linecap="round"/><line x1="91.8" y1="54.6" x2="101.2" y2="51.1" stroke="#2e62c4" stroke-width="2.6" stroke-linecap="round"/><line x1="49.6" y1="77.2" x2="42.0" y2="83.7" stroke="#2e62c4" stroke-width="2.6" stroke-linecap="round"/><line x1="66.4" y1="112.8" x2="74.0" y2="106.3" stroke="#2e62c4" stroke-width="2.6" stroke-linecap="round"/><line x1="138.0" y1="83.7" x2="130.4" y2="77.2" stroke="#2e62c4" stroke-width="2.6" stroke-linecap="round"/><line x1="106.0" y1="106.3" x2="113.6" y2="112.8" stroke="#2e62c4" stroke-width="2.6" stroke-linecap="round"/><line x1="133.3" y1="111.0" x2="139.8" y2="103.4" stroke="#2e62c4" stroke-width="2.6" stroke-linecap="round"/><circle cx="90" cy="70" r="14" fill="#e6c93d" stroke="#2a3340" stroke-width="1.2"/><text x="90" y="74.2" text-anchor="middle" font-size="12" font-weight="700" fill="#3a4350">S</text><circle cx="90" cy="35" r="13" fill="#e0533d" stroke="#2a3340" stroke-width="1.2"/><text x="90" y="38.85" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">O</text><circle cx="58" cy="95" r="13" fill="#e0533d" stroke="#2a3340" stroke-width="1.2"/><text x="58" y="98.85" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">O</text><circle cx="122" cy="95" r="13" fill="#e0533d" stroke="#2a3340" stroke-width="1.2"/><text x="122" y="98.85" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">O</text><circle cx="118" cy="15" r="10" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="118" y="18.5" text-anchor="middle" font-size="10" font-weight="700" fill="#3a4350">H</text><text x="172" y="40" font-size="14" font-weight="800" fill="#2e62c4">−</text><text x="90" y="75" text-anchor="middle" font-size="11" font-weight="800" fill="#9b27b0">+IV</text><text x="75" y="35" text-anchor="middle" font-size="11" font-weight="800" fill="#9b27b0">−II</text><text x="35" y="115" text-anchor="middle" font-size="11" font-weight="800" fill="#9b27b0">−II</text><text x="145" y="115" text-anchor="middle" font-size="11" font-weight="800" fill="#9b27b0">−II</text><text x="135" y="5" text-anchor="middle" font-size="11" font-weight="800" fill="#9b27b0">+I</text></svg></div>
+    <p style="margin-top:8px">S ist von 3 O umgeben (eine Doppelbindung) und gibt formal 4 Elektronen ab -> +IV. O bekommt seine Bindungselektronen -> -II. H an O -> +I. Probe: (+I) + (+IV) + 3 * (-II) = -1 = Ladung.</p>
+  </div>
+</div>
+
+<div class="ox-card" data-sub="nh3">
+  <div class="head">
+    <h4>Ammoniak</h4>
+    <span class="form">NH3</span>
+  </div>
+  <p style="color:var(--text-dim);font-size:.88rem;margin-top:4px">Zeichne die Lewisformel in dein Heft. Trage dann die Oxidationszahlen jedes Atomtyps ein (römische Zahl mit Vorzeichen) und prüfe.</p>
+  <div class="ox-fields"><div class="pair"><label>N:</label><select class="pick" data-correct="-III" data-name="N"><option value="—">—</option><option value="-IV">-IV</option><option value="-III">-III</option><option value="-II">-II</option><option value="-I">-I</option><option value="0">0</option><option value="+I">+I</option><option value="+II">+II</option><option value="+III">+III</option><option value="+IV">+IV</option><option value="+V">+V</option><option value="+VI">+VI</option><option value="+VII">+VII</option></select></div><div class="pair"><label>H:</label><select class="pick" data-correct="+I" data-name="H"><option value="—">—</option><option value="-IV">-IV</option><option value="-III">-III</option><option value="-II">-II</option><option value="-I">-I</option><option value="0">0</option><option value="+I">+I</option><option value="+II">+II</option><option value="+III">+III</option><option value="+IV">+IV</option><option value="+V">+V</option><option value="+VI">+VI</option><option value="+VII">+VII</option></select></div></div>
+  <div class="btns">
+    <button class="btn" onclick="checkOx(this)">Anzahl prüfen</button>
+    <button class="btn btn-purple sol-btn" data-sid="nh3" disabled style="opacity:.5">🔒 Musterlösung</button>
+  </div>
+  <div class="fb"></div>
+  <div class="sol">
+    <h4>Musterlösung – Ammoniak (NH3)</h4>
+    <div class="lewis-card" style="max-width:300px;margin:8px auto"><svg viewBox="0 0 160 140" xmlns="http://www.w3.org/2000/svg"><line x1="80" y1="80" x2="54" y2="95" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="80" y1="80" x2="80" y2="110" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="80" y1="80" x2="106" y2="95" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="85.0" y1="60.0" x2="75.0" y2="60.0" stroke="#2e62c4" stroke-width="2.6" stroke-linecap="round"/><circle cx="80" cy="80" r="14" fill="#3b6fb5" stroke="#2a3340" stroke-width="1.2"/><text x="80" y="84.2" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">N</text><circle cx="54" cy="95" r="10" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="54" y="98.5" text-anchor="middle" font-size="10" font-weight="700" fill="#3a4350">H</text><circle cx="80" cy="110" r="10" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="80" y="113.5" text-anchor="middle" font-size="10" font-weight="700" fill="#3a4350">H</text><circle cx="106" cy="95" r="10" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="106" y="98.5" text-anchor="middle" font-size="10" font-weight="700" fill="#3a4350">H</text><text x="110" y="80" text-anchor="middle" font-size="11" font-weight="800" fill="#9b27b0">−III</text><text x="35" y="105" text-anchor="middle" font-size="11" font-weight="800" fill="#9b27b0">+I</text><text x="125" y="105" text-anchor="middle" font-size="11" font-weight="800" fill="#9b27b0">+I</text><text x="100" y="118" text-anchor="middle" font-size="11" font-weight="800" fill="#9b27b0">+I</text></svg></div>
+    <p style="margin-top:8px">N (5. HG, EN 3,0) ist elektronegativer als H. Alle drei N-H-Bindungselektronenpaare werden dem N zugeordnet -> N hat 5 + 3 = 8 e- -> 3 zu viel -> -III. Jedes H verliert sein Elektron -> +I. Probe: (-III) + 3 * (+I) = 0.</p>
+  </div>
+</div>
+
+<div class="ox-card" data-sub="n2o">
+  <div class="head">
+    <h4>Distickstoffmonoxid</h4>
+    <span class="form">N2O</span>
+  </div>
+  <p style="color:var(--text-dim);font-size:.88rem;margin-top:4px">Zeichne die Lewisformel in dein Heft. Trage dann die Oxidationszahlen jedes Atomtyps ein (römische Zahl mit Vorzeichen) und prüfe.</p>
+  <div class="ox-fields"><div class="pair"><label>N (aussen):</label><select class="pick" data-correct="-III" data-name="N (aussen)"><option value="—">—</option><option value="-IV">-IV</option><option value="-III">-III</option><option value="-II">-II</option><option value="-I">-I</option><option value="0">0</option><option value="+I">+I</option><option value="+II">+II</option><option value="+III">+III</option><option value="+IV">+IV</option><option value="+V">+V</option><option value="+VI">+VI</option><option value="+VII">+VII</option></select></div><div class="pair"><label>N (mitte):</label><select class="pick" data-correct="+V" data-name="N (mitte)"><option value="—">—</option><option value="-IV">-IV</option><option value="-III">-III</option><option value="-II">-II</option><option value="-I">-I</option><option value="0">0</option><option value="+I">+I</option><option value="+II">+II</option><option value="+III">+III</option><option value="+IV">+IV</option><option value="+V">+V</option><option value="+VI">+VI</option><option value="+VII">+VII</option></select></div><div class="pair"><label>O:</label><select class="pick" data-correct="-II" data-name="O"><option value="—">—</option><option value="-IV">-IV</option><option value="-III">-III</option><option value="-II">-II</option><option value="-I">-I</option><option value="0">0</option><option value="+I">+I</option><option value="+II">+II</option><option value="+III">+III</option><option value="+IV">+IV</option><option value="+V">+V</option><option value="+VI">+VI</option><option value="+VII">+VII</option></select></div></div>
+  <div class="btns">
+    <button class="btn" onclick="checkOx(this)">Anzahl prüfen</button>
+    <button class="btn btn-purple sol-btn" data-sid="n2o" disabled style="opacity:.5">🔒 Musterlösung</button>
+  </div>
+  <div class="fb"></div>
+  <div class="sol">
+    <h4>Musterlösung – Distickstoffmonoxid (N2O)</h4>
+    <div class="lewis-card" style="max-width:300px;margin:8px auto"><svg viewBox="0 0 200 130" xmlns="http://www.w3.org/2000/svg"><line x1="60" y1="64" x2="100" y2="64" stroke="#7b8794" stroke-width="3" stroke-linecap="round"/><line x1="60" y1="70" x2="100" y2="70" stroke="#7b8794" stroke-width="3" stroke-linecap="round"/><line x1="60" y1="76" x2="100" y2="76" stroke="#7b8794" stroke-width="3" stroke-linecap="round"/><line x1="100" y1="70" x2="150" y2="70" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="31.0" y1="65.0" x2="31.0" y2="75.0" stroke="#2e62c4" stroke-width="2.6" stroke-linecap="round"/><line x1="169.0" y1="75.0" x2="169.0" y2="65.0" stroke="#2e62c4" stroke-width="2.6" stroke-linecap="round"/><line x1="155.0" y1="51.0" x2="145.0" y2="51.0" stroke="#2e62c4" stroke-width="2.6" stroke-linecap="round"/><line x1="145.0" y1="89.0" x2="155.0" y2="89.0" stroke="#2e62c4" stroke-width="2.6" stroke-linecap="round"/><circle cx="50" cy="70" r="13" fill="#3b6fb5" stroke="#2a3340" stroke-width="1.2"/><text x="50" y="73.85" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">N</text><circle cx="100" cy="70" r="13" fill="#3b6fb5" stroke="#2a3340" stroke-width="1.2"/><text x="100" y="73.85" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">N</text><circle cx="150" cy="70" r="13" fill="#e0533d" stroke="#2a3340" stroke-width="1.2"/><text x="150" y="73.85" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">O</text><text x="50" y="102" text-anchor="middle" font-size="11" font-weight="800" fill="#9b27b0">−III</text><text x="100" y="102" text-anchor="middle" font-size="11" font-weight="800" fill="#9b27b0">+V</text><text x="150" y="102" text-anchor="middle" font-size="11" font-weight="800" fill="#9b27b0">−II</text></svg></div>
+    <p style="margin-top:8px">Formal werden die N-Tripelbindungs-Elektronen geteilt, die N=O- bzw. N-O-Bindungselektronen werden dem O zugeordnet. Aussen-N: bekommt alle Tripel-Elektronen -> formal 8 e- -> -III. Mittleres N: verliert alle Bindungselektronen -> 0 e- -> +V. O: 6 + 2 = 8 e- -> -II. Probe: (-III) + (+V) + (-II) = 0. (Der Mittelwert der N ist +I, deshalb wird das in vielen Buechern angegeben.)</p>
+  </div>
+</div>
+
+<div class="ox-card" data-sub="h3po4">
+  <div class="head">
+    <h4>Phosphorsaeure</h4>
+    <span class="form">H3PO4</span>
+  </div>
+  <p style="color:var(--text-dim);font-size:.88rem;margin-top:4px">Zeichne die Lewisformel in dein Heft. Trage dann die Oxidationszahlen jedes Atomtyps ein (römische Zahl mit Vorzeichen) und prüfe.</p>
+  <div class="ox-fields"><div class="pair"><label>H:</label><select class="pick" data-correct="+I" data-name="H"><option value="—">—</option><option value="-IV">-IV</option><option value="-III">-III</option><option value="-II">-II</option><option value="-I">-I</option><option value="0">0</option><option value="+I">+I</option><option value="+II">+II</option><option value="+III">+III</option><option value="+IV">+IV</option><option value="+V">+V</option><option value="+VI">+VI</option><option value="+VII">+VII</option></select></div><div class="pair"><label>P:</label><select class="pick" data-correct="+V" data-name="P"><option value="—">—</option><option value="-IV">-IV</option><option value="-III">-III</option><option value="-II">-II</option><option value="-I">-I</option><option value="0">0</option><option value="+I">+I</option><option value="+II">+II</option><option value="+III">+III</option><option value="+IV">+IV</option><option value="+V">+V</option><option value="+VI">+VI</option><option value="+VII">+VII</option></select></div><div class="pair"><label>O:</label><select class="pick" data-correct="-II" data-name="O"><option value="—">—</option><option value="-IV">-IV</option><option value="-III">-III</option><option value="-II">-II</option><option value="-I">-I</option><option value="0">0</option><option value="+I">+I</option><option value="+II">+II</option><option value="+III">+III</option><option value="+IV">+IV</option><option value="+V">+V</option><option value="+VI">+VI</option><option value="+VII">+VII</option></select></div></div>
+  <div class="btns">
+    <button class="btn" onclick="checkOx(this)">Anzahl prüfen</button>
+    <button class="btn btn-purple sol-btn" data-sid="h3po4" disabled style="opacity:.5">🔒 Musterlösung</button>
+  </div>
+  <div class="fb"></div>
+  <div class="sol">
+    <h4>Musterlösung – Phosphorsaeure (H3PO4)</h4>
+    <div class="lewis-card" style="max-width:300px;margin:8px auto"><svg viewBox="0 0 220 160" xmlns="http://www.w3.org/2000/svg"><line x1="95" y1="80" x2="95" y2="42" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="95" y1="80" x2="60" y2="105" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="95" y1="80" x2="140" y2="70" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="90.03505862902529" y1="80.59106444892556" x2="95.03505862902529" y2="122.59106444892556" stroke="#7b8794" stroke-width="3" stroke-linecap="round"/><line x1="99.96494137097471" y1="79.40893555107444" x2="104.96494137097471" y2="121.40893555107444" stroke="#7b8794" stroke-width="3" stroke-linecap="round"/><line x1="95" y1="42" x2="75" y2="20" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="60" y1="105" x2="35" y2="125" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="140" y1="70" x2="165" y2="50" stroke="#7b8794" stroke-width="4" stroke-linecap="round"/><line x1="114.6" y1="40.2" x2="111.1" y2="30.8" stroke="#2e62c4" stroke-width="2.6" stroke-linecap="round"/><line x1="75.4" y1="43.8" x2="78.9" y2="53.2" stroke="#2e62c4" stroke-width="2.6" stroke-linecap="round"/><line x1="51.6" y1="87.2" x2="44.0" y2="93.7" stroke="#2e62c4" stroke-width="2.6" stroke-linecap="round"/><line x1="68.4" y1="122.8" x2="76.0" y2="116.3" stroke="#2e62c4" stroke-width="2.6" stroke-linecap="round"/><line x1="136.5" y1="50.7" x2="127.4" y2="54.9" stroke="#2e62c4" stroke-width="2.6" stroke-linecap="round"/><line x1="143.5" y1="89.3" x2="152.6" y2="85.1" stroke="#2e62c4" stroke-width="2.6" stroke-linecap="round"/><line x1="117.8" y1="130.2" x2="119.6" y2="120.4" stroke="#2e62c4" stroke-width="2.6" stroke-linecap="round"/><line x1="80.4" y1="123.8" x2="83.9" y2="133.2" stroke="#2e62c4" stroke-width="2.6" stroke-linecap="round"/><circle cx="95" cy="80" r="14" fill="#a18cd1" stroke="#2a3340" stroke-width="1.2"/><text x="95" y="84.2" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">P</text><circle cx="95" cy="42" r="13" fill="#e0533d" stroke="#2a3340" stroke-width="1.2"/><text x="95" y="45.85" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">O</text><circle cx="60" cy="105" r="13" fill="#e0533d" stroke="#2a3340" stroke-width="1.2"/><text x="60" y="108.85" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">O</text><circle cx="140" cy="70" r="13" fill="#e0533d" stroke="#2a3340" stroke-width="1.2"/><text x="140" y="73.85" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">O</text><circle cx="100" cy="122" r="13" fill="#e0533d" stroke="#2a3340" stroke-width="1.2"/><text x="100" y="125.85" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">O</text><circle cx="75" cy="20" r="10" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="75" y="23.5" text-anchor="middle" font-size="10" font-weight="700" fill="#3a4350">H</text><circle cx="35" cy="125" r="10" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="35" y="128.5" text-anchor="middle" font-size="10" font-weight="700" fill="#3a4350">H</text><circle cx="165" cy="50" r="10" fill="#f4f4f5" stroke="#2a3340" stroke-width="1.2"/><text x="165" y="53.5" text-anchor="middle" font-size="10" font-weight="700" fill="#3a4350">H</text><text x="95" y="85" text-anchor="middle" font-size="11" font-weight="800" fill="#9b27b0">+V</text><text x="73" y="38" text-anchor="middle" font-size="11" font-weight="800" fill="#9b27b0">−II</text><text x="40" y="102" text-anchor="middle" font-size="11" font-weight="800" fill="#9b27b0">−II</text><text x="157" y="68" text-anchor="middle" font-size="11" font-weight="800" fill="#9b27b0">−II</text><text x="113" y="132" text-anchor="middle" font-size="11" font-weight="800" fill="#9b27b0">−II</text><text x="60" y="15" text-anchor="middle" font-size="11" font-weight="800" fill="#9b27b0">+I</text><text x="23" y="130" text-anchor="middle" font-size="11" font-weight="800" fill="#9b27b0">+I</text><text x="185" y="50" text-anchor="middle" font-size="11" font-weight="800" fill="#9b27b0">+I</text></svg></div>
+    <p style="margin-top:8px">P (5. HG) ist viel weniger elektronegativ als O. Alle P-O-Bindungselektronen werden dem O zugeordnet. P gibt formal seine 5 Valenzelektronen ab -> +V. Jedes O bekommt 8 e- -> -II. H an O -> +I. Probe: 3 * (+I) + (+V) + 4 * (-II) = 0.</p>
+  </div>
+</div>
+
+  </div>
+</section>
+
+<section class="ex" data-ex="6">
+  <div class="ex-head" onclick="toggleEx(this)">
+    <div class="ex-num">6</div>
+    <div class="ti"><h3>Säure-Base-Reaktion oder Redoxreaktion?</h3>
+      <div class="sub">Vergleiche die Oxidationszahlen vor und nach der Reaktion.</div></div>
+    <span class="tag lock" id="lock-tag-sbr">🔒 Lösungen verschlossen</span>
+    <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 9l7 7 7-7"/></svg>
+  </div>
+  <div class="ex-body">
+
+    <div class="callout yellow">
+      <div class="ic">🔐</div>
+      <div class="body">
+        <h4>Lösungs-Code eingeben</h4>
+        <p>Die Musterlösungen werden mit einem separaten Code freigeschaltet. Die gestuften Tipps unten kannst du jederzeit nutzen.</p>
+        <div class="btns" style="margin-top:8px">
+          <input type="password" class="code" id="code-sbr" placeholder="Lösungs-Code" maxlength="6" style="width:160px"/>
+          <button class="btn btn-sec" onclick="unlockSBR()">Code prüfen</button>
+        </div>
+        <p id="code-sbr-msg" style="margin-top:6px;font-size:.85rem"></p>
+      </div>
+    </div>
+
+    
+<div class="ox-card" data-rid="r1">
+  <p style="color:var(--cyan);font-weight:700;margin-bottom:6px">Reaktion</p>
+  <p style="font-family:'Cambria Math',serif;font-size:1.05rem;color:var(--text);text-align:center;background:rgba(255,255,255,.05);padding:10px;border-radius:8px">Cu + 2 H₂SO₄ → CuSO₄ + 2 H₂O + SO₂</p>
+
+  <div class="tips">
+    <div class="tip"><button class="tipbtn" onclick="toggleTip(this)">💡 Tipp 1 – Was musst du prüfen?<span class="arw">▼</span></button>
+      <div class="tiptext">Bestimme zuerst für jedes Atom auf der <b>linken</b> und auf der <b>rechten</b> Seite der Reaktionsgleichung die Oxidationszahl. Nutze dazu die Regeln aus Station 2.</div></div>
+    <div class="tip"><button class="tipbtn" onclick="toggleTip(this)">💡 Tipp 2 – Worauf achtest du beim Vergleich?<span class="arw">▼</span></button>
+      <div class="tiptext">Vergleiche die Oxidationszahlen der gleichen Atomsorten vorher und nachher. Für eine <b>Redoxreaktion</b> muss sich die Oxidationszahl <b>eines Partners erhöhen</b> (Oxidation, Elektronen<b>donator</b>) <b>und</b> die eines anderen <b>sinken</b> (Reduktion, Elektronen<b>akzeptor</b>) – beides muss zusammen passieren. Findet nur eines davon statt, ist es keine Redoxreaktion (das gibt es so allein gar nicht – Elektronen verschwinden ja nicht einfach). Bleiben <b>alle</b> Oxidationszahlen gleich → keine Redox, sondern z. B. eine Säure-Base-Reaktion.</div></div>
+    <div class="tip"><button class="tipbtn" onclick="toggleTip(this)">💡 Tipp 3 – Was bei einer Redoxreaktion zu tun ist<span class="arw">▼</span></button>
+      <div class="tiptext">Bei einer Redox formulierst du zwei Teilgleichungen: Welche Atomsorte wird oxidiert (Oxidationszahl steigt → Elektronen rechts)? Welche wird reduziert (Oxidationszahl sinkt → Elektronen links)? Notiere beide Teilgleichungen.</div></div>
+  </div>
+
+  <p class="q">Liegt eine Säure-Base- oder eine Redoxreaktion vor?</p>
+  <div class="btns">
+    <label class="opt" style="flex:1;padding:9px 12px;background:rgba(255,255,255,.04);border:2px solid var(--bd);border-radius:10px;cursor:pointer;color:var(--text);font-size:.92rem">
+      <input type="radio" name="r1" value="sb" style="margin-right:6px"> Säure-Base-Reaktion
+    </label>
+    <label class="opt" style="flex:1;padding:9px 12px;background:rgba(255,255,255,.04);border:2px solid var(--bd);border-radius:10px;cursor:pointer;color:var(--text);font-size:.92rem">
+      <input type="radio" name="r1" value="redox" style="margin-right:6px"> Redoxreaktion
+    </label>
+  </div>
+  <div id="r1-tg" style="display:none;margin-top:10px">
+    <p class="q">Teilgleichung Oxidation:</p>
+    <input type="text" class="text" id="r1-ox" placeholder="Element -> Ion + Anzahl e-" style="width:100%"/>
+    <p class="q">Teilgleichung Reduktion:</p>
+    <input type="text" class="text" id="r1-red" placeholder="Ion + Anzahl e- -> Element" style="width:100%"/>
+  </div>
+  <div class="btns">
+    <button class="btn" onclick="checkSBR(this,'r1','redox')">Antwort prüfen</button>
+    <button class="btn btn-purple sol-btn-sbr" data-rid="r1" disabled style="opacity:.5">🔒 Musterlösung</button>
+  </div>
+  <div class="fb"></div>
+  <div class="sol">
+    <h4>Musterlösung</h4>
+    <p><b>Typ:</b> Redoxreaktion</p>
+    <p>Cu wird von 0 auf +II oxidiert; S wird von +VI (im H₂SO₄) auf +IV (im SO₂) reduziert. Die Oxidationszahlen ändern sich → Redoxreaktion.</p>
+    <p><b>Oxidation:</b> Cu → Cu²⁺ + 2 e⁻</p><p><b>Reduktion:</b> S(+VI) + 2 e⁻ → S(+IV) (im SO₂)</p>
+  </div>
+</div>
+
+<div class="ox-card" data-rid="r2">
+  <p style="color:var(--cyan);font-weight:700;margin-bottom:6px">Reaktion</p>
+  <p style="font-family:'Cambria Math',serif;font-size:1.05rem;color:var(--text);text-align:center;background:rgba(255,255,255,.05);padding:10px;border-radius:8px">CaCO₃ + 2 HCl → CaCl₂ + H₂O + CO₂</p>
+
+  <div class="tips">
+    <div class="tip"><button class="tipbtn" onclick="toggleTip(this)">💡 Tipp 1 – Was musst du prüfen?<span class="arw">▼</span></button>
+      <div class="tiptext">Bestimme zuerst für jedes Atom auf der <b>linken</b> und auf der <b>rechten</b> Seite der Reaktionsgleichung die Oxidationszahl. Nutze dazu die Regeln aus Station 2.</div></div>
+    <div class="tip"><button class="tipbtn" onclick="toggleTip(this)">💡 Tipp 2 – Worauf achtest du beim Vergleich?<span class="arw">▼</span></button>
+      <div class="tiptext">Vergleiche die Oxidationszahlen der gleichen Atomsorten vorher und nachher. Für eine <b>Redoxreaktion</b> muss sich die Oxidationszahl <b>eines Partners erhöhen</b> (Oxidation, Elektronen<b>donator</b>) <b>und</b> die eines anderen <b>sinken</b> (Reduktion, Elektronen<b>akzeptor</b>) – beides muss zusammen passieren. Findet nur eines davon statt, ist es keine Redoxreaktion (das gibt es so allein gar nicht – Elektronen verschwinden ja nicht einfach). Bleiben <b>alle</b> Oxidationszahlen gleich → keine Redox, sondern z. B. eine Säure-Base-Reaktion.</div></div>
+    <div class="tip"><button class="tipbtn" onclick="toggleTip(this)">💡 Tipp 3 – Was bei einer Redoxreaktion zu tun ist<span class="arw">▼</span></button>
+      <div class="tiptext">Bei einer Redox formulierst du zwei Teilgleichungen: Welche Atomsorte wird oxidiert (Oxidationszahl steigt → Elektronen rechts)? Welche wird reduziert (Oxidationszahl sinkt → Elektronen links)? Notiere beide Teilgleichungen.</div></div>
+  </div>
+
+  <p class="q">Liegt eine Säure-Base- oder eine Redoxreaktion vor?</p>
+  <div class="btns">
+    <label class="opt" style="flex:1;padding:9px 12px;background:rgba(255,255,255,.04);border:2px solid var(--bd);border-radius:10px;cursor:pointer;color:var(--text);font-size:.92rem">
+      <input type="radio" name="r2" value="sb" style="margin-right:6px"> Säure-Base-Reaktion
+    </label>
+    <label class="opt" style="flex:1;padding:9px 12px;background:rgba(255,255,255,.04);border:2px solid var(--bd);border-radius:10px;cursor:pointer;color:var(--text);font-size:.92rem">
+      <input type="radio" name="r2" value="redox" style="margin-right:6px"> Redoxreaktion
+    </label>
+  </div>
+  <div id="r2-tg" style="display:none;margin-top:10px">
+    <p class="q">Teilgleichung Oxidation:</p>
+    <input type="text" class="text" id="r2-ox" placeholder="Element -> Ion + Anzahl e-" style="width:100%"/>
+    <p class="q">Teilgleichung Reduktion:</p>
+    <input type="text" class="text" id="r2-red" placeholder="Ion + Anzahl e- -> Element" style="width:100%"/>
+  </div>
+  <div class="btns">
+    <button class="btn" onclick="checkSBR(this,'r2','sb')">Antwort prüfen</button>
+    <button class="btn btn-purple sol-btn-sbr" data-rid="r2" disabled style="opacity:.5">🔒 Musterlösung</button>
+  </div>
+  <div class="fb"></div>
+  <div class="sol">
+    <h4>Musterlösung</h4>
+    <p><b>Typ:</b> Säure-Base-Reaktion</p>
+    <p>Die Oxidationszahlen aller Atome bleiben gleich (Ca +II, C +IV, O -II, H +I, Cl -I). Es werden lediglich Protonen übertragen – es liegt eine <b>Säure-Base-Reaktion</b> vor.</p>
+    
+  </div>
+</div>
+
+<div class="ox-card" data-rid="r3">
+  <p style="color:var(--cyan);font-weight:700;margin-bottom:6px">Reaktion</p>
+  <p style="font-family:'Cambria Math',serif;font-size:1.05rem;color:var(--text);text-align:center;background:rgba(255,255,255,.05);padding:10px;border-radius:8px">Zn + 2 HCl → ZnCl₂ + H₂</p>
+
+  <div class="tips">
+    <div class="tip"><button class="tipbtn" onclick="toggleTip(this)">💡 Tipp 1 – Was musst du prüfen?<span class="arw">▼</span></button>
+      <div class="tiptext">Bestimme zuerst für jedes Atom auf der <b>linken</b> und auf der <b>rechten</b> Seite der Reaktionsgleichung die Oxidationszahl. Nutze dazu die Regeln aus Station 2.</div></div>
+    <div class="tip"><button class="tipbtn" onclick="toggleTip(this)">💡 Tipp 2 – Worauf achtest du beim Vergleich?<span class="arw">▼</span></button>
+      <div class="tiptext">Vergleiche die Oxidationszahlen der gleichen Atomsorten vorher und nachher. Für eine <b>Redoxreaktion</b> muss sich die Oxidationszahl <b>eines Partners erhöhen</b> (Oxidation, Elektronen<b>donator</b>) <b>und</b> die eines anderen <b>sinken</b> (Reduktion, Elektronen<b>akzeptor</b>) – beides muss zusammen passieren. Findet nur eines davon statt, ist es keine Redoxreaktion (das gibt es so allein gar nicht – Elektronen verschwinden ja nicht einfach). Bleiben <b>alle</b> Oxidationszahlen gleich → keine Redox, sondern z. B. eine Säure-Base-Reaktion.</div></div>
+    <div class="tip"><button class="tipbtn" onclick="toggleTip(this)">💡 Tipp 3 – Was bei einer Redoxreaktion zu tun ist<span class="arw">▼</span></button>
+      <div class="tiptext">Bei einer Redox formulierst du zwei Teilgleichungen: Welche Atomsorte wird oxidiert (Oxidationszahl steigt → Elektronen rechts)? Welche wird reduziert (Oxidationszahl sinkt → Elektronen links)? Notiere beide Teilgleichungen.</div></div>
+  </div>
+
+  <p class="q">Liegt eine Säure-Base- oder eine Redoxreaktion vor?</p>
+  <div class="btns">
+    <label class="opt" style="flex:1;padding:9px 12px;background:rgba(255,255,255,.04);border:2px solid var(--bd);border-radius:10px;cursor:pointer;color:var(--text);font-size:.92rem">
+      <input type="radio" name="r3" value="sb" style="margin-right:6px"> Säure-Base-Reaktion
+    </label>
+    <label class="opt" style="flex:1;padding:9px 12px;background:rgba(255,255,255,.04);border:2px solid var(--bd);border-radius:10px;cursor:pointer;color:var(--text);font-size:.92rem">
+      <input type="radio" name="r3" value="redox" style="margin-right:6px"> Redoxreaktion
+    </label>
+  </div>
+  <div id="r3-tg" style="display:none;margin-top:10px">
+    <p class="q">Teilgleichung Oxidation:</p>
+    <input type="text" class="text" id="r3-ox" placeholder="Element -> Ion + Anzahl e-" style="width:100%"/>
+    <p class="q">Teilgleichung Reduktion:</p>
+    <input type="text" class="text" id="r3-red" placeholder="Ion + Anzahl e- -> Element" style="width:100%"/>
+  </div>
+  <div class="btns">
+    <button class="btn" onclick="checkSBR(this,'r3','redox')">Antwort prüfen</button>
+    <button class="btn btn-purple sol-btn-sbr" data-rid="r3" disabled style="opacity:.5">🔒 Musterlösung</button>
+  </div>
+  <div class="fb"></div>
+  <div class="sol">
+    <h4>Musterlösung</h4>
+    <p><b>Typ:</b> Redoxreaktion</p>
+    <p>Zn wird von 0 auf +II oxidiert; H wird von +I auf 0 reduziert. Cl bleibt -I → <b>Redoxreaktion</b>.</p>
+    <p><b>Oxidation:</b> Zn → Zn²⁺ + 2 e⁻</p><p><b>Reduktion:</b> 2 H⁺ + 2 e⁻ → H₂</p>
+  </div>
+</div>
+
+  </div>
+</section>
+
+<section class="export-box">
+  <h2>📤 Ergebnisse sichern</h2>
+  <p>Trage deinen Namen ein und lade deine Bearbeitung als Textdatei herunter. Hypothese, Beobachtung, Auswertung, Übungseingaben und Bot-Verlauf werden mitgespeichert.</p>
+  <div class="namefield">
+    <input type="text" id="student-name" placeholder="Dein Name">
+    <button class="btn" onclick="exportResults()">📥 Ergebnisse herunterladen</button>
+  </div>
+</section>
+
+  <p class="foot">Lernumgebung Redoxreaktionen · Wiederholung · zur Selbstkontrolle</p>
+</div>
+<script>
+function toggleEx(h){h.parentElement.classList.toggle('open');}
+function toggleEl(id){document.getElementById(id).classList.toggle('show');}
+function toggleTip(b){b.closest('.tip').classList.toggle('open');}
+
+const TOTAL_TASKS = 6;
+const done = new Set();
+function markDone(n){
+  if(done.has(n)) return;
+  done.add(n);
+  const m = document.querySelector('section.ex[data-ex="'+n+'"] .ti .sub');
+  if(m && !m.querySelector('.tag.done')){
+    const t = document.createElement('span'); t.className='tag done'; t.textContent='✓ erledigt';
+    m.appendChild(document.createElement('br')); m.appendChild(t);
+  }
+  document.getElementById('pfill').style.width = Math.round(done.size/TOTAL_TASKS*100)+'%';
+  document.getElementById('plabel').textContent = done.size+' / '+TOTAL_TASKS+' Stationen bearbeitet';
+}
+
+// ---------- Hypothese / Beobachtung: getrennt für A und B ----------
+// Rückmeldung: NUR Lob für die tatsächlich richtig getroffenen Aspekte.
+// Was fehlt, wird nur als allgemeiner Impuls genannt – nie die Lösung vorwegnehmen.
+function _hit(low, kws){ return kws.some(k => low.includes(k.toLowerCase())); }
+
+function _feedback(fb, cls, head, foundList, generalImpulse){
+  let html = '<span class="rh">📝 '+head+'</span>';
+  if(foundList.length){
+    html += '<div>Gut erkannt:</div><ul>';
+    foundList.forEach(s => html += '<li>✓ '+s+'</li>');
+    html += '</ul>';
+  }
+  if(generalImpulse){
+    html += '<div style="margin-top:6px">'+generalImpulse+'</div>';
+  }
+  fb.className='fb show '+cls; fb.innerHTML=html;
+}
+
+// Hypothese Versuch A: Eisennagel reagiert mit Cu²⁺-Lösung
+function checkHypoA(){
+  const txt = (document.getElementById('ver-hypo-a').value||'').trim();
+  const fb = document.getElementById('fb-hypo-a');
+  if(txt.length<20){
+    fb.className='fb show bad';
+    fb.innerHTML='<span class="rh">📝 Hypothese Versuch A</span>Schreib bitte 1–2 Sätze mit Begründung.';
+    return;
+  }
+  const low = txt.toLowerCase();
+  const aspects = [
+    {name:'Du beziehst dich auf die Redoxreihe (edel/unedel).', kw:['edler','unedler','edel','unedel','redoxreihe','reihe']},
+    {name:'Du sprichst über Elektronenabgabe / -aufnahme.', kw:['elektron','abgib','gibt','aufnehm','übertrag']},
+    {name:'Du nennst, dass eine Reaktion zu erwarten ist.', kw:['reagiert','reaktion','findet statt','passiert','läuft ab','scheidet']},
+  ];
+  const found = aspects.filter(a => _hit(low, a.kw));
+  const cls = found.length>=2 ? 'good' : (found.length===1 ? 'part' : 'bad');
+  let impulse = '';
+  if(found.length<aspects.length){
+    impulse = 'Denkanstoß: Vergleiche die beiden Metalle in der Redoxreihe. Wer gibt eher Elektronen ab? Was bedeutet das für diesen Versuch?';
+  }
+  _feedback(fb, cls, 'Hypothese Versuch A', found.map(a=>a.name), impulse);
+  markDone(1);
+}
+
+// Hypothese Versuch B: Kupferblech in Fe²⁺-Lösung
+function checkHypoB(){
+  const txt = (document.getElementById('ver-hypo-b').value||'').trim();
+  const fb = document.getElementById('fb-hypo-b');
+  if(txt.length<20){
+    fb.className='fb show bad';
+    fb.innerHTML='<span class="rh">📝 Hypothese Versuch B</span>Schreib bitte 1–2 Sätze mit Begründung.';
+    return;
+  }
+  const low = txt.toLowerCase();
+  const aspects = [
+    {name:'Du beziehst dich auf die Redoxreihe (edel/unedel).', kw:['edler','unedler','edel','unedel','redoxreihe','reihe']},
+    {name:'Du sprichst Elektronenabgabe / -aufnahme an.', kw:['elektron','abgib','gibt','aufnehm','übertrag','nicht ab']},
+    {name:'Du formulierst eine Erwartung (Reaktion ja/nein).', kw:['keine','findet nicht','reagiert nicht','nichts','reaktion','läuft']},
+  ];
+  const found = aspects.filter(a => _hit(low, a.kw));
+  const cls = found.length>=2 ? 'good' : (found.length===1 ? 'part' : 'bad');
+  let impulse = '';
+  if(found.length<aspects.length){
+    impulse = 'Denkanstoß: Welches Metall ist hier edler? Was sagt das über die Bereitschaft, Elektronen abzugeben?';
+  }
+  _feedback(fb, cls, 'Hypothese Versuch B', found.map(a=>a.name), impulse);
+  markDone(1);
+}
+
+// Beobachtung Versuch A
+function checkBeobA(){
+  const txt = (document.getElementById('ver-beob-a').value||'').trim();
+  const fb = document.getElementById('fb-beob-a');
+  if(txt.length<10){
+    fb.className='fb show bad';
+    fb.innerHTML='<span class="rh">📝 Beobachtung Versuch A</span>Beschreibe ruhig genauer, was du am Eisennagel und in der Lösung siehst.';
+    return;
+  }
+  const low = txt.toLowerCase();
+  const aspects = [
+    {name:'Du beschreibst die Veränderung am Eisennagel.', kw:['nagel','eisennagel','belag','beschichtung','überzug']},
+    {name:'Du erwähnst die Farbe (rötlich / braun / kupfern).', kw:['rötlich','rotbraun','rot','braun','kupfer','kupfern','metallisch']},
+    {name:'Du beachtest, was mit der Lösung passiert.', kw:['lösung','blau','blasser','heller','farbe der lös']},
+  ];
+  const found = aspects.filter(a => _hit(low, a.kw));
+  const cls = found.length>=2 ? 'good' : (found.length===1 ? 'part' : 'bad');
+  let impulse = '';
+  if(found.length<aspects.length){
+    impulse = 'Schau noch einmal genau hin – sowohl auf den Nagel als auch auf die Lösung. Welche Farben hast du jeweils?';
+  }
+  _feedback(fb, cls, 'Beobachtung Versuch A', found.map(a=>a.name), impulse);
+}
+
+// Beobachtung Versuch B
+function checkBeobB(){
+  const txt = (document.getElementById('ver-beob-b').value||'').trim();
+  const fb = document.getElementById('fb-beob-b');
+  if(txt.length<8){
+    fb.className='fb show bad';
+    fb.innerHTML='<span class="rh">📝 Beobachtung Versuch B</span>Was siehst du am Kupferblech und in der Lösung?';
+    return;
+  }
+  const low = txt.toLowerCase();
+  const aspects = [
+    {name:'Du beschreibst, was du am Kupferblech siehst.', kw:['blech','kupferblech','blech','unverändert','keine veränder','kein belag']},
+    {name:'Du beschreibst, was du in der Lösung siehst.', kw:['lösung','farbe','grün','hellgrün','unverändert','keine änder']},
+  ];
+  const found = aspects.filter(a => _hit(low, a.kw));
+  const cls = found.length>=2 ? 'good' : (found.length===1 ? 'part' : 'bad');
+  let impulse = '';
+  if(found.length<aspects.length){
+    impulse = 'Achte separat auf das Blech und auf die Lösung – ist da überhaupt eine Veränderung zu sehen?';
+  }
+  _feedback(fb, cls, 'Beobachtung Versuch B', found.map(a=>a.name), impulse);
+}
+
+// ---------- Versuch A: Gleichungen prüfen ----------
+function _normEq(s){
+  return s.toLowerCase().replace(/\s+/g,'').replace(/[→⇌]/g,'->').replace(/[–—−]/g,'-').replace(/⁻/g,'-').replace(/²⁺/g,'2+').replace(/²/g,'2');
+}
+const versuchAns = {};
+function checkVersuchA(){
+  const ox = document.getElementById('ox-glei').value.trim();
+  const red = document.getElementById('red-glei').value.trim();
+  const ges = document.getElementById('redox-glei').value.trim();
+  const oN = _normEq(ox), rN = _normEq(red), gN = _normEq(ges);
+  const oxOk = oN.includes('fe->fe2+') || oN.includes('fe->fe2++2e');
+  const redOk = (rN.includes('cu2+')||rN.includes('cu^2+')) && rN.includes('->cu');
+  const gesOk = (gN.includes('fe+cu2+')||gN.includes('cu2++fe')) && (gN.includes('->fe2+')||gN.includes('fe2+'));
+  const fb = document.getElementById('fb-versuch-a');
+  const c = (oxOk?1:0)+(redOk?1:0)+(gesOk?1:0);
+  if(c===3){ fb.className='fb show good'; fb.textContent='🌟 Alle drei Gleichungen passen.'; }
+  else{ fb.className='fb show part'; fb.innerHTML='Es passen '+c+' von 3 Gleichungen. Welche du noch anpassen musst, sagt das Tool absichtlich nicht – schau dir deine Eingaben noch einmal genau an. Tipp: links stehen die Ausgangsstoffe, rechts die Produkte; Elektronen-Anzahlen müssen vor dem Kombinieren übereinstimmen.'; }
+  versuchAns.ox=ox; versuchAns.red=red; versuchAns.ges=ges; versuchAns.score=c+'/3';
+}
+
+// ---------- Versuch B Begründung ----------
+function checkBegB(){
+  const txt = document.getElementById('ver-b-beg').value.trim();
+  const fb = document.getElementById('fb-versuch-b');
+  if(txt.length<25){
+    fb.className='fb show bad';
+    fb.innerHTML='<span class="rh">📝 Erklärung Versuch B</span>Schreib bitte noch ein paar Sätze mehr.';
+    return;
+  }
+  const low = txt.toLowerCase();
+  const aspects = [
+    {name:'Du nennst, dass Kupfer edler ist.', kw:['edler','edel','unedler','unedel']},
+    {name:'Du sprichst die Elektronenabgabe an.', kw:['gibt keine','nicht ab','kann nicht','keine elektronen','reduzier','übertrag']},
+    {name:'Du beziehst dich auf die Fe²⁺-Ionen.', kw:['fe²','fe2+','eisen-ion','eisen ion','kationen']},
+  ];
+  const found = aspects.filter(a => _hit(low, a.kw));
+  const cls = found.length>=2 ? 'good' : (found.length===1 ? 'part' : 'bad');
+  let impulse = '';
+  if(found.length<aspects.length){
+    impulse = 'Denkanstoß: Was kann Kupfer im Vergleich zu Eisen (nicht)? Welche Teilchen liegen in der Lösung vor?';
+  }
+  _feedback(fb, cls, 'Erklärung Versuch B', found.map(a=>a.name), impulse);
+  versuchAns.begB = txt;
+  markDone(1);
+}
+
+// ---------- 25-Min-Timer für Auswertungs-Prüfung & -Musterlösung ----------
+const TIMER25_KEY = 'redox_aus_start_v4';
+function getStart25(){
+  let s = localStorage.getItem(TIMER25_KEY);
+  if(!s){ s = Date.now().toString(); localStorage.setItem(TIMER25_KEY, s); }
+  return parseInt(s);
+}
+function fmtMSS(ms){
+  if(ms<=0) return '00:00';
+  const tot = Math.floor(ms/1000);
+  const m = Math.floor(tot/60), s = tot%60;
+  return String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+}
+let _ausUnlocked = false;
+function unlockAusButtons(){
+  if(_ausUnlocked) return;
+  _ausUnlocked = true;
+  // Prüfen-Buttons aktivieren und onclick aus data-fn setzen
+  document.querySelectorAll('.check-aus').forEach(b => {
+    const fn = b.dataset.fn;
+    b.disabled = false;
+    b.style.opacity = '1';
+    b.textContent = b.textContent.replace(/^🔒\s*/, '');
+    b.onclick = function(){ if(window[fn]) window[fn](); };
+  });
+  // Musterlösungs-Buttons aktivieren
+  document.querySelectorAll('.sol-aus').forEach(b => {
+    const tgt = b.dataset.target;
+    b.disabled = false;
+    b.style.opacity = '1';
+    b.textContent = '📖 ' + b.textContent.replace(/^🔒\s*/, '').replace(/^📖\s*/, '');
+    b.onclick = function(){ document.getElementById(tgt).classList.toggle('show'); };
+  });
+  const box = document.getElementById('timer-aus');
+  if(box){
+    box.innerHTML = '<b>✓ Prüfen und Musterlösungen der Auswertung freigeschaltet.</b>';
+    box.style.borderColor = 'var(--green)';
+    box.style.color = 'var(--green)';
+  }
+}
+function tickAus(){
+  const elapsed = Date.now() - getStart25();
+  const remain = 25*60*1000 - elapsed;
+  const t = document.getElementById('t-aus');
+  if(remain<=0){
+    unlockAusButtons();
+  } else if(t){
+    t.textContent = fmtMSS(remain);
+  }
+}
+setInterval(tickAus, 1000);
+// initial direkt nach DOM-Aufbau aufrufen
+window.addEventListener('DOMContentLoaded', tickAus);
+tickAus();
+
+// ---------- Oxidationszahlen prüfen (nur Anzahl) ----------
+const oxResults = {};
+function checkOx(btn){
+  const card = btn.closest('.ox-card');
+  const sid = card.dataset.sub;
+  const sels = card.querySelectorAll('select.pick');
+  let c=0; const detail=[];
+  sels.forEach(s=>{
+    const ok = s.value===s.dataset.correct;
+    if(ok) c++;
+    detail.push({name:s.dataset.name, given:s.value, correct:s.dataset.correct, ok});
+  });
+  const fb = card.querySelector('.fb');
+  const total = sels.length;
+  if(c===total){ fb.className='fb show good'; fb.textContent='🌟 Alle '+total+' Werte richtig!'; markDone(5); }
+  else { fb.className='fb show part'; fb.textContent='Du hast '+c+' von '+total+' Werten richtig. Welche genau noch nicht stimmen, verrate ich absichtlich nicht – überlege noch einmal anhand der Regeln. Tipp: Faustregeln F = -I, O = -II, H = +I sind oft ein guter Startpunkt; daraus rückwärts rechnen.'; }
+  oxResults[sid] = {score:c, total, detail};
+}
+
+// ---------- Code-Mechanik ----------
+function unlockOx(){
+  const v = (document.getElementById('code-ox').value||'').trim();
+  const msg = document.getElementById('code-ox-msg');
+  if(v==='0408'){
+    document.querySelectorAll('.sol-btn').forEach(b=>{
+      b.disabled=false; b.style.opacity='1'; b.textContent='📖 Musterlösung anzeigen';
+      b.onclick = function(){ this.closest('.ox-card').querySelector('.sol').classList.toggle('show'); };
+    });
+    document.getElementById('lock-tag-ox').classList.remove('lock'); document.getElementById('lock-tag-ox').classList.add('done');
+    document.getElementById('lock-tag-ox').textContent='✓ Lösungen freigeschaltet';
+    msg.innerHTML='<span style="color:var(--green)">✓ Lösungen freigeschaltet.</span>';
+  } else {
+    msg.innerHTML='<span style="color:#ff8a9a">Falscher Code. Frag deine Lehrkraft.</span>';
+  }
+}
+function unlockSBR(){
+  const v = (document.getElementById('code-sbr').value||'').trim();
+  const msg = document.getElementById('code-sbr-msg');
+  if(v==='0807'){
+    document.querySelectorAll('.sol-btn-sbr').forEach(b=>{
+      b.disabled=false; b.style.opacity='1'; b.textContent='📖 Musterlösung anzeigen';
+      b.onclick = function(){ this.closest('.ox-card').querySelector('.sol').classList.toggle('show'); };
+    });
+    document.getElementById('lock-tag-sbr').classList.remove('lock'); document.getElementById('lock-tag-sbr').classList.add('done');
+    document.getElementById('lock-tag-sbr').textContent='✓ Lösungen freigeschaltet';
+    msg.innerHTML='<span style="color:var(--green)">✓ Lösungen freigeschaltet.</span>';
+  } else {
+    msg.innerHTML='<span style="color:#ff8a9a">Falscher Code. Frag deine Lehrkraft.</span>';
+  }
+}
+
+// ---------- Säure-Base / Redox prüfen ----------
+const sbrResults = {};
+document.addEventListener('change', e=>{
+  if(e.target.type==='radio' && e.target.name && e.target.name.startsWith('r')){
+    const tg = document.getElementById(e.target.name+'-tg');
+    if(tg) tg.style.display = (e.target.value==='redox')?'block':'none';
+  }
+});
+function checkSBR(btn, rid, kind){
+  const chosen = document.querySelector('input[name="'+rid+'"]:checked');
+  const fb = btn.closest('.ox-card').querySelector('.fb');
+  if(!chosen){ fb.className='fb show bad'; fb.textContent='Bitte zuerst eine Antwort auswählen.'; return; }
+  const ok = chosen.value===kind;
+  const oxv = document.getElementById(rid+'-ox')?document.getElementById(rid+'-ox').value.trim():'';
+  const redv = document.getElementById(rid+'-red')?document.getElementById(rid+'-red').value.trim():'';
+  sbrResults[rid] = {chosen:chosen.value, correct:kind, ok, ox:oxv, red:redv};
+  if(ok){
+    if(kind==='redox' && (oxv.length<5 || redv.length<5)){
+      fb.className='fb show part';
+      fb.textContent='Reaktionstyp passt. Vervollständige noch beide Teilgleichungen.';
+    } else {
+      fb.className='fb show good'; fb.textContent='🌟 Sieht gut aus!';
+      markDone(6);
+    }
+  } else {
+    fb.className='fb show bad'; fb.textContent='🤔 Schau dir die Oxidationszahlen vor und nach der Reaktion nochmal genau an. Nutze die gestuften Tipps oben.';
+  }
+}
+
+// ---------- Bot ----------
+const BLOCKED_KEYS = ['alf3','aluminiumfluorid','cah2','calciumhydrid','c2h4','ethen','ccl4','tetrachlormethan',
+ 'hcho','methanal','formaldehyd','ch3ch3','c2h6','ethan','hcooh','methansäure','ameisensäure',
+ 'co3','carbonat','hclo','hypochlorige','h2s','schwefelwasserstoff','hso3','hydrogensulfit',
+ 'nh3','ammoniak','n2o','distickstoffmonoxid','h3po4','phosphorsäure',
+ 'cu+h2so4','cuh2so4','caco3','zn+hcl'];
+const BOT_TOPICS = [
+  {kw:['lewisformel','lewis-formel','lewis strukt','lewis zeichn','lewis schreib'],
+   a:'<b>So zeichnest du eine Lewisformel:</b><br>1) Zentrales Atom suchen (meist das mit der niedrigsten EN, oft C, N, S, P). H sitzt nie in der Mitte.<br>2) Alle Valenzelektronen aller Atome zusammenzählen (für Ionen: -1 pro positive, +1 pro negative Ladung).<br>3) Mit Einfachbindungen die Atome verbinden (jede Bindung = 2 Elektronen).<br>4) Restliche Elektronen so an die Außenatome verteilen, dass jedes (außer H) 8 Außenelektronen hat (Oktett). H bekommt nur 2.<br>5) Wenn am Zentralatom noch Elektronen fehlen: Doppel- oder Dreifachbindung bilden. Freie Elektronenpaare als Striche an den Atomen zeichnen.'},
+  {kw:['valenzelektron','außenelektron','aussenelektron'],
+   a:'Valenzelektronen sind die Elektronen auf der äußersten Schale eines Atoms. Bei Hauptgruppen-Elementen entspricht ihre Zahl der Hauptgruppen-Nummer: H und Li = 1, Be = 2, B = 3, C = 4, N = 5, O = 6, F und Cl = 7, Edelgase = 8.'},
+  {kw:['hauptgruppe'],
+   a:'Die Hauptgruppe gibt dir an, wie viele Valenzelektronen ein neutrales Atom hat. Bei der Bestimmung von Oxidationszahlen vergleichst du die formal zugeordneten Elektronen mit dieser Zahl: <b>mehr</b> → negative Oxidationszahl, <b>weniger</b> → positive Oxidationszahl.'},
+  {kw:['freie elektronen','freies elektronen','elektronenpaar','nichtbindend','nicht bindend','nichtbindende'],
+   a:'Freie (nichtbindende) Elektronenpaare sind Valenzelektronen, die nicht an einer Bindung beteiligt sind. Du zeichnest sie als <b>Striche</b> am jeweiligen Atom. Beispiel: Sauerstoff in H₂O hat 2 freie Elektronenpaare. Diese 4 Elektronen werden beim Zählen für die Oxidationszahl voll dem Atom angerechnet.'},
+  {kw:['elektronegativ','en-wert','en wert'],
+   a:'Die Elektronegativität (EN) gibt an, wie stark ein Atom in einer Bindung die gemeinsamen Elektronen zu sich zieht. Wichtige Werte: F 4,0 · O 3,4 · N 3,0 · Cl 3,2 · C 2,55 · H 2,2 · Na 0,9 · Ca 1,0. Bei jeder Bindung gilt: Das elektronegativere Atom bekommt beide Bindungselektronen zugeordnet, wenn du Oxidationszahlen bestimmst.'},
+  {kw:['oxidationszahl','oxzahl','oxz '],
+   a:'Die Oxidationszahl gibt an, wie viele Elektronen ein Atom formal mehr oder weniger besitzt als im neutralen Zustand. So bestimmst du sie:<br>1) Lewisformel zeichnen.<br>2) Bindungselektronen dem elektronegativeren Partner zuordnen, freie Elektronenpaare bleiben am Atom.<br>3) Gefundene Elektronenzahl mit der Hauptgruppennummer vergleichen: zu viele → negativ, zu wenige → positiv.<br>4) Probe: Die Summe aller Oxidationszahlen entspricht der Gesamtladung des Teilchens.'},
+  {kw:['oxidation','reduktion','oilrig','elektronen abgabe','elektronen aufnahme'],
+   a:'<b>Oxidation = Abgabe</b> von Elektronen (Oxidationszahl steigt). <b>Reduktion = Aufnahme</b> von Elektronen (Oxidationszahl sinkt). Eselsbrücke <b>OilRig</b>: Oxidation is loss, Reduction is gain. Beides zusammen ergibt eine Redoxreaktion.'},
+  {kw:['edel','unedel','redoxreihe'],
+   a:'<b>Unedle Metalle</b> (z. B. Li, Mg, Zn, Fe) geben ihre Elektronen leicht ab, sie sind gute Elektronendonatoren und werden leicht oxidiert. <b>Edle Metalle</b> (z. B. Cu, Ag, Au) geben Elektronen nur sehr ungern ab. In der Redoxreihe stehen die unedelsten oben, die edelsten unten. Ein unedles Metall reduziert die Kationen eines edleren Metalls; umgekehrt geht das nicht.'},
+  {kw:['säure-base','säurebase','protonen','protonenübertragung'],
+   a:'Bei einer Säure-Base-Reaktion wird ein Proton (H⁺) übertragen, die Oxidationszahlen aller Atome bleiben gleich. So unterscheidest du sie von einer Redoxreaktion: Bestimme die Oxidationszahlen vor und nach der Reaktion. Ändert sich nichts → Säure-Base. Ändern sich Oxidationszahlen → Redox.'},
+  {kw:['teilgleichung','ausgleichen','elektronen ausgleich'],
+   a:'Bei einer Redoxreaktion stellst du zwei Teilgleichungen auf: eine für die Oxidation, eine für die Reduktion. Beispiel: Zn → Zn²⁺ + 2 e⁻ (Oxidation) und Ag⁺ + e⁻ → Ag (Reduktion). Wenn die Elektronenzahlen unterschiedlich sind, multipliziere die Teilgleichungen mit passenden Faktoren, damit sich die Elektronen beim Addieren kürzen.'},
+  {kw:['redoxreaktion','redox erkennen','redox unterscheid'],
+   a:'Eine Redoxreaktion erkennst du daran, dass sich mindestens eine Oxidationszahl ändert. Bestimme also alle Oxidationszahlen links und rechts. Steigt eine Oxidationszahl → Oxidation. Sinkt eine → Reduktion. Steigt eine UND sinkt eine andere → Redoxreaktion.'},
+  {kw:['hydrid'],
+   a:'In Hydriden (Metall + Wasserstoff, z. B. NaH oder CaH₂) ist Wasserstoff <b>elektronegativer</b> als das Metall. Deshalb bekommt H die Bindungselektronen zugeordnet und hat dort ausnahmsweise die Oxidationszahl <b>-I</b> statt +I.'},
+  {kw:['peroxid'],
+   a:'In Peroxiden (z. B. H₂O₂) sind zwei Sauerstoff-Atome direkt aneinander gebunden. Die O-O-Bindungselektronen werden geteilt. Dadurch hat O hier <b>-I</b> statt der üblichen -II.'},
+  {kw:['römische zahl','vorzeichen','schreibweise'],
+   a:'Oxidationszahlen werden als <b>römische Zahlen mit Vorzeichen</b> geschrieben, z. B. +I, +II, +III, -I, -II, -III. So unterscheidet man sie klar von Ionenladungen (arabische Zahlen mit Ladung, z. B. Ca²⁺).'},
+  {kw:['oktett','oktettregel'],
+   a:'Die Oktettregel sagt: Hauptgruppen-Atome sind besonders stabil, wenn sie 8 Außenelektronen haben (Edelgaskonfiguration). Wasserstoff strebt nur 2 Elektronen an. Diese Regel hilft beim Aufstellen der Lewisformel.'},
+  {kw:['ionenladung','formalladung'],
+   a:'Eine Ionenladung beschreibt die tatsächliche Ladung eines Ions (z. B. Ca²⁺: zwei Protonen mehr als Elektronen). Die Oxidationszahl ist dagegen eine formale Größe – ein Hilfskonstrukt, das man auch bei kovalent gebundenen Atomen anwendet.'},
+];
+const botHistory = [];
+
+function escapeHTML(s){ return s.replace(/[&<>]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
+function appendBot(role, html){
+  const chat = document.getElementById('bot-chat');
+  const div = document.createElement('div');
+  div.className = 'bot-msg ' + role;
+  div.innerHTML = (role==='user'?'<b>Du:</b> '+escapeHTML(html):html);
+  chat.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
+  botHistory.push({role, text: html});
+}
+function isBlocked(q){
+  const low = q.toLowerCase().replace(/\s+/g,'');
+  return BLOCKED_KEYS.some(k => low.includes(k.toLowerCase().replace(/\s+/g,'')));
+}
+const BLOCK_REPLIES = [
+  '🚫 <b>Bot:</b> Guter Versuch 😉 – Frau Huber ist immer einen Schritt voraus! Konkrete Übungsstoffe verrate ich dir nicht. Aber ich erkläre dir gerne <b>allgemein</b>, wie man auf so etwas kommt – frag mich z. B. „Wie bestimme ich die Oxidationszahl?" oder „Wie zeichne ich eine Lewisformel?".',
+  '🚫 <b>Bot:</b> Ah ah ah! Diese Aufgabe sollst du selbst lösen. Frau Huber hat das hier gesperrt – sie ist nicht blöd 😎. Frag mich stattdessen nach dem Vorgehen oder einer allgemeinen Erklärung.',
+  '🚫 <b>Bot:</b> Diesen Stoff zu lösen ist deine Aufgabe – Frau Huber ist mir da einen Schritt voraus 🙂. Ich helfe dir gerne mit dem Vorgehen, z. B. „Wie zähle ich Valenzelektronen?" oder „Wie wende ich die FON-Regel an?".'
+];
+function askBot(){
+  const ta = document.getElementById('bot-q');
+  const q = ta.value.trim();
+  if(!q){ return; }
+  appendBot('user', q);
+  ta.value='';
+  if(isBlocked(q)){
+    const r = BLOCK_REPLIES[Math.floor(Math.random()*BLOCK_REPLIES.length)];
+    setTimeout(()=>appendBot('bot', r), 300);
+    return;
+  }
+  const low = q.toLowerCase();
+  let best = null, bestScore = 0;
+  BOT_TOPICS.forEach(t=>{
+    const score = t.kw.reduce((s,k)=> s + (low.includes(k.toLowerCase())?1:0), 0);
+    if(score > bestScore){ bestScore=score; best=t; }
+  });
+  let answer;
+  if(best && bestScore>0){ answer = '<b>Bot:</b> '+best.a; }
+  else { answer = '<b>Bot:</b> Zu deiner Frage habe ich keinen passenden Eintrag. Probier es mit anderen Begriffen – z. B. „Lewisformel", „Valenzelektronen", „Oxidationszahl bestimmen", „Säure-Base oder Redox", „Teilgleichungen ausgleichen". Wenn es ganz speziell ist, frag deine Lehrkraft – ich speichere deine Frage im Download mit ab.'; }
+  setTimeout(()=>appendBot('bot', answer), 300);
+  markDone(4);
+}
+function clearBot(){
+  document.getElementById('bot-chat').innerHTML='<div class="bot-msg bot"><b>Bot:</b> Verlauf gelöscht. Stell deine nächste Frage!</div>';
+  botHistory.length = 0;
+}
+
+document.querySelectorAll('section.ex').forEach(s=>{
+  const n = +s.dataset.ex;
+  if([0,2,3].includes(n)){
+    s.querySelector('.ex-head').addEventListener('click', ()=>{ setTimeout(()=>{ if(s.classList.contains('open')) markDone(n); }, 50); });
+  }
+});
+
+// ---------- Export ----------
+function exportResults(){
+  const name = (document.getElementById('student-name').value||'').trim() || 'Unbekannt';
+  const d = new Date().toLocaleString('de-DE');
+  const L=[], bar='==================================================', sub='--------------------------------------------------';
+  L.push(bar); L.push('  LERNUMGEBUNG REDOX – ERGEBNISSE'); L.push(bar);
+  L.push('Name:   '+name); L.push('Datum:  '+d); L.push('Bearbeitete Stationen: '+done.size+' / '+TOTAL_TASKS); L.push('');
+
+  L.push(sub); L.push('STATION 1 · Versuch & Auswertung'); L.push(sub);
+  L.push('Hypothese Versuch A:'); ((document.getElementById('ver-hypo-a').value||'').split('\n')).forEach(l=>L.push('   '+l));
+  L.push(''); L.push('Hypothese Versuch B:'); ((document.getElementById('ver-hypo-b').value||'').split('\n')).forEach(l=>L.push('   '+l));
+  L.push(''); L.push('Beobachtung Versuch A:'); ((document.getElementById('ver-beob-a').value||'').split('\n')).forEach(l=>L.push('   '+l));
+  L.push(''); L.push('Beobachtung Versuch B:'); ((document.getElementById('ver-beob-b').value||'').split('\n')).forEach(l=>L.push('   '+l));
+  L.push(''); L.push('Versuch A - Gleichungen ('+(versuchAns.score||'-')+'):');
+  L.push('   Oxidation:    '+(versuchAns.ox||'(keine Eingabe)'));
+  L.push('   Reduktion:    '+(versuchAns.red||'(keine Eingabe)'));
+  L.push('   Redox gesamt: '+(versuchAns.ges||'(keine Eingabe)'));
+  L.push('Musterlösung: Fe -> Fe2+ + 2 e- | Cu2+ + 2 e- -> Cu | Fe + Cu2+ -> Fe2+ + Cu');
+  L.push(''); L.push('Versuch B - Erklärung:');
+  ((versuchAns.begB||'(keine Eingabe)').split('\n')).forEach(l=>L.push('   '+l));
+  L.push('');
+
+  L.push(sub); L.push('STATION 4 · Bot-Verlauf'); L.push(sub);
+  botHistory.forEach(m=>{
+    const tag = m.role==='user' ? 'DU' : 'BOT';
+    const txt = m.text.replace(/<[^>]+>/g,'');
+    L.push(tag+': '+txt);
+  });
+  L.push('');
+
+  L.push(sub); L.push('STATION 5 · Oxidationszahlen'); L.push(sub);
+  const titles = {
+  'alf3':'Aluminiumfluorid (AlF3)',
+  'cah2':'Calciumhydrid (CaH2)',
+  'c2h4':'Ethen (C2H4)',
+  'ccl4':'Tetrachlormethan (CCl4)',
+  'hcho':'Methanal (HCHO)',
+  'c2h6':'Ethan (CH3CH3)',
+  'hcooh':'Methansaeure (HCOOH)',
+  'co3':'Carbonat-Ion (CO3^2-)',
+  'hclo':'Hypochlorige Saeure (HClO)',
+  'h2s':'Schwefelwasserstoff (H2S)',
+  'hso3':'Hydrogensulfit-Ion (HSO3^-)',
+  'nh3':'Ammoniak (NH3)',
+  'n2o':'Distickstoffmonoxid (N2O)',
+  'h3po4':'Phosphorsaeure (H3PO4)'
+  };
+  Object.keys(titles).forEach(sid=>{
+    const r = oxResults[sid];
+    L.push(titles[sid]+':');
+    if(!r){ L.push('   (nicht bearbeitet)'); return; }
+    L.push('   '+r.score+' / '+r.total+' richtig');
+    r.detail.forEach(d=>{
+      const m = d.ok?'+':'X';
+      L.push('     ['+m+'] '+d.name+': '+d.given+(d.ok?'':'  -> richtig: '+d.correct));
+    });
+  });
+  L.push('');
+
+  L.push(sub); L.push('STATION 6 · Säure-Base / Redox'); L.push(sub);
+  ['r1','r2','r3'].forEach(rid=>{
+    const r = sbrResults[rid];
+    if(!r){ L.push(rid.toUpperCase()+': (nicht bearbeitet)'); return; }
+    const m = r.ok?'+':'X';
+    L.push('['+m+'] '+rid.toUpperCase()+': gewählt='+r.chosen+' | korrekt='+r.correct);
+    if(r.chosen==='redox'){
+      L.push('   Oxidation:  '+(r.ox||'(keine Eingabe)'));
+      L.push('   Reduktion:  '+(r.red||'(keine Eingabe)'));
+    }
+  });
+  L.push('');
+
+  L.push(bar); L.push('  ENDE · '+name); L.push(bar);
+  const text = L.join('\r\n');
+  const blob = new Blob([text],{type:'text/plain;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href=url;
+  const safe = name.replace(/[^a-zA-Z0-9äöüÄÖÜß_-]/g,'_');
+  a.download = 'Redox_'+safe+'_'+d.split(',')[0].trim().replace(/\./g,'-')+'.txt';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
+}
+</script>
+</body>
+</html>
