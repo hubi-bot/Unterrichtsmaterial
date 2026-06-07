@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lernumgebung – Genetischer Fingerabdruck (Q12)</title>
+<style>
+:root{
+  --bg-1:#0f0c29;--bg-2:#302b63;--bg-3:#24243e;
+  --pink:#ff2e63;--cyan:#08d9d6;--yellow:#ffd93d;--green:#6bcf7f;--purple:#a18cd1;--orange:#ff9f43;
+  --text:#fff;--text-dim:#b0b0c8;--card:rgba(255,255,255,.08);--bd:rgba(255,255,255,.18);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,sans-serif;color:var(--text);min-height:100vh;line-height:1.55;
+  background:linear-gradient(135deg,var(--bg-1) 0%,var(--bg-2) 50%,var(--bg-3) 100%);
+  background-attachment:fixed;padding:0 0 50px;-webkit-font-smoothing:antialiased}
+.wrap{max-width:980px;margin:0 auto;padding:0 20px}
+header{text-align:center;padding:38px 20px 14px}
+.kicker{display:inline-block;font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;font-weight:800;
+  color:var(--cyan);background:rgba(8,217,214,.14);border:1px solid rgba(8,217,214,.5);
+  padding:5px 13px;border-radius:25px;margin-bottom:10px}
+h1{font-size:clamp(1.6rem,4.4vw,2.3rem);font-weight:800;letter-spacing:-1px;line-height:1.18;
+  background:linear-gradient(135deg,var(--pink),var(--cyan));
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+header p.lead{color:var(--text-dim);max-width:720px;margin:8px auto 0;font-size:.95rem}
+p,li{text-align:left;hyphens:auto}
+p{color:var(--text-dim);margin-bottom:8px;font-size:.94rem}
+.input-section p,.input-section li{color:var(--text)}
+b,strong{color:var(--text)}
+.card{background:var(--card);backdrop-filter:blur(10px);border:1px solid var(--bd);
+  border-radius:16px;padding:22px;margin-bottom:14px;box-shadow:0 6px 26px rgba(0,0,0,.25)}
+.progress{position:sticky;top:8px;z-index:50;background:rgba(15,12,41,.92);
+  backdrop-filter:blur(10px);border:1px solid var(--bd);border-radius:14px;padding:11px 16px;
+  display:flex;align-items:center;gap:13px;box-shadow:0 4px 20px rgba(0,0,0,.35);margin-bottom:14px;flex-wrap:wrap}
+.progress .bar{flex:1;min-width:160px;height:10px;background:rgba(255,255,255,.1);border-radius:20px;overflow:hidden}
+.progress .fill{height:100%;width:0;background:linear-gradient(90deg,var(--pink),var(--cyan));transition:width .5s;border-radius:20px}
+.progress .lbl{font-size:.84rem;font-weight:800;color:var(--text-dim);white-space:nowrap}
+.progress .score{font-size:.84rem;font-weight:800;color:var(--cyan);white-space:nowrap}
+.toc{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:10px}
+.toc .item{background:rgba(255,255,255,.04);border:1px solid var(--bd);border-radius:10px;
+  padding:11px 13px;color:var(--text);font-size:.86rem}
+.toc .item b{display:block;color:var(--cyan);font-size:.92rem;margin-bottom:3px}
+.ex{background:var(--card);backdrop-filter:blur(10px);border:1px solid var(--bd);
+  border-radius:16px;margin-bottom:14px;overflow:hidden;box-shadow:0 6px 26px rgba(0,0,0,.2)}
+.ex-head{display:flex;align-items:center;gap:14px;padding:16px 20px;cursor:pointer;user-select:none;transition:.2s}
+.ex-head:hover{background:rgba(255,255,255,.04)}
+.ex-num{flex-shrink:0;width:42px;height:42px;border-radius:12px;
+  background:linear-gradient(135deg,var(--pink),var(--purple));
+  color:#fff;font-weight:800;font-size:1.15rem;display:flex;align-items:center;justify-content:center}
+.ex-head .ti{flex:1}
+.ex-head h3{font-size:1.08rem;font-weight:700;color:var(--text)}
+.ex-head .sub{font-size:.85rem;color:var(--text-dim);margin-top:3px}
+.tag{display:inline-block;font-size:.7rem;font-weight:700;padding:3px 9px;border-radius:20px;
+  background:rgba(8,217,214,.16);color:var(--cyan);border:1px solid rgba(8,217,214,.4);margin-right:6px;margin-top:4px}
+.tag.done{background:rgba(107,207,127,.2);color:var(--green);border-color:var(--green)}
+.tag.score{background:rgba(255,217,61,.15);color:var(--yellow);border-color:var(--yellow)}
+.chev{flex-shrink:0;width:22px;height:22px;color:var(--cyan);transition:transform .3s}
+.ex.open .chev{transform:rotate(180deg)}
+.ex-body{display:none;padding:0 20px 22px}
+.ex.open .ex-body{display:block;animation:fade .3s ease}
+@keyframes fade{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.input-section{background:rgba(8,217,214,.06);border:1px solid rgba(8,217,214,.35);
+  border-radius:12px;padding:14px 18px;margin:8px 0 14px}
+.input-section h4{color:var(--cyan);font-size:.9rem;letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px}
+.input-section ul{margin:6px 0 6px 22px}
+.input-section ol{margin:6px 0 6px 22px}
+.input-section li{margin:3px 0;color:var(--text);font-size:.93rem}
+h3.sub{font-size:1rem;color:var(--cyan);margin:14px 0 6px}
+h4{color:var(--cyan);font-size:.95rem;margin:10px 0 5px}
+.task{background:rgba(255,255,255,.04);border:1px solid var(--bd);border-radius:12px;
+  padding:14px 16px;margin:10px 0}
+.task .meta{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.task .type{font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;font-weight:700;color:var(--purple);
+  background:rgba(161,140,209,.14);padding:3px 10px;border-radius:8px;border:1px solid rgba(161,140,209,.4)}
+.task .pkt{font-size:.75rem;font-weight:700;color:var(--yellow);background:rgba(255,217,61,.12);
+  padding:3px 10px;border-radius:8px;border:1px solid rgba(255,217,61,.4)}
+.task .q{font-weight:600;color:var(--text);margin-bottom:8px;font-size:.96rem}
+.task .opts{display:flex;flex-direction:column;gap:6px;margin:8px 0 8px}
+.task .opts label{display:flex;align-items:flex-start;gap:8px;padding:8px 10px;background:rgba(255,255,255,.04);
+  border:1px solid var(--bd);border-radius:8px;cursor:pointer;color:var(--text);font-size:.92rem}
+.task .opts label:hover{background:rgba(255,255,255,.07)}
+.task .opts input{margin-top:3px;flex-shrink:0}
+.zuordnung-list{display:flex;flex-direction:column;gap:7px;margin:8px 0}
+.zuordnung-list .row{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.04);border:1px solid var(--bd);
+  padding:7px 10px;border-radius:8px;flex-wrap:wrap}
+.zuordnung-list .item{flex:1;min-width:180px;color:var(--text);font-size:.92rem;font-weight:600}
+.zuordnung-list select{font-family:inherit;font-size:.88rem;padding:7px 9px;border-radius:8px;
+  border:2px solid var(--bd);background:#26233f;color:var(--text);font-weight:500;cursor:pointer;min-width:200px;flex:1}
+.lt-text{margin:8px 0;font-size:.94rem;color:var(--text);line-height:1.9}
+.lt-text input{display:inline-block;width:160px;font-family:inherit;font-size:.92rem;padding:4px 8px;
+  border:2px solid var(--bd);border-radius:6px;background:rgba(255,255,255,.06);color:var(--text);font-weight:600;margin:0 3px}
+.lt-text input:focus{outline:none;border-color:var(--cyan)}
+textarea.free{width:100%;min-height:90px;font-family:inherit;font-size:.94rem;
+  border:2px solid var(--bd);border-radius:12px;padding:11px 13px;resize:vertical;
+  color:var(--text);background:rgba(255,255,255,.06);margin-top:6px}
+textarea.free:focus{outline:none;border-color:var(--cyan)}
+.btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.btn{font-family:inherit;font-weight:700;font-size:.88rem;padding:9px 18px;border-radius:22px;cursor:pointer;
+  border:none;color:#0f0c29;background:linear-gradient(135deg,var(--green),var(--cyan));transition:.15s}
+.btn:hover:not(:disabled){transform:scale(1.04)}
+.btn:disabled{opacity:.55;cursor:not-allowed}
+.btn-purple{background:rgba(161,140,209,.22);color:var(--purple);border:1px solid var(--purple)}
+.btn-sec{background:rgba(255,255,255,.08);color:var(--text);border:1px solid var(--bd)}
+.btn-tip{background:rgba(255,159,67,.16);color:var(--orange);border:1px solid var(--orange)}
+.fb{margin-top:11px;padding:11px 14px;border-radius:10px;font-size:.9rem;font-weight:500;display:none}
+.fb.show{display:block}
+.fb.good{background:rgba(107,207,127,.16);color:var(--green);border:1px solid var(--green)}
+.fb.bad{background:rgba(255,46,99,.14);color:#ff8a9a;border:1px solid var(--pink)}
+.fb.part{background:rgba(255,217,61,.14);color:var(--yellow);border:1px solid var(--yellow)}
+.fb .rh{font-weight:800;display:block;margin-bottom:6px}
+.fb ul{margin:6px 0 4px 18px;font-weight:400}
+.fb li{margin:3px 0;color:inherit}
+.sol{display:none;margin-top:12px;background:rgba(161,140,209,.12);border-left:4px solid var(--purple);
+  border-radius:5px;padding:12px 16px;font-size:.92rem;color:var(--text)}
+.sol.show{display:block;animation:fade .3s ease}
+.sol h4{color:var(--purple);margin-bottom:6px}
+.bot-box{background:rgba(255,255,255,.04);border:1px solid var(--bd);border-radius:12px;padding:12px;margin-top:10px}
+.bot-chat{max-height:360px;overflow-y:auto;padding-right:6px;margin-bottom:10px}
+.bot-msg{margin:8px 0;padding:10px 13px;border-radius:10px;font-size:.92rem;line-height:1.55}
+.bot-msg.user{background:rgba(8,217,214,.12);border:1px solid rgba(8,217,214,.4);color:var(--text);margin-left:30px}
+.bot-msg.bot{background:rgba(161,140,209,.14);border:1px solid rgba(161,140,209,.4);color:var(--text);margin-right:30px}
+.bot-msg.bot b{color:var(--purple)}
+.bot-input{display:flex;gap:8px}
+.bot-input textarea{flex:1;min-height:60px;font-family:inherit;font-size:.93rem;
+  border:2px solid var(--bd);border-radius:10px;padding:9px 12px;color:var(--text);
+  background:rgba(255,255,255,.06);resize:vertical}
+.bot-input textarea:focus{outline:none;border-color:var(--cyan)}
+.tips{display:flex;flex-direction:column;gap:8px;margin:8px 0 4px}
+.tip{border:1px solid var(--orange);border-radius:10px;background:rgba(255,159,67,.06);overflow:hidden}
+.tipbtn{width:100%;text-align:left;background:none;border:none;font-family:inherit;font-weight:700;
+  font-size:.86rem;color:var(--orange);padding:9px 14px;cursor:pointer;display:flex;align-items:center;gap:8px}
+.tipbtn .arw{margin-left:auto;font-size:.62rem;transition:transform .25s}
+.tip.open .tipbtn .arw{transform:rotate(180deg)}
+.tiptext{display:none;padding:0 14px 12px;font-size:.88rem;color:var(--text)}
+.tip.open .tiptext{display:block;animation:fade .25s ease}
+.export-box{background:linear-gradient(135deg,rgba(8,217,214,.14),rgba(161,140,209,.14));
+  border:2px dashed var(--cyan);border-radius:18px;padding:22px;margin:18px 0;text-align:center}
+.export-box h2{color:var(--cyan);margin-bottom:8px}
+.export-box p{color:var(--text-dim);margin:0 auto 14px;max-width:600px;font-size:.93rem}
+.namefield{display:flex;flex-direction:column;align-items:center;gap:10px}
+.namefield input{background:rgba(255,255,255,.1);border:2px solid var(--bd);border-radius:8px;
+  padding:11px 16px;color:var(--text);font-size:1rem;font-family:inherit;width:280px;text-align:center}
+.namefield input:focus{outline:none;border-color:var(--cyan)}
+.bigscore{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin:8px 0 16px}
+.bigscore .pad{background:rgba(255,255,255,.06);border:1px solid var(--bd);border-radius:14px;padding:14px 22px;text-align:center;min-width:140px}
+.bigscore .pad .v{font-size:1.7rem;font-weight:800;color:var(--cyan)}
+.bigscore .pad .l{font-size:.78rem;color:var(--text-dim);letter-spacing:.08em;text-transform:uppercase}
+.foot{text-align:center;color:var(--text-dim);font-size:.8rem;margin-top:20px}
+</style>
+</head>
+<body>
+<header>
+  <span class="kicker">Biologie · Q12 · Vorbereitung Schülerlabor</span>
+  <h1>Genetischer Fingerabdruck<br>– von der DNA bis zum Bandenmuster</h1>
+  <p class="lead">DNA-Aufbau · Replikation · Polymerase-Kettenreaktion · Gelelektrophorese · STR-Profile. Bearbeite die Stationen, prüfe deine Antworten und exportiere am Ende deine Ergebnisse als TXT für die Lehrkraft.</p>
+</header>
+<div class="wrap">
+  <div class="progress">
+    <div class="bar"><div class="fill" id="pfill"></div></div>
+    <div class="lbl" id="scoreLbl">0 / 70 P.</div>
+  </div>
+  
+<section class="card">
+  <h2 style="color:var(--cyan);font-size:1.2rem">🧭 Dein Lernweg</h2>
+  <p>6 Stationen mit Input, Aufgaben und Selbstkontrolle. Am Ende lädst du deine Ergebnisse als Textdatei herunter und schickst sie deiner Lehrkraft.</p>
+  <div class="toc"><div class="item"><b>1 · DNA – Aufbau und Struktur</b>🧬 · 5 Aufgaben</div><div class="item"><b>2 · DNA-Replikation</b>↻ · 5 Aufgaben</div><div class="item"><b>3 · Polymerase-Kettenreaktion (PCR)</b>🧪 · 6 Aufgaben</div><div class="item"><b>4 · Gel-Elektrophorese</b>⚡ · 4 Aufgaben</div><div class="item"><b>5 · Genetischer Fingerabdruck</b>🔬 · 5 Aufgaben</div><div class="item"><b>6 · Abschluss – Fallbeispiel</b>📌 · 1 Aufgaben</div></div>
+</section>
+
+  
+<section class="ex" data-sec="dna" data-ex="1" data-maxpoints="14">
+  <div class="ex-head" onclick="toggleEx(this)">
+    <div class="ex-num">1</div>
+    <div class="ti">
+      <h3>🧬  DNA – Aufbau und Struktur</h3>
+      <div class="sub">Input + 5 Aufgaben · max. 14 Punkte
+        <span class="tag" id="tag-dna">offen</span>
+      </div>
+    </div>
+    <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 9l7 7 7-7"/></svg>
+  </div>
+  <div class="ex-body">
+    <div class="input-section">
+      <h4>📚 Worauf es ankommt</h4>
+      
+<p>Die <b>DNA</b> (Desoxyribonukleinsäure) ist der Träger der Erbinformation. Ihre wichtigsten Eigenschaften:</p>
+<ul>
+  <li><b>Doppelhelix</b> (Watson & Crick, 1953): zwei antiparallele Stränge winden sich umeinander.</li>
+  <li><b>Nucleotid</b> als Baustein: Phosphatrest + Desoxyribose + organische Base.</li>
+  <li><b>Vier Basen:</b> Adenin (A), Thymin (T), Guanin (G), Cytosin (C).</li>
+  <li><b>Komplementäre Basenpaarung:</b> <b>A=T</b> (zwei H-Brücken), <b>G≡C</b> (drei H-Brücken).</li>
+  <li><b>Zucker-Phosphat-Rückgrat</b> über Phosphodiester-Bindungen, Basen ragen ins Innere.</li>
+  <li><b>5′ → 3′-Richtung:</b> Jeder Strang hat einen Anfang (5′-Phosphat) und ein Ende (3′-OH). Die beiden Stränge sind <b>antiparallel</b> orientiert.</li>
+</ul>
+<p>Weil G≡C drei H-Brücken hat (gegenüber zwei bei A=T), sind <b>GC-reiche Abschnitte stabiler</b> – sie schmelzen erst bei höherer Temperatur. Das ist die physikalische Grundlage für den Denaturierungsschritt bei der PCR.</p>
+
+    </div>
+    <div class="task" data-aid="dna1" data-type="mc_multi" data-points="2">  <div class="meta">    <span class="type">Multiple Choice · mehrere richtig</span>    <span class="pkt">max. 2 P.</span>  </div>  <div class="q"><b>Aufgabe 1.</b> Welche der folgenden Basen kommen in der DNA vor?</div><div class="opts"><label><input type="checkbox" name="dna1" value="0"> <span>Adenin</span></label><label><input type="checkbox" name="dna1" value="1"> <span>Uracil</span></label><label><input type="checkbox" name="dna1" value="2"> <span>Thymin</span></label><label><input type="checkbox" name="dna1" value="3"> <span>Guanin</span></label><label><input type="checkbox" name="dna1" value="4"> <span>Cytosin</span></label></div><div class="tips"><div class="tip"><button class="tipbtn" onclick="toggleTip(this)">💡 Tipp anzeigen<span class="arw">▼</span></button><div class="tiptext">Eine der Basen kommt nur in der RNA vor.</div></div></div><div class="btns"><button class="btn" onclick="checkTask(this)">Antwort prüfen</button><button class="btn btn-purple sol-btn" onclick="toggleSol(this)">📖 Musterlösung anzeigen</button></div><div class="fb"></div><div class="sol"><h4>Musterlösung</h4><p><b>Richtige Antworten:</b> Adenin, Thymin, Guanin, Cytosin</p></div></div><div class="task" data-aid="dna2" data-type="zuordnung" data-points="4">  <div class="meta">    <span class="type">Zuordnung</span>    <span class="pkt">max. 4 P.</span>  </div>  <div class="q"><b>Aufgabe 2.</b> Ordne den Basenpaaren die Anzahl der Wasserstoffbrücken und die Bindungspartner zu.</div><div class="zuordnung-list"><div class="row"><span class="item">A bindet komplementär an …</span><select data-item="0"><option value="-1">— bitte wählen —</option><option value="0">T (Thymin)</option><option value="1">C (Cytosin)</option><option value="2">A (Adenin)</option><option value="3">G (Guanin)</option><option value="4">1</option><option value="5">2</option><option value="6">3</option><option value="7">4</option></select></div><div class="row"><span class="item">G bindet komplementär an …</span><select data-item="1"><option value="-1">— bitte wählen —</option><option value="0">T (Thymin)</option><option value="1">C (Cytosin)</option><option value="2">A (Adenin)</option><option value="3">G (Guanin)</option><option value="4">1</option><option value="5">2</option><option value="6">3</option><option value="7">4</option></select></div><div class="row"><span class="item">Wie viele H-Brücken bei A=T?</span><select data-item="2"><option value="-1">— bitte wählen —</option><option value="0">T (Thymin)</option><option value="1">C (Cytosin)</option><option value="2">A (Adenin)</option><option value="3">G (Guanin)</option><option value="4">1</option><option value="5">2</option><option value="6">3</option><option value="7">4</option></select></div><div class="row"><span class="item">Wie viele H-Brücken bei G≡C?</span><select data-item="3"><option value="-1">— bitte wählen —</option><option value="0">T (Thymin)</option><option value="1">C (Cytosin)</option><option value="2">A (Adenin)</option><option value="3">G (Guanin)</option><option value="4">1</option><option value="5">2</option><option value="6">3</option><option value="7">4</option></select></div></div><div class="btns"><button class="btn" onclick="checkTask(this)">Antwort prüfen</button><button class="btn btn-purple sol-btn" onclick="toggleSol(this)">📖 Musterlösung anzeigen</button></div><div class="fb"></div><div class="sol"><h4>Musterlösung</h4><ul><li><b>A bindet komplementär an …</b> → T (Thymin)</li><li><b>G bindet komplementär an …</b> → C (Cytosin)</li><li><b>Wie viele H-Brücken bei A=T?</b> → 2</li><li><b>Wie viele H-Brücken bei G≡C?</b> → 3</li></ul></div></div><div class="task" data-aid="dna3" data-type="freitext" data-points="3">  <div class="meta">    <span class="type">Freitext</span>    <span class="pkt">max. 3 P.</span>  </div>  <div class="q"><b>Aufgabe 3.</b> Beschreibe den Aufbau eines DNA-Nucleotids. Nenne alle drei Bestandteile und ihre räumliche Verknüpfung.</div><textarea class="free" data-fid="dna3" placeholder="Deine Antwort …"></textarea><div class="btns"><button class="btn" onclick="checkTask(this)">Antwort prüfen</button><button class="btn btn-purple sol-btn" onclick="toggleSol(this)">📖 Musterlösung anzeigen</button></div><div class="fb"></div><div class="sol"><h4>Musterlösung</h4><p>Ein DNA-Nucleotid besteht aus einem Phosphatrest, der Pentose Desoxyribose und einer der vier organischen Basen (A, T, G, C). Phosphat ist über eine Esterbindung am 5′-C der Desoxyribose, die Base hängt über eine N-glycosidische Bindung am 1′-C. Mehrere Nucleotide werden über Phosphodiesterbindungen vom 3′-OH eines Zuckers zum 5′-Phosphat des nächsten zum Strang verknüpft.</p></div></div><div class="task" data-aid="dna4" data-type="mc_single" data-points="1">  <div class="meta">    <span class="type">Multiple Choice · 1 richtig</span>    <span class="pkt">max. 1 P.</span>  </div>  <div class="q"><b>Aufgabe 4.</b> Was bedeutet "antiparallel" bei den beiden DNA-Strängen?</div><div class="opts"><label><input type="radio" name="dna4" value="0"> <span>Beide Stränge laufen vom 5′-Ende zum 3′-Ende in der gleichen Richtung.</span></label><label><input type="radio" name="dna4" value="1"> <span>Die beiden Stränge sind gegenläufig orientiert: ein Strang verläuft 5′→3′, der komplementäre 3′→5′.</span></label><label><input type="radio" name="dna4" value="2"> <span>Die Stränge sind gleich aufgebaut, weisen aber unterschiedliche Basen auf.</span></label><label><input type="radio" name="dna4" value="3"> <span>Antiparallel meint, dass die Stränge im rechten Winkel zueinander stehen.</span></label></div><div class="btns"><button class="btn" onclick="checkTask(this)">Antwort prüfen</button><button class="btn btn-purple sol-btn" onclick="toggleSol(this)">📖 Musterlösung anzeigen</button></div><div class="fb"></div><div class="sol"><h4>Musterlösung</h4><p><b>Richtige Antwort:</b> Die beiden Stränge sind gegenläufig orientiert: ein Strang verläuft 5′→3′, der komplementäre 3′→5′.</p></div></div><div class="task" data-aid="dna5" data-type="lueckentext" data-points="4">  <div class="meta">    <span class="type">Lückentext</span>    <span class="pkt">max. 4 P.</span>  </div>  <div class="q"><b>Aufgabe 5.</b> Vervollständige die Aussage zur DNA-Struktur.</div><div class="lt-text">Die DNA bildet eine <input type="text" data-blank="1" placeholder="?" />-Helix aus zwei <input type="text" data-blank="2" placeholder="?" /> verlaufenden Strängen. Die Basenpaare A=T und G≡C werden durch <input type="text" data-blank="3" placeholder="?" />-Brücken zusammengehalten. Zwischen den Nucleotiden eines Stranges besteht eine <input type="text" data-blank="4" placeholder="?" />-Bindung.</div><div class="btns"><button class="btn" onclick="checkTask(this)">Antwort prüfen</button><button class="btn btn-purple sol-btn" onclick="toggleSol(this)">📖 Musterlösung anzeigen</button></div><div class="fb"></div><div class="sol"><h4>Musterlösung</h4><ul><li>Lücke 1: <b>doppel</b> (auch: doppelhelix)</li><li>Lücke 2: <b>antiparallel</b></li><li>Lücke 3: <b>wasserstoff</b> (auch: h)</li><li>Lücke 4: <b>phosphodiester</b> (auch: phosphor-diester, phosphodiester-bindung, phosphodiester bindung)</li></ul></div></div>
+  </div>
+</section>
+
+<section class="ex" data-sec="rep" data-ex="2" data-maxpoints="15">
+  <div class="ex-head" onclick="toggleEx(this)">
+    <div class="ex-num">2</div>
+    <div class="ti">
+      <h3>↻  DNA-Replikation</h3>
+      <div class="sub">Input + 5 Aufgaben · max. 15 Punkte
+        <span class="tag" id="tag-rep">offen</span>
+      </div>
+    </div>
+    <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 9l7 7 7-7"/></svg>
+  </div>
+  <div class="ex-body">
+    <div class="input-section">
+      <h4>📚 Worauf es ankommt</h4>
+      
+<p>Die <b>DNA-Replikation</b> verdoppelt die Erbsubstanz vor jeder Zellteilung. Sie verläuft <b>semikonservativ</b> (Meselson &amp; Stahl 1958): jede Tochter-DNA enthält einen alten und einen neu synthetisierten Strang.</p>
+<p>Sie läuft in drei Phasen ab: <b>Initiation – Elongation – Termination</b>. Wichtige Enzyme:</p>
+<ul>
+  <li><b>Helicase</b> – entwindet die Doppelhelix und trennt die Stränge.</li>
+  <li><b>Topoisomerase</b> – baut Torsionsspannungen vor der Replikationsgabel ab.</li>
+  <li><b>Einzelstrangbindende Proteine (SSB)</b> – halten die Einzelstränge stabil.</li>
+  <li><b>Primase</b> – synthetisiert kurze <b>RNA-Primer</b> als Startpunkte.</li>
+  <li><b>DNA-Polymerase</b> – knüpft neue Nucleotide ausschließlich an ein freies 3′-OH-Ende an, arbeitet nur in <b>5′ → 3′-Richtung</b>.</li>
+  <li><b>Ligase</b> – verbindet einzelne DNA-Stücke (Okazaki-Fragmente) zum durchgehenden Strang.</li>
+</ul>
+<p><b>Leitstrang (leading strand)</b>: Polymerase folgt der Helicase, kontinuierliche Synthese in 5′→3′.<br>
+<b>Folgestrang (lagging strand)</b>: Synthese in entgegengesetzter Richtung, daher diskontinuierlich in kurzen Stücken – den <b>Okazaki-Fragmenten</b>. Die Ligase verknüpft sie hinterher.</p>
+
+    </div>
+    <div class="task" data-aid="rep1" data-type="mc_single" data-points="1">  <div class="meta">    <span class="type">Multiple Choice · 1 richtig</span>    <span class="pkt">max. 1 P.</span>  </div>  <div class="q"><b>Aufgabe 1.</b> Wie verläuft die DNA-Replikation laut Meselson & Stahl?</div><div class="opts"><label><input type="radio" name="rep1" value="0"> <span>konservativ – die alte Doppelhelix bleibt erhalten, eine völlig neue entsteht.</span></label><label><input type="radio" name="rep1" value="1"> <span>semikonservativ – jede Tochter-DNA enthält einen alten und einen neuen Strang.</span></label><label><input type="radio" name="rep1" value="2"> <span>dispersiv – alte und neue DNA-Abschnitte sind beliebig in beiden Tochter-DNAs verteilt.</span></label><label><input type="radio" name="rep1" value="3"> <span>Sie verläuft unterschiedlich, je nachdem, ob Pro- oder Eukaryot.</span></label></div><div class="btns"><button class="btn" onclick="checkTask(this)">Antwort prüfen</button><button class="btn btn-purple sol-btn" onclick="toggleSol(this)">📖 Musterlösung anzeigen</button></div><div class="fb"></div><div class="sol"><h4>Musterlösung</h4><p><b>Richtige Antwort:</b> semikonservativ – jede Tochter-DNA enthält einen alten und einen neuen Strang.</p></div></div><div class="task" data-aid="rep2" data-type="zuordnung" data-points="5">  <div class="meta">    <span class="type">Zuordnung</span>    <span class="pkt">max. 5 P.</span>  </div>  <div class="q"><b>Aufgabe 2.</b> Ordne die Enzyme ihrer Funktion bei der Replikation zu.</div><div class="zuordnung-list"><div class="row"><span class="item">Helicase</span><select data-item="0"><option value="-1">— bitte wählen —</option><option value="0">entwindet die Doppelhelix und trennt die Stränge</option><option value="1">synthetisiert kurze RNA-Primer als Startpunkte</option><option value="2">verlängert den Strang in 5′→3′-Richtung am 3′-OH-Ende</option><option value="3">verbindet Okazaki-Fragmente zu einem durchgehenden Strang</option><option value="4">löst Torsionsspannungen vor der Replikationsgabel</option><option value="5">baut Aminosäuren in den Strang ein</option></select></div><div class="row"><span class="item">Primase</span><select data-item="1"><option value="-1">— bitte wählen —</option><option value="0">entwindet die Doppelhelix und trennt die Stränge</option><option value="1">synthetisiert kurze RNA-Primer als Startpunkte</option><option value="2">verlängert den Strang in 5′→3′-Richtung am 3′-OH-Ende</option><option value="3">verbindet Okazaki-Fragmente zu einem durchgehenden Strang</option><option value="4">löst Torsionsspannungen vor der Replikationsgabel</option><option value="5">baut Aminosäuren in den Strang ein</option></select></div><div class="row"><span class="item">DNA-Polymerase</span><select data-item="2"><option value="-1">— bitte wählen —</option><option value="0">entwindet die Doppelhelix und trennt die Stränge</option><option value="1">synthetisiert kurze RNA-Primer als Startpunkte</option><option value="2">verlängert den Strang in 5′→3′-Richtung am 3′-OH-Ende</option><option value="3">verbindet Okazaki-Fragmente zu einem durchgehenden Strang</option><option value="4">löst Torsionsspannungen vor der Replikationsgabel</option><option value="5">baut Aminosäuren in den Strang ein</option></select></div><div class="row"><span class="item">Ligase</span><select data-item="3"><option value="-1">— bitte wählen —</option><option value="0">entwindet die Doppelhelix und trennt die Stränge</option><option value="1">synthetisiert kurze RNA-Primer als Startpunkte</option><option value="2">verlängert den Strang in 5′→3′-Richtung am 3′-OH-Ende</option><option value="3">verbindet Okazaki-Fragmente zu einem durchgehenden Strang</option><option value="4">löst Torsionsspannungen vor der Replikationsgabel</option><option value="5">baut Aminosäuren in den Strang ein</option></select></div><div class="row"><span class="item">Topoisomerase</span><select data-item="4"><option value="-1">— bitte wählen —</option><option value="0">entwindet die Doppelhelix und trennt die Stränge</option><option value="1">synthetisiert kurze RNA-Primer als Startpunkte</option><option value="2">verlängert den Strang in 5′→3′-Richtung am 3′-OH-Ende</option><option value="3">verbindet Okazaki-Fragmente zu einem durchgehenden Strang</option><option value="4">löst Torsionsspannungen vor der Replikationsgabel</option><option value="5">baut Aminosäuren in den Strang ein</option></select></div></div><div class="btns"><button class="btn" onclick="checkTask(this)">Antwort prüfen</button><button class="btn btn-purple sol-btn" onclick="toggleSol(this)">📖 Musterlösung anzeigen</button></div><div class="fb"></div><div class="sol"><h4>Musterlösung</h4><ul><li><b>Helicase</b> → entwindet die Doppelhelix und trennt die Stränge</li><li><b>Primase</b> → synthetisiert kurze RNA-Primer als Startpunkte</li><li><b>DNA-Polymerase</b> → verlängert den Strang in 5′→3′-Richtung am 3′-OH-Ende</li><li><b>Ligase</b> → verbindet Okazaki-Fragmente zu einem durchgehenden Strang</li><li><b>Topoisomerase</b> → löst Torsionsspannungen vor der Replikationsgabel</li></ul></div></div><div class="task" data-aid="rep3" data-type="freitext" data-points="4">  <div class="meta">    <span class="type">Freitext</span>    <span class="pkt">max. 4 P.</span>  </div>  <div class="q"><b>Aufgabe 3.</b> Erläutere den Unterschied zwischen Leit- und Folgestrang. Gehe dabei auf die Synthese­richtung, die Notwendigkeit der Okazaki-Fragmente und die Funktion der Ligase ein.</div><textarea class="free" data-fid="rep3" placeholder="Deine Antwort …"></textarea><div class="btns"><button class="btn" onclick="checkTask(this)">Antwort prüfen</button><button class="btn btn-purple sol-btn" onclick="toggleSol(this)">📖 Musterlösung anzeigen</button></div><div class="fb"></div><div class="sol"><h4>Musterlösung</h4><p>Beide Stränge werden gleichzeitig synthetisiert, jedoch immer in 5′→3′-Richtung. Am Leitstrang folgt die DNA-Polymerase der Helicase und arbeitet kontinuierlich. Am Folgestrang verläuft die Synthese in die entgegengesetzte Richtung der Replikationsgabel, deshalb diskontinuierlich in kurzen Stücken, den Okazaki-Fragmenten. Jedes Fragment beginnt mit einem RNA-Primer (von der Primase). Die DNA-Ligase verbindet die Fragmente, nachdem die RNA-Primer durch DNA-Nucleotide ersetzt wurden, zu einem zusammenhängenden Strang.</p></div></div><div class="task" data-aid="rep4" data-type="mc_multi" data-points="2">  <div class="meta">    <span class="type">Multiple Choice · mehrere richtig</span>    <span class="pkt">max. 2 P.</span>  </div>  <div class="q"><b>Aufgabe 4.</b> Was sind Okazaki-Fragmente? Wähle alle korrekten Aussagen.</div><div class="opts"><label><input type="checkbox" name="rep4" value="0"> <span>Kurze, neu synthetisierte DNA-Stücke am Folgestrang.</span></label><label><input type="checkbox" name="rep4" value="1"> <span>Bruchstücke der Mutterstränge, die zufällig entstehen.</span></label><label><input type="checkbox" name="rep4" value="2"> <span>Sie werden später durch eine Ligase miteinander verknüpft.</span></label><label><input type="checkbox" name="rep4" value="3"> <span>Sie entstehen, weil die DNA-Polymerase nur in 5′→3′-Richtung arbeiten kann.</span></label></div><div class="btns"><button class="btn" onclick="checkTask(this)">Antwort prüfen</button><button class="btn btn-purple sol-btn" onclick="toggleSol(this)">📖 Musterlösung anzeigen</button></div><div class="fb"></div><div class="sol"><h4>Musterlösung</h4><p><b>Richtige Antworten:</b> Kurze, neu synthetisierte DNA-Stücke am Folgestrang., Sie werden später durch eine Ligase miteinander verknüpft., Sie entstehen, weil die DNA-Polymerase nur in 5′→3′-Richtung arbeiten kann.</p></div></div><div class="task" data-aid="rep5" data-type="lueckentext" data-points="3">  <div class="meta">    <span class="type">Lückentext</span>    <span class="pkt">max. 3 P.</span>  </div>  <div class="q"><b>Aufgabe 5.</b> Vervollständige den Satz zur Initiationsphase.</div><div class="lt-text">Die <input type="text" data-blank="1" placeholder="?" /> entwindet die DNA an der Replikationsgabel. Die <input type="text" data-blank="2" placeholder="?" /> setzt kurze RNA-Stücke (Primer), an die die DNA-Polymerase neue Nucleotide an das freie <input type="text" data-blank="3" placeholder="?" />-Ende anhängt.</div><div class="btns"><button class="btn" onclick="checkTask(this)">Antwort prüfen</button><button class="btn btn-purple sol-btn" onclick="toggleSol(this)">📖 Musterlösung anzeigen</button></div><div class="fb"></div><div class="sol"><h4>Musterlösung</h4><ul><li>Lücke 1: <b>helicase</b> (auch: helikase)</li><li>Lücke 2: <b>primase</b></li><li>Lücke 3: <b>3</b> (auch: 3&#x27;, 3′, 3-oh, 3&#x27;-oh, 3′-oh)</li></ul></div></div>
+  </div>
+</section>
+
+<section class="ex" data-sec="pcr" data-ex="3" data-maxpoints="14">
+  <div class="ex-head" onclick="toggleEx(this)">
+    <div class="ex-num">3</div>
+    <div class="ti">
+      <h3>🧪  Polymerase-Kettenreaktion (PCR)</h3>
+      <div class="sub">Input + 6 Aufgaben · max. 14 Punkte
+        <span class="tag" id="tag-pcr">offen</span>
+      </div>
+    </div>
+    <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 9l7 7 7-7"/></svg>
+  </div>
+  <div class="ex-body">
+    <div class="input-section">
+      <h4>📚 Worauf es ankommt</h4>
+      
+<p>Die <b>Polymerase-Kettenreaktion (PCR)</b> wurde 1983 von <b>Kary B. Mullis</b> entwickelt (Nobelpreis 1993). Sie vervielfältigt einen ganz bestimmten DNA-Abschnitt millionen- bis milliardenfach im Reagenzglas (in vitro).</p>
+<p><b>Notwendige Komponenten:</b></p>
+<ul>
+  <li>DNA-Matrize (Template)</li>
+  <li>zwei sequenzspezifische <b>Primer</b> (für jeden Strang einer)</li>
+  <li>freie <b>Nucleotide (dNTPs)</b></li>
+  <li>hitzestabile <b>Taq-Polymerase</b> aus <i>Thermus aquaticus</i></li>
+  <li>Mg²⁺-haltiger Puffer</li>
+</ul>
+<p>Ein <b>Zyklus</b> besteht aus drei Schritten im Thermocycler:</p>
+<ol>
+  <li><b>Denaturierung bei 95 °C</b> – die H-Brücken werden gelöst, die Doppelstränge trennen sich.</li>
+  <li><b>Annealing / Anlagerung der Primer bei ca. 55–65 °C</b> – die Primer binden komplementär an die Einzelstränge und legen den zu vervielfachenden Abschnitt fest.</li>
+  <li><b>Elongation / Polymerisierung bei 72 °C</b> – die Taq-Polymerase verlängert die Primer in 5′→3′-Richtung mit dNTPs.</li>
+</ol>
+<p>Nach jedem Zyklus verdoppelt sich die Anzahl der Ziel-DNA-Moleküle (exponentielles Wachstum): nach 30 Zyklen liegen aus einem einzigen Molekül theoretisch über 10⁹ Kopien vor.</p>
+
+    </div>
+    <div class="task" data-aid="pcr1" data-type="mc_single" data-points="1">  <div class="meta">    <span class="type">Multiple Choice · 1 richtig</span>    <span class="pkt">max. 1 P.</span>  </div>  <div class="q"><b>Aufgabe 1.</b> Welche Reihenfolge haben die Schritte eines PCR-Zyklus?</div><div class="opts"><label><input type="radio" name="pcr1" value="0"> <span>Annealing → Denaturierung → Elongation</span></label><label><input type="radio" name="pcr1" value="1"> <span>Denaturierung → Annealing → Elongation</span></label><label><input type="radio" name="pcr1" value="2"> <span>Elongation → Annealing → Denaturierung</span></label><label><input type="radio" name="pcr1" value="3"> <span>Denaturierung → Elongation → Annealing</span></label></div><div class="btns"><button class="btn" onclick="checkTask(this)">Antwort prüfen</button><button class="btn btn-purple sol-btn" onclick="toggleSol(this)">📖 Musterlösung anzeigen</button></div><div class="fb"></div><div class="sol"><h4>Musterlösung</h4><p><b>Richtige Antwort:</b> Denaturierung → Annealing → Elongation</p></div></div><div class="task" data-aid="pcr2" data-type="zuordnung" data-points="3">  <div class="meta">    <span class="type">Zuordnung</span>    <span class="pkt">max. 3 P.</span>  </div>  <div class="q"><b>Aufgabe 2.</b> Ordne die Temperaturen den Schritten der PCR zu.</div><div class="zuordnung-list"><div class="row"><span class="item">95 °C</span><select data-item="0"><option value="-1">— bitte wählen —</option><option value="0">Denaturierung – die Doppelstränge werden in Einzelstränge getrennt</option><option value="1">Annealing – die Primer binden an die Einzelstränge</option><option value="2">Elongation – die Taq-Polymerase verlängert die Primer</option><option value="3">Ligation der Fragmente</option></select></div><div class="row"><span class="item">55–65 °C</span><select data-item="1"><option value="-1">— bitte wählen —</option><option value="0">Denaturierung – die Doppelstränge werden in Einzelstränge getrennt</option><option value="1">Annealing – die Primer binden an die Einzelstränge</option><option value="2">Elongation – die Taq-Polymerase verlängert die Primer</option><option value="3">Ligation der Fragmente</option></select></div><div class="row"><span class="item">72 °C</span><select data-item="2"><option value="-1">— bitte wählen —</option><option value="0">Denaturierung – die Doppelstränge werden in Einzelstränge getrennt</option><option value="1">Annealing – die Primer binden an die Einzelstränge</option><option value="2">Elongation – die Taq-Polymerase verlängert die Primer</option><option value="3">Ligation der Fragmente</option></select></div></div><div class="btns"><button class="btn" onclick="checkTask(this)">Antwort prüfen</button><button class="btn btn-purple sol-btn" onclick="toggleSol(this)">📖 Musterlösung anzeigen</button></div><div class="fb"></div><div class="sol"><h4>Musterlösung</h4><ul><li><b>95 °C</b> → Denaturierung – die Doppelstränge werden in Einzelstränge getrennt</li><li><b>55–65 °C</b> → Annealing – die Primer binden an die Einzelstränge</li><li><b>72 °C</b> → Elongation – die Taq-Polymerase verlängert die Primer</li></ul></div></div><div class="task" data-aid="pcr3" data-type="freitext" data-points="3">  <div class="meta">    <span class="type">Freitext</span>    <span class="pkt">max. 3 P.</span>  </div>  <div class="q"><b>Aufgabe 3.</b> Begründe, warum bei der PCR ausgerechnet die Taq-Polymerase verwendet wird und nicht eine "normale" DNA-Polymerase aus dem Menschen.</div><textarea class="free" data-fid="pcr3" placeholder="Deine Antwort …"></textarea><div class="btns"><button class="btn" onclick="checkTask(this)">Antwort prüfen</button><button class="btn btn-purple sol-btn" onclick="toggleSol(this)">📖 Musterlösung anzeigen</button></div><div class="fb"></div><div class="sol"><h4>Musterlösung</h4><p>Bei jedem Zyklus wird die DNA auf 95 °C erhitzt, damit sich die H-Brücken öffnen. Eine normale Polymerase (z. B. menschliche) würde bei dieser Temperatur denaturieren und unbrauchbar werden. Die Taq-Polymerase stammt aus dem hitzeliebenden Bakterium Thermus aquaticus und ist thermostabil – sie übersteht die 95 °C und arbeitet bei 72 °C optimal. Dadurch muss kein neues Enzym in jedem Zyklus zugegeben werden.</p></div></div><div class="task" data-aid="pcr4" data-type="mc_single" data-points="1">  <div class="meta">    <span class="type">Multiple Choice · 1 richtig</span>    <span class="pkt">max. 1 P.</span>  </div>  <div class="q"><b>Aufgabe 4.</b> Aus einem einzelnen DNA-Doppelstrang entstehen nach n vollständigen PCR-Zyklen theoretisch wie viele Kopien?</div><div class="opts"><label><input type="radio" name="pcr4" value="0"> <span>n</span></label><label><input type="radio" name="pcr4" value="1"> <span>2·n</span></label><label><input type="radio" name="pcr4" value="2"> <span>2ⁿ</span></label><label><input type="radio" name="pcr4" value="3"> <span>n²</span></label></div><div class="tips"><div class="tip"><button class="tipbtn" onclick="toggleTip(this)">💡 Tipp anzeigen<span class="arw">▼</span></button><div class="tiptext">In jedem Zyklus wird die Anzahl der Zielmoleküle verdoppelt.</div></div></div><div class="btns"><button class="btn" onclick="checkTask(this)">Antwort prüfen</button><button class="btn btn-purple sol-btn" onclick="toggleSol(this)">📖 Musterlösung anzeigen</button></div><div class="fb"></div><div class="sol"><h4>Musterlösung</h4><p><b>Richtige Antwort:</b> 2ⁿ</p></div></div><div class="task" data-aid="pcr5" data-type="mc_multi" data-points="3">  <div class="meta">    <span class="type">Multiple Choice · mehrere richtig</span>    <span class="pkt">max. 3 P.</span>  </div>  <div class="q"><b>Aufgabe 5.</b> Was muss im PCR-Ansatz enthalten sein, damit die Reaktion abläuft? Wähle alle korrekten Antworten.</div><div class="opts"><label><input type="checkbox" name="pcr5" value="0"> <span>DNA-Matrize (Template) des zu vervielfältigenden Abschnitts</span></label><label><input type="checkbox" name="pcr5" value="1"> <span>mRNA des Zielproteins</span></label><label><input type="checkbox" name="pcr5" value="2"> <span>zwei sequenzspezifische DNA-Primer</span></label><label><input type="checkbox" name="pcr5" value="3"> <span>Ribosomen</span></label><label><input type="checkbox" name="pcr5" value="4"> <span>freie Desoxyribonukleotide (dNTPs)</span></label><label><input type="checkbox" name="pcr5" value="5"> <span>hitzestabile Taq-Polymerase</span></label></div><div class="btns"><button class="btn" onclick="checkTask(this)">Antwort prüfen</button><button class="btn btn-purple sol-btn" onclick="toggleSol(this)">📖 Musterlösung anzeigen</button></div><div class="fb"></div><div class="sol"><h4>Musterlösung</h4><p><b>Richtige Antworten:</b> DNA-Matrize (Template) des zu vervielfältigenden Abschnitts, zwei sequenzspezifische DNA-Primer, freie Desoxyribonukleotide (dNTPs), hitzestabile Taq-Polymerase</p></div></div><div class="task" data-aid="pcr6" data-type="freitext" data-points="3">  <div class="meta">    <span class="type">Freitext</span>    <span class="pkt">max. 3 P.</span>  </div>  <div class="q"><b>Aufgabe 6.</b> Welche Rolle spielen die beiden Primer für die PCR? Erkläre, warum man genau zwei verschiedene Primer braucht und welche Information sie liefern.</div><textarea class="free" data-fid="pcr6" placeholder="Deine Antwort …"></textarea><div class="btns"><button class="btn" onclick="checkTask(this)">Antwort prüfen</button><button class="btn btn-purple sol-btn" onclick="toggleSol(this)">📖 Musterlösung anzeigen</button></div><div class="fb"></div><div class="sol"><h4>Musterlösung</h4><p>Die Primer sind kurze, einzelsträngige DNA-Stücke, die komplementär zu den Enden des zu vervielfachenden Abschnitts sind. Sie liefern der Polymerase ein freies 3′-OH-Ende, an dem sie anbauen kann. Es werden zwei verschiedene Primer benötigt, weil die beiden Einzelstränge antiparallel sind und in 5′→3′-Richtung unterschiedliche Sequenzen haben. Durch die Wahl der Primer wird festgelegt, welcher DNA-Abschnitt überhaupt vervielfacht wird.</p></div></div>
+  </div>
+</section>
+
+<section class="ex" data-sec="gel" data-ex="4" data-maxpoints="8">
+  <div class="ex-head" onclick="toggleEx(this)">
+    <div class="ex-num">4</div>
+    <div class="ti">
+      <h3>⚡  Gel-Elektrophorese</h3>
+      <div class="sub">Input + 4 Aufgaben · max. 8 Punkte
+        <span class="tag" id="tag-gel">offen</span>
+      </div>
+    </div>
+    <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 9l7 7 7-7"/></svg>
+  </div>
+  <div class="ex-body">
+    <div class="input-section">
+      <h4>📚 Worauf es ankommt</h4>
+      
+<p>Bei der <b>Gel-Elektrophorese</b> werden DNA-Stücke nach ihrer <b>Größe (Länge in bp)</b> aufgetrennt.</p>
+<ul>
+  <li>Trägermaterial: <b>Agarose-Gel</b> (oder Polyacrylamid für kurze Fragmente).</li>
+  <li>DNA-Proben werden in Taschen am oberen Rand des Gels pipettiert.</li>
+  <li>Beim Anlegen einer Spannung wandert die DNA durch das Gel.</li>
+  <li><b>DNA ist negativ geladen</b> (Phosphatreste) → Wanderung zum <b>Pluspol (Anode)</b>.</li>
+  <li><b>Kurze Fragmente</b> durchqueren das Gelnetz leichter → sie wandern <b>weiter</b>.<br>
+      <b>Lange Fragmente</b> werden stärker zurückgehalten → sie bleiben <b>weiter oben</b>.</li>
+  <li>Sichtbarmachung: Anfärbung (z. B. Ethidiumbromid oder Midori Green) und Betrachtung unter <b>UV-Licht</b>.</li>
+  <li>Eine <b>DNA-Leiter (Marker)</b> mit Fragmenten bekannter Länge erlaubt die Abschätzung der Größe.</li>
+</ul>
+
+    </div>
+    <div class="task" data-aid="gel1" data-type="mc_single" data-points="1">  <div class="meta">    <span class="type">Multiple Choice · 1 richtig</span>    <span class="pkt">max. 1 P.</span>  </div>  <div class="q"><b>Aufgabe 1.</b> Warum wandert DNA in der Gelelektrophorese zum Pluspol?</div><div class="opts"><label><input type="radio" name="gel1" value="0"> <span>Sie ist durch die Basen positiv geladen.</span></label><label><input type="radio" name="gel1" value="1"> <span>Die negativ geladenen Phosphatreste werden vom Pluspol angezogen.</span></label><label><input type="radio" name="gel1" value="2"> <span>Die Wasserstoffbrücken im Inneren orientieren das Molekül.</span></label><label><input type="radio" name="gel1" value="3"> <span>Die Bewegung ist zufällig, der Pluspol spielt keine Rolle.</span></label></div><div class="btns"><button class="btn" onclick="checkTask(this)">Antwort prüfen</button><button class="btn btn-purple sol-btn" onclick="toggleSol(this)">📖 Musterlösung anzeigen</button></div><div class="fb"></div><div class="sol"><h4>Musterlösung</h4><p><b>Richtige Antwort:</b> Die negativ geladenen Phosphatreste werden vom Pluspol angezogen.</p></div></div><div class="task" data-aid="gel2" data-type="mc_single" data-points="1">  <div class="meta">    <span class="type">Multiple Choice · 1 richtig</span>    <span class="pkt">max. 1 P.</span>  </div>  <div class="q"><b>Aufgabe 2.</b> Welche DNA-Fragmente wandern am weitesten?</div><div class="opts"><label><input type="radio" name="gel2" value="0"> <span>Die längsten, weil sie schneller sind.</span></label><label><input type="radio" name="gel2" value="1"> <span>Die kürzesten, weil sie das Gel-Netz leichter durchqueren.</span></label><label><input type="radio" name="gel2" value="2"> <span>Mittlere Fragmente, lange und kurze bleiben gleichermaßen oben.</span></label><label><input type="radio" name="gel2" value="3"> <span>Die Wanderungsstrecke hängt nicht von der Fragmentlänge ab.</span></label></div><div class="btns"><button class="btn" onclick="checkTask(this)">Antwort prüfen</button><button class="btn btn-purple sol-btn" onclick="toggleSol(this)">📖 Musterlösung anzeigen</button></div><div class="fb"></div><div class="sol"><h4>Musterlösung</h4><p><b>Richtige Antwort:</b> Die kürzesten, weil sie das Gel-Netz leichter durchqueren.</p></div></div><div class="task" data-aid="gel3" data-type="freitext" data-points="3">  <div class="meta">    <span class="type">Freitext</span>    <span class="pkt">max. 3 P.</span>  </div>  <div class="q"><b>Aufgabe 3.</b> Erkläre kurz, wie man die DNA-Banden im fertig gelaufenen Gel sichtbar machen kann und wozu man eine sogenannte DNA-Leiter (Größenmarker) benötigt.</div><textarea class="free" data-fid="gel3" placeholder="Deine Antwort …"></textarea><div class="btns"><button class="btn" onclick="checkTask(this)">Antwort prüfen</button><button class="btn btn-purple sol-btn" onclick="toggleSol(this)">📖 Musterlösung anzeigen</button></div><div class="fb"></div><div class="sol"><h4>Musterlösung</h4><p>Die DNA-Banden werden mit einem in DNA interkalierenden Farbstoff (z. B. Ethidiumbromid oder Midori Green) angefärbt und unter UV-Licht zum Leuchten gebracht. So entstehen sichtbare Banden auf dem Gel. Ein Größenmarker („DNA-Leiter&quot;) besteht aus DNA-Fragmenten bekannter Länge. Er wird in eine eigene Tasche aufgetragen und ermöglicht durch Vergleich mit den eigenen Banden eine Abschätzung der Fragmentgröße.</p></div></div><div class="task" data-aid="gel4" data-type="lueckentext" data-points="3">  <div class="meta">    <span class="type">Lückentext</span>    <span class="pkt">max. 3 P.</span>  </div>  <div class="q"><b>Aufgabe 4.</b> Vervollständige die folgende Beschreibung.</div><div class="lt-text">Da DNA durch ihre <input type="text" data-blank="1" placeholder="?" /> negativ geladen ist, wandert sie im elektrischen Feld zum <input type="text" data-blank="2" placeholder="?" />. Je <input type="text" data-blank="3" placeholder="?" /> ein DNA-Fragment ist, desto schneller wandert es durch das Gel.</div><div class="btns"><button class="btn" onclick="checkTask(this)">Antwort prüfen</button><button class="btn btn-purple sol-btn" onclick="toggleSol(this)">📖 Musterlösung anzeigen</button></div><div class="fb"></div><div class="sol"><h4>Musterlösung</h4><ul><li>Lücke 1: <b>phosphat</b> (auch: phosphate, phosphatgruppen, phosphat-gruppen, phosphatreste)</li><li>Lücke 2: <b>pluspol</b> (auch: anode, +pol, +-pol)</li><li>Lücke 3: <b>kürzer</b> (auch: kurzer, kürzere, kleiner, kleinere)</li></ul></div></div>
+  </div>
+</section>
+
+<section class="ex" data-sec="fa" data-ex="5" data-maxpoints="13">
+  <div class="ex-head" onclick="toggleEx(this)">
+    <div class="ex-num">5</div>
+    <div class="ti">
+      <h3>🔬  Genetischer Fingerabdruck</h3>
+      <div class="sub">Input + 5 Aufgaben · max. 13 Punkte
+        <span class="tag" id="tag-fa">offen</span>
+      </div>
+    </div>
+    <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 9l7 7 7-7"/></svg>
+  </div>
+  <div class="ex-body">
+    <div class="input-section">
+      <h4>📚 Worauf es ankommt</h4>
+      
+<p>Der <b>genetische Fingerabdruck</b> nutzt <b>Short Tandem Repeats (STRs, Mikrosatelliten)</b>: kurze, sich hintereinander wiederholende Basenpaarabfolgen (z. B. GATA, 2–6 bp lang) in <b>nicht codierenden</b> Bereichen der DNA. Die <b>Anzahl der Wiederholungen</b> an einem bestimmten Ort (Locus) unterscheidet sich von Mensch zu Mensch.</p>
+<p><b>Verfahren:</b></p>
+<ol>
+  <li>DNA aus einer biologischen Spur (Blut, Haar, Speichel, Hautschuppe) gewinnen.</li>
+  <li>Die ausgewählten STR-Loci mit spezifischen Primern per <b>PCR</b> millionenfach vervielfältigen.</li>
+  <li>Auftrennung der entstandenen Fragmente nach Länge per <b>Gel- bzw. Kapillarelektrophorese</b>.</li>
+  <li>Anfärben/Detektieren der Banden – es entsteht ein <b>charakteristisches Bandenmuster</b>.</li>
+  <li>Vergleich mit Vergleichsproben (Verdächtige, Vater).</li>
+</ol>
+<p>In Deutschland werden im <b>DNA-Identifizierungs-Standard 16 STR-Loci</b> untersucht. Die Wahrscheinlichkeit, dass zwei nicht verwandte Personen dasselbe Profil zeigen, liegt damit bei etwa <b>1 : 10¹⁸</b>. Anwendungen: Forensik, Vaterschafts­nachweis, Verwandtschafts- und Stammbaumanalyse.</p>
+
+    </div>
+    <div class="task" data-aid="fa1" data-type="mc_single" data-points="1">  <div class="meta">    <span class="type">Multiple Choice · 1 richtig</span>    <span class="pkt">max. 1 P.</span>  </div>  <div class="q"><b>Aufgabe 1.</b> Was sind STRs (Short Tandem Repeats)?</div><div class="opts"><label><input type="radio" name="fa1" value="0"> <span>Codierende Genabschnitte mit besonders hoher Variabilität.</span></label><label><input type="radio" name="fa1" value="1"> <span>Kurze, sich wiederholende Basenfolgen in nicht codierenden DNA-Abschnitten.</span></label><label><input type="radio" name="fa1" value="2"> <span>Spezielle Proteine, die die DNA-Replikation steuern.</span></label><label><input type="radio" name="fa1" value="3"> <span>Marker-Moleküle, die einer DNA-Probe vor der PCR zugegeben werden.</span></label></div><div class="btns"><button class="btn" onclick="checkTask(this)">Antwort prüfen</button><button class="btn btn-purple sol-btn" onclick="toggleSol(this)">📖 Musterlösung anzeigen</button></div><div class="fb"></div><div class="sol"><h4>Musterlösung</h4><p><b>Richtige Antwort:</b> Kurze, sich wiederholende Basenfolgen in nicht codierenden DNA-Abschnitten.</p></div></div><div class="task" data-aid="fa2" data-type="mc_single" data-points="1">  <div class="meta">    <span class="type">Multiple Choice · 1 richtig</span>    <span class="pkt">max. 1 P.</span>  </div>  <div class="q"><b>Aufgabe 2.</b> Warum reichen drei untersuchte STR-Loci für eine sichere Identifizierung nicht aus?</div><div class="opts"><label><input type="radio" name="fa2" value="0"> <span>Drei Loci liefern statistisch noch zu viele übereinstimmende Profile in der Bevölkerung.</span></label><label><input type="radio" name="fa2" value="1"> <span>Die PCR funktioniert mit nur drei Primer-Paaren nicht zuverlässig.</span></label><label><input type="radio" name="fa2" value="2"> <span>Die DNA wird durch zu wenige Loci zerstört.</span></label><label><input type="radio" name="fa2" value="3"> <span>Die Gelelektrophorese kann nur drei Banden gleichzeitig auflösen.</span></label></div><div class="btns"><button class="btn" onclick="checkTask(this)">Antwort prüfen</button><button class="btn btn-purple sol-btn" onclick="toggleSol(this)">📖 Musterlösung anzeigen</button></div><div class="fb"></div><div class="sol"><h4>Musterlösung</h4><p><b>Richtige Antwort:</b> Drei Loci liefern statistisch noch zu viele übereinstimmende Profile in der Bevölkerung.</p></div></div><div class="task" data-aid="fa3" data-type="mc_multi" data-points="2">  <div class="meta">    <span class="type">Multiple Choice · mehrere richtig</span>    <span class="pkt">max. 2 P.</span>  </div>  <div class="q"><b>Aufgabe 3.</b> Welche Anwendungen des genetischen Fingerabdrucks gibt es? Wähle alle zutreffenden.</div><div class="opts"><label><input type="checkbox" name="fa3" value="0"> <span>Identifizierung von Tatverdächtigen</span></label><label><input type="checkbox" name="fa3" value="1"> <span>Bestimmung der Blutgruppe eines Patienten</span></label><label><input type="checkbox" name="fa3" value="2"> <span>Vaterschaftsnachweis</span></label><label><input type="checkbox" name="fa3" value="3"> <span>Bestimmung des Geschlechts an einem mehrere Stunden alten Embryo</span></label><label><input type="checkbox" name="fa3" value="4"> <span>Verwandtschaftsanalyse / Stammbaumforschung</span></label></div><div class="btns"><button class="btn" onclick="checkTask(this)">Antwort prüfen</button><button class="btn btn-purple sol-btn" onclick="toggleSol(this)">📖 Musterlösung anzeigen</button></div><div class="fb"></div><div class="sol"><h4>Musterlösung</h4><p><b>Richtige Antworten:</b> Identifizierung von Tatverdächtigen, Vaterschaftsnachweis, Verwandtschaftsanalyse / Stammbaumforschung</p></div></div><div class="task" data-aid="fa4" data-type="freitext" data-points="5">  <div class="meta">    <span class="type">Freitext</span>    <span class="pkt">max. 5 P.</span>  </div>  <div class="q"><b>Aufgabe 4.</b> Beschreibe das Verfahren des genetischen Fingerabdrucks in der Forensik in eigenen Worten. Gehe von der Spurensicherung bis zum Vergleich mit den Verdächtigen vor.</div><textarea class="free" data-fid="fa4" placeholder="Deine Antwort …"></textarea><div class="btns"><button class="btn" onclick="checkTask(this)">Antwort prüfen</button><button class="btn btn-purple sol-btn" onclick="toggleSol(this)">📖 Musterlösung anzeigen</button></div><div class="fb"></div><div class="sol"><h4>Musterlösung</h4><p>Aus einer biologischen Spur (z. B. Blut, Speichel, Haar) am Tatort wird die DNA isoliert. Mit spezifischen Primern werden mehrere STR-Loci per PCR vervielfältigt. Die Fragmente werden anschließend per Gel- bzw. Kapillarelektrophorese ihrer Größe nach aufgetrennt und sichtbar gemacht – es ergibt sich ein charakteristisches Bandenmuster. Dieses Muster wird mit Bandenmustern der Verdächtigen verglichen, die aus deren Speichelproben auf dieselbe Weise erzeugt wurden. Stimmen alle Banden überein, lässt sich der Spurenleger mit sehr hoher Wahrscheinlichkeit identifizieren.</p></div></div><div class="task" data-aid="fa5" data-type="lueckentext" data-points="4">  <div class="meta">    <span class="type">Lückentext</span>    <span class="pkt">max. 4 P.</span>  </div>  <div class="q"><b>Aufgabe 5.</b> Vervollständige die zentrale Aussage zum Verfahren.</div><div class="lt-text">Aus einer Spur am Tatort wird zunächst die DNA <input type="text" data-blank="1" placeholder="?" />. Anschließend werden bestimmte STR-Bereiche mithilfe der <input type="text" data-blank="2" placeholder="?" /> vervielfältigt. Die Auftrennung der entstandenen DNA-Fragmente nach <input type="text" data-blank="3" placeholder="?" /> erfolgt durch eine <input type="text" data-blank="4" placeholder="?" />.</div><div class="btns"><button class="btn" onclick="checkTask(this)">Antwort prüfen</button><button class="btn btn-purple sol-btn" onclick="toggleSol(this)">📖 Musterlösung anzeigen</button></div><div class="fb"></div><div class="sol"><h4>Musterlösung</h4><ul><li>Lücke 1: <b>isoliert</b> (auch: extrahiert, gewonnen)</li><li>Lücke 2: <b>pcr</b> (auch: polymerase-kettenreaktion, polymerasekettenreaktion)</li><li>Lücke 3: <b>länge</b> (auch: grösse, größe, fragmentlänge, fragmentgrösse, fragmentgröße)</li><li>Lücke 4: <b>gelelektrophorese</b> (auch: gel-elektrophorese, elektrophorese, kapillarelektrophorese)</li></ul></div></div>
+  </div>
+</section>
+
+<section class="ex" data-sec="ab" data-ex="6" data-maxpoints="6">
+  <div class="ex-head" onclick="toggleEx(this)">
+    <div class="ex-num">6</div>
+    <div class="ti">
+      <h3>📌  Abschluss – Fallbeispiel</h3>
+      <div class="sub">Input + 1 Aufgaben · max. 6 Punkte
+        <span class="tag" id="tag-ab">offen</span>
+      </div>
+    </div>
+    <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 9l7 7 7-7"/></svg>
+  </div>
+  <div class="ex-body">
+    <div class="input-section">
+      <h4>📚 Worauf es ankommt</h4>
+      <p>Verbinde dein Wissen aus allen Stationen zu einer geschlossenen Erklärung.</p>
+    </div>
+    <div class="task" data-aid="ab1" data-type="freitext" data-points="6">  <div class="meta">    <span class="type">Freitext</span>    <span class="pkt">max. 6 P.</span>  </div>  <div class="q"><b>Aufgabe 1.</b> An einem Tatort wird ein einzelnes Haar mit Wurzel gefunden. Beschreibe in einem zusammenhängenden Text, wie aus dieser Spur ein genetischer Fingerabdruck erzeugt wird, der mit Vergleichsproben zweier Verdächtiger verglichen werden kann. Verwende dabei die Fachbegriffe <b>DNA-Isolierung, PCR (mit Denaturierung, Annealing, Elongation), Taq-Polymerase, Primer, STR, Gelelektrophorese, Bandenmuster</b> sinnvoll.</div><textarea class="free" data-fid="ab1" placeholder="Deine Antwort …"></textarea><div class="btns"><button class="btn" onclick="checkTask(this)">Antwort prüfen</button><button class="btn btn-purple sol-btn" onclick="toggleSol(this)">📖 Musterlösung anzeigen</button></div><div class="fb"></div><div class="sol"><h4>Musterlösung</h4><p>Aus der Haarwurzel werden Zellen aufgeschlossen und die DNA isoliert. Anschließend werden ausgewählte STR-Loci per PCR vermehrt: Bei 95 °C werden die Doppelstränge denaturiert, bei ca. 60 °C lagern sich die sequenzspezifischen Primer an, und bei 72 °C verlängert die hitzestabile Taq-Polymerase die Primer in 5′→3′-Richtung. Nach ca. 30 Zyklen liegen die Ziel-STRs millionenfach vor. Die Fragmente werden per Gel-Elektrophorese nach ihrer Länge aufgetrennt – kürzere wandern weiter, längere bleiben oben. Es entsteht ein charakteristisches Bandenmuster. Mit den Vergleichsproben der Verdächtigen wird identisch verfahren. Ein übereinstimmendes Bandenmuster identifiziert den Spurenleger mit sehr hoher Wahrscheinlichkeit.</p></div></div>
+  </div>
+</section>
+
+  
+<section class="ex" data-sec="bot" data-ex="bot" data-maxpoints="0">
+  <div class="ex-head" onclick="toggleEx(this)">
+    <div class="ex-num">?</div>
+    <div class="ti">
+      <h3>🤖  Hilfe-Bot</h3>
+      <div class="sub">Fragen zu DNA, Replikation, PCR, Gel, Fingerabdruck – ohne Aufgaben-Lösungen.</div>
+    </div>
+    <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 9l7 7 7-7"/></svg>
+  </div>
+  <div class="ex-body">
+    <p>Tippe deine Frage ein, z. B. „Wie läuft die PCR ab?" oder „Was ist ein STR?". Der Bot erklärt dir die <b>Begriffe und Vorgehensweisen</b> – die konkreten Aufgaben aus dieser Lernumgebung löst er dir absichtlich nicht.</p>
+    <div class="bot-box">
+      <div class="bot-chat" id="bot-chat">
+        <div class="bot-msg bot"><b>Bot:</b> Hi! Frag mich alles rund um DNA, Replikation, PCR, Gel-Elektrophorese und Genetischen Fingerabdruck. Womit kann ich helfen?</div>
+      </div>
+      <div class="bot-input">
+        <textarea id="bot-q" placeholder="Tippe deine Frage ..."></textarea>
+      </div>
+      <div class="btns">
+        <button class="btn" onclick="askBot()">Frage senden</button>
+        <button class="btn btn-sec" onclick="clearBot()">Verlauf löschen</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+  
+<section class="card" id="liveScoreCard">
+  <h2 style="color:var(--cyan);font-size:1.2rem">📊 Dein aktueller Stand</h2>
+  <p>Aktualisiert sich automatisch, sobald du eine Aufgabe prüfen lässt. Die Note ist vorläufig – die Lehrkraft entscheidet final anhand deiner Antworten.</p>
+  <div class="bigscore">
+    <div class="pad"><div class="v" id="liveScore">0</div><div class="l">Punkte</div></div>
+    <div class="pad"><div class="v" id="livePct">0 %</div><div class="l">Anteil</div></div>
+    <div class="pad"><div class="v" id="liveNote">–</div><div class="l">vorläufige Note</div></div>
+  </div>
+</section>
+
+  
+<section class="export-box">
+  <h2>📤 Ergebnisse als Textdatei abgeben</h2>
+  <p>Trage deinen Namen ein und lade deine Bearbeitung als TXT herunter. Alle Antworten, Punkte und der Bot-Verlauf werden mitgespeichert. Die Datei schickst du anschließend deiner Lehrkraft.</p>
+  <div class="namefield">
+    <input type="text" id="student-name" placeholder="Vor- und Nachname">
+    <button class="btn" onclick="exportResults()">📥 Ergebnisse herunterladen</button>
+  </div>
+</section>
+
+  <p class="foot">Lernumgebung Genetischer Fingerabdruck · Vorbereitung Schülerlabor · Q12</p>
+</div>
+<script>const TOTAL_MAX = 70;
+const MC_CORRECT = {"dna1": [0, 2, 3, 4], "dna4": 1, "rep1": 1, "rep4": [0, 2, 3], "pcr1": 1, "pcr4": 2, "pcr5": [0, 2, 4, 5], "gel1": 1, "gel2": 1, "fa1": 1, "fa2": 0, "fa3": [0, 2, 4]};
+const ZU_CORRECT = {"dna2": {"0": 0, "1": 1, "2": 5, "3": 6}, "rep2": {"0": 0, "1": 1, "2": 2, "3": 3, "4": 4}, "pcr2": {"0": 0, "1": 1, "2": 2}};
+const LT_CORRECT = {"dna5": {"1": ["doppel", "doppelhelix"], "2": ["antiparallel"], "3": ["wasserstoff", "h"], "4": ["phosphodiester", "phosphor-diester", "phosphodiester-bindung", "phosphodiester bindung"]}, "rep5": {"1": ["helicase", "helikase"], "2": ["primase"], "3": ["3", "3'", "3′", "3-oh", "3'-oh", "3′-oh"]}, "gel4": {"1": ["phosphat", "phosphate", "phosphatgruppen", "phosphat-gruppen", "phosphatreste"], "2": ["pluspol", "anode", "+pol", "+-pol"], "3": ["kürzer", "kurzer", "kürzere", "kleiner", "kleinere"]}, "fa5": {"1": ["isoliert", "extrahiert", "gewonnen"], "2": ["pcr", "polymerase-kettenreaktion", "polymerasekettenreaktion"], "3": ["länge", "grösse", "größe", "fragmentlänge", "fragmentgrösse", "fragmentgröße"], "4": ["gelelektrophorese", "gel-elektrophorese", "elektrophorese", "kapillarelektrophorese"]}};
+const FREI_CONCEPTS = {"dna3": [{"name": "Phosphatrest genannt", "kw": ["phosphat", "phosphor"]}, {"name": "Desoxyribose / Zucker genannt", "kw": ["desoxyribose", "pentose", "zucker"]}, {"name": "Base (eine der vier oder allgemein) genannt", "kw": ["base", "adenin", "thymin", "guanin", "cytosin"]}], "rep3": [{"name": "Synthese 5′→3′ am 3′-OH-Ende", "kw": ["5", "5'", "5′", "3", "3'", "3′"]}, {"name": "Leitstrang kontinuierlich", "kw": ["leitstrang", "kontinuierl", "leading"]}, {"name": "Folgestrang diskontinuierlich / Okazaki", "kw": ["folgestrang", "okazaki", "diskontinuierlich", "lagging"]}, {"name": "Ligase verknüpft Fragmente", "kw": ["ligase", "verbind", "verknüp"]}], "pcr3": [{"name": "Hohe Temperatur (95 °C) bei Denaturierung erwähnt", "kw": ["95", "hitze", "temperatur", "denatur"]}, {"name": "Normale Polymerase würde denaturieren", "kw": ["denatur", "kaputt", "zerstör", "inaktiv"]}, {"name": "Taq aus Thermus aquaticus / hitzestabil", "kw": ["thermus", "aquaticus", "hitzestabil", "thermostabil", "hitzeliebend"]}], "pcr6": [{"name": "Primer liefert 3′-OH / Start der Polymerase", "kw": ["3", "3'", "3'-oh", "3′", "startpunkt", "startsequenz", "start"]}, {"name": "Antiparallele Stränge / zwei verschiedene Sequenzen", "kw": ["antiparallel", "beide stränge", "einzelstrang", "gegenläufig", "verschied"]}, {"name": "Primer legen den Abschnitt / Selektivität fest", "kw": ["festgelegt", "definiert", "bestimm", "abschnitt", "auswahl"]}], "gel3": [{"name": "Färbung mit z. B. Ethidiumbromid / Midori", "kw": ["ethidium", "midori", "farbstoff", "färben", "einfärb", "interkal"]}, {"name": "UV-Licht zur Sichtbarmachung", "kw": ["uv", "ultraviolett"]}, {"name": "Größenmarker dient zum Vergleich der Länge", "kw": ["marker", "leiter", "vergleich", "länge", "größe", "standard"]}], "fa4": [{"name": "DNA-Isolierung aus Spur", "kw": ["isolier", "extrah", "gewinn", "aus dem blut", "aus haar", "aus speichel"]}, {"name": "PCR-Vervielfältigung der STR-Bereiche", "kw": ["pcr", "vervielf", "amplifi", "vermehr", "kopier"]}, {"name": "Gel- bzw. Kapillarelektrophorese zur Auftrennung", "kw": ["gelelektroph", "gel-elektroph", "gel ", "gel.", "elektroph", "kapillar"]}, {"name": "Bandenmuster sichtbar machen", "kw": ["bandenmuster", "banden", "muster"]}, {"name": "Vergleich mit Vergleichsproben (Verdächtige / Vater)", "kw": ["vergleich", "verdächt", "abgleich", "tatverdäch"]}], "ab1": [{"name": "DNA-Isolierung aus Haarwurzel", "kw": ["isolier", "extrah", "haarwurzel", "zelle aufgeschlossen"]}, {"name": "PCR-Schritte mit korrekten Temperaturen", "kw": ["95", "72", "60", "denatur", "annealing", "anlager", "elongation", "polymeris"]}, {"name": "Primer / STR-spezifisch", "kw": ["primer", "spezifisch", "sequenzspezifisch"]}, {"name": "Taq-Polymerase / hitzestabil", "kw": ["taq", "hitzestabil", "thermus", "thermostabil"]}, {"name": "Gelelektrophorese trennt nach Länge", "kw": ["gelelektrophorese", "elektrophorese", "länge", "größe", "wander"]}, {"name": "Bandenmuster vergleichen", "kw": ["bandenmuster", "muster", "vergleich"]}]};
+const SECTIONS_META = [{"num": 1, "title": "DNA – Aufbau und Struktur", "taskIds": ["dna1", "dna2", "dna3", "dna4", "dna5"]}, {"num": 2, "title": "DNA-Replikation", "taskIds": ["rep1", "rep2", "rep3", "rep4", "rep5"]}, {"num": 3, "title": "Polymerase-Kettenreaktion (PCR)", "taskIds": ["pcr1", "pcr2", "pcr3", "pcr4", "pcr5", "pcr6"]}, {"num": 4, "title": "Gel-Elektrophorese", "taskIds": ["gel1", "gel2", "gel3", "gel4"]}, {"num": 5, "title": "Genetischer Fingerabdruck", "taskIds": ["fa1", "fa2", "fa3", "fa4", "fa5"]}, {"num": 6, "title": "Abschluss – Fallbeispiel", "taskIds": ["ab1"]}];
+const TASK_META = {"dna1": {"q": "Welche der folgenden Basen kommen in der DNA vor?", "type": "Multiple Choice · mehrere richtig", "max": 2}, "dna2": {"q": "Ordne den Basenpaaren die Anzahl der Wasserstoffbrücken und die Bindungspartner zu.", "type": "Zuordnung", "max": 4}, "dna3": {"q": "Beschreibe den Aufbau eines DNA-Nucleotids. Nenne alle drei Bestandteile und ihre räumliche Verknüpfung.", "type": "Freitext", "max": 3}, "dna4": {"q": "Was bedeutet \"antiparallel\" bei den beiden DNA-Strängen?", "type": "Multiple Choice · 1 richtig", "max": 1}, "dna5": {"q": "Vervollständige die Aussage zur DNA-Struktur.", "type": "Lückentext", "max": 4}, "rep1": {"q": "Wie verläuft die DNA-Replikation laut Meselson & Stahl?", "type": "Multiple Choice · 1 richtig", "max": 1}, "rep2": {"q": "Ordne die Enzyme ihrer Funktion bei der Replikation zu.", "type": "Zuordnung", "max": 5}, "rep3": {"q": "Erläutere den Unterschied zwischen Leit- und Folgestrang. Gehe dabei auf die Synthese­richtung, die Notwendigkeit der Okazaki-Fragmente und die Funktion der Ligase ein.", "type": "Freitext", "max": 4}, "rep4": {"q": "Was sind Okazaki-Fragmente? Wähle alle korrekten Aussagen.", "type": "Multiple Choice · mehrere richtig", "max": 2}, "rep5": {"q": "Vervollständige den Satz zur Initiationsphase.", "type": "Lückentext", "max": 3}, "pcr1": {"q": "Welche Reihenfolge haben die Schritte eines PCR-Zyklus?", "type": "Multiple Choice · 1 richtig", "max": 1}, "pcr2": {"q": "Ordne die Temperaturen den Schritten der PCR zu.", "type": "Zuordnung", "max": 3}, "pcr3": {"q": "Begründe, warum bei der PCR ausgerechnet die Taq-Polymerase verwendet wird und nicht eine \"normale\" DNA-Polymerase aus dem Menschen.", "type": "Freitext", "max": 3}, "pcr4": {"q": "Aus einem einzelnen DNA-Doppelstrang entstehen nach n vollständigen PCR-Zyklen theoretisch wie viele Kopien?", "type": "Multiple Choice · 1 richtig", "max": 1}, "pcr5": {"q": "Was muss im PCR-Ansatz enthalten sein, damit die Reaktion abläuft? Wähle alle korrekten Antworten.", "type": "Multiple Choice · mehrere richtig", "max": 3}, "pcr6": {"q": "Welche Rolle spielen die beiden Primer für die PCR? Erkläre, warum man genau zwei verschiedene Primer braucht und welche Information sie liefern.", "type": "Freitext", "max": 3}, "gel1": {"q": "Warum wandert DNA in der Gelelektrophorese zum Pluspol?", "type": "Multiple Choice · 1 richtig", "max": 1}, "gel2": {"q": "Welche DNA-Fragmente wandern am weitesten?", "type": "Multiple Choice · 1 richtig", "max": 1}, "gel3": {"q": "Erkläre kurz, wie man die DNA-Banden im fertig gelaufenen Gel sichtbar machen kann und wozu man eine sogenannte DNA-Leiter (Größenmarker) benötigt.", "type": "Freitext", "max": 3}, "gel4": {"q": "Vervollständige die folgende Beschreibung.", "type": "Lückentext", "max": 3}, "fa1": {"q": "Was sind STRs (Short Tandem Repeats)?", "type": "Multiple Choice · 1 richtig", "max": 1}, "fa2": {"q": "Warum reichen drei untersuchte STR-Loci für eine sichere Identifizierung nicht aus?", "type": "Multiple Choice · 1 richtig", "max": 1}, "fa3": {"q": "Welche Anwendungen des genetischen Fingerabdrucks gibt es? Wähle alle zutreffenden.", "type": "Multiple Choice · mehrere richtig", "max": 2}, "fa4": {"q": "Beschreibe das Verfahren des genetischen Fingerabdrucks in der Forensik in eigenen Worten. Gehe von der Spurensicherung bis zum Vergleich mit den Verdächtigen vor.", "type": "Freitext", "max": 5}, "fa5": {"q": "Vervollständige die zentrale Aussage zum Verfahren.", "type": "Lückentext", "max": 4}, "ab1": {"q": "An einem Tatort wird ein einzelnes Haar mit Wurzel gefunden. Beschreibe in einem zusammenhängenden Text, wie aus dieser Spur ein genetischer Fingerabdruck erzeugt wird, der mit Vergleichsproben zweier Verdächtiger verglichen werden kann. Verwende dabei die Fachbegriffe <b>DNA-Isolierung, PCR (mit Denaturierung, Annealing, Elongation), Taq-Polymerase, Primer, STR, Gelelektrophorese, Bandenmuster</b> sinnvoll.", "type": "Freitext", "max": 6}};
+
+function toggleEx(h){h.parentElement.classList.toggle('open');}
+function toggleSol(b){var s=b.closest('.task').querySelector('.sol');s.classList.toggle('show');}
+function toggleTip(b){b.closest('.tip').classList.toggle('open');}
+
+// ===== Aufgabe prüfen =====
+const taskResults = {};   // aid -> {scored, max, type, detail}
+const freitextAns = {};   // aid -> {text, found:[]}
+
+function normalize(s){
+  return (s||'').toLowerCase().normalize('NFKC').replace(/[′’']/g,"'").replace(/\s+/g,' ').trim();
+}
+
+function checkTask(btn){
+  const task = btn.closest('.task');
+  const aid  = task.dataset.aid;
+  const type = task.dataset.type;
+  const max  = parseInt(task.dataset.points);
+  const fb   = task.querySelector('.fb');
+  let scored = 0;
+  let msg = '';
+  let cls = 'bad';
+  let detail = '';
+
+  if(type==='mc_single'){
+    const ch = task.querySelector('input[type=radio]:checked');
+    if(!ch){ fb.className='fb show bad'; fb.textContent='Bitte eine Antwort wählen.'; return; }
+    const idx = parseInt(ch.value);
+    const correct = MC_CORRECT[aid];
+    if(idx===correct){ scored=max; cls='good'; msg='✓ Richtig!'; }
+    else{ scored=0; cls='bad'; msg='Leider nicht ganz richtig. Schau dir die Musterlösung an oder versuche es nochmal.'; }
+    detail = 'gewählt: Option '+(idx+1);
+  }
+  else if(type==='mc_multi'){
+    const sel = Array.from(task.querySelectorAll('input[type=checkbox]:checked')).map(c=>parseInt(c.value));
+    const correct = MC_CORRECT[aid];
+    const n = correct.length;
+    // partial credit: pro richtigem Klick + pro vermiedenem falschen
+    let hits = sel.filter(x=>correct.includes(x)).length;
+    let wrong = sel.filter(x=>!correct.includes(x)).length;
+    // simple: points = max * max(0, (hits - wrong)/n)
+    let frac = Math.max(0, (hits - wrong) / n);
+    scored = Math.round(frac * max);
+    if(scored===max){ cls='good'; msg='✓ Alle richtigen Antworten erkannt.'; }
+    else if(scored>0){ cls='part'; msg='Teilweise richtig: '+scored+' / '+max+' P. ('+hits+' richtig, '+wrong+' falsch).'; }
+    else{ cls='bad'; msg='Noch nicht richtig. ('+hits+' richtig, '+wrong+' falsch markiert)'; }
+    detail = 'gewählt: '+sel.map(i=>i+1).join(', ');
+  }
+  else if(type==='zuordnung'){
+    const pairs = ZU_CORRECT[aid];
+    const sels = task.querySelectorAll('select');
+    let hits=0, total=Object.keys(pairs).length;
+    const dets = [];
+    sels.forEach(s=>{
+      const i = parseInt(s.dataset.item);
+      const v = parseInt(s.value);
+      const ok = (v === pairs[i]);
+      if(ok) hits++;
+      dets.push('Z'+(i+1)+'→Opt'+(v+1)+(ok?' ✓':' ✗'));
+    });
+    scored = Math.round(hits/total * max);
+    if(hits===total){ cls='good'; msg='✓ Alle Zuordnungen richtig.'; }
+    else if(hits>0){ cls='part'; msg=hits+' von '+total+' richtig zugeordnet ('+scored+' / '+max+' P.).'; }
+    else{ cls='bad'; msg='Keine Zuordnung stimmt – schau dir die Begriffe nochmal an.'; }
+    detail = dets.join(' | ');
+  }
+  else if(type==='lueckentext'){
+    const sols = LT_CORRECT[aid];
+    const inps = task.querySelectorAll('input[data-blank]');
+    const dets = [];
+    let hits = 0, total = inps.length;
+    inps.forEach(inp=>{
+      const k = inp.dataset.blank;
+      const v = normalize(inp.value);
+      const valids = sols[k].map(x=>normalize(x));
+      const ok = valids.some(va => v===va);
+      if(ok) hits++;
+      dets.push('L'+k+': "'+inp.value+'"'+(ok?' ✓':' ✗'));
+    });
+    scored = Math.round(hits/total * max);
+    if(hits===total){ cls='good'; msg='✓ Alle Lücken stimmen.'; }
+    else if(hits>0){ cls='part'; msg=hits+' von '+total+' Lücken richtig ('+scored+' / '+max+' P.).'; }
+    else{ cls='bad'; msg='Noch keine Lücke ganz richtig – probiere es noch einmal.'; }
+    detail = dets.join(' | ');
+  }
+  else if(type==='freitext'){
+    const txt = task.querySelector('textarea.free').value.trim();
+    if(txt.length < 20){
+      fb.className='fb show bad'; fb.textContent='Bitte schreibe ein paar zusammenhängende Sätze.';
+      return;
+    }
+    const concepts = FREI_CONCEPTS[aid];
+    const low = txt.toLowerCase();
+    const found = concepts.map(c => ({name:c.name, hit: c.kw.some(k => low.includes(k.toLowerCase()))}));
+    const hits = found.filter(x=>x.hit).length;
+    scored = Math.round(hits/concepts.length * max);
+    if(hits===concepts.length){ cls='good'; msg='Stark – alle Kernaspekte sind erkennbar enthalten.'; }
+    else if(hits>0){ cls='part'; msg='Du hast '+hits+' von '+concepts.length+' Kernaspekten klar genannt. Vorläufige Wertung: '+scored+' / '+max+' P.'; }
+    else{ cls='bad'; msg='Bisher konnte ich keinen der erwarteten Kernaspekte erkennen – formuliere ausführlicher.'; }
+    let html = '<span class="rh">📝 Stichwort-Rückmeldung</span>'+msg+'<ul>';
+    found.forEach(x=> html += '<li>'+(x.hit?'✓ ':'◦ ')+x.name+'</li>');
+    html += '</ul><div style="margin-top:6px;font-size:.85rem;font-weight:400;font-style:italic">'
+          + 'Die endgültige Note vergibt deine Lehrkraft anhand deines vollständigen Textes.</div>';
+    fb.className = 'fb show '+cls;
+    fb.innerHTML = html;
+    freitextAns[aid] = {text: txt, found: found, scored: scored, max: max};
+    taskResults[aid] = {scored: scored, max: max, type: type, detail: 'siehe Volltext im Export', text: txt, found: found};
+    refreshScore();
+    return;
+  }
+
+  fb.className = 'fb show '+cls;
+  fb.innerHTML = '<span class="rh">'+(scored===max?'🎉 ':'')+'Ergebnis</span>'
+                + msg + '<div style="margin-top:6px;font-size:.82rem;font-weight:400">Punkte: '
+                + scored + ' / ' + max + '</div>';
+  taskResults[aid] = {scored: scored, max: max, type: type, detail: detail};
+  refreshScore();
+}
+
+function refreshScore(){
+  let scored = 0, max = 0;
+  Object.values(taskResults).forEach(r => { scored += r.scored; max += r.max; });
+  document.getElementById('scoreLbl').textContent = scored+' / '+TOTAL_MAX+' P.';
+  document.getElementById('pfill').style.width = (TOTAL_MAX ? Math.round(scored/TOTAL_MAX*100) : 0)+'%';
+  // Section tags
+  document.querySelectorAll('section.ex').forEach(s => {
+    const sid = s.dataset.sec;
+    const max_sec = parseInt(s.dataset.maxpoints);
+    let scored_sec = 0, count = 0;
+    s.querySelectorAll('.task').forEach(t => {
+      const r = taskResults[t.dataset.aid];
+      if(r){ scored_sec += r.scored; count++; }
+    });
+    const tag = document.getElementById('tag-'+sid);
+    if(!tag) return;
+    if(count===0){ tag.className='tag'; tag.textContent='offen'; }
+    else{
+      tag.className = 'tag score';
+      tag.textContent = scored_sec+' / '+max_sec+' P. (' + count + ' bearbeitet)';
+      const totalTasks = s.querySelectorAll('.task').length;
+      if(count===totalTasks){
+        if(scored_sec/max_sec >= 0.8){ tag.className='tag done'; tag.textContent='✓ '+scored_sec+' / '+max_sec+' P.'; }
+      }
+    }
+  });
+  // Note vorläufig
+  if(TOTAL_MAX>0){
+    const pct = scored/TOTAL_MAX*100;
+    document.getElementById('liveScore').textContent = scored;
+    document.getElementById('liveNote').textContent = noteFor(pct);
+    document.getElementById('livePct').textContent  = Math.round(pct)+' %';
+  }
+}
+
+function noteFor(pct){
+  if(pct >= 92) return '1';
+  if(pct >= 81) return '2';
+  if(pct >= 67) return '3';
+  if(pct >= 50) return '4';
+  if(pct >= 30) return '5';
+  return '6';
+}
+
+// ===== Bot =====
+const BOT_TOPICS = [{"kw": ["dna struktur", "aufbau dna", "doppelhelix", "watson", "crick"], "a": "<b>DNA-Aufbau:</b> Zwei antiparallele Stränge winden sich zu einer Doppelhelix (Watson & Crick 1953). Bausteine sind Nucleotide aus Phosphat + Desoxyribose + organischer Base (A, T, G, C). Die Basen paaren komplementär A=T (2 H-Brücken) und G≡C (3 H-Brücken)."}, {"kw": ["nucleotid", "nukleotid", "baustein dna"], "a": "<b>Nucleotid:</b> Phosphatrest (am 5′-C), Desoxyribose (Pentose), eine der vier Basen (A, T, G, C) am 1′-C. Über Phosphodiesterbindungen vom 3′-OH zum 5′-Phosphat des nächsten Bausteins entsteht der DNA-Strang."}, {"kw": ["base", "adenin", "thymin", "guanin", "cytosin", "basenpaar"], "a": "<b>Basen & Basenpaare:</b> A–T paart über 2 H-Brücken, G–C über 3 H-Brücken. Deshalb sind GC-reiche Bereiche stabiler – sie schmelzen erst bei höherer Temperatur. In der RNA wird Thymin durch Uracil ersetzt."}, {"kw": ["antiparallel", "5'", "3'", "5 prime", "3 prime", "5′", "3′"], "a": "<b>Antiparallel & 5′→3′:</b> Jeder DNA-Strang hat ein 5′-Ende (mit Phosphat) und ein 3′-Ende (mit OH). Die beiden Stränge laufen in entgegengesetzter Richtung („antiparallel\"). DNA-Polymerasen können neue Nucleotide nur an ein freies 3′-OH-Ende anhängen."}, {"kw": ["semikonservativ", "meselson", "stahl"], "a": "<b>Semikonservative Replikation:</b> Meselson & Stahl zeigten 1958, dass jede Tochter-DNA aus einem alten und einem neu synthetisierten Strang besteht."}, {"kw": ["helicase", "helikase"], "a": "<b>Helicase:</b> Entwindet die Doppelhelix an der Replikationsgabel und trennt die beiden Stränge, indem sie die H-Brücken zwischen den Basen löst."}, {"kw": ["polymerase", "dna-polymerase", "dna polymerase"], "a": "<b>DNA-Polymerase:</b> Synthetisiert den neuen Strang ausschließlich in 5′→3′-Richtung, indem sie an ein freies 3′-OH-Ende neue Nucleotide anhängt. Sie braucht einen Primer und einen Matrizenstrang."}, {"kw": ["primase", "primer"], "a": "<b>Primase / Primer:</b> Die Primase synthetisiert kurze RNA-Primer als Startpunkt. Die DNA-Polymerase kann nur weiterbauen, sie kann nicht aus dem Nichts starten. Bei der PCR werden die Primer (kurze, einzelsträngige DNA-Stücke) als „Klammern\" gewählt, die den zu vervielfachenden Abschnitt einrahmen."}, {"kw": ["ligase"], "a": "<b>Ligase:</b> Verknüpft DNA-Fragmente, indem sie eine Phosphodiester-Bindung schließt. Bei der Replikation verbindet sie die Okazaki-Fragmente am Folgestrang."}, {"kw": ["okazaki", "folgestrang", "leitstrang"], "a": "<b>Leit- vs. Folgestrang:</b> Der Leitstrang wird kontinuierlich in 5′→3′ synthetisiert, die Polymerase folgt der Helicase. Der Folgestrang verläuft in entgegengesetzter Richtung, deshalb diskontinuierlich in kurzen Stücken (Okazaki-Fragmenten), die später von der Ligase verbunden werden."}, {"kw": ["pcr", "polymerase-kettenreaktion", "polymerasekettenreaktion", "mullis"], "a": "<b>PCR (Polymerase-Kettenreaktion):</b> 1983 von Kary Mullis erfunden, Nobelpreis 1993. Ein Zyklus besteht aus drei Schritten: Denaturierung (95 °C) → Annealing der Primer (≈ 60 °C) → Elongation durch Taq-Polymerase (72 °C). In jedem Zyklus verdoppelt sich die DNA – nach 30 Zyklen sind es theoretisch über eine Milliarde Kopien."}, {"kw": ["denaturierung"], "a": "<b>Denaturierung:</b> Erster PCR-Schritt bei ca. 95 °C. Die Wasserstoffbrücken zwischen den Basen werden gelöst, der Doppelstrang trennt sich in zwei Einzelstränge."}, {"kw": ["annealing", "anlagerung"], "a": "<b>Annealing (Anlagerung der Primer):</b> Zweiter PCR-Schritt bei ca. 55–65 °C. Die Primer binden komplementär an die Einzelstränge und legen den zu vervielfachenden Abschnitt fest. Die Temperatur hängt von der konkreten Primer-Sequenz ab."}, {"kw": ["elongation", "polymerisierung", "72"], "a": "<b>Elongation:</b> Dritter PCR-Schritt bei 72 °C. Die Taq-Polymerase verlängert die Primer in 5′→3′-Richtung und baut dabei dNTPs ein."}, {"kw": ["taq", "thermus", "aquaticus", "hitzestabil", "thermostabil"], "a": "<b>Taq-Polymerase:</b> Hitzestabile DNA-Polymerase aus dem Bakterium Thermus aquaticus, das in heißen Quellen lebt. Sie übersteht die 95 °C der Denaturierung und arbeitet bei 72 °C optimal. Ohne sie müsste bei jedem Zyklus neues Enzym zugegeben werden."}, {"kw": ["thermocycler"], "a": "<b>Thermocycler:</b> Programmierbares Gerät, das die Temperaturen der PCR-Zyklen automatisch durchläuft (Heiz- und Kühlblock)."}, {"kw": ["dntp", "nucleotide", "nukleotide"], "a": "<b>dNTPs:</b> Desoxyribonukleosid-Triphosphate (dATP, dTTP, dGTP, dCTP). Sie sind die Bausteine, aus denen die Polymerase die neuen DNA-Stränge zusammensetzt."}, {"kw": ["exponentiell", "verdoppl", "zyklus"], "a": "<b>Exponentielle Vermehrung:</b> Aus 1 Doppelstrang werden nach 1 Zyklus 2, nach 2 Zyklen 4, nach n Zyklen 2ⁿ Moleküle. 30 Zyklen ergeben theoretisch ca. 10⁹ Kopien."}, {"kw": ["gelelektrophorese", "gel-elektrophorese", "agarose", "elektrophorese"], "a": "<b>Gel-Elektrophorese:</b> Trennt DNA-Fragmente nach Länge. DNA-Proben werden in Taschen am oberen Rand des Agarose-Gels gefüllt. Im elektrischen Feld wandert die negativ geladene DNA zum Pluspol; kürzere Fragmente wandern weiter, längere bleiben oben."}, {"kw": ["pluspol", "anode", "negativ", "wanderung"], "a": "<b>Warum zum Pluspol?</b> Das Zucker-Phosphat-Rückgrat der DNA trägt durch die Phosphatgruppen negative Ladungen. Im elektrischen Feld werden negative Teilchen zum positiven Pol (Anode) gezogen."}, {"kw": ["ethidiumbromid", "midori", "färb", "uv"], "a": "<b>Banden sichtbar machen:</b> Mit einem in DNA interkalierenden Farbstoff (z. B. Ethidiumbromid oder Midori Green) und Betrachtung unter UV-Licht. Ein Größenmarker („DNA-Leiter\") erlaubt die Abschätzung der Fragmentlänge."}, {"kw": ["str", "short tandem repeat", "mikrosatellit", "tandem"], "a": "<b>STRs (Short Tandem Repeats):</b> Kurze, sich hintereinander wiederholende Basenpaarabfolgen (z. B. GATAGATA…) in nicht-codierenden DNA-Bereichen. Die Anzahl der Wiederholungen unterscheidet sich von Person zu Person und wird für den genetischen Fingerabdruck genutzt."}, {"kw": ["fingerabdruck", "fingerprint", "forensik", "tatort"], "a": "<b>Genetischer Fingerabdruck:</b> DNA-Probe gewinnen → STR-Bereiche per PCR vervielfältigen → Gel- bzw. Kapillarelektrophorese → charakteristisches Bandenmuster → Vergleich mit Verdächtigen. In Deutschland werden 16 STR-Loci untersucht, dadurch sind Verwechslungen praktisch ausgeschlossen."}, {"kw": ["vaterschaft", "verwandt"], "a": "<b>Vaterschaftsanalyse:</b> Kinder erben je einen STR-Allel von Vater und Mutter. Vergleicht man das STR-Profil von Kind, Mutter und Vermutetem Vater, kann man eine Vaterschaft mit sehr hoher Sicherheit bestätigen oder ausschließen."}, {"kw": ["note", "punkt", "bewertung"], "a": "<b>Bewertung:</b> Multiple-Choice-, Zuordnungs- und Lückentextaufgaben werden automatisch ausgewertet. Bei Freitextaufgaben erhältst du eine Stichwort-Rückmeldung – die endgültige Note vergibt deine Lehrkraft anhand der Textdatei."}];
+const BLOCKED = ["aufgabe 1 lösung", "aufgabe 2 lösung", "lösung der aufgabe", "antwort auf aufgabe", "welche antwort ist richtig"];
+const botHistory = [];
+
+function escapeHTML(s){ return s.replace(/[&<>]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
+function appendBot(role, html){
+  const chat = document.getElementById('bot-chat');
+  const div = document.createElement('div');
+  div.className = 'bot-msg ' + role;
+  div.innerHTML = (role==='user'?'<b>Du:</b> '+escapeHTML(html):html);
+  chat.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
+  botHistory.push({role, text: html});
+}
+function isBlocked(q){
+  const low = q.toLowerCase();
+  return BLOCKED.some(b => low.includes(b));
+}
+function askBot(){
+  const ta = document.getElementById('bot-q');
+  const q = ta.value.trim();
+  if(!q) return;
+  appendBot('user', q);
+  ta.value='';
+  if(isBlocked(q)){
+    setTimeout(()=>appendBot('bot', '🤔 <b>Bot:</b> Die konkreten Aufgaben-Antworten zeige ich dir nicht – das wäre ja kein Lernen. Frag mich gerne nach <b>Begriffen oder Vorgehensweisen</b>, z. B. „Wie läuft die PCR ab?" oder „Was ist ein STR?".'), 250);
+    return;
+  }
+  const low = q.toLowerCase();
+  let best = null, bestScore = 0;
+  BOT_TOPICS.forEach(t => {
+    const score = t.kw.reduce((s,k) => s + (low.includes(k.toLowerCase()) ? 1 : 0), 0);
+    if(score > bestScore){ bestScore = score; best = t; }
+  });
+  let answer;
+  if(best && bestScore>0){ answer = '<b>Bot:</b> '+best.a; }
+  else { answer = '<b>Bot:</b> Zu deiner Frage habe ich keinen direkten Eintrag. Versuche es mit Begriffen wie „DNA-Aufbau", „Replikation", „PCR-Zyklus", „Taq-Polymerase", „Gelelektrophorese", „STR", „Fingerabdruck", „Bandenmuster". Frag deine Lehrkraft, wenn etwas ganz speziell ist – ich speichere deine Frage in der Textdatei mit ab.'; }
+  setTimeout(()=>appendBot('bot', answer), 250);
+}
+function clearBot(){
+  document.getElementById('bot-chat').innerHTML='<div class="bot-msg bot"><b>Bot:</b> Verlauf gelöscht. Stell deine nächste Frage!</div>';
+  botHistory.length = 0;
+}
+
+// ===== Export TXT =====
+function exportResults(){
+  const name = (document.getElementById('student-name').value||'').trim() || 'Unbekannt';
+  const d = new Date().toLocaleString('de-DE');
+  const L=[], bar='='.repeat(70), sub='-'.repeat(70);
+  let scored=0;
+  Object.values(taskResults).forEach(r => scored += r.scored);
+  const pct = TOTAL_MAX ? scored/TOTAL_MAX*100 : 0;
+  L.push(bar);
+  L.push('  LERNUMGEBUNG · Genetischer Fingerabdruck (DNA · PCR · Gel · STR)');
+  L.push(bar);
+  L.push('Name:       '+name);
+  L.push('Datum:      '+d);
+  L.push('Punkte:     '+scored+' / '+TOTAL_MAX+'   ('+Math.round(pct)+' %)');
+  L.push('Vorläufige Note (Notenschlüssel s. unten): '+noteFor(pct));
+  L.push('');
+  L.push('Hinweis an die Lehrkraft: Die Freitextantworten wurden nur per Stichwort-');
+  L.push('matching vorbewertet. Endgültige Bewertung bitte direkt anhand der unten');
+  L.push('aufgeführten Antworten vornehmen.');
+  L.push('');
+
+  SECTIONS_META.forEach(sec => {
+    L.push(sub);
+    L.push('STATION '+sec.num+'  '+sec.title);
+    L.push(sub);
+    let sScored = 0, sMax = 0;
+    sec.taskIds.forEach((aid, i) => {
+      const r = taskResults[aid];
+      const aMeta = TASK_META[aid];
+      sMax += aMeta.max;
+      L.push('Aufgabe '+(i+1)+'  ['+aMeta.type+', max. '+aMeta.max+' P.]');
+      L.push('  Frage: '+aMeta.q);
+      if(!r){
+        L.push('  → nicht bearbeitet');
+      } else {
+        sScored += r.scored;
+        L.push('  → erreichte Punkte: '+r.scored+' / '+r.max);
+        if(r.type==='freitext'){
+          L.push('  Antwort des Schülers:');
+          r.text.split('\n').forEach(ln => L.push('     '+ln));
+          L.push('  Stichwort-Treffer:');
+          r.found.forEach(c => L.push('     ['+(c.hit?'+':'-')+'] '+c.name));
+        } else {
+          L.push('  Antwort: '+r.detail);
+        }
+      }
+      L.push('');
+    });
+    L.push('Stations-Summe: '+sScored+' / '+sMax+' P.');
+    L.push('');
+  });
+
+  L.push(sub);
+  L.push('BOT-VERLAUF');
+  L.push(sub);
+  if(botHistory.length===0){
+    L.push('(keine Bot-Fragen gestellt)');
+  } else {
+    botHistory.forEach(m => {
+      const tag = m.role==='user' ? 'Du ' : 'Bot';
+      L.push(tag+': '+m.text.replace(/<[^>]+>/g,''));
+    });
+  }
+  L.push('');
+  L.push(sub);
+  L.push('NOTENSCHLÜSSEL (vorläufig, auf 100 % Prozentbasis)');
+  L.push(sub);
+  L.push('  Note 1:  92 – 100 %');
+  L.push('  Note 2:  81 –  91 %');
+  L.push('  Note 3:  67 –  80 %');
+  L.push('  Note 4:  50 –  66 %');
+  L.push('  Note 5:  30 –  49 %');
+  L.push('  Note 6:   0 –  29 %');
+  L.push('');
+  L.push(bar);
+  L.push('  ENDE · '+name);
+  L.push(bar);
+
+  const text = L.join('\r\n');
+  const blob = new Blob([text],{type:'text/plain;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href=url;
+  const safe = name.replace(/[^a-zA-Z0-9äöüÄÖÜß_-]/g,'_');
+  a.download = 'Genetik_'+safe+'_'+d.split(',')[0].trim().replace(/\./g,'-')+'.txt';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
+}
+</script>
+</body>
+</html>
