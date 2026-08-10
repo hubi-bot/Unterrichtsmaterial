@@ -1,0 +1,1823 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fit für die Integralrechnung – Teil 1: Gleichungen und Schnittpunkte</title>
+<style>
+:root{
+  --pink:#ff2e63; --cyan:#08d9d6; --yellow:#ffd93d; --green:#6bcf7f; --violet:#a18cd1;
+  --card:rgba(255,255,255,.07); --card2:rgba(255,255,255,.11); --line:rgba(255,255,255,.16);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family:'Segoe UI',system-ui,-apple-system,'Helvetica Neue',Arial,sans-serif;
+  color:#fff; min-height:100vh; line-height:1.55; font-size:16px;
+  background:linear-gradient(135deg,#0f0c29 0%,#302b63 50%,#24243e 100%);
+  background-attachment:fixed;
+}
+.wrap{max-width:1080px;margin:0 auto;padding:24px 18px 80px}
+h1{font-size:2.1rem;line-height:1.2;margin:0 0 6px;font-weight:800;
+  background:linear-gradient(90deg,var(--pink),var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+h2{font-size:1.3rem;margin:0 0 10px}
+h3{font-size:1.05rem;margin:0 0 8px}
+.sub{color:#cfc9ee;font-size:1rem;margin:0 0 4px}
+.tiny{font-size:.82rem;color:#b9b3dd}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;margin:16px 0;
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:0 8px 32px rgba(0,0,0,.25)}
+.card.tight{padding:14px 16px}
+table.ov{width:100%;border-collapse:collapse;font-size:.86rem}
+table.ov th,table.ov td{border-bottom:1px solid var(--line);padding:7px 8px;text-align:left;vertical-align:top}
+table.ov th{color:var(--cyan);font-weight:700;white-space:nowrap}
+table.ov tr:hover td{background:rgba(255,255,255,.04)}
+.badge{display:inline-block;padding:2px 9px;border-radius:99px;font-size:.72rem;font-weight:700;
+  letter-spacing:.02em;white-space:nowrap}
+.b-basis{background:rgba(107,207,127,.18);color:var(--green);border:1px solid rgba(107,207,127,.45)}
+.b-mittel{background:rgba(255,217,61,.16);color:var(--yellow);border:1px solid rgba(255,217,61,.45)}
+.b-schwer{background:rgba(255,46,99,.16);color:var(--pink);border:1px solid rgba(255,46,99,.45)}
+.b-fmt{background:rgba(161,140,209,.18);color:#d3c6f2;border:1px solid rgba(161,140,209,.45)}
+.b-time{background:rgba(8,217,214,.14);color:var(--cyan);border:1px solid rgba(8,217,214,.4)}
+
+/* progress */
+.sticky{position:sticky;top:0;z-index:60;margin:0 -18px 14px;padding:10px 18px;
+  background:rgba(15,12,41,.82);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line)}
+.pbar{height:11px;border-radius:99px;background:rgba(255,255,255,.13);overflow:hidden}
+.pfill{height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,var(--pink),var(--violet),var(--cyan));transition:width .45s ease}
+.prow{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:6px;font-size:.85rem;flex-wrap:wrap}
+.pstat b{color:var(--cyan)}
+
+/* accordion */
+.acc{border:1px solid var(--line);border-radius:16px;margin:12px 0;overflow:hidden;background:var(--card)}
+.acc.done{border-color:rgba(107,207,127,.5)}
+.acc-h{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:14px 16px;cursor:pointer;
+  background:rgba(255,255,255,.05);user-select:none}
+.acc-h:hover{background:rgba(255,255,255,.09)}
+.acc-h .ttl{font-weight:700;flex:1 1 240px;min-width:200px}
+.acc-h .chev{transition:transform .25s;color:var(--violet);font-size:1.1rem}
+.acc.open .acc-h .chev{transform:rotate(90deg)}
+.acc-b{display:none;padding:18px 16px 20px;border-top:1px solid var(--line)}
+.acc.open .acc-b{display:block}
+.stat-dot{width:11px;height:11px;border-radius:50%;background:rgba(255,255,255,.25);flex:0 0 auto}
+.stat-dot.ok{background:var(--green);box-shadow:0 0 10px var(--green)}
+.stat-dot.part{background:var(--yellow);box-shadow:0 0 10px var(--yellow)}
+.stat-dot.bad{background:var(--pink);box-shadow:0 0 10px var(--pink)}
+
+/* info box */
+.info{border-left:4px solid var(--cyan);background:rgba(8,217,214,.09);border-radius:0 14px 14px 0;
+  padding:14px 16px;margin:14px 0}
+.info h4{margin:0 0 8px;color:var(--cyan);font-size:1rem}
+.info ul{margin:6px 0 0 18px;padding:0}
+.info li{margin:4px 0}
+.formula{font-family:'Cambria Math','Georgia',serif;background:rgba(255,255,255,.09);
+  padding:2px 8px;border-radius:7px;display:inline-block;font-size:1.02em;white-space:nowrap}
+.fbig{display:block;text-align:center;margin:10px auto;padding:10px 14px;font-size:1.12em}
+
+/* buttons */
+button{font-family:inherit;font-size:.9rem;font-weight:700;border:none;border-radius:11px;
+  padding:10px 17px;cursor:pointer;color:#0f0c29;transition:transform .12s,filter .2s}
+button:hover{transform:translateY(-2px);filter:brightness(1.08)}
+button:active{transform:translateY(0)}
+.btn-check{background:linear-gradient(90deg,var(--green),var(--cyan))}
+.btn-tip{background:linear-gradient(90deg,var(--yellow),#ffb703)}
+.btn-sol{background:linear-gradient(90deg,var(--violet),#8e7cc3);color:#fff}
+.btn-ghost{background:transparent;border:1px solid var(--line);color:#e5e0ff}
+.btn-row{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}
+
+/* inputs */
+input[type=text],input[type=number],textarea,select{
+  font-family:inherit;font-size:.95rem;color:#fff;background:rgba(255,255,255,.09);
+  border:1px solid var(--line);border-radius:10px;padding:9px 11px;outline:none;width:100%}
+input:focus,textarea:focus,select:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(8,217,214,.18)}
+select option{background:#24243e;color:#fff}
+textarea{min-height:110px;resize:vertical}
+.inl{display:inline-block;width:auto;min-width:110px;max-width:190px}
+.ok-in{border-color:var(--green)!important;background:rgba(107,207,127,.16)!important}
+.bad-in{border-color:var(--pink)!important;background:rgba(255,46,99,.16)!important}
+.qline{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:9px 0}
+.qline .lab{min-width:26px;font-weight:700;color:var(--violet)}
+.qtxt{flex:1 1 220px;min-width:180px}
+
+/* choices */
+.opt{display:flex;gap:11px;align-items:flex-start;padding:11px 13px;margin:8px 0;border-radius:12px;
+  border:1px solid var(--line);background:rgba(255,255,255,.05);cursor:pointer}
+.opt:hover{background:rgba(255,255,255,.1)}
+.opt input{width:auto;flex:0 0 auto;margin-top:3px;accent-color:var(--cyan);transform:scale(1.2)}
+.opt.ok{border-color:var(--green);background:rgba(107,207,127,.15)}
+.opt.bad{border-color:var(--pink);background:rgba(255,46,99,.15)}
+.opt .mk{margin-left:auto;font-weight:800}
+
+/* true/false */
+.tf{display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding:10px 12px;margin:8px 0;
+  border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.05)}
+.tf .st{flex:1 1 260px;min-width:200px}
+.tf .btns{display:flex;gap:6px}
+.tf .btns button{padding:6px 15px;font-size:.82rem;background:rgba(255,255,255,.14);color:#fff}
+.tf .btns button.sel{background:linear-gradient(90deg,var(--violet),var(--cyan));color:#0f0c29}
+.tf.ok{border-color:var(--green);background:rgba(107,207,127,.13)}
+.tf.bad{border-color:var(--pink);background:rgba(255,46,99,.13)}
+
+/* drag & drop */
+.dnd-pool{display:flex;flex-wrap:wrap;gap:8px;padding:12px;border:1px dashed var(--line);
+  border-radius:12px;background:rgba(255,255,255,.04);min-height:56px;margin:10px 0}
+.chip{padding:8px 13px;border-radius:10px;background:linear-gradient(90deg,rgba(161,140,209,.5),rgba(8,217,214,.35));
+  border:1px solid var(--line);cursor:pointer;font-size:.88rem;font-weight:600;user-select:none}
+.chip.sel{outline:3px solid var(--yellow);transform:scale(1.04)}
+.slot{display:flex;gap:10px;align-items:center;padding:10px 12px;margin:8px 0;border-radius:12px;
+  border:1px solid var(--line);background:rgba(255,255,255,.05);min-height:52px;cursor:pointer}
+.slot:hover{background:rgba(255,255,255,.1)}
+.slot .nm{font-weight:700;color:var(--violet);flex:0 0 auto}
+.slot .drop{flex:1;min-height:34px;border:1px dashed rgba(255,255,255,.25);border-radius:9px;
+  padding:5px 9px;display:flex;align-items:center;font-size:.9rem;color:#b9b3dd}
+.slot .drop.filled{border-style:solid;color:#fff;background:rgba(161,140,209,.22)}
+.slot.ok{border-color:var(--green)} .slot.bad{border-color:var(--pink)}
+
+/* figure card (hell!) */
+.fig{background:#f7f7fb;border-radius:14px;padding:14px;margin:14px 0;color:#1a1a2e;
+  box-shadow:0 6px 22px rgba(0,0,0,.3)}
+.fig .cap{font-size:.82rem;color:#4a4a68;margin-top:8px;text-align:center}
+.fig svg{display:block;max-width:100%;height:auto;margin:0 auto}
+.figrow{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.figrow .fig{flex:1 1 210px;min-width:190px;margin:0}
+.figttl{font-weight:800;text-align:center;color:#1a1a2e;font-size:.95rem;margin-bottom:4px}
+
+/* feedback */
+.fb{display:none;margin-top:14px;padding:13px 15px;border-radius:13px;font-size:.92rem;border:1px solid}
+.fb.show{display:block}
+.fb.good{background:rgba(107,207,127,.14);border-color:var(--green)}
+.fb.mid{background:rgba(255,217,61,.13);border-color:var(--yellow)}
+.fb.bad{background:rgba(255,46,99,.13);border-color:var(--pink)}
+.fb b{color:#fff}
+.kw{display:inline-block;padding:2px 9px;margin:3px 4px 3px 0;border-radius:99px;font-size:.78rem;font-weight:700}
+.kw.hit{background:rgba(107,207,127,.22);color:var(--green);border:1px solid rgba(107,207,127,.5)}
+.kw.miss{background:rgba(255,46,99,.16);color:var(--pink);border:1px solid rgba(255,46,99,.45)}
+.auto-note{font-size:.76rem;color:#b9b3dd;font-style:italic;margin-top:8px;
+  border-top:1px dashed var(--line);padding-top:7px}
+
+/* panels */
+.panel{display:none;margin-top:12px;padding:14px 16px;border-radius:13px;font-size:.92rem}
+.panel.show{display:block}
+.panel.tip{background:rgba(255,217,61,.1);border:1px solid rgba(255,217,61,.45)}
+.panel.sol{background:rgba(161,140,209,.12);border:1px solid rgba(161,140,209,.5)}
+.panel h5{margin:0 0 8px;font-size:.95rem;color:var(--yellow)}
+.panel.sol h5{color:var(--violet)}
+.panel ol,.panel ul{margin:6px 0 0 20px;padding:0}
+.panel li{margin:5px 0}
+.lock{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin-top:12px;padding:11px 13px;
+  border-radius:12px;background:rgba(161,140,209,.1);border:1px dashed rgba(161,140,209,.5);font-size:.86rem}
+.lock input{max-width:130px}
+
+/* blocks */
+.blockhead{margin:38px 0 4px;padding:16px 20px;border-radius:18px;
+  background:linear-gradient(90deg,rgba(255,46,99,.22),rgba(161,140,209,.16),rgba(8,217,214,.16));
+  border:1px solid var(--line)}
+.blockhead h2{margin:0;font-size:1.45rem}
+.blockhead p{margin:5px 0 0;font-size:.9rem;color:#cfc9ee}
+.upl{margin:12px 0;padding:12px 14px;border:1px dashed rgba(8,217,214,.5);border-radius:12px;
+  background:rgba(8,217,214,.06);font-size:.88rem}
+.upl input[type=file]{margin-top:7px;font-size:.83rem}
+.upl .fn{color:var(--green);font-weight:700}
+.legend{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+.lg{display:flex;gap:7px;align-items:center;font-size:.82rem;background:rgba(255,255,255,.06);
+  padding:6px 11px;border-radius:10px;border:1px solid var(--line)}
+.sw{width:22px;height:4px;border-radius:2px;flex:0 0 auto}
+.final{background:linear-gradient(135deg,rgba(255,46,99,.22),rgba(161,140,209,.2),rgba(8,217,214,.2));
+  border:1px solid var(--line);text-align:center}
+.final h2{background:linear-gradient(90deg,var(--pink),var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+
+/* Strategie-/Regeltabellen in den Info-Kästen */
+table.strat{width:100%;border-collapse:collapse;font-size:.86rem;margin:10px 0}
+table.strat th{background:rgba(8,217,214,.18);color:var(--cyan);font-weight:700;
+  padding:7px 9px;text-align:left;border:1px solid var(--line)}
+table.strat td{padding:7px 9px;border:1px solid var(--line);vertical-align:top}
+table.strat tr:nth-child(even) td{background:rgba(255,255,255,.04)}
+/* Weiterüben-Karten */
+.linkcard{background:linear-gradient(135deg,rgba(161,140,209,.16),rgba(8,217,214,.12));
+  border:1px solid var(--line);border-radius:16px;padding:18px 20px;margin:18px 0 26px}
+.linkcard h3{color:var(--violet);margin:0 0 4px}
+.linkcard p.sub2{font-size:.85rem;color:#b9b3dd;margin:0 0 12px}
+.linkcard a{display:block;text-decoration:none;color:inherit;padding:11px 14px;margin:8px 0;
+  border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.05);transition:.2s}
+.linkcard a:hover{background:rgba(255,255,255,.11);transform:translateX(3px);border-color:var(--cyan)}
+.linkcard a b{color:var(--cyan);display:block;font-size:.95rem}
+.linkcard a span{font-size:.83rem;color:#cfc9ee}
+.linkcard a em{font-size:.75rem;color:#8d86b8;font-style:normal;word-break:break-all}
+
+
+/* ---- ausklappbarer Input-Kasten ---- */
+.infowrap{border:1px solid rgba(8,217,214,.4);border-radius:14px;background:rgba(8,217,214,.06);margin:14px 0;overflow:hidden}
+.infotoggle{display:flex;gap:10px;align-items:center;width:100%;text-align:left;padding:13px 16px;
+  background:rgba(8,217,214,.1);border:none;border-radius:0;color:var(--cyan);font-size:.95rem;font-weight:700;cursor:pointer}
+.infotoggle:hover{background:rgba(8,217,214,.18);transform:none}
+.infotoggle .chev2{transition:transform .25s;font-size:1rem}
+.infowrap.open .infotoggle .chev2{transform:rotate(90deg)}
+.infotoggle .hintx{margin-left:auto;font-weight:400;font-size:.8rem;color:#b9b3dd}
+.infobody{display:none;padding:4px 16px 16px}
+.infowrap.open .infobody{display:block}
+.infobody .info{border:none;background:none;padding:0;margin:0}
+.infobody .info h4{display:none}
+
+/* ---- Strategie-Karten mit Rechenweg ---- */
+.strat-item{border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.05);
+  padding:12px 14px;margin:11px 0}
+.strat-head{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;margin-bottom:9px;
+  padding-bottom:8px;border-bottom:1px dashed var(--line)}
+.strat-nr{flex:0 0 auto;width:23px;height:23px;border-radius:50%;background:var(--cyan);color:#0f0c29;
+  font-weight:800;font-size:.8rem;display:flex;align-items:center;justify-content:center}
+.strat-form{font-family:'Cambria Math',Georgia,serif;font-size:1.05rem;font-weight:700;color:#fff}
+.strat-name{margin-left:auto;font-size:.82rem;color:var(--yellow);font-weight:700}
+.strat-sub{width:100%;font-size:.78rem;color:#b9b3dd;font-style:italic}
+.calcrow{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;padding:4px 0}
+.calcrow .eq{flex:0 0 auto;min-width:170px;font-family:'Cambria Math',Georgia,serif;font-size:1rem}
+.calcrow .cmd{flex:0 0 auto;min-width:64px;color:var(--yellow);font-family:'Cambria Math',Georgia,serif;font-size:.95rem}
+.calcrow .why{flex:1 1 210px;font-size:.84rem;color:#cfc9ee}
+.strat-warn{margin-top:9px;padding:8px 11px;border-radius:9px;background:rgba(255,46,99,.12);
+  border:1px solid rgba(255,46,99,.4);font-size:.83rem;color:#ffd3e0}
+.strat-warn b{color:var(--pink)}
+@media(max-width:640px){.calcrow .eq{min-width:130px}.calcrow .cmd{min-width:52px}}
+
+/* ---- Graph zum Vergleich ---- */
+.btn-graph{background:linear-gradient(90deg,var(--cyan),#4dabf7)}
+.panel.graph{background:rgba(8,217,214,.09);border:1px solid rgba(8,217,214,.45)}
+.panel.graph h5{color:var(--cyan)}
+
+
+/* ---- Rechenweg-Diagnose ---- */
+.diagbox{margin-top:14px;padding:13px 15px;border-radius:12px;background:rgba(161,140,209,.1);
+  border:1px dashed rgba(161,140,209,.5)}
+.diagbox>b{color:var(--violet)}
+.diagopt{display:flex;gap:10px;align-items:flex-start;padding:8px 11px;margin:6px 0;border-radius:10px;
+  border:1px solid var(--line);background:rgba(255,255,255,.05);cursor:pointer;font-size:.88rem}
+.diagopt:hover{background:rgba(255,255,255,.1)}
+.diagopt input{width:auto;flex:0 0 auto;margin-top:3px;accent-color:var(--violet);transform:scale(1.15)}
+.diagout{display:none;margin-top:12px}
+.diagout.show{display:block}
+.dg-part{padding:11px 14px;border-radius:11px;margin:8px 0;font-size:.88rem;border:1px solid}
+.dg-part b{display:block;margin-bottom:5px}
+.dg-part ul{margin:4px 0 0 18px;padding:0}
+.dg-part li{margin:4px 0}
+.dg-good{background:rgba(107,207,127,.13);border-color:rgba(107,207,127,.5)}
+.dg-good b{color:var(--green)}
+.dg-bad{background:rgba(255,46,99,.12);border-color:rgba(255,46,99,.45)}
+.dg-bad b{color:var(--pink)}
+.dg-fix{background:rgba(8,217,214,.11);border-color:rgba(8,217,214,.45)}
+.dg-fix b{color:var(--cyan)}
+.dg-note{background:rgba(255,217,61,.1);border-color:rgba(255,217,61,.45)}
+.dg-note b{color:var(--yellow)}
+.dg-neutral{background:rgba(255,255,255,.06);border-color:var(--line)}
+
+/* ---- Tipp-Assistent ---- */
+.assist{margin-top:14px;padding:13px 15px;border-radius:12px;
+  background:linear-gradient(135deg,rgba(255,217,61,.09),rgba(161,140,209,.09));
+  border:1px solid rgba(255,217,61,.4)}
+.assist>b{color:var(--yellow)}
+.chat{display:none;margin-top:10px;max-height:340px;overflow-y:auto}
+.chat.show{display:block}
+.chat-q{margin:8px 0 0 auto;max-width:82%;padding:8px 12px;border-radius:13px 13px 3px 13px;
+  background:rgba(161,140,209,.28);font-size:.87rem;width:fit-content}
+.chat-a{margin:6px auto 8px 0;max-width:92%;padding:10px 13px;border-radius:13px 13px 13px 3px;
+  background:rgba(255,217,61,.13);border:1px solid rgba(255,217,61,.35);font-size:.87rem;line-height:1.5}
+
+
+/* ---- echte Brüche mit waagerechtem Bruchstrich ---- */
+.frac{display:inline-block;vertical-align:-0.55em;text-align:center;margin:0 3px;
+  font-family:'Cambria Math',Georgia,serif;line-height:1.25}
+.frac>span{display:block;padding:0 5px}
+.frac .num{border-bottom:1.6px solid currentColor;padding-bottom:1px}
+.frac .den{padding-top:2px}
+.fig .frac{color:#1a1a2e}
+
+@media(max-width:640px){h1{font-size:1.6rem}.wrap{padding:16px 12px 70px}.card{padding:15px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>Fit für die Integralrechnung · Teil 1</h1>
+<p class="sub">Gleichungen lösen und Schnittpunkte berechnen · Mathematik Jg. 12, grundlegendes Anforderungsniveau</p>
+<p class="tiny">Block A: Gleichungen und Nullstellen · Block B: Schnittpunkte &nbsp;|&nbsp; Teil 2 dieser Reihe behandelt die Ableitungen.</p>
+
+<div class="card">
+  <h2>Worum es geht</h2>
+  <p style="font-size:.94rem">Ohne sichere <b>Nullstellen- und Schnittpunktberechnung</b> können Sie in der Integralrechnung keine Flächen berechnen – die Nullstellen von heute sind die Integrationsgrenzen von übermorgen. Dieser erste Teil frischt genau das auf: mit viel Rechnen, Selbstkontrolle, einem Tipp-Assistenten und ausführlichen Musterlösungen. Die Ableitungen folgen in Teil 2.</p>
+
+
+  <div class="info" style="margin-top:18px">
+    <h4>So arbeiten Sie</h4>
+    <ul>
+      <li><b>Rechnen statt klicken.</b> Der größte Teil der Aufgaben verlangt einen vollständigen Rechenweg. Halten Sie Papier, Stift und GTR bereit.</li>
+      <li><b>Pflicht sind alle Basisaufgaben</b> (grün), danach je nach Tempo die <b>mittleren</b> (gelb) und <b>anspruchsvollen</b> Aufgaben (pink). Die anspruchsvollen Aufgaben sind fast durchweg Sachaufgaben.</li>
+      <li>Jeder Block beginnt mit einem <b>ausklappbaren Hilfe-Kasten</b> mit vollständigen Rechenwegen. Klappen Sie ihn nur auf, wenn Sie ihn brauchen – das ist kein Schummeln.</li>
+      <li><b>Tipps</b> sind Denkanstöße, keine Lösungen. Bei den Sachaufgaben gibt es zusätzlich einen <b>Graphen zum Vergleich</b> – bewusst ohne Skala, damit Sie rechnen statt ablesen.</li><li>Bei jeder Rechenaufgabe finden Sie einen <b>Tipp-Assistenten</b>. Beschreiben Sie dort in einem Satz, wo Sie nicht weiterkommen – Sie bekommen einen gezielten Hinweis, nie die Lösung.</li><li>Wo Sie einen <b>Rechenweg hochladen</b> können, gibt es darunter eine kurze Selbstdiagnose. Kreuzen Sie ehrlich an, was auf Ihren Weg zutrifft, und Sie erhalten eine Rückmeldung dazu, was gut lief, was schiefging und worauf Sie beim nächsten Mal achten sollten.</li>
+      <li><b>Musterlösungen:</b> Bei Basisaufgaben direkt aufklappbar. Bei mittleren und anspruchsvollen Aufgaben erst nach Eingabe des <b>4-stelligen Codes</b>, den Sie am Ende des Blocks von der Lehrkraft bekommen – erst rechnen, dann vergleichen.</li>
+      <li>Am Ende jedes Blocks finden Sie <b>Links zum Weiterüben</b> (LearningApps, H5P, GeoGebra-Lernpfade).</li><li>Am Ende laden Sie Ihr <b>Ergebnisprotokoll</b> als Textdatei herunter und geben es ab.</li>
+    </ul>
+  </div>
+
+  <h3 style="margin-top:20px">Legende der Abbildungen</h3>
+  <div class="legend">
+    <span class="lg"><span class="sw" style="background:#0b7285"></span> Graph von f</span>
+    <span class="lg"><span class="sw" style="background:#c2255c"></span> Graph von g bzw. f′</span>
+    <span class="lg"><span class="sw" style="background:#e8590c"></span> Hilfslinie / Gerade</span>
+    <span class="lg"><span class="sw" style="background:#f59f00;height:12px;width:12px;border-radius:50%"></span> markierter Punkt</span>
+    <span class="lg"><span class="sw" style="background:#adb5bd;height:12px;width:12px"></span> gefärbte Fläche</span>
+    <span class="lg">gestrichelt = Hilfslinie zum Ablesen</span>
+  </div>
+</div>
+
+<div class="sticky">
+  <div class="prow">
+    <span class="pstat"><b id="pDone">0</b> / <span id="pAll">0</span> Aufgaben geprüft</span>
+    <span class="pstat">richtig: <b id="pOk">0</b> · teilweise: <b id="pPart">0</b> · offen: <b id="pOpen">0</b></span>
+  </div>
+  <div class="pbar"><div class="pfill" id="pFill"></div></div>
+</div>
+
+<div id="content"></div>
+
+<div class="card" id="exportCard">
+  <h2>Ergebnisprotokoll herunterladen</h2>
+  <p style="font-size:.92rem">Tragen Sie Ihren Namen ein und laden Sie das Protokoll herunter. Es enthält für jede Aufgabe Ihre Eingaben, die Bewertung und – bei Fehlern – die richtige Lösung.</p>
+  <div class="qline">
+    <span class="lab" style="min-width:64px">Name</span>
+    <input type="text" id="stName" class="qtxt" placeholder="Vor- und Nachname">
+    <span class="lab" style="min-width:64px">Kurs</span>
+    <input type="text" id="stKurs" class="inl" placeholder="z. B. MA12-3">
+  </div>
+  <div class="btn-row">
+    <button class="btn-check" onclick="exportTxt()">Protokoll als .txt herunterladen</button>
+    <button class="btn-ghost" onclick="if(confirm('Wirklich alle Eingaben zurücksetzen?'))location.reload()">Alles zurücksetzen</button>
+  </div>
+  <p class="tiny" style="margin-top:10px">Legende in der Datei: <b>[v]</b> richtig · <b>[x]</b> falsch · <b>[~]</b> teilweise richtig · <b>[-]</b> nicht bearbeitet · <b>[i]</b> Freitext mit automatischer Rückmeldung</p>
+</div>
+
+<div class="card final">
+  <h2>Geschafft!</h2>
+  <p style="font-size:.95rem;max-width:640px;margin:0 auto">Sie haben jetzt das Werkzeug beisammen, mit dem die Integralrechnung funktioniert: Sie können Nullstellen und Schnittstellen bestimmen – das brauchen Sie für <b>Integrationsgrenzen</b> – und Sie können ableiten – das brauchen Sie, um <b>Stammfunktionen zu überprüfen</b>.</p>
+  <p style="font-size:.95rem;max-width:640px;margin:12px auto 0"><b>Und die entscheidende Frage der nächsten Wochen lautet:</b> Wenn ich aus dem Graphen von f den Graphen von f′ gewinnen kann – geht das auch rückwärts? Und was hat das mit Flächen zu tun?</p>
+</div>
+
+<p class="tiny" style="text-align:center;margin-top:26px">Erstellt für den Mathematikunterricht Jg. 12 gA · funktioniert offline · keine Daten werden gesendet</p>
+</div>
+
+<script>
+"use strict";
+
+/* ============================ SVG-PLOTTER ============================ */
+function plot(o){
+  const W=o.w||300,H=o.h||230,m=o.m||{l:26,r:12,t:12,b:24};
+  const x0=o.xmin,x1=o.xmax,y0=o.ymin,y1=o.ymax;
+  const px=x=>m.l+(x-x0)/(x1-x0)*(W-m.l-m.r);
+  const py=y=>H-m.b-(y-y0)/(y1-y0)*(H-m.t-m.b);
+  let s=`<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,Arial" font-size="10">`;
+  s+=`<rect x="0" y="0" width="${W}" height="${H}" fill="#ffffff" rx="8"/>`;
+  // grid
+  for(let x=Math.ceil(x0);x<=x1;x++) s+=`<line x1="${px(x)}" y1="${m.t}" x2="${px(x)}" y2="${H-m.b}" stroke="#e3e3ee" stroke-width="1"/>`;
+  for(let y=Math.ceil(y0);y<=y1;y++) s+=`<line x1="${m.l}" y1="${py(y)}" x2="${W-m.r}" y2="${py(y)}" stroke="#e3e3ee" stroke-width="1"/>`;
+  // shading
+  if(o.shade) o.shade.forEach(sh=>{
+    let d=`M ${px(sh.a)} ${py(sh.base!==undefined?sh.base:0)} `;
+    const N=90;
+    for(let i=0;i<=N;i++){const x=sh.a+(sh.b-sh.a)*i/N;d+=`L ${px(x)} ${py(sh.f(x))} `;}
+    d+=`L ${px(sh.b)} ${py(sh.base!==undefined?sh.base:0)} Z`;
+    s+=`<path d="${d}" fill="${sh.color||'#adb5bd'}" fill-opacity="${sh.op||.42}"/>`;
+  });
+  // axes
+  const ax=(y0<=0&&y1>=0)?py(0):H-m.b, ay=(x0<=0&&x1>=0)?px(0):m.l;
+  s+=`<line x1="${m.l-4}" y1="${ax}" x2="${W-m.r}" y2="${ax}" stroke="#212529" stroke-width="1.6"/>`;
+  s+=`<polygon points="${W-m.r},${ax} ${W-m.r-7},${ax-3.5} ${W-m.r-7},${ax+3.5}" fill="#212529"/>`;
+  s+=`<line x1="${ay}" y1="${H-m.b+4}" x2="${ay}" y2="${m.t}" stroke="#212529" stroke-width="1.6"/>`;
+  s+=`<polygon points="${ay},${m.t} ${ay-3.5},${m.t+7} ${ay+3.5},${m.t+7}" fill="#212529"/>`;
+  s+=`<text x="${W-m.r-4}" y="${ax+15}" fill="#212529" text-anchor="end">${o.xlab||'x'}</text>`;
+  s+=`<text x="${ay+7}" y="${m.t+10}" fill="#212529">${o.ylab||'y'}</text>`;
+  // ticks – bei noscale ohne Zahlen (nur Orientierung, kein Ablesen)
+  const stx=o.stepx||1, sty=o.stepy||1;
+  for(let x=Math.ceil(x0/stx)*stx;x<=x1;x+=stx){ if(Math.abs(x)<1e-9)continue;
+    s+=`<line x1="${px(x)}" y1="${ax-3}" x2="${px(x)}" y2="${ax+3}" stroke="#212529" stroke-width="1.4"/>`;
+    if(!o.noscale) s+=`<text x="${px(x)}" y="${ax+14}" fill="#495057" text-anchor="middle">${+x.toFixed(2)}</text>`;}
+  for(let y=Math.ceil(y0/sty)*sty;y<=y1;y+=sty){ if(Math.abs(y)<1e-9)continue;
+    s+=`<line x1="${ay-3}" y1="${py(y)}" x2="${ay+3}" y2="${py(y)}" stroke="#212529" stroke-width="1.4"/>`;
+    if(!o.noscale) s+=`<text x="${ay-6}" y="${py(y)+3.5}" fill="#495057" text-anchor="end">${+y.toFixed(2)}</text>`;}
+  // curves
+  (o.fns||[]).forEach(fn=>{
+    let d='',pen=false;const N=420;
+    for(let i=0;i<=N;i++){const x=x0+(x1-x0)*i/N,y=fn.f(x);
+      if(!isFinite(y)||y<y0-1.5||y>y1+1.5){pen=false;continue;}
+      d+=(pen?'L':'M')+px(x)+' '+py(y)+' ';pen=true;}
+    s+=`<path d="${d}" fill="none" stroke="${fn.color||'#0b7285'}" stroke-width="${fn.wd||2.4}" ${fn.dash?'stroke-dasharray="6 4"':''} stroke-linecap="round" stroke-linejoin="round"/>`;
+    if(fn.label){const lx=fn.lx!==undefined?fn.lx:x1-(x1-x0)*.18, ly=fn.f(lx);
+      s+=`<text x="${px(lx)+6}" y="${py(ly)-6}" fill="${fn.color||'#0b7285'}" font-weight="700">${fn.label}</text>`;}
+  });
+  // extra lines
+  (o.lines||[]).forEach(L=>{s+=`<line x1="${px(L.x1)}" y1="${py(L.y1)}" x2="${px(L.x2)}" y2="${py(L.y2)}" stroke="${L.color||'#e8590c'}" stroke-width="${L.wd||1.7}" ${L.dash?'stroke-dasharray="5 4"':''}/>`;});
+  // points
+  (o.pts||[]).forEach(p=>{
+    s+=`<circle cx="${px(p.x)}" cy="${py(p.y)}" r="${p.r||4.6}" fill="${p.color||'#f59f00'}" stroke="#fff" stroke-width="1.6"/>`;
+    if(p.t&&!o.noscale) s+=`<text x="${px(p.x)+(p.dx||8)}" y="${py(p.y)+(p.dy||-8)}" fill="#212529" font-weight="700">${p.t}</text>`;});
+  // free text
+  (o.texts||[]).forEach(t=>{s+=`<text x="${px(t.x)}" y="${py(t.y)}" fill="${t.color||'#212529'}" font-weight="${t.w||600}" text-anchor="${t.anchor||'middle'}" font-size="${t.size||10}">${t.s}</text>`;});
+  return s+'</svg>';
+}
+function fig(svg,cap,ttl){return `<div class="fig">${ttl?`<div class="figttl">${ttl}</div>`:''}${svg}${cap?`<div class="cap">${cap}</div>`:''}</div>`;}
+
+/* ============================ AUFGABEN-DATEN ============================ */
+
+/* --- Normalisierung für Term- und Zahleneingaben --- */
+const SUP={'⁰':'0','¹':'1','²':'2','³':'3','⁴':'4','⁵':'5','⁶':'6','⁷':'7','⁸':'8','⁹':'9','⁻':'-','\u235F':'.'};
+function nt(s){
+  return (s||'').toString().toLowerCase()
+    .replace(/\s+/g,'')
+    .replace(/[−–—]/g,'-')
+    /* Dezimalpunkt innerhalb einer Hochstellung (x⁻⁰·⁵) zunächst sichern */
+    .replace(/([⁰¹²³⁴⁵⁶⁷⁸⁹])·([⁰¹²³⁴⁵⁶⁷⁸⁹])/g,'$1\u235F$2')
+    /* zusammenhängende Hochstellungen (x⁻⁴, x², …) zu ^-Schreibweise */
+    .replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹⁻\u235F]+/g,m=>'^'+[...m].map(c=>SUP[c]||c).join(''))
+    .replace(/,/g,'.')
+    .replace(/[·*]/g,'')
+    .replace(/=0$/,'')
+    .replace(/^\+/,'');
+}
+/* T('x^2-6x+5', ...) – akzeptiert alle angegebenen Schreibweisen */
+const T=(...v)=>(x)=>{const n=nt(x);return n!==''&&v.some(a=>nt(a)===n);};
+/* N(2.54, 0.02) – Zahleneingabe mit Toleranz */
+const N=(val,tol)=>(x)=>{
+  const s=nt(x).replace(/[^0-9.\-]/g,'');
+  const z=parseFloat(s);
+  return isFinite(z)&&Math.abs(z-val)<=(tol===undefined?0.005:tol);
+};
+/* TEQ – wie T, aber die Eingabe MUSS „= 0" enthalten (Normalform für die pq-Formel) */
+function ntSide(s){
+  let r=(s||'').toString().replace(/\s+/g,'').replace(/[−–—]/g,'-');
+  if(/^0=/.test(r)) r=r.slice(2);
+  else if(/=0$/.test(r)) r=r.slice(0,-2);
+  else return null;
+  return nt(r);
+}
+const TEQ=(...v)=>(x)=>{const a=ntSide(x); return a!==null&&a!==''&&v.some(b=>nt(b)===a);};
+
+/* KEINE – für Gleichungen ohne reelle Lösung */
+const KEINE=T('keine','keinelösung','keineloesung','keinereellelösung','keinelösunginℝ','keinelösungen','nichtlösbar','∅','leeremenge');
+
+/* ---------- Bausteine für die Rechenweg-Diagnose ---------- */
+const DIAG_NULL={
+ frage:'Kreuzen Sie ehrlich an, was auf Ihren Rechenweg zutrifft. Daraus entsteht Ihre Rückmeldung.',
+ allesGut:'Ihr Weg trägt. Prüfen Sie zum Abschluss nur noch, ob Sie wirklich <b>alle</b> Lösungen aufgeschrieben haben und ob hinter jedem Schritt ein Befehlsstrich steht.',
+ items:[
+  {s:'Ich habe zuerst geprüft, welche Bauart die Gleichung hat, und dann eine Strategie gewählt.',good:true,
+   fb:'Sie haben mit der Analyse begonnen statt sofort loszurechnen – genau so geht man an Gleichungen heran.'},
+  {s:'Ich habe hinter jeden Umformungsschritt einen Befehlsstrich geschrieben.',good:true,
+   fb:'Damit ist Ihr Weg für andere und für Sie selbst nachvollziehbar. In der Klausur gibt das Punkte, auch wenn das Ergebnis am Ende nicht stimmt.'},
+  {s:'Ich habe am Ende die Probe gemacht und meine Lösung eingesetzt.',good:true,
+   fb:'Die Probe ist die einzige Kontrolle, die Sie ohne Lösungsblatt haben. Sehr gut, dass Sie sie machen.'},
+  {s:'Ich habe alle Lösungen aufgeschrieben, auch x = 0.',good:true,
+   fb:'Gerade x = 0 wird beim Ausklammern gern übersehen. Sie haben aufgepasst.'},
+  {s:'Ich habe die pq-Formel angewendet, ohne vorher durch die Zahl vor dem x² zu teilen.',good:false,
+   fb:'Damit stimmen p und q nicht. Die pq-Formel gilt nur, wenn vor dem x² eine 1 steht.',
+   fix:'Teilen Sie zuerst die <b>gesamte</b> Gleichung durch den Vorfaktor – jeden einzelnen Summanden. Aus 2x² − 12x + 10 = 0 wird so x² − 6x + 5 = 0, und erst hier sind p = −6 und q = 5 ablesbar.',
+   merke:'Vor der pq-Formel immer zwei Dinge prüfen: Steht auf einer Seite eine 0? Steht vor dem x² eine 1?'},
+  {s:'Ich habe die Gleichung durch x geteilt.',good:false,
+   fb:'Dabei geht die Lösung x = 0 verloren – Sie haben also mindestens eine Lösung zu wenig.',
+   fix:'Klammern Sie x aus, statt zu teilen: Aus 2x² + 6x = 0 wird 2x(x + 3) = 0. Dann liefert der Satz vom Nullprodukt beide Lösungen, x = 0 und x = −3.',
+   merke:'Durch x darf man nie teilen, weil x auch null sein könnte. Ausklammern ist immer der sichere Weg.'},
+  {s:'Beim Wurzelziehen habe ich nur die positive Lösung angegeben.',good:false,
+   fb:'Es fehlt die zweite Lösung. Aus x² = 16 folgt nicht nur x = 4, sondern auch x = −4.',
+   fix:'Schreiben Sie beim Wurzelziehen konsequent x = ± … und lösen Sie danach beide Fälle einzeln auf.',
+   merke:'Wurzelziehen liefert zwei Lösungen – außer wenn rechts eine 0 steht, dann ist es genau eine.'},
+  {s:'Ich habe ausgeklammert, obwohl nicht in jedem Summanden ein x steckt.',good:false,
+   fb:'Ausklammern ist hier nicht erlaubt, deshalb stimmt schon der erste Schritt nicht.',
+   fix:'Prüfen Sie vorher jeden Summanden einzeln. Bei x² + 6x + 5 = 0 enthält die 5 kein x – hier brauchen Sie die pq-Formel.',
+   merke:'Ausklammern nur, wenn wirklich <b>jeder</b> Summand ein x enthält.'},
+  {s:'Ich habe ein Produkt ausmultipliziert, obwohl es schon faktorisiert dastand.',good:false,
+   fb:'Das ist nicht falsch, macht die Aufgabe aber unnötig schwer – und schafft neue Fehlerquellen.',
+   fix:'Steht der Term als Produkt da, etwa (x + 3)(4 − x) = 0, setzen Sie direkt jeden Faktor null.',
+   merke:'Ein Produkt gleich null ist ein Geschenk. Nicht ausmultiplizieren!'},
+  {s:'Ich habe beim Sortieren ein Vorzeichen verwechselt.',good:false,
+   fb:'Vorzeichenfehler sind der häufigste Grund für falsche Ergebnisse – und sie fallen ohne Probe nicht auf.',
+   fix:'Schreiben Sie jeden Schritt einzeln und nur eine Umformung pro Zeile. Machen Sie am Ende die Probe in der <b>ursprünglichen</b> Gleichung.',
+   merke:'Lieber eine Zeile mehr als zwei Umformungen im Kopf.'},
+  {s:'Ich bin an einer Stelle steckengeblieben und habe nicht zu Ende gerechnet.',good:false,
+   fb:'Das ist kein Beinbruch, aber Sie sollten wissen, wo genau der Faden gerissen ist.',
+   fix:'Markieren Sie die Zeile, ab der es nicht weiterging, und vergleichen Sie sie mit den Bauarten im Hilfe-Kasten. Nutzen Sie den Tipp-Assistenten und beschreiben Sie genau diese Stelle.',
+   merke:'Notieren Sie sich die Stelle. Wer weiß, wo es hakt, kann gezielt fragen.'}]};
+
+const DIAG_SCHNITT={
+ frage:'Kreuzen Sie ehrlich an, was auf Ihren Rechenweg zutrifft. Daraus entsteht Ihre Rückmeldung.',
+ allesGut:'Ihr Weg trägt. Kontrollieren Sie nur noch, ob jeder Schnittpunkt als Koordinatenpaar S(x | y) dasteht und ob Sie die Probe in beiden Funktionen gemacht haben.',
+ items:[
+  {s:'Ich habe mit dem Ansatz f(x) = g(x) begonnen.',good:true,
+   fb:'Der Ansatz sitzt. Damit ist der wichtigste Schritt getan.'},
+  {s:'Ich habe alle x-Terme auf eine Seite und alle Zahlen auf die andere gebracht.',good:true,
+   fb:'Sauber sortiert – so entsteht von selbst eine Gleichung, die Sie mit den Strategien aus Block A lösen können.'},
+  {s:'Ich habe hinter jeden Umformungsschritt einen Befehlsstrich geschrieben.',good:true,
+   fb:'Genau so soll ein Rechenweg aussehen. Das ist auch in der Klausur punktrelevant.'},
+  {s:'Ich habe die x-Werte eingesetzt und die Schnittpunkte als S(x | y) angegeben.',good:true,
+   fb:'Die Aufgabe ist damit wirklich beantwortet – ein Punkt braucht beide Koordinaten.'},
+  {s:'Ich habe die Probe gemacht und in beide Funktionen eingesetzt.',good:true,
+   fb:'Die beste Kontrolle überhaupt: Kommt zweimal derselbe y-Wert heraus, stimmt Ihr Ergebnis.'},
+  {s:'Ich habe nur die x-Werte hingeschrieben, keine Punkte.',good:false,
+   fb:'Damit ist die Aufgabe nur halb beantwortet. Gefragt waren Schnitt<b>punkte</b>.',
+   fix:'Setzen Sie jeden x-Wert in f oder g ein, berechnen Sie den y-Wert und schreiben Sie S(x | y).',
+   merke:'Eine Zahl ist noch kein Punkt. Ein Punkt hat immer zwei Koordinaten.'},
+  {s:'Ich habe beim Sortieren ein Vorzeichen verwechselt.',good:false,
+   fb:'Das ist die häufigste Fehlerquelle in diesem Aufgabentyp – besonders wenn auf beiden Seiten x-Terme stehen.',
+   fix:'Machen Sie nur eine Umformung pro Zeile und schreiben Sie den Befehlsstrich dazu. Aus „= −x + 5" wird beim Hinüberbringen ein „+ x" auf beiden Seiten.',
+   merke:'Eine Umformung pro Zeile. Das kostet Papier und spart Fehler.'},
+  {s:'Ich habe durch x geteilt, statt x auszuklammern.',good:false,
+   fb:'Dabei geht der Schnittpunkt bei x = 0 verloren.',
+   fix:'Klammern Sie x aus: Aus x³ − x² − 6x = 0 wird x(x² − x − 6) = 0. Der erste Faktor liefert x = 0, die Klammer die übrigen Lösungen.',
+   merke:'Bei ganzrationalen Gleichungen ohne konstantes Glied immer ausklammern, nie teilen.'},
+  {s:'Ich habe bei der quadratischen Gleichung nicht durch den Vorfaktor geteilt.',good:false,
+   fb:'Dann sind p und q falsch abgelesen und alle folgenden Werte stimmen nicht mehr.',
+   fix:'Teilen Sie die gesamte Gleichung durch die Zahl vor dem x², bevor Sie p und q bestimmen.',
+   merke:'Die pq-Formel setzt eine 1 vor dem x² voraus.'},
+  {s:'Ich habe weniger Schnittpunkte gefunden, als der Grad der Gleichung erlaubt hätte.',good:false,
+   fb:'Möglicherweise fehlt Ihnen eine Lösung – bei einer Gleichung dritten Grades sind bis zu drei möglich.',
+   fix:'Prüfen Sie: Haben Sie beim Ausklammern den Faktor x als eigene Lösung mitgezählt? Und haben Sie die Klammer vollständig gelöst?',
+   merke:'Der Grad der Gleichung sagt Ihnen, wie viele Lösungen höchstens möglich sind. Das ist eine gute Kontrolle.'},
+  {s:'Ich bin an einer Stelle steckengeblieben und habe nicht zu Ende gerechnet.',good:false,
+   fb:'Wichtig ist jetzt, dass Sie die Stelle genau benennen können.',
+   fix:'Markieren Sie die Zeile, ab der es nicht weiterging, und fragen Sie den Tipp-Assistenten genau danach.',
+   merke:'Wer weiß, wo es hakt, kann gezielt fragen – und kommt schneller weiter.'}]};
+
+const DIAG_GTR={
+ frage:'Kreuzen Sie ehrlich an, wie Sie mit dem GTR gearbeitet haben. Daraus entsteht Ihre Rückmeldung.',
+ allesGut:'Ihr Vorgehen passt. Achten Sie zum Abschluss nur noch darauf, dass zu jedem Zahlenwert die Einheit dabeisteht und dass Ihre Antwort im Sachzusammenhang formuliert ist.',
+ items:[
+  {s:'Ich habe beide Funktionen eingegeben und das Anzeigefenster passend eingestellt.',good:true,
+   fb:'Das richtige Fenster ist die halbe Miete – nur so sehen Sie überhaupt alle Schnittpunkte.'},
+  {s:'Ich habe die Analysefunktion des Rechners benutzt (Intersect, Root oder Maximum).',good:true,
+   fb:'So bekommen Sie genaue Werte statt geschätzter. Genau dafür ist der GTR da.'},
+  {s:'Ich habe Fenstereinstellung und verwendete Befehle im Heft notiert.',good:true,
+   fb:'Damit ist Ihr Vorgehen nachvollziehbar. Bei GTR-Aufgaben ist genau das der geforderte „Rechenweg".'},
+  {s:'Ich habe zu jedem Ergebnis die Einheit geschrieben und es im Sachzusammenhang gedeutet.',good:true,
+   fb:'Die Deutung ist der Teil, der in Klausuren am häufigsten vergessen wird. Sehr gut.'},
+  {s:'Ich habe das Standardfenster benutzt und nichts verändert.',good:false,
+   fb:'Im Standardfenster liegen viele Schnittpunkte außerhalb des sichtbaren Bereichs – Sie übersehen sie dann einfach.',
+   fix:'Überlegen Sie vorher, in welchem Bereich die Lösung liegen kann, und stellen Sie das Fenster entsprechend ein. Bei einer Stückzahl bis 300 zum Beispiel 0 ≤ x ≤ 300.',
+   merke:'Erst denken, dann das Fenster einstellen. Was man nicht sieht, findet der Rechner auch nicht.'},
+  {s:'Ich habe die Werte vom Bildschirm abgeschätzt, statt die Analysefunktion zu nutzen.',good:false,
+   fb:'Abgelesene Werte sind ungenau – auf zwei Nachkommastellen kommen Sie so nicht.',
+   fix:'Nutzen Sie „Intersect" für Schnittpunkte, „Root" für Nullstellen und „Maximum"/„Minimum" für Extrempunkte.',
+   merke:'Ablesen ist Schätzen. Die Analysefunktionen liefern die Zahlen, die gefragt sind.'},
+  {s:'Ich habe nur einen Schnittpunkt gefunden, obwohl es mehrere geben könnte.',good:false,
+   fb:'Der GTR findet mit „Intersect" immer nur einen Punkt – den in der Nähe des Cursors.',
+   fix:'Verschieben Sie den Cursor und wiederholen Sie „Intersect" für jeden weiteren Schnittpunkt. Überlegen Sie vorab über den Grad, wie viele es sein können.',
+   merke:'Ein Aufruf, ein Schnittpunkt. Für alle weiteren muss man erneut suchen.'},
+  {s:'Ich habe eine unrealistische Lösung mit angegeben, zum Beispiel eine negative Zeit oder Stückzahl.',good:false,
+   fb:'Rechnerisch mag der Wert stimmen, im Sachzusammenhang ist er ohne Bedeutung.',
+   fix:'Geben Sie beide Lösungen an, begründen Sie aber ausdrücklich, welche Sie verwerfen und warum – etwa weil die Zeitmessung erst bei t = 0 beginnt.',
+   merke:'Der Sachkontext schränkt den Definitionsbereich ein. Immer prüfen, ob die Lösung sinnvoll ist.'},
+  {s:'Ich habe das Ergebnis nicht auf die geforderte Genauigkeit gerundet.',good:false,
+   fb:'Bei Sachaufgaben gehört die Rundung zur Antwort dazu.',
+   fix:'Runden Sie erst am Ende und nur so weit, wie in der Aufgabe verlangt. Bei Stückzahlen muss man außerdem überlegen, ob auf- oder abgerundet wird.',
+   merke:'Zwischenergebnisse nie runden, das Endergebnis immer sinnvoll.'},
+  {s:'Ich habe die Aufgabe von Hand gerechnet, obwohl der GTR verlangt war.',good:false,
+   fb:'Rechnen können Sie offenbar – hier ging es aber darum, den zweiten Weg zu üben.',
+   fix:'Rechnen Sie die Aufgabe noch einmal ausschließlich grafisch: beide Funktionen plotten, Fenster einstellen, Analysefunktion nutzen.',
+   merke:'Im Abitur gibt es beide Aufgabentypen. Der grafische Weg muss genauso sitzen wie der rechnerische.'}]};
+
+
+const BLOCKS=[
+/* ================================================================= BLOCK A */
+{id:'A',title:'Block A · Gleichungen lösen und Nullstellen bestimmen',
+ lead:'Nullstellen liefern später die Grenzen, an denen Sie eine Fläche zerlegen müssen. Hier rechnen Sie – viel und mit allen Verfahren.',
+ code:'4271',
+ info:`<div class="info">
+<p>Eine Nullstelle ist eine Stelle x, an der der Funktionswert null ist. Der Ansatz lautet immer <span class="formula">f(x) = 0</span>. Welches Verfahren Sie brauchen, erkennen Sie am <b>Aussehen</b> des Terms.</p>
+<p class="tiny">Lesen Sie jeden Rechenweg von oben nach unten: links die Umformung, in der Mitte der Befehlsstrich, rechts die Begründung.</p>
+<div class="strat-item">
+  <div class="strat-head"><span class="strat-nr">1</span><span class="strat-form">x² + e = 0</span><span class="strat-name">Wurzel ziehen</span><span class="strat-sub">Beispiel: x² − 16 = 0</span></div>
+  <div class="calcrow"><span class="eq">x² − 16 = 0</span><span class="cmd">| + 16</span><span class="why">Die Zahl auf die andere Seite bringen, damit x² allein steht</span></div>
+  <div class="calcrow"><span class="eq">x² = 16</span><span class="cmd">| √</span><span class="why">Wurzel ziehen – dabei an die zweite Lösung mit Minus denken</span></div>
+</div>
+<div class="strat-item">
+  <div class="strat-head"><span class="strat-nr">2</span><span class="strat-form">a · x² + e = 0</span><span class="strat-name">teilen, dann Wurzel ziehen</span><span class="strat-sub">Beispiel: 3x² − 24 = 3</span></div>
+  <div class="calcrow"><span class="eq">3x² − 24 = 3</span><span class="cmd">| + 24</span><span class="why">Die Zahl auf die andere Seite bringen</span></div>
+  <div class="calcrow"><span class="eq">3x² = 27</span><span class="cmd">| : 3</span><span class="why">Durch den Vorfaktor vor dem x² teilen</span></div>
+  <div class="calcrow"><span class="eq">x² = 9</span><span class="cmd">| √</span><span class="why">Wurzel ziehen – an die zweite Lösung denken</span></div>
+</div>
+<div class="strat-item">
+  <div class="strat-head"><span class="strat-nr">3</span><span class="strat-form">a · (x − d)² = 0</span><span class="strat-name">Wurzel ziehen, dann auflösen</span><span class="strat-sub">Beispiel: 2(x − 3)² = 0</span></div>
+  <div class="calcrow"><span class="eq">2(x − 3)² = 0</span><span class="cmd">| : 2</span><span class="why">Durch den Vorfaktor teilen</span></div>
+  <div class="calcrow"><span class="eq">(x − 3)² = 0</span><span class="cmd">| √</span><span class="why">Wurzel ziehen – hier gibt es nur einen Fall, weil rechts 0 steht</span></div>
+  <div class="calcrow"><span class="eq">x − 3 = 0</span><span class="cmd">| + 3</span><span class="why">Nach x auflösen</span></div>
+</div>
+<div class="strat-item">
+  <div class="strat-head"><span class="strat-nr">4</span><span class="strat-form">a · (x − d)² + e = 0</span><span class="strat-name">Scheitelpunktform auflösen</span><span class="strat-sub">Beispiel: 2(x − 1)² − 18 = 0</span></div>
+  <div class="calcrow"><span class="eq">2(x − 1)² − 18 = 0</span><span class="cmd">| + 18</span><span class="why">Die Zahl auf die andere Seite bringen</span></div>
+  <div class="calcrow"><span class="eq">2(x − 1)² = 18</span><span class="cmd">| : 2</span><span class="why">Durch den Vorfaktor teilen</span></div>
+  <div class="calcrow"><span class="eq">(x − 1)² = 9</span><span class="cmd">| √</span><span class="why">Wurzel ziehen – jetzt entstehen zwei Fälle: + 3 und − 3</span></div>
+  <div class="calcrow"><span class="eq">x − 1 = ± 3</span><span class="cmd">| + 1</span><span class="why">Beide Fälle einzeln nach x auflösen</span></div>
+</div>
+<div class="strat-item">
+  <div class="strat-head"><span class="strat-nr">5</span><span class="strat-form">(x − r) · (x − s) = 0</span><span class="strat-name">Satz vom Nullprodukt</span><span class="strat-sub">Beispiel: (x + 3)(4 − x) = 0</span></div>
+  <div class="calcrow"><span class="eq">(x + 3)(4 − x) = 0</span><span class="cmd">|</span><span class="why">Ein Produkt ist genau dann null, wenn ein Faktor null ist</span></div>
+  <div class="calcrow"><span class="eq">x + 3 = 0</span><span class="cmd">| − 3</span><span class="why">Ersten Faktor null setzen und auflösen</span></div>
+  <div class="calcrow"><span class="eq">4 − x = 0</span><span class="cmd">| + x</span><span class="why">Zweiten Faktor null setzen und auflösen</span></div>
+  <div class="strat-warn"><b>Nicht ausmultiplizieren!</b> Der Term steht bereits in der günstigsten Form. Ausmultiplizieren macht die Aufgabe nur schwerer.</div>
+</div>
+<div class="strat-item">
+  <div class="strat-head"><span class="strat-nr">6</span><span class="strat-form">a · x² + b · x = 0</span><span class="strat-name">x ausklammern</span><span class="strat-sub">Beispiel: 2x² + 6x = 0</span></div>
+  <div class="calcrow"><span class="eq">2x² + 6x = 0</span><span class="cmd">|</span><span class="why">Prüfen: Steckt in <b>jedem</b> Summanden ein x? Hier ja</span></div>
+  <div class="calcrow"><span class="eq">2x · (x + 3) = 0</span><span class="cmd">|</span><span class="why">x ausklammern – der zweite Faktor steht in der Klammer</span></div>
+  <div class="calcrow"><span class="eq">2x = 0</span><span class="cmd">| : 2</span><span class="why">Ersten Faktor null setzen</span></div>
+  <div class="calcrow"><span class="eq">x + 3 = 0</span><span class="cmd">| − 3</span><span class="why">Zweiten Faktor null setzen</span></div>
+  <div class="strat-warn"><b>Ausklammern geht nur, wenn jeder Summand ein x enthält.</b> Bei x² + 6x + 5 = 0 geht es nicht – im letzten Summanden fehlt das x. Dort brauchen Sie die pq-Formel.<br><b>Und niemals durch x teilen</b> – dabei geht die Lösung x = 0 verloren.</div>
+</div>
+<div class="strat-item">
+  <div class="strat-head"><span class="strat-nr">7</span><span class="strat-form">x² + p · x + q = 0</span><span class="strat-name">pq-Formel</span><span class="strat-sub">Beispiel: 2x² − 12x + 10 = 0</span></div>
+  <div class="calcrow"><span class="eq">2x² − 12x + 10 = 0</span><span class="cmd">| : 2</span><span class="why">Durch den Vorfaktor teilen, damit vor dem x² eine 1 steht</span></div>
+  <div class="calcrow"><span class="eq">x² − 6x + 5 = 0</span><span class="cmd">|</span><span class="why">Jetzt liegt die Normalform vor: p = −6 und q = 5 ablesen</span></div>
+  <div class="calcrow"><span class="eq">x<sub>1,2</sub> = −p/2 ± √((p/2)² − q)</span><span class="cmd">|</span><span class="why">p und q in die pq-Formel einsetzen und ausrechnen</span></div>
+  <div class="strat-warn">Die pq-Formel setzt <b>zwei Dinge</b> voraus: rechts muss eine 0 stehen und vor dem x² eine 1. Prüfen Sie beides, bevor Sie p und q ablesen.</div>
+</div>
+<div class="strat-item">
+  <div class="strat-head"><span class="strat-nr">8</span><span class="strat-form">Rechts steht keine 0</span><span class="strat-name">erst sortieren</span><span class="strat-sub">Beispiel: −5 = 3x² − 12x + 4</span></div>
+  <div class="calcrow"><span class="eq">−5 = 3x² − 12x + 4</span><span class="cmd">| + 5</span><span class="why">Alles auf eine Seite bringen, sodass auf der anderen 0 steht</span></div>
+  <div class="calcrow"><span class="eq">0 = 3x² − 12x + 9</span><span class="cmd">| : 3</span><span class="why">Durch den Vorfaktor teilen</span></div>
+  <div class="calcrow"><span class="eq">0 = x² − 4x + 3</span><span class="cmd">|</span><span class="why">Normalform erreicht – p und q ablesen, dann pq-Formel</span></div>
+</div>
+<div class="strat-item">
+  <div class="strat-head"><span class="strat-nr">9</span><span class="strat-form">x<sup>gerade</sup> = negative Zahl</span><span class="strat-name">keine Lösung</span><span class="strat-sub">Beispiel: x⁴ = −16</span></div>
+  <div class="calcrow"><span class="eq">x⁴ = −16</span><span class="cmd">|</span><span class="why">Eine gerade Potenz ist niemals negativ – x⁴ ≥ 0 für jedes x</span></div>
+  <div class="calcrow"><span class="eq"></span><span class="cmd">|</span><span class="why">Die Gleichung hat deshalb keine Lösung in ℝ</span></div>
+</div>
+<p class="tiny" style="margin-top:14px">Wenn Sie ins Stocken geraten: Gehen Sie diese neun Bauarten von oben nach unten durch und vergleichen Sie mit Ihrer Gleichung.</p>
+</div>`,
+ links:[
+  {t:'LearningApps: Quadratische Gleichungen',u:'https://learningapps.org/2046646',
+   d:'Fertige Übungs-App zu den Lösungsverfahren. Zettel und Stift bereitlegen – hier wird gerechnet.'},
+  {t:'ZUM-Lernpfad: Quadratische Gleichungen',u:'https://projekte.zum.de/wiki/Buss-Haskert/Quadratische_Gleichungen',
+   d:'Kompletter Lernpfad mit eingebetteten H5P- und LearningApps-Übungen zu allen Lösungsverfahren.'},
+  {t:'LearningApps: Ganzrationale Funktionen und ihre Nullstellen',u:'https://learningapps.org/2314769',
+   d:'Übung zu Nullstellen von Funktionen höheren Grades – passend zu den Aufgaben A3 und A4.'},
+  {t:'H5P bei ZUM-Apps: Ganzrationale Funktionen und ihre Nullstellen',u:'https://apps.zum.de/apps/2396',
+   d:'Mehrteilige H5P-Übung zu Potenz- und ganzrationalen Funktionen: Nullstellen bestimmen, Graphen zuordnen, Verhalten im Unendlichen.'},
+ ],
+ tasks:[
+
+ {id:'A1',n:'Mittel',fmt:'Eingabe + Erklärung',t:12,ttl:'Fit für die pq-Formel',type:'mixed',assist:'nullstellen',
+  body:`<p>Die pq-Formel funktioniert nur, wenn die Gleichung in der <b>Normalform</b> <span class="formula">x² + p·x + q = 0</span> steht. Bei keiner der vier Gleichungen ist das schon der Fall.</p>
+   <p>Formen Sie zuerst um und tippen Sie die Gleichung <b>vollständig</b> ein – so, dass Sie die pq-Formel direkt anwenden könnten, also <b>mit „= 0"</b>. Schreibweise z. B. <span class="formula">x^2-6x+5=0</span>. Berechnen Sie danach die Lösungen, kleinere zuerst.</p>`,
+  items:[
+   {l:'a)',q:'2x² − 12x + 10 = 0 &nbsp;→&nbsp; Normalform:',chk:TEQ('x^2-6x+5'),sol:'x² − 6x + 5 = 0'},
+   {l:'',q:'x₁ =',chk:N(1),sol:'1'},{l:'',q:'x₂ =',chk:N(5),sol:'5'},
+   {l:'b)',q:'−5 = 3x² − 12x + 4 &nbsp;→&nbsp; Normalform:',chk:TEQ('x^2-4x+3'),sol:'x² − 4x + 3 = 0'},
+   {l:'',q:'x₁ =',chk:N(1),sol:'1'},{l:'',q:'x₂ =',chk:N(3),sol:'3'},
+   {l:'c)',q:'x² + 4x = 12 &nbsp;→&nbsp; Normalform:',chk:TEQ('x^2+4x-12'),sol:'x² + 4x − 12 = 0'},
+   {l:'',q:'x₁ =',chk:N(-6),sol:'−6'},{l:'',q:'x₂ =',chk:N(2),sol:'2'},
+   {l:'d)',q:'2x² − 5x + 3 = x² − x &nbsp;→&nbsp; Normalform:',chk:TEQ('x^2-4x+3'),sol:'x² − 4x + 3 = 0'},
+   {l:'',q:'x₁ =',chk:N(1),sol:'1'},{l:'',q:'x₂ =',chk:N(3),sol:'3'}],
+  free:{q:'Beschreiben Sie am Beispiel b), welche Umformungen nötig waren – und warum man die pq-Formel vorher nicht anwenden darf.',
+   kw:[{k:['eine seite','auf null','=0','null bringen','alles auf','sortier','umstell'],n:'alles auf eine Seite bringen'},
+       {k:['teilen','dividier',':3','durch 3','durch den vorfaktor','geteilt'],n:'durch den Vorfaktor teilen'},
+       {k:['normalform','1 vor','eins vor','vorfaktor','koeffizient'],n:'Normalform / Vorfaktor 1 nötig'},
+       {k:['p','q'],n:'p und q ablesen'},
+       {k:['falsch','fehler','nicht anwendbar','geht nicht','stimmt nicht'],n:'Konsequenz bei falscher Anwendung'}],
+   sol:`<p><b>Schritt 1 – alles auf eine Seite:</b> Aus −5 = 3x² − 12x + 4 wird durch Addition von 5 auf beiden Seiten
+    0 = 3x² − 12x + 9. Die pq-Formel setzt voraus, dass auf einer Seite eine Null steht.</p>
+    <p><b>Schritt 2 – durch den Vorfaktor teilen:</b> 0 = 3x² − 12x + 9 &nbsp;|&nbsp; : 3 &nbsp;⟹&nbsp; 0 = x² − 4x + 3.
+    Erst jetzt steht vor dem x² eine 1, erst jetzt sind p = −4 und q = 3 ablesbar.</p>
+    <p><b>Warum das nötig ist:</b> Die pq-Formel wurde für die Normalform hergeleitet. Setzt man p = −12 und q = 9 ein (also die Zahlen aus der ungeteilten Gleichung), erhält man x = 6 ± √27 ≈ 11,2 bzw. 0,8 – beides ist falsch. Die Probe würde es sofort zeigen.</p>
+    <p><b>Ergebnis:</b> x = 2 ± √(4 − 3) = 2 ± 1, also x₁ = 1 und x₂ = 3. Probe: 3·1 − 12·1 + 9 = 0 ✓</p>`},
+  tip:'Zwei Fragen in dieser Reihenfolge: Steht auf einer Seite eine Null? Steht vor dem x² eine 1? Erst wenn beides „ja" ist, dürfen Sie p und q ablesen. Bei d) stehen auf beiden Seiten x²-Terme – ziehen Sie zuerst die rechte Seite komplett ab.',
+  sol:`<p><b>a)</b> 2x² − 12x + 10 = 0 &nbsp;|&nbsp; : 2 &nbsp;⟹&nbsp; <b>x² − 6x + 5 = 0</b><br>
+   p = −6, q = 5 ⟹ x = 3 ± √(9 − 5) = 3 ± 2 ⟹ <b>x₁ = 1, x₂ = 5</b></p>
+   <p><b>b)</b> −5 = 3x² − 12x + 4 &nbsp;|&nbsp; +5 &nbsp;⟹&nbsp; 0 = 3x² − 12x + 9 &nbsp;|&nbsp; : 3 &nbsp;⟹&nbsp; <b>x² − 4x + 3 = 0</b><br>
+   x = 2 ± √(4 − 3) = 2 ± 1 ⟹ <b>x₁ = 1, x₂ = 3</b></p>
+   <p><b>c)</b> x² + 4x = 12 &nbsp;|&nbsp; −12 &nbsp;⟹&nbsp; <b>x² + 4x − 12 = 0</b><br>
+   x = −2 ± √(4 + 12) = −2 ± 4 ⟹ <b>x₁ = −6, x₂ = 2</b></p>
+   <p><b>d)</b> 2x² − 5x + 3 = x² − x &nbsp;|&nbsp; −x² + x &nbsp;⟹&nbsp; <b>x² − 4x + 3 = 0</b><br>
+   x = 2 ± 1 ⟹ <b>x₁ = 1, x₂ = 3</b></p>
+   <p class="tiny">Bei a) hätte man auch ohne Teilen arbeiten können – mit der Mitternachtsformel. Für die pq-Formel ist das Teilen aber Pflicht.</p>`},
+
+ {id:'A2',n:'Basis',fmt:'Erklärung in Textform',t:14,ttl:'Welcher Schritt kommt zuerst?',type:'free',assist:'nullstellen',
+  body:`<p>Bei jeder Gleichung entscheidet der <b>erste Umformungsschritt</b> darüber, wie schnell Sie zum Ziel kommen. Beschreiben Sie deshalb in einem vollständigen Satz, <b>was Sie zuerst tun würden – und warum</b>.</p>
+   <p class="tiny">Rechnen Sie noch nicht! Es geht nur um den ersten Schritt und die Begründung. Formulieren Sie so, wie Sie es einer Mitschülerin erklären würden.</p>`,
+  frees:[
+   {h:'a)',q:'a)  x² − 16 = 0',ph:'Ich würde zuerst …, weil …',
+    kw:[{k:['16','zahl'],n:'die Zahl 16 nennen'},
+        {k:['andere seite','rüber','addier','plus','beide seiten','+16'],n:'auf die andere Seite bringen'},
+        {k:['allein','isolier','nur noch','damit x','freistell'],n:'Ziel: x² allein stehen haben'},
+        {k:['wurzel'],n:'danach Wurzel ziehen'}],
+    sol:`<p>Zuerst addiere ich auf beiden Seiten 16, bringe die Zahl also auf die andere Seite. Ziel ist, dass x² allein steht – erst dann kann ich die Wurzel ziehen.</p>
+     <p class="tiny">x² − 16 = 0 &nbsp;|&nbsp; + 16 &nbsp;⟶&nbsp; x² = 16 &nbsp;|&nbsp; √</p>`},
+
+   {h:'b)',q:'b)  2(x − 1)² − 18 = 0',ph:'Ich würde zuerst …, weil …',
+    kw:[{k:['18','zahl'],n:'die Zahl 18 nennen'},
+        {k:['andere seite','rüber','addier','plus','+18'],n:'auf die andere Seite bringen'},
+        {k:['klammer','quadrat'],n:'die quadrierte Klammer isolieren'},
+        {k:['teilen','dividier',': 2','durch 2','geteilt','vorfaktor'],n:'danach durch 2 teilen'}],
+    sol:`<p>Zuerst addiere ich 18 auf beiden Seiten, damit die quadrierte Klammer allein auf einer Seite steht. Danach teile ich durch den Vorfaktor 2 und ziehe erst dann die Wurzel.</p>
+     <p class="tiny">2(x − 1)² − 18 = 0 &nbsp;|&nbsp; + 18 &nbsp;⟶&nbsp; 2(x − 1)² = 18 &nbsp;|&nbsp; : 2</p>`},
+
+   {h:'c)',q:'c)  2x² + 6x = 0',ph:'Ich würde zuerst …, weil …',
+    kw:[{k:['ausklammer','klammer','faktorisier'],n:'x ausklammern'},
+        {k:['jeder','jedem','beide summand','alle summand','steckt','enthält','kommt vor'],n:'Begründung: in jedem Summanden steckt ein x'},
+        {k:['nullprodukt','faktor null','null setzen','satz vom'],n:'danach Satz vom Nullprodukt'},
+        {k:['nicht teilen','nicht durch x','nie durch x','verlier'],n:'nicht durch x teilen'}],
+    sol:`<p>Zuerst klammere ich x aus, denn in jedem Summanden steckt ein x. Dann steht ein Produkt da und ich kann den Satz vom Nullprodukt anwenden.</p>
+     <p class="tiny">2x² + 6x = 0 &nbsp;⟶&nbsp; 2x · (x + 3) = 0</p>
+     <p><b>Wichtig:</b> Auf keinen Fall durch x teilen – dabei geht die Lösung x = 0 verloren.</p>`},
+
+   {h:'d)',q:'d)  (x + 3)(4 − x) = 0',ph:'Ich würde zuerst …, weil …',
+    kw:[{k:['nicht umform','keine umform','kein umform','gar nicht','direkt','sofort','bereits','schon'],n:'keine Umformung nötig'},
+        {k:['faktor','nullprodukt','null setzen'],n:'Faktoren einzeln null setzen'},
+        {k:['produkt'],n:'Begründung über das Produkt'},
+        {k:['nicht ausmultipliz','ausmultipliz'],n:'nicht ausmultiplizieren'}],
+    sol:`<p>Hier muss ich gar nichts umformen. Der Term steht bereits als Produkt da, also setze ich direkt jeden Faktor einzeln null – ein Produkt ist genau dann null, wenn ein Faktor null ist.</p>
+     <p><b>Wichtig:</b> Nicht ausmultiplizieren! Das macht die Aufgabe nur schwerer.</p>`},
+
+   {h:'e)',q:'e)  2x² − 12x + 10 = 0',ph:'Ich würde zuerst …, weil …',
+    kw:[{k:['teilen','dividier',': 2','durch 2','geteilt'],n:'durch 2 teilen'},
+        {k:['normalform','1 vor','eins vor','vorfaktor','koeffizient','faktor vor'],n:'damit vor x² eine 1 steht'},
+        {k:['pq'],n:'damit die pq-Formel anwendbar wird'},
+        {k:['p','q'],n:'p und q ablesen'}],
+    sol:`<p>Zuerst teile ich die ganze Gleichung durch 2, damit vor dem x² eine 1 steht. Nur in dieser Normalform darf ich p und q ablesen und die pq-Formel anwenden.</p>
+     <p class="tiny">2x² − 12x + 10 = 0 &nbsp;|&nbsp; : 2 &nbsp;⟶&nbsp; x² − 6x + 5 = 0</p>`},
+
+   {h:'f)',q:'f)  −5 = 3x² − 12x + 4',ph:'Ich würde zuerst …, weil …',
+    kw:[{k:['+5','5 addier','fünf'],n:'5 addieren'},
+        {k:['eine seite','andere seite','alles auf','sortier','umstell','null','0 ='],n:'alles auf eine Seite bringen'},
+        {k:['teilen','dividier',': 3','durch 3'],n:'danach durch 3 teilen'},
+        {k:['pq','normalform'],n:'Ziel: Normalform für die pq-Formel'}],
+    sol:`<p>Zuerst addiere ich 5 auf beiden Seiten, damit auf einer Seite eine 0 steht. Erst danach kann ich durch 3 teilen und schließlich p und q ablesen.</p>
+     <p class="tiny">−5 = 3x² − 12x + 4 &nbsp;|&nbsp; + 5 &nbsp;⟶&nbsp; 0 = 3x² − 12x + 9 &nbsp;|&nbsp; : 3</p>`},
+
+   {h:'g)',q:'g)  x⁴ = −16',ph:'Ich würde zuerst …, weil …',
+    kw:[{k:['nicht','kein','gar nicht','erübrigt','entfällt','muss ich nicht'],n:'keine Umformung nötig'},
+        {k:['gerade','vierte potenz','potenz'],n:'gerade Potenz erkannt'},
+        {k:['nie negativ','nicht negativ','immer positiv','größer gleich','≥','nie kleiner','positiv'],n:'gerade Potenz ist nie negativ'},
+        {k:['keine lösung','lösungsmenge','leer','∅','unlösbar'],n:'Folgerung: keine Lösung in ℝ'}],
+    sol:`<p>Hier ist gar keine Umformung nötig. x⁴ ist eine gerade Potenz und deshalb für jedes x größer oder gleich null. Der Wert −16 kann also nie herauskommen – die Gleichung hat keine Lösung in ℝ.</p>`}],
+  tip:`<p>Formulieren Sie Ihre Antwort nach diesem Muster:</p>
+   <p class="tiny" style="margin:8px 0 12px"><i>„Wenn man eine Gleichung von der Gestalt … hat, dann macht man zuerst …, um … zu erreichen."</i></p>
+   <ul>
+     <li>Wenn man eine Gleichung von der Gestalt <b>x² + e = 0</b> hat, dann bringt man zuerst die Zahl e auf die andere Seite, um x² allein stehen zu haben und danach die Wurzel ziehen zu können.</li>
+     <li>Wenn man eine Gleichung von der Gestalt <b>a · (x − d)² + e = 0</b> hat, dann bringt man zuerst e auf die andere Seite, um die quadrierte Klammer freizustellen.</li>
+     <li>Wenn man eine Gleichung von der Gestalt <b>a · x² + b · x = 0</b> hat, dann klammert man zuerst x aus, um ein Produkt zu erhalten und den Satz vom Nullprodukt anwenden zu können.</li>
+     <li>Wenn eine Gleichung <b>bereits als Produkt</b> dasteht, dann setzt man zuerst jeden Faktor einzeln null, um sich das Ausmultiplizieren zu sparen.</li>
+     <li>Wenn man eine Gleichung von der Gestalt <b>a · x² + b · x + c = 0</b> hat, dann teilt man zuerst durch a, um die Normalform zu erreichen und p und q ablesen zu können.</li>
+     <li>Wenn <b>rechts keine 0</b> steht, dann bringt man zuerst alles auf eine Seite, um überhaupt eine der Strategien anwenden zu können.</li>
+     <li>Wenn eine <b>gerade Potenz gleich einer negativen Zahl</b> ist, dann formt man gar nicht um, um zu begründen, dass es keine Lösung geben kann.</li>
+   </ul>`,
+  sol:`<p>Der erste Schritt ergibt sich immer aus dem <b>Aussehen</b> der Gleichung. Deshalb lohnt es sich, vor dem Rechnen kurz innezuhalten und die Bauart zu bestimmen – das spart mehr Zeit, als es kostet.</p>
+   <p>Die Einzelantworten finden Sie unten bei den jeweiligen Teilaufgaben.</p>`},
+
+ {id:'A3',n:'Mittel',fmt:'Eingabe',t:14,ttl:'Alle Verfahren im Wechsel',type:'input',assist:'nullstellen',
+  body:`<p>Lösen Sie jede Gleichung. Sortieren Sie die Lösungen aufsteigend. Gibt es keine reelle Lösung, schreiben Sie <span class="formula">keine</span> in das erste Feld und lassen Sie die übrigen leer.</p>
+   <p class="tiny">Jede Aufgabe geht mit einer der acht Strategien aus dem Info-Kasten. Notieren Sie sich zu jeder Teilaufgabe, welche Sie gewählt haben.</p>`,
+  items:[
+   {l:'a)',q:'x² − 16 = 0 &nbsp;→&nbsp; x₁ =',chk:N(-4),sol:'−4'},{l:'',q:'x₂ =',chk:N(4),sol:'4'},
+   {l:'b)',q:'3x² − 24 = 3 &nbsp;→&nbsp; x₁ =',chk:N(-3),sol:'−3'},{l:'',q:'x₂ =',chk:N(3),sol:'3'},
+   {l:'c)',q:'2x² + 6x = 0 &nbsp;→&nbsp; x₁ =',chk:N(-3),sol:'−3'},{l:'',q:'x₂ =',chk:N(0),sol:'0'},
+   {l:'d)',q:'(x + 5)² = 0 &nbsp;→&nbsp; x =',chk:N(-5),sol:'−5 (doppelte Lösung)'},
+   {l:'e)',q:'2(x − 1)² − 18 = 0 &nbsp;→&nbsp; x₁ =',chk:N(-2),sol:'−2'},{l:'',q:'x₂ =',chk:N(4),sol:'4'},
+   {l:'f)',q:'x⁴ = −16 &nbsp;→&nbsp; x =',chk:KEINE,sol:'keine'},
+   {l:'g)',q:'x³ − 9x = 0 &nbsp;→&nbsp; x₁ =',chk:N(-3),sol:'−3'},{l:'',q:'x₂ =',chk:N(0),sol:'0'},{l:'',q:'x₃ =',chk:N(3),sol:'3'},
+   {l:'h)',q:'x² + 10x + 9 = 0 &nbsp;→&nbsp; x₁ =',chk:N(-9),sol:'−9'},{l:'',q:'x₂ =',chk:N(-1),sol:'−1'},
+   {l:'i)',q:'x² + 2x = 10 &nbsp;→&nbsp; x₁ = (2 Nachkommastellen)',chk:N(-4.32,0.02),sol:'−4,32'},
+   {l:'',q:'x₂ =',chk:N(2.32,0.02),sol:'2,32'}],
+  tip:'Bei c) und g) darf keinesfalls durch x geteilt werden – dabei geht die Lösung x = 0 verloren. Bei d) steckt die Antwort schon im Term. Bei i) sind die Lösungen keine ganzen Zahlen, das ist völlig in Ordnung.',
+  sol:`<p><b>a)</b> x² = 16 ⟹ <b>x = ±4</b></p>
+   <p><b>b)</b> 3x² = 27 ⟹ x² = 9 ⟹ <b>x = ±3</b></p>
+   <p><b>c)</b> 2x(x + 3) = 0 ⟹ 2x = 0 oder x + 3 = 0 ⟹ <b>x = 0 oder x = −3</b></p>
+   <p><b>d)</b> (x + 5)² = 0 ⟹ x + 5 = 0 ⟹ <b>x = −5</b> (doppelte Nullstelle, der Graph berührt die Achse)</p>
+   <p><b>e)</b> 2(x − 1)² = 18 ⟹ (x − 1)² = 9 ⟹ x − 1 = 3 oder x − 1 = −3 ⟹ <b>x = 4 oder x = −2</b></p>
+   <p><b>f)</b> x⁴ ist als gerade Potenz nie negativ ⟹ <b>keine Lösung in ℝ</b></p>
+   <p><b>g)</b> x(x² − 9) = x(x − 3)(x + 3) = 0 ⟹ <b>x = 0; 3; −3</b></p>
+   <p><b>h)</b> p = 10, q = 9 ⟹ x = −5 ± √(25 − 9) = −5 ± 4 ⟹ <b>x = −1 oder x = −9</b></p>
+   <p><b>i)</b> x² + 2x − 10 = 0, p = 2, q = −10 ⟹ x = −1 ± √(1 + 10) = −1 ± √11 ≈ −1 ± 3,3166<br>
+   ⟹ <b>x₁ ≈ −4,32 und x₂ ≈ 2,32</b></p>`},
+
+ {id:'A4',n:'Mittel',fmt:'Eingabe + Rechenweg hochladen',t:12,ttl:'Nullstellen ganzrationaler Funktionen',type:'input',assist:'nullstellen',
+  body:`<p>Bestimmen Sie alle Nullstellen, aufsteigend sortiert. Nicht benötigte Felder bleiben leer.</p>
+   <p class="tiny">Alle vier Funktionen lassen sich durch Ausklammern und danach mit dem Satz vom Nullprodukt bzw. der pq-Formel lösen. Die Funktion in a) begegnet Ihnen in wenigen Wochen wieder – dann sollen Sie die Fläche zwischen ihrem Graphen und der x-Achse berechnen.</p>`,
+  items:[
+   {l:'a)',q:'f(x) = x³ + x² − 6x &nbsp;→&nbsp; x₁ =',chk:N(-3),sol:'−3'},{l:'',q:'x₂ =',chk:N(0),sol:'0'},{l:'',q:'x₃ =',chk:N(2),sol:'2'},
+   {l:'b)',q:'f(x) = x⁴ − 4x² &nbsp;→&nbsp; x₁ =',chk:N(-2),sol:'−2'},{l:'',q:'x₂ =',chk:N(0),sol:'0'},{l:'',q:'x₃ =',chk:N(2),sol:'2'},
+   {l:'c)',q:'f(x) = x³ − 3x² + 4x &nbsp;→&nbsp; x =',chk:N(0),sol:'0 (einzige Nullstelle)'},
+   {l:'d)',q:'f(x) = 2x³ + 8x² + 8x &nbsp;→&nbsp; x₁ =',chk:N(-2),sol:'−2'},{l:'',q:'x₂ =',chk:N(0),sol:'0'}],
+  upload:true, diag:DIAG_NULL,
+  tip:'In allen vier Termen steckt in jedem Summanden ein x – klammern Sie es aus. Bei b) klammern Sie x² aus. Bei c) prüfen Sie die Diskriminante der Klammer, bevor Sie weiterrechnen. Bei d) lässt sich die Klammer als binomische Formel schreiben.',
+  sol:`<p><b>a)</b> x³ + x² − 6x = x(x² + x − 6). Klammer: p = 1, q = −6 ⟹ x = −0,5 ± 2,5 ⟹ x = 2 oder x = −3.<br>
+   Faktorisiert: f(x) = x(x + 3)(x − 2) ⟹ <b>x = −3; 0; 2</b></p>
+   <p><b>b)</b> x⁴ − 4x² = x²(x² − 4) = x²(x − 2)(x + 2) ⟹ <b>x = −2; 0; 2</b>. Bei x = 0 liegt eine doppelte Nullstelle vor – der Graph berührt dort die x-Achse.</p>
+   <p><b>c)</b> x³ − 3x² + 4x = x(x² − 3x + 4). Für die Klammer: (1,5)² − 4 = 2,25 − 4 = −1,75 &lt; 0, also keine reellen Lösungen.<br>
+   ⟹ <b>x = 0 ist die einzige Nullstelle.</b></p>
+   <p><b>d)</b> 2x³ + 8x² + 8x = 2x(x² + 4x + 4) = 2x(x + 2)² ⟹ <b>x = 0 und x = −2</b> (x = −2 doppelt).</p>
+   <p class="tiny">Merken Sie sich den Unterschied: Bei a) drei einfache Nullstellen (Graph schneidet), bei b) und d) je eine doppelte (Graph berührt).</p>`},
+
+ {id:'A5',n:'Anspruchsvoll',fmt:'Sachaufgabe mit GTR',t:14,ttl:'Der Wurf',type:'mixed',assist:'nullstellen',
+  body:`<p>Ein Ball wird aus 1,8 m Höhe nach oben geworfen. Seine Höhe über dem Boden wird beschrieben durch</p>
+   <span class="formula fbig">h(t) = −5t² + 12t + 1,8</span>
+   <p class="tiny">t in Sekunden, h(t) in Metern.</p>
+   <p><b>Rechnen Sie zunächst vollständig von Hand</b>, ohne GTR. Welche Strategie dazu passt, entscheiden Sie selbst – ein Blick auf die Bauart der Gleichung hilft. Erst wenn Sie fertig sind, kontrollieren Sie Ihre Werte mit dem GTR. Geben Sie alle Zeiten auf <b>zwei Nachkommastellen</b> an.</p>`,
+  graph:{note:'Vergleichen Sie den Verlauf mit Ihrer Rechnung. Die Achsen sind absichtlich unbeschriftet – Sie sollen die Werte nicht ablesen, sondern rechnen.',
+   svg:fig(plot({xmin:-0.4,xmax:3.0,ymin:-2,ymax:11,w:430,h:250,stepx:0.5,stepy:2,noscale:true,xlab:'t',ylab:'h(t)',
+     fns:[{f:t=>-5*t*t+12*t+1.8,color:'#c2255c',label:'h',lx:2.1}],
+     lines:[{x1:-0.4,y1:7,x2:3.0,y2:7,dash:true,color:'#868e96',wd:1.4}]}),
+     'Höhe des Balls über der Zeit · die gestrichelte Linie liegt bei 7 m')},
+  items:[
+   {l:'a)',q:'Wann trifft der Ball auf den Boden? t =',chk:N(2.54,0.02),sol:'2,54 s'},
+   {l:'b)',q:'Wann ist er auf 7 m Höhe? t₁ =',chk:N(0.57,0.02),sol:'0,57 s'},
+   {l:'',q:'t₂ =',chk:N(1.83,0.02),sol:'1,83 s'},
+   {l:'c)',q:'Zu welchem Zeitpunkt ist der Ball am höchsten? t =',chk:N(1.2,0.02),sol:'1,20 s'},
+   {l:'',q:'maximale Höhe in m:',chk:N(9,0.05),sol:'9,00 m'}],
+  upload:true, diag:DIAG_NULL,
+  free:{q:'d) Die Gleichung in a) hat zwei Lösungen. Erklären Sie, warum eine davon im Sachzusammenhang nicht sinnvoll ist – und was sie mathematisch trotzdem bedeutet.',
+   kw:[{k:['negativ','minus','kleiner null','vor dem wurf','-0,14','-0.14'],n:'zweite Lösung ist negativ'},
+       {k:['zeit','sekunde','t=0','beginn','wurf','startet'],n:'Zeit beginnt beim Abwurf'},
+       {k:['nicht sinnvoll','nicht möglich','keinen sinn','unrealistisch','existiert nicht'],n:'Deutung: im Kontext nicht sinnvoll'},
+       {k:['parabel','graph','verlänger','fortsetz','mathematisch','rechnerisch','modell'],n:'mathematisch existiert sie trotzdem'},
+       {k:['definitionsbereich','gültigkeitsbereich','t≥0','t >= 0','nur positiv'],n:'Einschränkung des Definitionsbereichs'}],
+   sol:`<p>Die Gleichung −5t² + 12t + 1,8 = 0 liefert t₁ ≈ 2,54 und t₂ ≈ −0,14.</p>
+    <p><b>Warum t₂ ausfällt:</b> Die Zeitmessung beginnt beim Abwurf, also bei t = 0. Ein negativer Zeitpunkt läge <i>vor</i> dem Wurf – da war der Ball noch in der Hand und die Funktion beschreibt seine Bewegung gar nicht. Der Sachzusammenhang schränkt den Definitionsbereich auf t ≥ 0 ein.</p>
+    <p><b>Was t₂ mathematisch bedeutet:</b> Die Parabel schneidet die t-Achse an dieser Stelle tatsächlich. Verlängert man den Graphen nach links, liefert das Modell dort den Wert 0 – rein rechnerisch korrekt, im Sachkontext aber bedeutungslos.</p>
+    <p class="tiny">Diese Unterscheidung wird in Klausuren regelmäßig verlangt: Rechnen Sie beide Lösungen aus, geben Sie beide an und begründen Sie dann, welche Sie verwerfen.</p>`},
+  tip:`<p>a) Überlegen Sie zuerst: Welchen Wert hat die Höhe h in dem Moment, in dem der Ball den Boden berührt? Stellen Sie damit die passende Gleichung auf.</p>
+   <p>b) „Auf 7 m Höhe" heißt: h(t) soll den Wert 7 annehmen. Formen Sie danach so um, dass eine Gleichung entsteht, deren Bauart Sie kennen.</p>
+   <p>c) Der höchste Punkt liegt genau in der Mitte zwischen zwei gleich hohen Punkten. Ihre beiden Zeiten aus b) sind genau solche.</p>
+   <p><b>Welches Verfahren?</b> Schauen Sie sich die Bauart Ihrer Gleichung an und vergleichen Sie sie mit den neun Formen im Hilfe-Kasten. Der Tipp-Assistent hilft weiter, wenn Sie unsicher sind.</p>
+   <p><b>Wenn Sie gar nicht weiterkommen:</b> Zeichnen Sie h zuerst mit dem GTR. Ein sinnvolles Fenster ist 0 ≤ t ≤ 3 und 0 ≤ h ≤ 10. Am Bild sehen Sie, wie viele Lösungen Sie erwarten müssen – rechnen müssen Sie sie trotzdem.</p>`,
+  sol:`<p><b>a)</b> −5t² + 12t + 1,8 = 0 &nbsp;|&nbsp; : (−5) &nbsp;⟹&nbsp; t² − 2,4t − 0,36 = 0<br>
+   t = 1,2 ± √(1,44 + 0,36) = 1,2 ± √1,8 = 1,2 ± 1,3416<br>
+   ⟹ t₁ ≈ <b>2,54 s</b> &nbsp;(t₂ ≈ −0,14 entfällt, siehe d)</p>
+   <p><b>b)</b> −5t² + 12t + 1,8 = 7 &nbsp;⟹&nbsp; −5t² + 12t − 5,2 = 0 &nbsp;|&nbsp; : (−5) &nbsp;⟹&nbsp; t² − 2,4t + 1,04 = 0<br>
+   t = 1,2 ± √(1,44 − 1,04) = 1,2 ± √0,4 = 1,2 ± 0,6325<br>
+   ⟹ <b>t₁ ≈ 0,57 s</b> (auf dem Weg nach oben) und <b>t₂ ≈ 1,83 s</b> (auf dem Weg nach unten)</p>
+   <p><b>c)</b> Der Scheitel liegt genau mittig zwischen zwei gleich hohen Punkten: t = (0,57 + 1,83) / 2 = <b>1,20 s</b>.<br>
+   h(1,2) = −5 · 1,44 + 12 · 1,2 + 1,8 = −7,2 + 14,4 + 1,8 = <b>9,00 m</b></p>
+   <p class="tiny">Mit dem GTR: Funktion plotten, mit „Root" die Nullstelle, mit „Intersect" gegen y = 7 die beiden Zeitpunkte und mit „Maximum" den Scheitel bestimmen.</p>`},
+
+ {id:'A6',n:'Anspruchsvoll',fmt:'Sachaufgabe + Erklärung',t:14,ttl:'Regenrückhaltebecken',type:'mixed',assist:'nullstellen',
+  body:`<p>Bei einem Starkregen wird die <b>Zuflussrate</b> in ein Regenrückhaltebecken für die ersten 5 Stunden modelliert durch</p>
+   <span class="formula fbig">f(t) = −0,5·t³ + 3·t² − 4·t</span>
+   <p class="tiny">t in Stunden, f(t) in m³ pro Stunde. Negative Werte bedeuten, dass mehr abfließt als zufließt.</p>
+   <p><b>Lösen Sie diese Aufgabe ausschließlich grafisch mit dem GTR.</b> Geben Sie die Funktion ein, wählen Sie ein sinnvolles Fenster und arbeiten Sie mit den Analysefunktionen des Rechners. Halten Sie in Ihrem Heft fest, welches Fenster Sie eingestellt und welche Befehle Sie benutzt haben – diesen „Rechenweg" können Sie unten hochladen.</p>`,
+  graph:{note:'Kontrollbild nach Ihrer Rechnung. Ohne Skala – die Nullstellen sollen Sie berechnen, nicht ablesen.',
+   svg:fig(plot({xmin:-0.5,xmax:5.2,ymin:-5,ymax:9,w:430,h:250,stepx:1,stepy:2,noscale:true,xlab:'t',ylab:'f(t)',
+     fns:[{f:t=>-0.5*t*t*t+3*t*t-4*t,color:'#0b7285',label:'f',lx:3.2}]}),
+     'Zuflussrate f über der Zeit')},
+  items:[
+   {l:'a)',q:'kleinste Nullstelle t₁ =',chk:N(0),sol:'0'},
+   {l:'',q:'t₂ =',chk:N(2),sol:'2'},
+   {l:'',q:'t₃ =',chk:N(4),sol:'4'},
+   {l:'b)',q:'f(1) = &nbsp;(in m³/h)',chk:N(-1.5,0.02),sol:'−1,5'},
+   {l:'',q:'f(3) =',chk:N(1.5,0.02),sol:'1,5'},
+   {l:'c)',q:'Das Becken füllt sich von t =',chk:N(2),sol:'2'},
+   {l:'',q:'bis t =',chk:N(4),sol:'4'}],
+  upload:true, diag:DIAG_GTR,
+  free:{q:'d) Erklären Sie, was die Nullstellen im Sachzusammenhang bedeuten – und warum der Wasserbestand bei t = 4 am größten ist, obwohl die Zuflussrate dort null beträgt.',
+   kw:[{k:['zufluss','rate','zuflussrate','zufließ'],n:'Bezug zur Zuflussrate'},
+       {k:['null','0','keine','netto'],n:'Rate ist null'},
+       {k:['vorzeichen','wechsel','wechselt','von positiv','nach negativ'],n:'Vorzeichenwechsel'},
+       {k:['abfluss','abfließ','abnimmt','sinkt','leert','fällt'],n:'ab t = 4 überwiegt der Abfluss'},
+       {k:['bestand','wassermenge','füllstand','menge','maximal','höchst','größt'],n:'Bestand vs. Rate unterschieden'},
+       {k:['solange','weiter','immer noch','bis dahin','wächst'],n:'solange f > 0 wächst der Bestand'}],
+   sol:`<p><b>Bedeutung der Nullstellen:</b> Zu diesen Zeitpunkten ist die Zuflussrate null – es fließt netto weder Wasser hinein noch heraus.</p>
+    <p><b>t = 0:</b> Der Regen setzt gerade erst ein.<br>
+    <b>t = 2:</b> Vorzeichenwechsel von <i>negativ nach positiv</i>. Zwischen 0 und 2 ist f(t) &lt; 0 (z. B. f(1) = −1,5), das Becken verliert Wasser. Ab t = 2 überwiegt der Zufluss.<br>
+    <b>t = 4:</b> Vorzeichenwechsel von <i>positiv nach negativ</i>. Ab hier fließt wieder mehr ab als zu.</p>
+    <p><b>Warum der Bestand bei t = 4 maximal ist:</b> Hier muss man Rate und Bestand streng unterscheiden. Solange die Rate positiv ist, kommt Wasser <i>hinzu</i> – der Bestand wächst also weiter, auch wenn die Rate schon wieder kleiner wird. Erst wenn die Rate ihr Vorzeichen wechselt, kippt der Bestand von Zunahme zu Abnahme. Genau das passiert bei t = 4.</p>
+    <p class="tiny">Und wie viel Wasser genau hinzugekommen ist? Das ist der Flächeninhalt zwischen dem Graphen und der t-Achse von 2 bis 4 – die Frage, mit der Kapitel 1 beginnt.</p>`},
+  tip:`<p>a) Geben Sie f in den GTR ein. Ein sinnvolles Fenster ist 0 ≤ t ≤ 5 und −5 ≤ y ≤ 5. Nutzen Sie dann die Funktion „Root" bzw. „Nullstelle" – und denken Sie daran, dass Sie für jede weitere Nullstelle erneut suchen müssen.</p>
+   <p>b) Für Funktionswerte gibt es die Tabellenansicht oder die Funktion „Y-Cal" bzw. „Wert berechnen".</p>
+   <p>c) Schauen Sie im Bild, zwischen welchen Nullstellen der Graph <b>oberhalb</b> der t-Achse verläuft. Genau dort ist die Rate positiv.</p>`,
+  sol:`<p><b>a)</b> f(t) = −0,5t³ + 3t² − 4t = t(−0,5t² + 3t − 4) = −0,5 · t · (t² − 6t + 8)<br>
+   Erster Faktor: <b>t₁ = 0</b>. Klammer: p = −6, q = 8 ⟹ t = 3 ± √(9 − 8) = 3 ± 1 ⟹ <b>t₂ = 2, t₃ = 4</b></p>
+   <p><b>b)</b> f(1) = −0,5 + 3 − 4 = <b>−1,5 m³/h</b> (es fließt netto ab)<br>
+   f(3) = −13,5 + 27 − 12 = <b>1,5 m³/h</b> (es fließt netto zu)</p>
+   <p><b>c)</b> Zwischen den Nullstellen t = 2 und t = 4 ist f(t) &gt; 0, dort <b>füllt sich das Becken</b>.</p>`},
+
+ {id:'A7',n:'Anspruchsvoll',fmt:'Sachaufgabe + Rechenweg hochladen',t:15,ttl:'Wann lohnt sich die Produktion?',type:'mixed',assist:'nullstellen',
+  body:`<p>Eine kleine Druckerei verkauft Poster für 5 € pro Stück. Die Kosten für die Produktion von x Postern betragen</p>
+   <span class="formula fbig">K(x) = 0,01x² + x + 300</span>
+   <p class="tiny">x in Stück, K(x) in Euro. Der Erlös beträgt E(x) = 5x.</p>
+   <p><b>Lösen Sie diese Aufgabe ausschließlich grafisch mit dem GTR.</b> Stellen Sie zuerst die Gewinnfunktion auf, geben Sie sie ein und arbeiten Sie dann mit den Analysefunktionen. Notieren Sie Fenster und Befehle in Ihrem Heft – diesen „Rechenweg" können Sie unten hochladen.</p>`,
+  graph:{note:'Kontrollbild nach Ihrer Rechnung. Bewusst ohne Skala – Gewinnschwelle und Gewinngrenze sollen Sie berechnen.',
+   svg:fig(plot({xmin:-20,xmax:440,ymin:-320,ymax:180,w:430,h:250,stepx:100,stepy:100,noscale:true,xlab:'x',ylab:'G(x)',
+     shade:[{a:100,b:300,f:x=>-0.01*x*x+4*x-300,base:0,color:'#6bcf7f',op:.25}],
+     fns:[{f:x=>-0.01*x*x+4*x-300,color:'#0b7285',label:'G',lx:355}]}),
+     'Gewinnfunktion G über der Stückzahl · grün: Bereich mit Gewinn')},
+  items:[
+   {l:'a)',q:'Gewinnfunktion G(x) = &nbsp;(z. B. -0.01x^2+4x-300)',
+    chk:T('-0.01x^2+4x-300','-0,01x^2+4x-300','4x-0.01x^2-300','-0.01x²+4x-300'),sol:'G(x) = −0,01x² + 4x − 300'},
+   {l:'b)',q:'Gewinnschwelle x₁ =',chk:N(100),sol:'100 Poster'},
+   {l:'',q:'Gewinngrenze x₂ =',chk:N(300),sol:'300 Poster'},
+   {l:'c)',q:'Stückzahl mit maximalem Gewinn: x =',chk:N(200),sol:'200 Poster'},
+   {l:'',q:'maximaler Gewinn in €:',chk:N(100,0.5),sol:'100 €'}],
+  diag:DIAG_GTR,
+  free:{q:'d) Deuten Sie die beiden Werte aus b) im Sachzusammenhang. Was passiert, wenn die Druckerei 350 Poster produziert?',
+   kw:[{k:['gewinnschwelle','break','ab hier','erstmals','beginnt'],n:'x₁ = Gewinnschwelle'},
+       {k:['gewinngrenze','darüber','ab 300','wieder verlust','oberhalb'],n:'x₂ = Gewinngrenze'},
+       {k:['verlust','minus','negativ','defizit'],n:'außerhalb Verlust'},
+       {k:['zwischen','dazwischen','100 und 300','im bereich'],n:'nur dazwischen Gewinn'},
+       {k:['350','-75','75'],n:'Bezug auf x = 350'},
+       {k:['kosten','steigen','quadratisch','überproportional','stärker'],n:'Kosten wachsen stärker als der Erlös'}],
+   sol:`<p><b>x₁ = 100 (Gewinnschwelle):</b> Ab 100 verkauften Postern deckt der Erlös erstmals die Kosten. Unterhalb davon macht die Druckerei Verlust, weil die Fixkosten von 300 € noch nicht erwirtschaftet sind.</p>
+    <p><b>x₂ = 300 (Gewinngrenze):</b> Oberhalb von 300 Postern rutscht der Gewinn wieder ins Minus. Der Grund liegt im quadratischen Term 0,01x²: Die Kosten wachsen mit der Stückzahl überproportional (z. B. durch Überstunden oder Materialverschleiß), der Erlös dagegen nur linear.</p>
+    <p><b>Bei 350 Postern:</b> G(350) = −0,01 · 122 500 + 1 400 − 300 = −1 225 + 1 100 = <b>−125 €</b>, also ein Verlust von 125 €. Mehr produzieren heißt hier eindeutig nicht mehr verdienen.</p>
+    <p><b>Fazit:</b> Nur im Bereich 100 &lt; x &lt; 300 arbeitet die Druckerei mit Gewinn, am besten bei 200 Postern.</p>`},
+  upload:true,
+  tip:`<p>a) Gewinn = Erlös − Kosten. Achten Sie beim Abziehen der Klammer auf alle Vorzeichen – hier lohnt sich Sorgfalt, denn mit dieser Funktion arbeiten Sie danach im GTR weiter.</p>
+   <p>b) Gewinnschwelle und Gewinngrenze sind die Nullstellen von G. Geben Sie G ein, wählen Sie ein Fenster wie 0 ≤ x ≤ 400 und −350 ≤ y ≤ 200 und nutzen Sie „Root". Für die zweite Nullstelle müssen Sie erneut suchen.</p>
+   <p>c) Für den höchsten Punkt gibt es die Funktion „Maximum". Der Rechner liefert Ihnen x- und y-Wert in einem Schritt.</p>`,
+  sol:`<p><b>a)</b> G(x) = E(x) − K(x) = 5x − (0,01x² + x + 300) = 5x − 0,01x² − x − 300<br>
+   ⟹ <b>G(x) = −0,01x² + 4x − 300</b></p>
+   <p><b>b)</b> −0,01x² + 4x − 300 = 0 &nbsp;|&nbsp; · (−100) &nbsp;⟹&nbsp; x² − 400x + 30 000 = 0<br>
+   x = 200 ± √(40 000 − 30 000) = 200 ± √10 000 = 200 ± 100<br>
+   ⟹ <b>x₁ = 100 und x₂ = 300</b></p>
+   <p><b>c)</b> Der Scheitel liegt mittig: x = (100 + 300) / 2 = <b>200</b><br>
+   G(200) = −0,01 · 40 000 + 800 − 300 = −400 + 500 = <b>100 €</b></p>
+   <p class="tiny">Kontrolle mit dem GTR: G plotten, „Root" für die beiden Nullstellen, „Maximum" für den Scheitel.</p>`}
+]},
+
+/* ================================================================= BLOCK B */
+{id:'B',title:'Block B · Schnittpunkte zweier Graphen',
+ lead:'Die Schnittstellen von heute sind die Integrationsgrenzen von übermorgen. Der Ansatz ist immer derselbe – gerechnet wird von Hand.',
+ code:'3856',
+ info:`<div class="info">
+   <p>Zwei Graphen schneiden sich dort, wo beide Funktionen <b>denselben y-Wert</b> haben. Der Ansatz lautet deshalb immer:</p>
+   <span class="formula fbig">f(x) = g(x)</span>
+   <p>Danach formen Sie ganz normal <b>nach x um</b> – genau wie bei jeder anderen Gleichung. Ein eigener Schritt „gleich null setzen" ist dabei nicht nötig: Die Null entsteht bei quadratischen und ganzrationalen Gleichungen von selbst, sobald Sie alles auf eine Seite sortieren.</p>
+   <p class="tiny">Lesen Sie jeden Rechenweg von oben nach unten: links die Umformung, in der Mitte der Befehlsstrich, rechts die Begründung.</p>
+
+   <div class="strat-item">
+     <div class="strat-head"><span class="strat-nr">1</span><span class="strat-form">Gerade und Gerade</span><span class="strat-name">nach x umstellen</span><span class="strat-sub">Beispiel: f(x) = 2x − 1 und g(x) = −x + 5</span></div>
+     <div class="calcrow"><span class="eq">2x − 1 = −x + 5</span><span class="cmd">| + x</span><span class="why">Alle x-Terme auf eine Seite bringen</span></div>
+     <div class="calcrow"><span class="eq">3x − 1 = 5</span><span class="cmd">| + 1</span><span class="why">Alle Zahlen auf die andere Seite bringen</span></div>
+     <div class="calcrow"><span class="eq">3x = 6</span><span class="cmd">| : 3</span><span class="why">Durch die Zahl vor dem x teilen</span></div>
+   </div>
+
+   <div class="strat-item">
+     <div class="strat-head"><span class="strat-nr">2</span><span class="strat-form">Parabel und Gerade</span><span class="strat-name">sortieren, dann Strategie aus Teil 1</span><span class="strat-sub">Beispiel: f(x) = x² − 2x und g(x) = x + 4</span></div>
+     <div class="calcrow"><span class="eq">x² − 2x = x + 4</span><span class="cmd">| − x</span><span class="why">x-Terme zusammenfassen</span></div>
+     <div class="calcrow"><span class="eq">x² − 3x = 4</span><span class="cmd">| − 4</span><span class="why">Weiter sortieren, bis eine vertraute Gleichungsform dasteht</span></div>
+     <div class="calcrow"><span class="eq">x² − 3x − 4 = 0</span><span class="cmd">|</span><span class="why">Das ist die Normalform – ab hier wie in Block A weiterrechnen</span></div>
+   </div>
+
+   <div class="strat-item">
+     <div class="strat-head"><span class="strat-nr">3</span><span class="strat-form">Ganzrationale Funktion und Gerade</span><span class="strat-name">sortieren und ausklammern</span><span class="strat-sub">Beispiel: f(x) = x³ + x² und g(x) = 6x</span></div>
+     <div class="calcrow"><span class="eq">x³ + x² = 6x</span><span class="cmd">| − 6x</span><span class="why">Alles auf eine Seite sortieren</span></div>
+     <div class="calcrow"><span class="eq">x³ + x² − 6x = 0</span><span class="cmd">|</span><span class="why">Prüfen: In jedem Summanden steckt ein x</span></div>
+     <div class="calcrow"><span class="eq">x · (x² + x − 6) = 0</span><span class="cmd">|</span><span class="why">x ausklammern, dann Satz vom Nullprodukt anwenden</span></div>
+     <div class="strat-warn"><b>Nicht durch x teilen!</b> Dabei geht der Schnittpunkt bei x = 0 verloren.</div>
+   </div>
+
+   <div class="strat-item">
+     <div class="strat-head"><span class="strat-nr">4</span><span class="strat-form">Vom x-Wert zum Punkt</span><span class="strat-name">einsetzen und angeben</span><span class="strat-sub">Fortsetzung von Beispiel 1: x = 2</span></div>
+     <div class="calcrow"><span class="eq">g(2) = −2 + 5</span><span class="cmd">|</span><span class="why">Den x-Wert in f oder in g einsetzen</span></div>
+     <div class="calcrow"><span class="eq">g(2) = 3</span><span class="cmd">|</span><span class="why">Das ist die y-Koordinate</span></div>
+     <div class="calcrow"><span class="eq">S(2 | 3)</span><span class="cmd">|</span><span class="why">Schnittpunkt als Koordinatenpaar angeben</span></div>
+     <div class="strat-warn"><b>Probe:</b> Setzen Sie den x-Wert in <b>beide</b> Funktionen ein. Kommt zweimal derselbe y-Wert heraus, stimmt Ihr Ergebnis. Das ist die beste Kontrolle, die es gibt.</div>
+   </div>
+
+   <div class="strat-item">
+     <div class="strat-head"><span class="strat-nr">5</span><span class="strat-form">Wie viele Schnittpunkte sind möglich?</span><span class="strat-name">über den Grad abschätzen</span><span class="strat-sub">vor dem Rechnen kurz überlegen</span></div>
+     <div class="calcrow"><span class="eq">Gerade und Gerade</span><span class="cmd">|</span><span class="why">höchstens 1 – bei parallelen Geraden gar keiner</span></div>
+     <div class="calcrow"><span class="eq">Parabel und Gerade</span><span class="cmd">|</span><span class="why">0, 1 oder 2 – bei genau einem berühren sich die Graphen nur</span></div>
+     <div class="calcrow"><span class="eq">Parabel und Parabel</span><span class="cmd">|</span><span class="why">0, 1 oder 2</span></div>
+     <div class="calcrow"><span class="eq">Grad 3 und Gerade</span><span class="cmd">|</span><span class="why">1, 2 oder 3 – mindestens einer ist immer dabei</span></div>
+     <div class="strat-warn">Woher kommt das? Sortiert man alles auf eine Seite, entsteht eine Gleichung. Ihr <b>höchster Exponent</b> – der Grad – sagt, wie viele Lösungen es höchstens geben kann. Eine Gleichung dritten Grades hat außerdem immer mindestens eine Lösung.</div>
+   </div>
+ </div>`,
+ links:[
+  {t:'ZUM: Ganzrationale Funktionen',u:'https://unterrichten.zum.de/wiki/Ganzrationale_Funktionen',
+   d:'Lernpfad mit interaktiven Übungen zu Nullstellen, Schnittpunkten und Funktionsuntersuchungen.'},
+  {t:'ZUM: Eigenschaften ganzrationaler Funktionen',u:'https://unterrichten.zum.de/wiki/Eigenschaften_ganzrationaler_Funktionen',
+   d:'Ergänzende H5P- und GeoGebra-Übungen – gut als Vertiefung nach Block B.'},
+  {t:'LearningApps: Graph und Funktionsgleichung zuordnen',u:'https://learningapps.org/16200021',
+   d:'Graphen den passenden Funktionsgleichungen zuordnen – trainiert genau den Blick, den Sie für Aufgabe B1 brauchen.'},
+ ],
+ tasks:[
+
+ {id:'B1',n:'Basis',fmt:'Abschätzen + Zuordnung',t:14,ttl:'Wie viele Schnittpunkte sind zu erwarten?',type:'mixed',assist:'schnitt',
+  body:`<p>Bevor man rechnet, lohnt sich eine Vorüberlegung: Um welche Funktionstypen handelt es sich – und wie viele Schnittpunkte sind damit überhaupt möglich?</p>
+   <p>Schätzen Sie zuerst für jedes Paar die Anzahl der Schnittpunkte ab. Ordnen Sie danach jedem Paar das passende Bild zu.</p>
+   <table class="strat"><thead><tr><th>Paar</th><th>Funktionen</th></tr></thead><tbody>
+     <tr><td><b>A</b></td><td>f(x) = 2x − 1 &nbsp;und&nbsp; g(x) = −x + 5</td></tr>
+     <tr><td><b>B</b></td><td>f(x) = x² &nbsp;und&nbsp; g(x) = 2x − 1</td></tr>
+     <tr><td><b>C</b></td><td>f(x) = x² + 2 &nbsp;und&nbsp; g(x) = 1</td></tr>
+     <tr><td><b>D</b></td><td>f(x) = x² − 4 &nbsp;und&nbsp; g(x) = x</td></tr>
+     <tr><td><b>E</b></td><td>f(x) = x³ − 3x &nbsp;und&nbsp; g(x) = 1</td></tr>
+     <tr><td><b>F</b></td><td>f(x) = x² &nbsp;und&nbsp; g(x) = −x² + 4</td></tr>
+   </tbody></table>
+   <div class="figrow">`+
+    fig(plot({xmin:-3,xmax:3,ymin:-1,ymax:6,w:215,h:170,stepx:1,stepy:1,noscale:true,m:{l:20,r:10,t:8,b:18},
+      fns:[{f:x=>x*x+2,color:'#0b7285'},{f:x=>1,color:'#c2255c'}]}),'','I')+
+    fig(plot({xmin:-2.6,xmax:2.6,ymin:-4,ymax:4,w:215,h:170,stepx:1,stepy:1,noscale:true,m:{l:20,r:10,t:8,b:18},
+      fns:[{f:x=>x*x*x-3*x,color:'#0b7285'},{f:x=>1,color:'#c2255c'}]}),'','II')+
+    fig(plot({xmin:-2,xmax:4,ymin:-4,ymax:8,w:215,h:170,stepx:1,stepy:2,noscale:true,m:{l:20,r:10,t:8,b:18},
+      fns:[{f:x=>2*x-1,color:'#0b7285'},{f:x=>-x+5,color:'#c2255c'}]}),'','III')+
+   `</div><div class="figrow" style="margin-top:10px">`+
+    fig(plot({xmin:-3,xmax:3,ymin:-2,ymax:6,w:215,h:170,stepx:1,stepy:1,noscale:true,m:{l:20,r:10,t:8,b:18},
+      fns:[{f:x=>x*x,color:'#0b7285'},{f:x=>-x*x+4,color:'#c2255c'}]}),'','IV')+
+    fig(plot({xmin:-2,xmax:4,ymin:-2,ymax:8,w:215,h:170,stepx:1,stepy:2,noscale:true,m:{l:20,r:10,t:8,b:18},
+      fns:[{f:x=>x*x,color:'#0b7285'},{f:x=>2*x-1,color:'#c2255c'}]}),'','V')+
+    fig(plot({xmin:-4,xmax:4,ymin:-6,ymax:8,w:215,h:170,stepx:1,stepy:2,noscale:true,m:{l:20,r:10,t:8,b:18},
+      fns:[{f:x=>x*x-4,color:'#0b7285'},{f:x=>x,color:'#c2255c'}]}),'','VI')+
+   `</div>`,
+  items:[
+   {l:'A',q:'Anzahl der Schnittpunkte:',chk:N(1),sol:'1'},
+   {l:'B',q:'Anzahl:',chk:N(1),sol:'1 (Berührpunkt)'},
+   {l:'C',q:'Anzahl:',chk:N(0),sol:'0'},
+   {l:'D',q:'Anzahl:',chk:N(2),sol:'2'},
+   {l:'E',q:'Anzahl:',chk:N(3),sol:'3'},
+   {l:'F',q:'Anzahl:',chk:N(2),sol:'2'}],
+  match2:{opts:['Bild I','Bild II','Bild III','Bild IV','Bild V','Bild VI'],
+   items:[{q:'Zu Paar A gehört …',a:2},{q:'Zu Paar B gehört …',a:4},{q:'Zu Paar C gehört …',a:0},
+          {q:'Zu Paar D gehört …',a:5},{q:'Zu Paar E gehört …',a:1},{q:'Zu Paar F gehört …',a:3}]},
+  free:{q:'Woran haben Sie bei Paar E erkannt, dass es drei Schnittpunkte sein können? Und woran bei Paar C, dass es keinen gibt?',
+   kw:[{k:['grad','dritten grades','x³','x^3','hochste','höchste','exponent'],n:'Grad der Gleichung als Argument'},
+       {k:['drei','3 lösungen','höchstens drei'],n:'höchstens drei Lösungen bei Grad 3'},
+       {k:['parabel','nach oben','scheitel','tiefste','minimum'],n:'Lage der Parabel bei Paar C'},
+       {k:['über','oberhalb','immer größer','nie','unter','trifft nicht','kein schnitt'],n:'Parabel liegt ganz oberhalb der Geraden'},
+       {k:['x²=-1','x^2=-1','negativ','quadrat','nie negativ'],n:'x² kann nicht negativ werden'}],
+   sol:`<p><b>Paar E:</b> Sortiert man alles auf eine Seite, entsteht x³ − 3x − 1 = 0, also eine Gleichung <b>dritten Grades</b>. Sie kann höchstens drei Lösungen haben – und hat mindestens eine. Am Bild sieht man, dass der Graph von f dreimal auf die Höhe 1 kommt: einmal beim Ansteigen, einmal beim Fallen und einmal beim erneuten Ansteigen.</p>
+    <p><b>Paar C:</b> Die Parabel f(x) = x² + 2 hat ihren tiefsten Punkt bei (0 | 2), liegt also <b>überall oberhalb</b> der waagerechten Geraden y = 1. Rechnerisch: x² + 2 = 1 führt auf x² = −1, und ein Quadrat kann nie negativ sein. Also gibt es keinen Schnittpunkt.</p>
+    <p class="tiny">Der Grad sagt Ihnen, wie viele Schnittpunkte <i>höchstens</i> möglich sind. Wie viele es tatsächlich sind, entscheidet die Lage der Graphen zueinander.</p>`},
+  tip:`<p>Fragen Sie sich für jedes Paar nur zwei Dinge:</p>
+   <ul>
+     <li><b>Welchen Grad</b> hat die Gleichung, wenn ich alles auf eine Seite sortiere? Eine Gerade ist Grad 1, eine Parabel Grad 2, x³ ist Grad 3. Der Grad ist die Obergrenze für die Anzahl der Lösungen.</li>
+     <li><b>Wo liegen die Graphen zueinander?</b> Eine nach oben geöffnete Parabel mit Scheitel oberhalb einer waagerechten Geraden kann diese gar nicht treffen.</li>
+   </ul>
+   <p>Für die Bildzuordnung: Zählen Sie in jedem Bild, wie oft sich die beiden Kurven berühren oder kreuzen – und schauen Sie auf die Form (Gerade, Parabel, S-Kurve).</p>`,
+  sol:`<p><b>A: 1</b> – zwei Geraden mit verschiedenen Steigungen schneiden sich genau einmal (Bild III).</p>
+   <p><b>B: 1</b> – x² = 2x − 1 führt auf (x − 1)² = 0. Die Gerade ist Tangente, sie <b>berührt</b> die Parabel nur (Bild V).</p>
+   <p><b>C: 0</b> – x² + 2 = 1 führt auf x² = −1, das ist unmöglich (Bild I).</p>
+   <p><b>D: 2</b> – x² − 4 = x führt auf eine quadratische Gleichung mit zwei Lösungen (Bild VI).</p>
+   <p><b>E: 3</b> – Gleichung dritten Grades, der Graph kreuzt die Höhe 1 dreimal (Bild II).</p>
+   <p><b>F: 2</b> – x² = −x² + 4 führt auf x² = 2, also x = ±√2 (Bild IV).</p>
+   <p style="margin-top:12px"><b>Zuordnung:</b> A – III · B – V · C – I · D – VI · E – II · F – IV</p>`},
+
+ {id:'B2',n:'Basis',fmt:'Eingabe + Rechenweg dokumentieren',t:16,ttl:'Schnittpunkte berechnen',type:'input',assist:'schnitt',
+  body:`<p>Berechnen Sie die Schnittpunkte. <b>Dokumentieren Sie Ihren Rechenweg im Heft mit allen Befehlsstrichen</b> – also so, wie es in den Beispielen im Hilfe-Kasten steht.</p>
+   <p>Tragen Sie hier jeweils ein, welche Gleichung dasteht, <b>nachdem Sie alles sortiert haben</b>, und danach die Schnittpunkte (aufsteigend nach x). Nicht benötigte Felder bleiben leer.</p>`,
+  items:[
+   {l:'a)',q:'f(x) = 2x − 1 und g(x) = −x + 5 &nbsp;→&nbsp; sortierte Gleichung:',
+    chk:T('3x=6','6=3x','3x-6=0'),sol:'3x = 6'},
+   {l:'',q:'x =',chk:N(2),sol:'2'},{l:'',q:'y =',chk:N(3),sol:'3'},
+   {l:'b)',q:'f(x) = x² − 2x und g(x) = x + 4 &nbsp;→&nbsp; sortierte Gleichung:',
+    chk:T('x^2-3x-4=0','x^2-3x-4','x²-3x-4=0','x^2-3x=4'),sol:'x² − 3x − 4 = 0'},
+   {l:'',q:'x₁ =',chk:N(-1),sol:'−1'},{l:'',q:'y₁ =',chk:N(3),sol:'3'},
+   {l:'',q:'x₂ =',chk:N(4),sol:'4'},{l:'',q:'y₂ =',chk:N(8),sol:'8'},
+   {l:'c)',q:'f(x) = x³ + x² und g(x) = 6x &nbsp;→&nbsp; sortierte Gleichung:',
+    chk:T('x^3+x^2-6x=0','x^3+x^2-6x','x³+x²-6x=0','x^3+x^2=6x'),sol:'x³ + x² − 6x = 0'},
+   {l:'',q:'x₁ =',chk:N(-3),sol:'−3'},{l:'',q:'y₁ =',chk:N(-18),sol:'−18'},
+   {l:'',q:'x₂ =',chk:N(0),sol:'0'},{l:'',q:'y₂ =',chk:N(0),sol:'0'},
+   {l:'',q:'x₃ =',chk:N(2),sol:'2'},{l:'',q:'y₃ =',chk:N(12),sol:'12'}],
+  upload:true,
+  diag:DIAG_SCHNITT,
+  tip:`<p>a) Bringen Sie zuerst alle x-Terme auf eine Seite. Aus „−x" auf der rechten Seite wird beim Hinüberbringen ein „+ x" auf der linken.</p>
+   <p>b) Sortieren Sie so lange, bis eine quadratische Gleichung in Normalform dasteht. Dann greift eine Strategie aus Block A.</p>
+   <p>c) Nach dem Sortieren steht eine Gleichung dritten Grades da, in der jeder Summand ein x enthält. Was bietet sich an?</p>
+   <p>Für die y-Werte: Setzen Sie jeden x-Wert in die <b>einfachere</b> der beiden Funktionen ein – und zur Probe zusätzlich in die andere.</p>`,
+  sol:`<p><b>a)</b> 2x − 1 = −x + 5 &nbsp;|&nbsp; + x &nbsp;⟹&nbsp; 3x − 1 = 5 &nbsp;|&nbsp; + 1 &nbsp;⟹&nbsp; <b>3x = 6</b> &nbsp;|&nbsp; : 3 &nbsp;⟹&nbsp; x = 2<br>
+   g(2) = −2 + 5 = 3 ⟹ <b>S(2 | 3)</b>. Probe: f(2) = 4 − 1 = 3 ✓</p>
+   <p><b>b)</b> x² − 2x = x + 4 &nbsp;|&nbsp; − x &nbsp;⟹&nbsp; x² − 3x = 4 &nbsp;|&nbsp; − 4 &nbsp;⟹&nbsp; <b>x² − 3x − 4 = 0</b><br>
+   p = −3, q = −4 ⟹ x = 1,5 ± √(2,25 + 4) = 1,5 ± 2,5 ⟹ x₁ = −1, x₂ = 4<br>
+   g(−1) = 3 und g(4) = 8 ⟹ <b>S₁(−1 | 3) und S₂(4 | 8)</b></p>
+   <p><b>c)</b> x³ + x² = 6x &nbsp;|&nbsp; − 6x &nbsp;⟹&nbsp; <b>x³ + x² − 6x = 0</b><br>
+   x ausklammern: x(x² + x − 6) = 0. Erster Faktor: x = 0.<br>
+   Klammer: p = 1, q = −6 ⟹ x = −0,5 ± 2,5 ⟹ x = 2 und x = −3<br>
+   y-Werte über g: g(−3) = −18, g(0) = 0, g(2) = 12<br>
+   ⟹ <b>S₁(−3 | −18), S₂(0 | 0), S₃(2 | 12)</b><br>
+   Probe über f: f(−3) = −27 + 9 = −18 ✓ &nbsp; f(2) = 8 + 4 = 12 ✓</p>`},
+
+ {id:'B3',n:'Mittel',fmt:'Eingabe + Rechenweg hochladen',t:14,ttl:'Zwei Kurven, drei Schnittpunkte',type:'input',assist:'schnitt',
+  body:`<p>Gegeben sind <span class="formula">f(x) = x³ − 4x</span> und <span class="formula">g(x) = x² + 2x</span>.</p>
+   <p>Berechnen Sie alle Schnittpunkte <b>rechnerisch</b>, aufsteigend nach x sortiert. Wie viele es sind, sollen Sie selbst herausfinden – nicht ablesen.</p>`,
+  items:[
+   {l:'S₁',q:'x =',chk:N(-2),sol:'−2'},{l:'',q:'y =',chk:N(0),sol:'0'},
+   {l:'S₂',q:'x =',chk:N(0),sol:'0'},{l:'',q:'y =',chk:N(0),sol:'0'},
+   {l:'S₃',q:'x =',chk:N(3),sol:'3'},{l:'',q:'y =',chk:N(15),sol:'15'}],
+  upload:true,
+  diag:DIAG_SCHNITT,
+  graph:{note:'Nur zur Kontrolle nach Ihrer Rechnung – bewusst ohne Skala. Zählen Sie die Schnittstellen und vergleichen Sie mit Ihrem Ergebnis.',
+   svg:fig(plot({xmin:-3,xmax:3.8,ymin:-6,ymax:16,w:420,h:250,stepx:1,stepy:4,noscale:true,
+     fns:[{f:x=>x*x*x-4*x,color:'#0b7285',label:'f',lx:2.9},{f:x=>x*x+2*x,color:'#c2255c',label:'g',lx:-2.6}]}),
+     'Die Graphen von f und g')},
+  tip:`<p>Sortieren Sie zuerst alles auf eine Seite. Welchen Grad hat die entstehende Gleichung – und wie viele Lösungen sind damit höchstens möglich?</p>
+   <p>Schauen Sie sich die sortierte Gleichung genau an: Steckt in jedem Summanden ein x? Dann klammern Sie es aus. Teilen Sie auf keinen Fall durch x.</p>`,
+  sol:`<p><b>Ansatz:</b> x³ − 4x = x² + 2x &nbsp;|&nbsp; − x² − 2x &nbsp;⟹&nbsp; x³ − x² − 6x = 0</p>
+   <p><b>Ausklammern:</b> x(x² − x − 6) = 0. Erster Faktor: x = 0.<br>
+   Klammer: p = −1, q = −6 ⟹ x = 0,5 ± √(0,25 + 6) = 0,5 ± 2,5 ⟹ x = −2 und x = 3.</p>
+   <p><b>y-Werte über g:</b> g(−2) = 4 − 4 = 0; g(0) = 0; g(3) = 9 + 6 = 15.<br>
+   <b>Probe über f:</b> f(−2) = −8 + 8 = 0 ✓; f(0) = 0 ✓; f(3) = 27 − 12 = 15 ✓</p>
+   <p><b>Ergebnis: S₁(−2 | 0), S₂(0 | 0), S₃(3 | 15)</b></p>
+   <p class="tiny">Die Gleichung hat den Grad 3, also waren höchstens drei Lösungen zu erwarten – und alle drei treten hier tatsächlich auf.</p>`},
+
+ {id:'B4',n:'Mittel',fmt:'Eingabe + Rechenweg hochladen',t:14,ttl:'Ein Berührpunkt versteckt sich',type:'mixed',assist:'schnitt',
+  body:`<p>Gegeben sind <span class="formula">f(x) = x³ − 3x² + 2x</span> und <span class="formula">g(x) = x² − 2x</span>.</p>
+   <p>Bestimmen Sie alle gemeinsamen Punkte der Graphen.</p>`,
+  items:[
+   {l:'S₁',q:'x =',chk:N(0),sol:'0'},{l:'',q:'y =',chk:N(0),sol:'0'},
+   {l:'S₂',q:'x =',chk:N(2),sol:'2'},{l:'',q:'y =',chk:N(0),sol:'0'}],
+  upload:true,
+  diag:DIAG_SCHNITT,
+  free:{q:'Was fällt bei der Lösung x = 2 auf? Erklären Sie, was das für den Verlauf der beiden Graphen an dieser Stelle bedeutet.',
+   kw:[{k:['doppelt','zweifach','zwei mal','mehrfach','quadrat','(x-2)^2','(x-2)²'],n:'doppelte Lösung'},
+       {k:['berühr','tangential','streift','nicht schneid','nicht kreuz'],n:'Berührpunkt statt Schnittpunkt'},
+       {k:['vorzeichen','wechselt nicht','kein wechsel','gleiche seite','oben','unten'],n:'kein Wechsel der Lage'},
+       {k:['binomisch','klammer','faktorisier'],n:'binomische Formel erkannt'}],
+   sol:`<p>Die Gleichung führt auf x(x − 2)² = 0. Die Lösung x = 2 tritt <b>doppelt</b> auf.</p>
+    <p><b>Geometrische Bedeutung:</b> Die Graphen <b>berühren</b> sich bei x = 2, sie kreuzen sich dort nicht. Vor und nach der Stelle liegt derselbe Graph oben.</p>
+    <p><b>Woran man das sieht:</b> Bei einem echten Schnittpunkt wie x = 0 wechselt die Lage der Graphen zueinander. Bei einem Berührpunkt bleibt sie gleich.</p>
+    <p class="tiny">Das wird in Kapitel 1.5 wichtig: Bei einem Berührpunkt müssen Sie die Fläche <b>nicht</b> zerlegen, bei einem echten Schnittpunkt schon.</p>`},
+  tip:`<p>Sortieren Sie alles auf eine Seite und klammern Sie x aus. Schauen Sie sich die verbleibende Klammer genau an, bevor Sie die pq-Formel bemühen – es könnte eine binomische Formel sein.</p>
+   <p>Wenn beim Lösen eine Lösung <b>zweimal</b> herauskommt, ist das kein Fehler, sondern eine wichtige Information.</p>`,
+  sol:`<p><b>Ansatz:</b> x³ − 3x² + 2x = x² − 2x &nbsp;|&nbsp; − x² + 2x &nbsp;⟹&nbsp; x³ − 4x² + 4x = 0</p>
+   <p><b>Ausklammern:</b> x(x² − 4x + 4) = 0 ⟹ x(x − 2)² = 0 ⟹ x = 0 oder x = 2 (doppelt).</p>
+   <p><b>y-Werte über g:</b> g(0) = 0 und g(2) = 4 − 4 = 0.<br>
+   <b>Probe über f:</b> f(0) = 0 ✓ und f(2) = 8 − 12 + 4 = 0 ✓</p>
+   <p><b>Ergebnis: S₁(0 | 0) und S₂(2 | 0)</b> – beide liegen zufällig auf der x-Achse.</p>`},
+
+ {id:'B5',n:'Anspruchsvoll',fmt:'Sachaufgabe von Hand + Rechenweg hochladen',t:16,ttl:'Zwei Wasserbecken',type:'mixed',assist:'schnitt',
+  body:`<p>Zwei Becken werden über acht Stunden beobachtet. Die Wasserstände in Zentimetern werden beschrieben durch</p>
+   <span class="formula fbig">h<sub>A</sub>(t) = 0,25t² − 2t + 10 &nbsp;&nbsp;&nbsp;&nbsp; h<sub>B</sub>(t) = −0,5t + 8</span>
+   <p class="tiny">t in Stunden, 0 ≤ t ≤ 8.</p>
+   <p><b>Dies ist die letzte Aufgabe, die Sie vollständig von Hand rechnen.</b> Der GTR dient nur zur Kontrolle.</p>`,
+  graph:{note:'Kontrollbild ohne Skala. Die Schnittstellen sollen Sie berechnen, nicht ablesen.',
+   svg:fig(plot({xmin:-0.4,xmax:8.4,ymin:-0.5,ymax:12,w:420,h:245,stepx:1,stepy:2,noscale:true,xlab:'t',ylab:'h(t)',
+     fns:[{f:t=>0.25*t*t-2*t+10,color:'#0b7285',label:'h_A',lx:7.0,ldy:-8},
+          {f:t=>-0.5*t+8,color:'#c2255c',label:'h_B',lx:0.6,ldy:-10}]}),
+     'Wasserstände der beiden Becken')},
+  items:[
+   {l:'a)',q:'Erster Zeitpunkt mit gleichem Stand: t₁ =',chk:N(2),sol:'2 h'},
+   {l:'',q:'zugehörige Höhe in cm:',chk:N(7),sol:'7 cm'},
+   {l:'b)',q:'Zweiter Zeitpunkt: t₂ =',chk:N(4),sol:'4 h'},
+   {l:'',q:'zugehörige Höhe in cm:',chk:N(6),sol:'6 cm'},
+   {l:'c)',q:'Wasserstand in A bei t = 3 (in cm):',chk:N(6.25,0.02),sol:'6,25 cm'},
+   {l:'',q:'Wasserstand in B bei t = 3 (in cm):',chk:N(6.5,0.02),sol:'6,5 cm'}],
+  upload:true,
+  diag:DIAG_SCHNITT,
+  free:{q:'d) In welchem Zeitraum steht in Becken A weniger Wasser als in Becken B? Begründen Sie mit Ihren Ergebnissen aus a) bis c).',
+   kw:[{k:['zwischen','von 2','bis 4','2 und 4','2 < t','2<t'],n:'Zeitraum zwischen t = 2 und t = 4'},
+       {k:['t=3','bei 3','stichprobe','beispiel','einsetzen','prüf'],n:'Nachweis durch Einsetzen eines Zwischenwerts'},
+       {k:['6,25','6.25','6,5','6.5','kleiner','weniger'],n:'konkreter Vergleich der Werte'},
+       {k:['schnitt','gleich','wechsel','tausch','überhol'],n:'Schnittstellen als Wechselpunkte'}],
+   sol:`<p><b>Antwort: zwischen t = 2 h und t = 4 h.</b></p>
+    <p><b>Begründung:</b> An den Schnittstellen t = 2 und t = 4 sind beide Wasserstände gleich. Zwischen zwei aufeinanderfolgenden Schnittstellen kann sich die Reihenfolge nicht ändern – es genügt also <b>eine</b> Stichprobe.</p>
+    <p>Bei t = 3: h<sub>A</sub>(3) = 6,25 cm und h<sub>B</sub>(3) = 6,5 cm. Es gilt h<sub>A</sub> &lt; h<sub>B</sub>, in Becken A steht also weniger Wasser.</p>
+    <p>Außerhalb ist es umgekehrt: Bei t = 0 etwa ist h<sub>A</sub> = 10 cm und h<sub>B</sub> = 8 cm.</p>
+    <p class="tiny">Dieses Vorgehen – Schnittstellen bestimmen, dann in jedem Teilintervall eine Stichprobe – brauchen Sie in Kapitel 1.5 wieder, um zu entscheiden, welcher Graph oben liegt.</p>`},
+  tip:`<p>a) und b): Setzen Sie beide Terme gleich und sortieren Sie. Der Vorfaktor 0,25 stört – multiplizieren Sie die ganze Gleichung mit 4, dann stehen ganze Zahlen da.</p>
+   <p>d) Sie müssen nicht überall prüfen. Eine einzige Stichprobe im Intervall genügt, weil sich die Reihenfolge nur an den Schnittstellen ändern kann.</p>`,
+  sol:`<p><b>a) und b)</b> 0,25t² − 2t + 10 = −0,5t + 8 &nbsp;|&nbsp; + 0,5t − 8 &nbsp;⟹&nbsp; 0,25t² − 1,5t + 2 = 0 &nbsp;|&nbsp; · 4 &nbsp;⟹&nbsp; t² − 6t + 8 = 0<br>
+   p = −6, q = 8 ⟹ t = 3 ± √(9 − 8) = 3 ± 1 ⟹ <b>t₁ = 2 und t₂ = 4</b></p>
+   <p>Höhen über h<sub>B</sub>: h<sub>B</sub>(2) = <b>7 cm</b> und h<sub>B</sub>(4) = <b>6 cm</b>.<br>
+   Probe über h<sub>A</sub>: h<sub>A</sub>(2) = 1 − 4 + 10 = 7 ✓ und h<sub>A</sub>(4) = 4 − 8 + 10 = 6 ✓</p>
+   <p><b>c)</b> h<sub>A</sub>(3) = 2,25 − 6 + 10 = <b>6,25 cm</b> und h<sub>B</sub>(3) = −1,5 + 8 = <b>6,5 cm</b></p>`},
+
+ {id:'B6',n:'Anspruchsvoll',fmt:'Sachaufgabe nur mit dem GTR',t:14,ttl:'Zwei Druckereien im Vergleich',type:'mixed',assist:'schnitt',
+  body:`<p>Eine Druckerei gibt folgendes Angebot für den Druck von Plakaten ab:</p>
+   <table class="strat"><thead><tr><th>Stückzahl x</th><th>50</th><th>100</th><th>150</th><th>200</th></tr></thead>
+   <tbody><tr><td><b>Preis in €</b></td><td>45</td><td>70</td><td>95</td><td>120</td></tr></tbody></table>
+   <p>Eine zweite Druckerei verlangt pauschal <span class="formula">Q(x) = 0,65 · x</span> Euro, hat dafür aber keine Grundgebühr.</p>
+   <p><b>Lösen Sie diese Aufgabe ausschließlich mit dem GTR</b> – zeichnen Sie beide Funktionen und nutzen Sie die Analysefunktionen. Halten Sie in Ihrem Heft fest, welches Fenster Sie eingestellt und welche Befehle Sie verwendet haben.</p>`,
+  items:[
+   {l:'a)',q:'Preisformel der ersten Druckerei P(x) = &nbsp;(z. B. 0.5x+20)',
+    chk:T('0.5x+20','0,5x+20','20+0.5x','0.5*x+20','1/2x+20'),sol:'P(x) = 0,5x + 20'},
+   {l:'b)',q:'Preis für 250 Plakate bei Druckerei 1 (in €):',chk:N(145,0.5),sol:'145 €'},
+   {l:'',q:'Preis für 250 Plakate bei Druckerei 2 (in €):',chk:N(162.5,0.5),sol:'162,50 €'},
+   {l:'c)',q:'Bei welcher Stückzahl kosten beide gleich viel? x = (2 Nachkommastellen)',chk:N(133.33,0.1),sol:'x ≈ 133,33'},
+   {l:'',q:'Ab welcher ganzen Stückzahl ist Druckerei 1 günstiger?',chk:N(134),sol:'ab 134 Plakaten'}],
+  upload:true,
+  diag:DIAG_GTR,
+  free:{q:'d) Deuten Sie den Schnittpunkt im Sachzusammenhang. Wem würden Sie welche Druckerei empfehlen?',
+   kw:[{k:['gleich teuer','gleich viel','gleicher preis','kosten gleich'],n:'Schnittpunkt = gleicher Preis'},
+       {k:['kleine','wenig','weniger als','unter 133','geringe','klein'],n:'kleine Stückzahlen → Druckerei 2'},
+       {k:['große','viel','mehr als','über 133','ab 134','hohe'],n:'große Stückzahlen → Druckerei 1'},
+       {k:['grundgebühr','fixkosten','20','pauschale','sockelbetrag'],n:'Grundgebühr von 20 € als Grund'},
+       {k:['pro plakat','stückpreis','0,5','0.5','0,65','0.65','günstiger pro'],n:'Vergleich der Stückpreise'}],
+   sol:`<p><b>Der Schnittpunkt bei x ≈ 133,33 bedeutet:</b> Bei rund 133 Plakaten kosten beide Anbieter dasselbe, nämlich etwa 86,67 €.</p>
+    <p><b>Kleine Auflagen (bis 133 Plakate):</b> Druckerei 2 ist günstiger. Sie verlangt zwar mehr pro Plakat (0,65 € statt 0,50 €), hat aber keine Grundgebühr. Bei 50 Plakaten zahlt man dort 32,50 € statt 45 €.</p>
+    <p><b>Große Auflagen (ab 134 Plakaten):</b> Druckerei 1 ist günstiger. Die einmalige Grundgebühr von 20 € fällt kaum ins Gewicht, der niedrigere Stückpreis setzt sich durch.</p>
+    <p><b>Empfehlung:</b> Für 30 Plakate zum Aushang in der Schule Druckerei 2, für eine Kampagne mit 500 Plakaten eindeutig Druckerei 1 – dort spart man 75 €.</p>
+    <p class="tiny">Da man keine halben Plakate druckt, muss man aufrunden: Ab 134 Plakaten ist Druckerei 1 tatsächlich billiger.</p>`},
+  tip:`<p>a) Die Preise steigen bei jeweils 50 Plakaten mehr um denselben Betrag. Berechnen Sie daraus die Steigung m und setzen Sie dann einen Tabellenwert ein, um b zu finden.</p>
+   <p>c) Geben Sie beide Funktionen im GTR ein. Ein sinnvolles Fenster ist 0 ≤ x ≤ 300 und 0 ≤ y ≤ 200. Nutzen Sie dann die Funktion „Intersect" bzw. „ISCT".</p>
+   <p>Denken Sie beim letzten Feld daran, dass es keine halben Plakate gibt.</p>`,
+  sol:`<p><b>a)</b> m = (70 − 45) / (100 − 50) = 0,5. Einsetzen von (50 | 45): 45 = 25 + b ⟹ b = 20.<br>
+   ⟹ <b>P(x) = 0,5x + 20</b>. Probe mit (200 | 120): 0,5 · 200 + 20 = 120 ✓</p>
+   <p><b>b)</b> P(250) = <b>145 €</b> &nbsp;&nbsp; Q(250) = <b>162,50 €</b></p>
+   <p><b>c)</b> Mit dem GTR: beide Funktionen plotten, Fenster 0 ≤ x ≤ 300, 0 ≤ y ≤ 200, dann „Intersect".<br>
+   Der Rechner liefert x ≈ <b>133,33</b> und y ≈ 86,67.<br>
+   Da nur ganze Plakate gedruckt werden: <b>ab 134 Plakaten</b> ist Druckerei 1 günstiger.</p>
+   <p class="tiny">Zur Kontrolle von Hand: 0,5x + 20 = 0,65x ⟹ 20 = 0,15x ⟹ x = 133,33.</p>`},
+
+ {id:'B7',n:'Anspruchsvoll',fmt:'Sachaufgabe nur mit dem GTR',t:14,ttl:'Vorgriff: der Abstand zwischen zwei Graphen',type:'mixed',assist:'schnitt',
+  body:`<p>Die Graphen von <span class="formula">f(x) = −x² + 4</span> und <span class="formula">g(x) = x + 2</span> schließen eine Fläche ein.</p>
+   <p><b>Arbeiten Sie mit dem GTR.</b> Zeichnen Sie beide Funktionen und zusätzlich die Differenzfunktion d(x) = f(x) − g(x). Bestimmen Sie damit die gesuchten Werte.</p>`,
+  items:[
+   {l:'a)',q:'linke Schnittstelle x₁ =',chk:N(-2),sol:'−2'},
+   {l:'',q:'rechte Schnittstelle x₂ =',chk:N(1),sol:'1'},
+   {l:'',q:'y-Wert der rechten Schnittstelle =',chk:N(3),sol:'3'},
+   {l:'b)',q:'Differenzfunktion d(x) = &nbsp;(z. B. -x^2-x+2)',
+    chk:T('-x^2-x+2','-x²-x+2','2-x-x^2'),sol:'d(x) = −x² − x + 2'},
+   {l:'c)',q:'d(0) =',chk:N(2),sol:'2'},
+   {l:'',q:'d(0,5) =',chk:N(1.25,0.02),sol:'1,25'},
+   {l:'',q:'An welcher Stelle ist der Abstand am größten? x =',chk:N(-0.5,0.02),sol:'−0,5'},
+   {l:'',q:'Wie groß ist dieser größte Abstand?',chk:N(2.25,0.02),sol:'2,25'}],
+  upload:true,
+  diag:DIAG_GTR,
+  free:{q:'d) Erklären Sie, warum man vor der Berechnung einer Fläche zwischen zwei Graphen zwingend die Schnittstellen bestimmen muss – und was ohne sie schiefgehen würde.',
+   kw:[{k:['grenze','integrationsgrenz','von','bis','intervall'],n:'Schnittstellen sind die Integrationsgrenzen'},
+       {k:['begrenz','eingeschlossen','abgeschlossen','unendlich','rand'],n:'Fläche nur dort begrenzt'},
+       {k:['ober','unter','oberhalb','unterhalb','darüber','wechsel','tausch'],n:'Wechsel von oberer und unterer Funktion'},
+       {k:['differenz','d(x)','f(x)-g','f-g','abzieh','subtrah'],n:'Differenzfunktion'},
+       {k:['vorzeichen','negativ','aufheben','zu klein','fehler','zerlegen','teilfläch'],n:'Vorzeichenproblem / Zerlegung'}],
+   sol:`<p><b>1. Die Schnittstellen sind die Integrationsgrenzen.</b> Nur zwischen x = −2 und x = 1 ist die Fläche überhaupt begrenzt. Außerhalb laufen die Graphen auseinander – eine „Fläche" wäre unendlich groß.</p>
+    <p><b>2. An den Schnittstellen wechselt, welcher Graph oben liegt.</b> Zwischen −2 und 1 liegt f oberhalb von g, also ist d(x) dort positiv. Außerhalb ist d(x) negativ.</p>
+    <p><b>3. Was ohne Zerlegung passiert:</b> Rechnet man über eine Schnittstelle hinweg mit derselben Differenz, heben sich positive und negative Anteile teilweise auf. Das Ergebnis ist dann zu klein – im ungünstigsten Fall sogar null, obwohl eine Fläche vorhanden ist.</p>
+    <p><b>Zur Kontrolle:</b> Der Flächeninhalt wäre hier 4,5 FE – das rechnen Sie in Kapitel 1.5 aus.</p>`},
+  tip:`<p>a) Zeichnen Sie beide Funktionen und nutzen Sie „Intersect". Ein Fenster von −4 ≤ x ≤ 4 und −4 ≤ y ≤ 6 zeigt alles Nötige.</p>
+   <p>b) Ziehen Sie g von f ab und achten Sie auf die Vorzeichen der Klammer: (−x² + 4) − (x + 2).</p>
+   <p>c) Die Differenzfunktion d ist eine nach unten geöffnete Parabel. Ihren höchsten Punkt finden Sie im GTR mit „Maximum" – oder Sie überlegen, wo der Scheitel zwischen zwei Nullstellen liegt.</p>`,
+  sol:`<p><b>a)</b> Mit „Intersect": <b>x₁ = −2</b> und <b>x₂ = 1</b>. Der zugehörige y-Wert bei x = 1 ist g(1) = <b>3</b>.<br>
+   Kontrolle von Hand: −x² + 4 = x + 2 ⟹ x² + x − 2 = 0 ⟹ x = −0,5 ± 1,5.</p>
+   <p><b>b)</b> d(x) = (−x² + 4) − (x + 2) = <b>−x² − x + 2</b></p>
+   <p><b>c)</b> d(0) = <b>2</b> &nbsp;·&nbsp; d(0,5) = −0,25 − 0,5 + 2 = <b>1,25</b></p>
+   <p>Der größte Abstand liegt im Scheitel von d, genau mittig zwischen den Nullstellen −2 und 1:<br>
+   x = <b>−0,5</b> und d(−0,5) = −0,25 + 0,5 + 2 = <b>2,25</b></p>
+   <p class="tiny">Im GTR finden Sie denselben Wert mit der Maximum-Funktion an der Differenzfunktion.</p>`}
+]}
+];
+
+/* ============================ RENDERING ============================ */
+const S={}; // state per task
+const nBadge=n=>n==='Basis'?'b-basis':(n==='Mittel'?'b-mittel':'b-schwer');
+/* eine oder mehrere Freitext-Aufgaben je Übung */
+const frees=T=>T.frees||(T.free?[T.free]:[]);
+
+function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+function build(){
+  let totT=0,totBasis=0,n=0,html='';
+  BLOCKS.forEach(B=>{
+    html+=`<div class="blockhead"><h2>${B.title}</h2><p>${B.lead}</p></div>`;
+    html+=`<div class="infowrap" id="iw_${B.id}">
+      <button class="infotoggle" onclick="document.getElementById('iw_${B.id}').classList.toggle('open')">
+        <span class="chev2">▶</span> Hilfe und Rechenwege – bei Bedarf aufklappen
+        <span class="hintx">öffnen, wenn Sie nicht weiterkommen</span></button>
+      <div class="infobody">${B.info}</div></div>`;
+    B.tasks.forEach(T=>{
+      n++; totT+=T.t; if(T.n==='Basis') totBasis+=T.t;
+      S[T.id]={task:T,block:B,checked:false,score:null,ans:{},unlocked:T.n==='Basis'};
+      html+=renderTask(T,B);
+    });
+    if(B.links&&B.links.length){
+      html+=`<div class="linkcard"><h3>Weiterüben zu Block ${B.id}</h3>
+        <p class="sub2">Frei zugängliche Übungen zum Vertiefen – öffnen sich in einem neuen Tab.</p>`;
+      B.links.forEach(L=>{
+        html+=`<a href="${L.u}" target="_blank" rel="noopener">
+          <b>${L.t}</b><span>${L.d}</span><em>${L.u}</em></a>`;
+      });
+      html+=`</div>`;
+    }
+    html+=`<div class="card tight" style="border-color:rgba(161,140,209,.5)">
+      <h3 style="color:var(--violet)">Musterlösungen für Block ${B.id} freischalten</h3>
+      <p style="font-size:.9rem;margin:0 0 8px">Die Musterlösungen der <b>mittleren</b> und <b>anspruchsvollen</b> Aufgaben dieses Blocks sind gesperrt. Den 4-stelligen Code erhalten Sie von Ihrer Lehrkraft, wenn Sie die Aufgaben bearbeitet haben.</p>
+      <div class="qline"><input type="text" class="inl" id="code_${B.id}" placeholder="4-stelliger Code" maxlength="4" inputmode="numeric">
+      <button class="btn-sol" onclick="unlock('${B.id}')">Freischalten</button>
+      <span id="codemsg_${B.id}" style="font-size:.85rem"></span></div></div>`;
+  });
+  document.getElementById('content').innerHTML=html;
+  document.getElementById('pAll').textContent=n;
+  document.getElementById('pOpen').textContent=n;
+  bindAll();
+}
+
+function renderTask(T,B){
+  let b='';
+  b+=T.body||'';
+  const id=T.id;
+
+  if(T.type==='tf'){
+    b+='<div>';
+    T.items.forEach((it,i)=>{
+      b+=`<div class="tf" id="tf_${id}_${i}"><span class="st">${i+1}. ${it.s}</span>
+        <span class="btns"><button onclick="setTF('${id}',${i},true)" id="tfw_${id}_${i}">wahr</button>
+        <button onclick="setTF('${id}',${i},false)" id="tff_${id}_${i}">falsch</button></span>
+        <span id="tfm_${id}_${i}" style="font-weight:800;min-width:20px"></span></div>`;
+    });
+    b+='</div>';
+  }
+  if(T.type==='mc'){
+    b+=mcHTML(id,T.opts,T.multi);
+  }
+  if(T.type==='match'){
+    T.items.forEach((it,i)=>{
+      b+=`<div class="qline" id="mt_${id}_${i}"><span class="qtxt">${it.q}</span>
+        <select id="ms_${id}_${i}" class="inl" style="max-width:280px"><option value="-1">– bitte wählen –</option>`;
+      T.opts.forEach((o,j)=>{b+=`<option value="${j}">${o}</option>`;});
+      b+=`</select><span id="mm_${id}_${i}" style="font-weight:800;min-width:20px"></span></div>`;
+    });
+  }
+  if(T.type==='dnd'){
+    b+=`<div class="dnd-pool" id="pool_${id}"></div>`;
+    T.slots.forEach((s,i)=>{
+      b+=`<div class="slot" id="slot_${id}_${i}" onclick="dropChip('${id}',${i})">
+        <span class="nm">${s}</span><span class="drop" id="drop_${id}_${i}">hier ablegen</span>
+        <span id="dm_${id}_${i}" style="font-weight:800;min-width:20px"></span></div>`;
+    });
+  }
+  if(T.type==='input'||T.type==='mixed'){
+    (T.items||[]).forEach((it,i)=>{
+      b+=`<div class="qline"><span class="lab">${it.l||''}</span>
+        <span class="qtxt">${it.q}</span>
+        <input type="text" class="inl" id="in_${id}_${i}" autocomplete="off">
+        <span id="im_${id}_${i}" style="font-weight:800;min-width:20px"></span></div>`;
+    });
+  }
+  if(T.match2){
+    b+=`<p style="margin-top:18px"><b>${T.match2.q||'Ordnen Sie jedem Paar das passende Bild zu.'}</b></p>`;
+    T.match2.items.forEach((it,i)=>{
+      b+=`<div class="qline"><span class="qtxt">${it.q}</span>
+        <select id="m2_${id}_${i}" class="inl" style="max-width:200px"><option value="-1">– bitte wählen –</option>`;
+      T.match2.opts.forEach((o,j)=>{b+=`<option value="${j}">${o}</option>`;});
+      b+=`</select><span id="m2m_${id}_${i}" style="font-weight:800;min-width:20px"></span></div>`;
+    });
+  }
+  if(T.mc){ b+=`<p style="margin-top:16px"><b>${T.mc.q}</b></p>`+mcHTML(id+'_mc',T.mc.opts,false); }
+  const FR=frees(T);
+  FR.forEach((F,k)=>{
+    b+=`<p style="margin-top:16px"><b>${F.q}</b></p>
+      <textarea id="fr_${id}_${k}" placeholder="${F.ph||'Schreiben Sie hier in ganzen Sätzen …'}"></textarea>`;
+  });
+  if(T.upload){
+    b+=`<div class="upl"><b>Rechenweg abgeben (optional)</b><br>
+      Fotografieren oder scannen Sie Ihren Rechenweg und laden Sie ihn hier hoch (PDF oder Bild).
+      Der Dateiname wird in Ihrem Protokoll vermerkt.
+      <input type="file" id="up_${id}" accept="application/pdf,image/*" onchange="noteFile('${id}')">
+      <div id="upn_${id}" class="fn"></div>`;
+    if(T.diag){
+      b+=`<div class="diagbox" id="dg_${id}">
+        <b>Rückmeldung zu Ihrem Rechenweg</b>
+        <p style="font-size:.86rem;margin:6px 0 10px">${T.diag.frage}</p>`;
+      T.diag.items.forEach((d,i)=>{
+        b+=`<label class="diagopt"><input type="checkbox" id="dgc_${id}_${i}"><span>${d.s}</span></label>`;
+      });
+      b+=`<div class="btn-row" style="margin-top:10px">
+            <button class="btn-tip" onclick="diagnose('${id}')">Rückmeldung anzeigen</button></div>
+          <div class="diagout" id="dgo_${id}"></div></div>`;
+    }
+    b+=`</div>`;
+  }
+  if(T.assist){
+    b+=`<div class="assist" id="as_${id}">
+      <b>Tipp-Assistent</b>
+      <p style="font-size:.86rem;margin:6px 0 9px">Beschreiben Sie in einem Satz, <b>wo genau</b> Sie nicht weiterkommen – zum Beispiel „Ich weiß nicht, ob ich ausklammern oder die pq-Formel nehmen soll" oder „Nach dem Umformen komme ich nicht weiter". Sie bekommen einen Tipp, keine Lösung.</p>
+      <div class="qline">
+        <input type="text" id="asq_${id}" class="qtxt" placeholder="Ich komme nicht weiter bei …"
+          onkeydown="if(event.key==='Enter')askAssist('${id}')">
+        <button class="btn-tip" onclick="askAssist('${id}')">Tipp holen</button>
+      </div>
+      <div class="chat" id="asc_${id}"></div></div>`;
+  }
+
+  b+=`<div class="btn-row">
+      <button class="btn-check" onclick="check('${id}')">Lösung prüfen</button>
+      <button class="btn-tip" onclick="tog('tip_${id}')">Tipp anzeigen</button>
+      ${T.graph?`<button class="btn-graph" onclick="tog('gr_${id}')">Graph zum Vergleich</button>`:''}
+      <button class="btn-sol" onclick="showSol('${id}')">Musterlösung${T.n!=='Basis'?' (Code nötig)':''}</button>
+     </div>
+     <div class="fb" id="fb_${id}"></div>
+     <div class="panel tip" id="tip_${id}"><h5>Tipp – ein Denkanstoß, keine Lösung</h5>${T.tip||''}</div>
+     ${T.graph?`<div class="panel graph" id="gr_${id}"><h5>Graph zum Vergleich – bewusst ohne Skala</h5>
+        <p style="font-size:.86rem;margin:0 0 8px">${T.graph.note||''}</p>${T.graph.svg}</div>`:''}
+     <div class="panel sol" id="sol_${id}"><h5>Musterlösung</h5>${T.sol||''}${
+       FR.filter(f=>f.sol).map((f,k)=>'<hr style="border:none;border-top:1px solid var(--line);margin:14px 0"><h5>'+(f.h||'Zur Erklärungsaufgabe')+'</h5>'+f.sol).join('')}</div>`;
+
+  return `<div class="acc" id="acc_${id}">
+    <div class="acc-h" onclick="togAcc('${id}')">
+      <span class="chev">▶</span>
+      <span class="stat-dot" id="dot_${id}"></span>
+      <span class="ttl">${id} · ${T.ttl}</span>
+      <span class="badge ${nBadge(T.n)}">${T.n}</span>
+      <span class="badge b-fmt">${T.fmt}</span>
+      <span class="badge b-time">${T.t} min</span>
+    </div>
+    <div class="acc-b">${b}</div></div>`;
+}
+
+function mcHTML(id,opts,multi){
+  let s='';
+  opts.forEach((o,i)=>{
+    s+=`<label class="opt" id="op_${id}_${i}">
+      <input type="${multi?'checkbox':'radio'}" name="mc_${id}" value="${i}">
+      <span>${o.s}</span><span class="mk" id="opm_${id}_${i}"></span></label>`;
+  });
+  if(multi) s+='<p class="tiny">Mehrfachauswahl möglich.</p>';
+  return s;
+}
+
+function bindAll(){
+  BLOCKS.forEach(B=>B.tasks.forEach(T=>{
+    if(T.type==='dnd'){
+      const pool=document.getElementById('pool_'+T.id);
+      T.chips.forEach((c,i)=>{
+        const d=document.createElement('div');
+        d.className='chip';d.textContent=c;d.dataset.idx=i;d.id='chip_'+T.id+'_'+i;
+        d.onclick=e=>{e.stopPropagation();selChip(T.id,i);};
+        pool.appendChild(d);
+      });
+      S[T.id].placed={};S[T.id].sel=null;
+    }
+  }));
+}
+
+/* ---- interactions ---- */
+function togAcc(id){document.getElementById('acc_'+id).classList.toggle('open');}
+function tog(id){document.getElementById(id).classList.toggle('show');}
+function noteFile(id){
+  const f=document.getElementById('up_'+id).files[0];
+  S[id].file=f?f.name:null;
+  document.getElementById('upn_'+id).textContent=f?('Hochgeladen: '+f.name):'';
+}
+function setTF(id,i,val){
+  S[id].ans['tf'+i]=val;
+  document.getElementById('tfw_'+id+'_'+i).classList.toggle('sel',val===true);
+  document.getElementById('tff_'+id+'_'+i).classList.toggle('sel',val===false);
+}
+function selChip(tid,i){
+  const st=S[tid];
+  if(st.placed[i]!==undefined){ // zurück in den Pool
+    const slot=st.placed[i];delete st.placed[i];
+    const d=document.getElementById('drop_'+tid+'_'+slot);
+    d.textContent='hier ablegen';d.classList.remove('filled');
+    document.getElementById('pool_'+tid).appendChild(document.getElementById('chip_'+tid+'_'+i));
+  }
+  document.querySelectorAll('#pool_'+tid+' .chip').forEach(c=>c.classList.remove('sel'));
+  if(st.sel===i){st.sel=null;return;}
+  st.sel=i;
+  const el=document.getElementById('chip_'+tid+'_'+i);
+  if(el&&el.parentElement.id==='pool_'+tid) el.classList.add('sel');
+}
+function dropChip(tid,slot){
+  const st=S[tid];if(st.sel===null||st.sel===undefined)return;
+  for(const k in st.placed) if(st.placed[k]===slot){ // Platz belegt -> alten Chip zurück
+    delete st.placed[k];
+    document.getElementById('pool_'+tid).appendChild(document.getElementById('chip_'+tid+'_'+k));
+  }
+  st.placed[st.sel]=slot;
+  const d=document.getElementById('drop_'+tid+'_'+slot);
+  d.textContent=BLOCKS.flatMap(b=>b.tasks).find(t=>t.id===tid).chips[st.sel];
+  d.classList.add('filled');
+  const c=document.getElementById('chip_'+tid+'_'+st.sel);
+  c.classList.remove('sel');c.style.display='none';
+  st.sel=null;
+}
+/* ---------- Rechenweg-Diagnose ---------- */
+function diagnose(id){
+  const T=S[id].task, D=T.diag, out=document.getElementById('dgo_'+id);
+  const gut=[],fehler=[],fix=[],merke=[];
+  D.items.forEach((d,i)=>{
+    if(!document.getElementById('dgc_'+id+'_'+i).checked) return;
+    if(d.good) gut.push(d.fb); else { fehler.push(d.fb); if(d.fix) fix.push(d.fix); if(d.merke) merke.push(d.merke); }
+  });
+  S[id].diagSel=D.items.map((d,i)=>document.getElementById('dgc_'+id+'_'+i).checked?d.s:null).filter(Boolean);
+  if(!gut.length&&!fehler.length){
+    out.innerHTML='<div class="dg-part dg-neutral">Kreuzen Sie zuerst an, was auf Ihren Rechenweg zutrifft. Seien Sie dabei ehrlich – die Rückmeldung nützt Ihnen nur dann etwas.</div>';
+    out.classList.add('show'); return;
+  }
+  let h='';
+  h+=`<div class="dg-part dg-good"><b>Das ist gut gelaufen</b>`+
+     (gut.length?'<ul>'+gut.map(x=>'<li>'+x+'</li>').join('')+'</ul>'
+                :'<p>Hier war diesmal noch nichts dabei – das ist beim Üben völlig normal. Arbeiten Sie die Punkte unten durch und rechnen Sie die Aufgabe danach noch einmal komplett neu.</p>')+`</div>`;
+  if(fehler.length){
+    h+=`<div class="dg-part dg-bad"><b>Hier ist etwas schiefgegangen</b><ul>${fehler.map(x=>'<li>'+x+'</li>').join('')}</ul></div>`;
+    h+=`<div class="dg-part dg-fix"><b>So machen Sie es richtig</b><ul>${fix.map(x=>'<li>'+x+'</li>').join('')}</ul></div>`;
+    h+=`<div class="dg-part dg-note"><b>Darauf achten Sie beim nächsten Mal</b><ul>${merke.map(x=>'<li>'+x+'</li>').join('')}</ul></div>`;
+  }else{
+    h+=`<div class="dg-part dg-fix"><b>Nächster Schritt</b><p>${D.allesGut||'Ihr Weg trägt. Vergleichen Sie Ihre Zahlen jetzt noch mit der Musterlösung und achten Sie darauf, dass Sie jeden Befehlsstrich notiert haben.'}</p></div>`;
+  }
+  h+=`<p class="auto-note">Diese Rückmeldung entsteht aus dem, was Sie angekreuzt haben. Sie ersetzt keine Korrektur durch Ihre Lehrkraft – Ihre hochgeladene Datei wird nicht automatisch gelesen.</p>`;
+  out.innerHTML=h; out.classList.add('show');
+  S[id].diagText=out.innerText||'';
+}
+
+/* ---------- Tipp-Assistent: erkennt Stichworte, gibt Hinweise, nie Lösungen ---------- */
+const ASSIST={
+ nullstellen:[
+  {k:['durch x teilen','geteilt durch x'],a:'Teilen Sie niemals durch x. Dabei verlieren Sie die Lösung x = 0. Klammern Sie stattdessen x aus.'},
+  {k:['ausklammern','klammer','ausklammer'],a:'Prüfen Sie zuerst: Steckt in <b>jedem</b> Summanden ein x? Nur dann dürfen Sie ausklammern. Fehlt in einem Summanden das x, brauchen Sie ein anderes Verfahren.'},
+  {k:['pq','p und q','formel'],a:'Die pq-Formel braucht zwei Voraussetzungen: Auf einer Seite muss 0 stehen, und vor dem x² muss eine 1 stehen. Gehen Sie die beiden Punkte der Reihe nach durch – meistens fehlt das Teilen durch den Vorfaktor.'},
+  {k:['vorfaktor','teilen','dividieren','zahl vor'],a:'Teilen Sie die <b>gesamte</b> Gleichung durch den Vorfaktor, also jeden einzelnen Summanden. Wenn Sie einen vergessen, stimmen p und q nicht mehr.'},
+  {k:['wurzel','plus minus','±','zwei lösungen','nur eine'],a:'Beim Wurzelziehen entstehen fast immer <b>zwei</b> Lösungen – eine mit Plus und eine mit Minus. Nur wenn rechts eine 0 steht, gibt es genau eine.'},
+  {k:['negativ','minus unter der wurzel','keine lösung','geht nicht'],a:'Wenn unter der Wurzel eine negative Zahl steht oder eine gerade Potenz gleich einer negativen Zahl sein soll, gibt es keine Lösung in ℝ. Schreiben Sie das als Ergebnis hin – das ist eine vollständige Antwort.'},
+  {k:['produkt','faktor','nullprodukt','klammern multiplizieren','ausmultiplizieren'],a:'Steht der Term bereits als Produkt da? Dann nicht ausmultiplizieren, sondern jeden Faktor einzeln null setzen.'},
+  {k:['welche strategie','welches verfahren','womit anfangen','wo anfangen','weiß nicht'],a:'Schauen Sie sich nur das <b>Aussehen</b> der Gleichung an und vergleichen Sie es mit den neun Bauarten im Hilfe-Kasten. Zwei Fragen führen fast immer weiter: Steht auf einer Seite eine 0? Steckt in jedem Summanden ein x?'},
+  {k:['umformen','umgeformt','nicht weiter','stecke fest','komme nicht'],a:'Schreiben Sie den Stand Ihrer Gleichung auf ein separates Blatt und vergleichen Sie ihn mit den Bauarten im Hilfe-Kasten. Meist ist man näher am Ziel, als man denkt – oft fehlt nur noch ein Sortierschritt.'},
+  {k:['vorzeichen','minus','falsches ergebnis','probe'],a:'Machen Sie die Probe: Setzen Sie Ihre Lösung in die <b>ursprüngliche</b> Gleichung ein. Kommt nicht null heraus, liegt der Fehler fast immer bei einem Vorzeichen beim Sortieren.'},
+  {k:['grad','wie viele lösungen','anzahl'],a:'Eine Gleichung vom Grad n hat höchstens n Lösungen. Das ist eine gute Kontrolle: Haben Sie bei einer Gleichung dritten Grades nur eine Lösung gefunden, kann das stimmen – vier Lösungen können es aber nicht sein.'}],
+ schnitt:[
+  {k:['durch x teilen'],a:'Nicht durch x teilen! Dabei verlieren Sie den Schnittpunkt bei x = 0. Klammern Sie x aus.'},
+  {k:['ansatz','wie anfangen','wo anfangen','erster schritt','weiß nicht'],a:'Der Ansatz ist immer derselbe: Setzen Sie die beiden Funktionsterme gleich, also f(x) = g(x). Danach formen Sie nach x um wie bei jeder anderen Gleichung auch.'},
+  {k:['x auf eine seite','sortieren','umformen','zusammenfassen'],a:'Bringen Sie alle x-Terme auf eine Seite und alle Zahlen auf die andere. Rechnen Sie dabei Schritt für Schritt und notieren Sie jeden Befehlsstrich – so finden Sie Vorzeichenfehler später wieder.'},
+  {k:['y','zweite koordinate','punkt angeben','koordinaten'],a:'Der berechnete x-Wert ist erst die halbe Miete. Setzen Sie ihn in f oder g ein, um den y-Wert zu bekommen, und geben Sie den Punkt als S(x | y) an.'},
+  {k:['probe','kontrolle','stimmt das'],a:'Setzen Sie Ihren x-Wert in <b>beide</b> Funktionen ein. Kommt zweimal derselbe y-Wert heraus, stimmt Ihr Ergebnis. Kommen zwei verschiedene heraus, steckt ein Rechenfehler drin.'},
+  {k:['kubisch','x^3','x³','dritten grades','ganzrational'],a:'Bei einer Gleichung dritten Grades sortieren Sie zuerst alles auf eine Seite. Steht dann in jedem Summanden ein x, klammern Sie es aus – der Rest ist eine quadratische Gleichung.'},
+  {k:['wie viele','anzahl','schnittpunkte gibt'],a:'Denken Sie an die Formen der Graphen: Zwei Geraden treffen sich höchstens einmal, eine Parabel und eine Gerade höchstens zweimal, eine Kurve dritten Grades und eine Gerade höchstens dreimal – und mindestens einmal.'},
+  {k:['berühr','tangente','doppelt','nur ein schnittpunkt'],a:'Wenn beim Lösen eine Lösung doppelt auftritt, etwa in der Form (x − 2)² = 0, dann berühren sich die Graphen dort nur, statt sich zu kreuzen.'},
+  {k:['gtr','rechner','intersect','zeichnen'],a:'Zeichnen Sie beide Funktionen mit dem GTR und wählen Sie das Fenster groß genug. Am Bild sehen Sie, wie viele Schnittpunkte Sie erwarten müssen – die Werte selbst sollen Sie aber rechnerisch bestimmen.'},
+  {k:['nicht weiter','stecke fest','komme nicht'],a:'Notieren Sie, wie Ihre Gleichung gerade aussieht, und fragen Sie sich: Welchen Typ habe ich vor mir – linear, quadratisch oder höheren Grades? Danach richtet sich der nächste Schritt.'}],
+ ableiten:[
+  {k:['zweite ableitung',"f''",'f″','nochmal ableiten','zweimal'],a:'Die zweite Ableitung entsteht, indem Sie f′ noch einmal ableiten – mit genau denselben Regeln. Schreiben Sie f′ sauber hin, bevor Sie weitermachen.'},
+  {k:['negativ','exponent kleiner','x^-','hoch minus'],a:'Auch bei negativen Exponenten wird der Exponent um 1 <b>kleiner</b>: aus x⁻² wird −2·x⁻³, nicht −2·x⁻¹. Das ist die häufigste Falle.'},
+  {k:['bruch','nenner','1/x','durch x'],a:'Schreiben Sie den Bruch zuerst als Potenz mit negativem Exponenten, zum Beispiel 1/x² = x⁻². Danach greift die Potenzregel ganz normal.'},
+  {k:['wurzel','√'],a:'Schreiben Sie die Wurzel als Potenz: √x = x hoch 0,5. Danach leiten Sie wie gewohnt mit der Potenzregel ab.'},
+  {k:['klammer','produkt','ausmultipl','kettenregel','produktregel'],a:'Produkt- und Kettenregel lernen Sie erst später. Multiplizieren Sie die Klammern aus und leiten Sie dann summandenweise ab.'},
+  {k:['konstante','zahl ohne x','summand','fällt weg','plus 5','minus 7'],a:'Ein konstanter Summand ohne x wird beim Ableiten zu 0 – er fällt also weg und wird nicht mitgeschleppt.'},
+  {k:['faktor','zahl vor'],a:'Ein konstanter Faktor bleibt beim Ableiten stehen. Leiten Sie nur den x-Teil ab und multiplizieren Sie den Faktor anschließend hinein.'},
+  {k:['potenzregel','exponent','hoch'],a:'Zwei Schritte gehören zusammen: Exponent nach vorn multiplizieren <b>und</b> Exponent um 1 verringern. Prüfen Sie, ob Sie beide gemacht haben.'},
+  {k:['sin','cos','sinus','kosinus'],a:'Sinus wird zu Kosinus, Kosinus wird zu minus Sinus. Nur beim Kosinus kommt ein Minus dazu.'},
+  {k:['steigung','tangente','an der stelle','einsetzen'],a:'Die Steigung an einer Stelle bekommen Sie, indem Sie den x-Wert in <b>f′</b> einsetzen – nicht in f.'},
+  {k:['waagerecht','extrem','hochpunkt','tiefpunkt'],a:'Waagerechte Tangente bedeutet f′(x) = 0. Das ist eine gewöhnliche Gleichung – lösen Sie sie mit den Strategien aus Teil 1, meistens durch Ausklammern.'},
+  {k:['hoch oder tief','unterscheiden','welche art','hochpunkt oder'],a:'Setzen Sie die gefundene Stelle in f″ ein: Ist f″ negativ, liegt ein Hochpunkt vor, ist f″ positiv, ein Tiefpunkt.'},
+  {k:['wende','krümmung','links','rechts'],a:'Wendestellen findet man über f″(x) = 0. Für die Krümmung setzen Sie einen Wert aus dem jeweiligen Bereich in f″ ein: positiv bedeutet linksgekrümmt.'},
+  {k:['nicht weiter','stecke fest','komme nicht','weiß nicht'],a:'Schreiben Sie f und f′ untereinander und markieren Sie die Zeile, ab der es hakt. Fast immer fehlt einer dieser Schritte: umformen, Faktor mitnehmen, Konstante weglassen.'}],
+ grafisch:[
+  {k:['waagerecht','extrem','hochpunkt','tiefpunkt','nullstelle von'],a:'Überall dort, wo f eine waagerechte Tangente hat, hat f′ eine <b>Nullstelle</b>. Suchen Sie zuerst diese Stellen und tragen Sie sie ein.'},
+  {k:['steigt','fällt','vorzeichen','oberhalb','unterhalb'],a:'Steigt f, verläuft f′ <b>über</b> der x-Achse. Fällt f, verläuft f′ <b>darunter</b>. Prüfen Sie das bereichsweise.'},
+  {k:['wendepunkt','wende','steilst'],a:'Im Wendepunkt ist f am steilsten. Genau dort hat f′ einen Hoch- oder Tiefpunkt.'},
+  {k:['sattel','berühr'],a:'Unterschied Hoch-/Tiefpunkt und Sattelpunkt: Beim Sattelpunkt <b>berührt</b> f′ die x-Achse, beim Hoch- oder Tiefpunkt <b>schneidet</b> sie sie.'},
+  {k:['grad','parabel wird','gerade wird','wie sieht'],a:'Ist f vom Grad n, so ist f′ vom Grad n − 1. Aus einer Parabel wird eine Gerade, aus einer S-Kurve eine Parabel. Das ist eine gute Plausibilitätsprüfung.'},
+  {k:['verschieb','nach oben','+ c','plus c'],a:'Verschieben ändert nur die Höhe von f, nicht die Steigung. Der Graph von f′ bleibt völlig unverändert.'},
+  {k:['zuordnen','welcher graph','welches bild','passt zu'],a:'Zählen Sie zuerst die waagerechten Tangenten von f. So viele Nullstellen muss die zugehörige Ableitung haben. Danach entscheidet das Vorzeichen.'},
+  {k:['rate','bestand','wasser','zufluss','maximal'],a:'Unterscheiden Sie Rate und Bestand: Solange die Rate positiv ist, wächst der Bestand weiter – auch wenn die Rate schon wieder kleiner wird. Erst beim Vorzeichenwechsel kippt es.'},
+  {k:['parallel','gleich aussehen','ähnlich'],a:'Zeichnen Sie f′ nicht parallel zu f. f′ hat mit der Höhe von f nichts zu tun, nur mit der Steigung.'},
+  {k:['nicht weiter','stecke fest','komme nicht','weiß nicht'],a:'Gehen Sie in dieser Reihenfolge vor: erst die Nullstellen von f′ eintragen, dann bereichsweise das Vorzeichen, dann die Extrempunkte von f′ an den Wendestellen von f.'}]
+};
+function askAssist(id){
+  const T=S[id].task, topic=ASSIST[T.assist]||[];
+  const el=document.getElementById('asq_'+id), box=document.getElementById('asc_'+id);
+  const q=(el.value||'').trim();
+  if(q.length<3){el.classList.add('bad-in');return;}
+  el.classList.remove('bad-in');
+  const low=q.toLowerCase().replace(/ß/g,'ss');
+  const treffer=topic.filter(r=>r.k.some(k=>low.includes(k)));
+  const antwort = treffer.length
+    ? treffer.slice(0,2).map(r=>r.a).join('<br><br>')
+    : 'Ihre Frage kann ich nicht sicher zuordnen. Versuchen Sie es konkreter – zum Beispiel: „Ich weiß nicht, ob ich ausklammern darf", „Ich komme nach dem Umformen nicht weiter" oder „Ich habe zwei Lösungen, weiß aber nicht, ob das stimmt". Und werfen Sie einen Blick in den Hilfe-Kasten oben: Vergleichen Sie das <b>Aussehen</b> Ihrer Gleichung mit den Bauarten dort.';
+  box.innerHTML += `<div class="chat-q">${esc(q)}</div><div class="chat-a">${antwort}</div>`;
+  box.classList.add('show');
+  el.value='';
+  S[id].chat=(S[id].chat||[]).concat([{q, a:antwort.replace(/<[^>]+>/g,'')}]);
+  box.scrollTop=box.scrollHeight;
+}
+
+function unlock(bid){
+  const B=BLOCKS.find(b=>b.id===bid);
+  const v=document.getElementById('code_'+bid).value.trim();
+  const m=document.getElementById('codemsg_'+bid);
+  if(v===B.code){
+    B.tasks.forEach(t=>{S[t.id].unlocked=true;});
+    m.innerHTML='<span style="color:var(--green);font-weight:700">Freigeschaltet – alle Musterlösungen in Block '+bid+' sind jetzt verfügbar.</span>';
+  }else{
+    m.innerHTML='<span style="color:var(--pink);font-weight:700">Der Code stimmt nicht.</span>';
+  }
+}
+function showSol(id){
+  if(!S[id].unlocked){
+    const b=S[id].block.id;
+    alert('Die Musterlösung dieser Aufgabe ist noch gesperrt.\n\nGeben Sie den 4-stelligen Code am Ende von Block '+b+' ein. Ihre Lehrkraft gibt ihn heraus, sobald alle die Aufgaben bearbeitet haben.');
+    return;
+  }
+  tog('sol_'+id);
+}
+
+/* ---- Freitext-Auswertung ---- */
+function evalFreeKw(F,txt){
+  const t=(txt||'').toLowerCase().replace(/ß/g,'ss');
+  const hits=[],miss=[];
+  F.kw.forEach(g=>{
+    (g.k.some(k=>t.includes(k.toLowerCase()))?hits:miss).push(g.n);
+  });
+  return {hits,miss,words:(txt||'').trim().split(/\s+/).filter(Boolean).length};
+}
+
+/* ---- Prüfen ---- */
+function check(id){
+  const st=S[id],T=st.task;
+  let right=0,total=0,det=[];
+  const mark=(el,ok)=>{if(!el)return;el.classList.remove('ok-in','bad-in','ok','bad');el.classList.add(ok?(el.tagName==='INPUT'?'ok-in':'ok'):(el.tagName==='INPUT'?'bad-in':'bad'));};
+
+  if(T.type==='tf'){
+    T.items.forEach((it,i)=>{
+      total++;const v=st.ans['tf'+i];const ok=(v===it.a);
+      if(ok)right++;
+      const row=document.getElementById('tf_'+id+'_'+i);
+      row.classList.remove('ok','bad');row.classList.add(v===undefined?'':(ok?'ok':'bad'));
+      document.getElementById('tfm_'+id+'_'+i).textContent=v===undefined?'':(ok?'✓':'✗');
+      det.push({q:'Aussage '+(i+1),a:v===undefined?null:(v?'wahr':'falsch'),ok:v===undefined?null:ok,sol:it.a?'wahr':'falsch'});
+    });
+  }
+  if(T.type==='mc'){ const r=chkMC(id,T.opts,T.multi);right+=r.r;total+=r.t;det=det.concat(r.det); }
+  if(T.mc){ const r=chkMC(id+'_mc',T.mc.opts,false);right+=r.r;total+=r.t;det=det.concat(r.det); }
+  if(T.match2){
+    T.match2.items.forEach((it,i)=>{
+      total++;const sel=document.getElementById('m2_'+id+'_'+i);
+      const v=parseInt(sel.value,10);const ok=(v===it.a);
+      if(ok)right++;
+      sel.classList.remove('ok-in','bad-in');
+      if(v>=0) sel.classList.add(ok?'ok-in':'bad-in');
+      document.getElementById('m2m_'+id+'_'+i).textContent=v<0?'':(ok?'✓':'✗');
+      det.push({q:it.q.replace(/<[^>]+>/g,''),a:v>=0?T.match2.opts[v]:null,ok:v<0?null:ok,sol:T.match2.opts[it.a]});
+    });
+  }
+
+  if(T.type==='match'){
+    T.items.forEach((it,i)=>{
+      total++;const sel=document.getElementById('ms_'+id+'_'+i);
+      const v=parseInt(sel.value,10);const ok=(v===it.a);
+      if(ok)right++;
+      mark(sel,ok&&v>=0);
+      if(v<0){sel.classList.remove('ok-in','bad-in');}
+      document.getElementById('mm_'+id+'_'+i).textContent=v<0?'':(ok?'✓':'✗');
+      det.push({q:it.q.replace(/<[^>]+>/g,''),a:v>=0?T.opts[v]:null,ok:v<0?null:ok,sol:T.opts[it.a]});
+    });
+  }
+  if(T.type==='dnd'){
+    T.slots.forEach((s,slot)=>{
+      total++;
+      let chip=null;for(const k in st.placed) if(st.placed[k]===slot) chip=parseInt(k,10);
+      const ok=(chip===T.answer[slot]);
+      if(ok)right++;
+      const el=document.getElementById('slot_'+id+'_'+slot);
+      el.classList.remove('ok','bad');if(chip!==null)el.classList.add(ok?'ok':'bad');
+      document.getElementById('dm_'+id+'_'+slot).textContent=chip===null?'':(ok?'✓':'✗');
+      det.push({q:s,a:chip!==null?T.chips[chip]:null,ok:chip===null?null:ok,sol:T.chips[T.answer[slot]]});
+    });
+  }
+  if(T.items&&(T.type==='input'||T.type==='mixed')){
+    T.items.forEach((it,i)=>{
+      total++;const el=document.getElementById('in_'+id+'_'+i);
+      const v=el.value.trim();
+      const ok=v!==''&&it.chk(v);
+      if(ok)right++;
+      el.classList.remove('ok-in','bad-in');if(v!=='')el.classList.add(ok?'ok-in':'bad-in');
+      document.getElementById('im_'+id+'_'+i).textContent=v===''?'':(ok?'✓':'✗');
+      det.push({q:((it.l?it.l+' ':'')+it.q).replace(/<[^>]+>/g,'').replace(/&nbsp;/g,' '),a:v||null,ok:v===''?null:ok,sol:it.sol});
+    });
+  }
+
+  // Freitexte (eine oder mehrere)
+  let freeHTML='';
+  const FR=frees(T);
+  st.freeTexts=[];st.freeEvals=[];
+  FR.forEach((F,k)=>{
+    const el=document.getElementById('fr_'+id+'_'+k);
+    const txt=el?el.value:'';
+    st.freeTexts[k]=txt;
+    const label=FR.length>1?('<b>'+(F.h||('Teilaufgabe '+(k+1)))+':</b> '):'<b>Erklärungsaufgabe:</b> ';
+    if(txt.trim().length<12){
+      st.freeEvals[k]=null;
+      freeHTML+=`<div style="margin-top:12px;padding-top:10px;border-top:1px dashed var(--line)">
+        ${label}Noch keine ausreichende Eingabe – schreiben Sie mindestens einen vollständigen Satz.</div>`;
+    }else{
+      const e=evalFreeKw(F,txt);st.freeEvals[k]=e;
+      freeHTML+=`<div style="margin-top:12px;padding-top:10px;border-top:1px dashed var(--line)">
+        ${label}<span style="font-size:.85rem;color:#b9b3dd">${e.words} Wörter</span>
+        <div style="margin-top:7px">Erkennbar dargestellt: ${e.hits.length?e.hits.map(h=>`<span class="kw hit">✓ ${h}</span>`).join(''):'<i>keiner der erwarteten Kernaspekte</i>'}</div>
+        <div style="margin-top:7px">Noch nicht erkennbar: ${e.miss.length?e.miss.map(h=>`<span class="kw miss">? ${h}</span>`).join(''):'<span class="kw hit">alle Kernaspekte enthalten</span>'}</div></div>`;
+    }
+  });
+  if(FR.length) freeHTML+=`<div class="auto-note">Hinweis: Dies ist eine <b>automatische, stichwortbasierte Orientierung</b>. Sie erkennt Schlüsselbegriffe, aber nicht, ob Ihre Argumentation fachlich schlüssig ist. Ein fehlender Punkt kann auch bedeuten, dass Sie ihn anders formuliert haben. Vergleichen Sie deshalb immer mit der Musterlösung.</div>`;
+
+  st.checked=true;st.det=det;
+  const fb=document.getElementById('fb_'+id);
+  let cls,msg;
+  if(total===0){cls='mid';msg='<b>Erklärungsaufgaben geprüft.</b>';
+    const ok=st.freeEvals.filter(e=>e&&e.hits.length>=Math.ceil((e.hits.length+e.miss.length)/2)).length;
+    st.score=st.freeEvals.length?ok/st.freeEvals.length:0;}
+  else{
+    const q=right/total;st.score=q;
+    if(q===1){cls='good';msg=`<b>Alles richtig!</b> ${right} von ${total} Teilaufgaben korrekt.`;}
+    else if(q>=0.5){cls='mid';msg=`<b>Fast.</b> ${right} von ${total} Teilaufgaben korrekt. Schauen Sie sich die rot markierten Stellen noch einmal an – der Tipp hilft weiter.`;}
+    else{cls='bad';msg=`<b>Da geht noch was.</b> ${right} von ${total} Teilaufgaben korrekt. Lesen Sie den Info-Kasten am Anfang des Blocks noch einmal und nutzen Sie den Tipp.`;}
+  }
+  fb.className='fb show '+cls;fb.innerHTML=msg+freeHTML;
+
+  const dot=document.getElementById('dot_'+id);
+  dot.className='stat-dot '+(st.score===1?'ok':(st.score>=0.5?'part':'bad'));
+  document.getElementById('acc_'+id).classList.toggle('done',st.score===1);
+  updProgress();
+}
+function chkMC(key,opts,multi){
+  let r=0,t=0,det=[],chosen=[];
+  opts.forEach((o,i)=>{
+    const inp=document.querySelector(`#op_${key}_${i} input`);
+    const el=document.getElementById('op_'+key+'_'+i);
+    el.classList.remove('ok','bad');
+    const sel=inp.checked;if(sel)chosen.push(o.s);
+    if(multi){
+      t++;const ok=(sel===o.a);if(ok)r++;
+      if(sel||o.a) el.classList.add(ok?'ok':'bad');
+      document.getElementById('opm_'+key+'_'+i).textContent=o.a?'✓ richtig':(sel?'✗':'');
+    }else{
+      if(sel){t=1;if(o.a)r=1;el.classList.add(o.a?'ok':'bad');
+        document.getElementById('opm_'+key+'_'+i).textContent=o.a?'✓':'✗';}
+      else if(o.a){document.getElementById('opm_'+key+'_'+i).textContent='';}
+    }
+  });
+  if(!multi&&t===0)t=1;
+  det.push({q:'Multiple-Choice',a:chosen.length?chosen.join(' | '):null,ok:chosen.length?(r===t):null,
+    sol:opts.filter(o=>o.a).map(o=>o.s).join(' | ')});
+  return {r,t,det};
+}
+
+function updProgress(){
+  let done=0,ok=0,part=0,all=0;
+  BLOCKS.forEach(B=>B.tasks.forEach(T=>{all++;const s=S[T.id];
+    if(s.checked){done++;if(s.score===1)ok++;else if(s.score>=0.5)part++;}}));
+  document.getElementById('pDone').textContent=done;
+  document.getElementById('pOk').textContent=ok;
+  document.getElementById('pPart').textContent=part;
+  document.getElementById('pOpen').textContent=all-done;
+  document.getElementById('pFill').style.width=(done/all*100)+'%';
+}
+
+/* ---- Export ---- */
+function exportTxt(){
+  const name=document.getElementById('stName').value.trim()||'ohne_Name';
+  const kurs=document.getElementById('stKurs').value.trim();
+  const d=new Date();const p=n=>String(n).padStart(2,'0');
+  const dat=`${p(d.getDate())}.${p(d.getMonth()+1)}.${d.getFullYear()}`;
+  let L=[];
+  L.push('==========================================================');
+  L.push('  ERGEBNISPROTOKOLL');
+  L.push('  Fit fuer die Integralrechnung - Wiederholung Vorkenntnisse');
+  L.push('  Mathematik Jg. 12 gA');
+  L.push('==========================================================');
+  L.push('Name:  '+name);
+  L.push('Kurs:  '+(kurs||'-'));
+  L.push('Datum: '+dat+', '+p(d.getHours())+':'+p(d.getMinutes()));
+  L.push('');
+  L.push('Legende: [v] richtig  [x] falsch  [~] teilweise  [-] nicht bearbeitet  [i] Freitext');
+  L.push('');
+
+  let gOk=0,gAll=0,gDone=0;
+  BLOCKS.forEach(B=>{
+    L.push('');L.push('----------------------------------------------------------');
+    L.push(B.title.toUpperCase().replace(/·/g,'-'));
+    L.push('----------------------------------------------------------');
+    B.tasks.forEach(T=>{
+      const s=S[T.id];gAll++;
+      let flag='[-]';
+      if(s.checked){gDone++;flag=s.score===1?'[v]':(s.score>=0.5?'[~]':'[x]');if(s.score===1)gOk++;}
+      L.push('');
+      L.push(`${flag} ${T.id} - ${T.ttl}   (${T.n}, ${T.fmt}, ${T.t} min)`);
+      if(!s.checked){L.push('    nicht bearbeitet');return;}
+      (s.det||[]).forEach(dd=>{
+        const m=dd.ok===null?'[-]':(dd.ok?'[v]':'[x]');
+        L.push(`    ${m} ${dd.q}`);
+        L.push(`         Antwort: ${dd.a===null?'(leer)':dd.a}`);
+        if(dd.ok!==true) L.push(`         Richtig: ${dd.sol}`);
+      });
+      frees(T).forEach((F,k)=>{
+        L.push('    [i] Erklaerungsaufgabe '+(F.h||('Teil '+(k+1))));
+        L.push('         Frage: '+F.q.replace(/<[^>]+>/g,''));
+        const txt=((s.freeTexts&&s.freeTexts[k])||'').trim();
+        L.push('         Antwort des Schuelers/der Schuelerin:');
+        if(!txt) L.push('           (leer)');
+        else txt.split('\n').forEach(z=>L.push('           '+z));
+        const e=s.freeEvals&&s.freeEvals[k];
+        if(e){
+          L.push('         Automatische Rueckmeldung (stichwortbasiert):');
+          L.push('           erkannt : '+(e.hits.join('; ')||'-'));
+          L.push('           fehlt   : '+(e.miss.join('; ')||'-'));
+          L.push('           Hinweis : automatische Orientierung, keine fachliche Bewertung');
+        }
+      });
+      if(T.upload){
+        L.push('    Rechenweg-Datei: '+(s.file||'nicht hochgeladen'));
+        if(s.diagSel&&s.diagSel.length){
+          L.push('    Selbstdiagnose zum Rechenweg – angekreuzt:');
+          s.diagSel.forEach(x=>L.push('       - '+x.replace(/<[^>]+>/g,'')));
+        }
+      }
+      if(s.chat&&s.chat.length){
+        L.push('    Fragen an den Tipp-Assistenten:');
+        s.chat.forEach(c=>{L.push('       Frage: '+c.q);L.push('       Tipp : '+c.a);});
+      }
+    });
+  });
+  L.push('');L.push('==========================================================');
+  L.push(`ZUSAMMENFASSUNG: ${gDone} von ${gAll} Aufgaben bearbeitet, davon ${gOk} vollstaendig richtig.`);
+  L.push('==========================================================');
+
+  const blob=new Blob([L.join('\r\n')],{type:'text/plain;charset=utf-8'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download=`Integralrechnung_Wiederholung_${name.replace(/[^A-Za-zÄÖÜäöüß0-9]/g,'_')}_${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}.txt`;
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+  URL.revokeObjectURL(a.href);
+}
+
+build();
+</script>
+</body>
+</html>
