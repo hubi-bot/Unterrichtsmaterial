@@ -1,0 +1,1765 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fit für die Integralrechnung – Teil 2: Ableitungen</title>
+<style>
+:root{
+  --pink:#ff2e63; --cyan:#08d9d6; --yellow:#ffd93d; --green:#6bcf7f; --violet:#a18cd1;
+  --card:rgba(255,255,255,.07); --card2:rgba(255,255,255,.11); --line:rgba(255,255,255,.16);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family:'Segoe UI',system-ui,-apple-system,'Helvetica Neue',Arial,sans-serif;
+  color:#fff; min-height:100vh; line-height:1.55; font-size:16px;
+  background:linear-gradient(135deg,#0f0c29 0%,#302b63 50%,#24243e 100%);
+  background-attachment:fixed;
+}
+.wrap{max-width:1080px;margin:0 auto;padding:24px 18px 80px}
+h1{font-size:2.1rem;line-height:1.2;margin:0 0 6px;font-weight:800;
+  background:linear-gradient(90deg,var(--pink),var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+h2{font-size:1.3rem;margin:0 0 10px}
+h3{font-size:1.05rem;margin:0 0 8px}
+.sub{color:#cfc9ee;font-size:1rem;margin:0 0 4px}
+.tiny{font-size:.82rem;color:#b9b3dd}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;margin:16px 0;
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:0 8px 32px rgba(0,0,0,.25)}
+.card.tight{padding:14px 16px}
+table.ov{width:100%;border-collapse:collapse;font-size:.86rem}
+table.ov th,table.ov td{border-bottom:1px solid var(--line);padding:7px 8px;text-align:left;vertical-align:top}
+table.ov th{color:var(--cyan);font-weight:700;white-space:nowrap}
+table.ov tr:hover td{background:rgba(255,255,255,.04)}
+.badge{display:inline-block;padding:2px 9px;border-radius:99px;font-size:.72rem;font-weight:700;
+  letter-spacing:.02em;white-space:nowrap}
+.b-basis{background:rgba(107,207,127,.18);color:var(--green);border:1px solid rgba(107,207,127,.45)}
+.b-mittel{background:rgba(255,217,61,.16);color:var(--yellow);border:1px solid rgba(255,217,61,.45)}
+.b-schwer{background:rgba(255,46,99,.16);color:var(--pink);border:1px solid rgba(255,46,99,.45)}
+.b-fmt{background:rgba(161,140,209,.18);color:#d3c6f2;border:1px solid rgba(161,140,209,.45)}
+.b-time{background:rgba(8,217,214,.14);color:var(--cyan);border:1px solid rgba(8,217,214,.4)}
+
+/* progress */
+.sticky{position:sticky;top:0;z-index:60;margin:0 -18px 14px;padding:10px 18px;
+  background:rgba(15,12,41,.82);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line)}
+.pbar{height:11px;border-radius:99px;background:rgba(255,255,255,.13);overflow:hidden}
+.pfill{height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,var(--pink),var(--violet),var(--cyan));transition:width .45s ease}
+.prow{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:6px;font-size:.85rem;flex-wrap:wrap}
+.pstat b{color:var(--cyan)}
+
+/* accordion */
+.acc{border:1px solid var(--line);border-radius:16px;margin:12px 0;overflow:hidden;background:var(--card)}
+.acc.done{border-color:rgba(107,207,127,.5)}
+.acc-h{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:14px 16px;cursor:pointer;
+  background:rgba(255,255,255,.05);user-select:none}
+.acc-h:hover{background:rgba(255,255,255,.09)}
+.acc-h .ttl{font-weight:700;flex:1 1 240px;min-width:200px}
+.acc-h .chev{transition:transform .25s;color:var(--violet);font-size:1.1rem}
+.acc.open .acc-h .chev{transform:rotate(90deg)}
+.acc-b{display:none;padding:18px 16px 20px;border-top:1px solid var(--line)}
+.acc.open .acc-b{display:block}
+.stat-dot{width:11px;height:11px;border-radius:50%;background:rgba(255,255,255,.25);flex:0 0 auto}
+.stat-dot.ok{background:var(--green);box-shadow:0 0 10px var(--green)}
+.stat-dot.part{background:var(--yellow);box-shadow:0 0 10px var(--yellow)}
+.stat-dot.bad{background:var(--pink);box-shadow:0 0 10px var(--pink)}
+
+/* info box */
+.info{border-left:4px solid var(--cyan);background:rgba(8,217,214,.09);border-radius:0 14px 14px 0;
+  padding:14px 16px;margin:14px 0}
+.info h4{margin:0 0 8px;color:var(--cyan);font-size:1rem}
+.info ul{margin:6px 0 0 18px;padding:0}
+.info li{margin:4px 0}
+.formula{font-family:'Cambria Math','Georgia',serif;background:rgba(255,255,255,.09);
+  padding:2px 8px;border-radius:7px;display:inline-block;font-size:1.02em;white-space:nowrap}
+.fbig{display:block;text-align:center;margin:10px auto;padding:10px 14px;font-size:1.12em}
+
+/* buttons */
+button{font-family:inherit;font-size:.9rem;font-weight:700;border:none;border-radius:11px;
+  padding:10px 17px;cursor:pointer;color:#0f0c29;transition:transform .12s,filter .2s}
+button:hover{transform:translateY(-2px);filter:brightness(1.08)}
+button:active{transform:translateY(0)}
+.btn-check{background:linear-gradient(90deg,var(--green),var(--cyan))}
+.btn-tip{background:linear-gradient(90deg,var(--yellow),#ffb703)}
+.btn-sol{background:linear-gradient(90deg,var(--violet),#8e7cc3);color:#fff}
+.btn-ghost{background:transparent;border:1px solid var(--line);color:#e5e0ff}
+.btn-row{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}
+
+/* inputs */
+input[type=text],input[type=number],textarea,select{
+  font-family:inherit;font-size:.95rem;color:#fff;background:rgba(255,255,255,.09);
+  border:1px solid var(--line);border-radius:10px;padding:9px 11px;outline:none;width:100%}
+input:focus,textarea:focus,select:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(8,217,214,.18)}
+select option{background:#24243e;color:#fff}
+textarea{min-height:110px;resize:vertical}
+.inl{display:inline-block;width:auto;min-width:110px;max-width:190px}
+.ok-in{border-color:var(--green)!important;background:rgba(107,207,127,.16)!important}
+.bad-in{border-color:var(--pink)!important;background:rgba(255,46,99,.16)!important}
+.qline{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:9px 0}
+.qline .lab{min-width:26px;font-weight:700;color:var(--violet)}
+.qtxt{flex:1 1 220px;min-width:180px}
+
+/* choices */
+.opt{display:flex;gap:11px;align-items:flex-start;padding:11px 13px;margin:8px 0;border-radius:12px;
+  border:1px solid var(--line);background:rgba(255,255,255,.05);cursor:pointer}
+.opt:hover{background:rgba(255,255,255,.1)}
+.opt input{width:auto;flex:0 0 auto;margin-top:3px;accent-color:var(--cyan);transform:scale(1.2)}
+.opt.ok{border-color:var(--green);background:rgba(107,207,127,.15)}
+.opt.bad{border-color:var(--pink);background:rgba(255,46,99,.15)}
+.opt .mk{margin-left:auto;font-weight:800}
+
+/* true/false */
+.tf{display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding:10px 12px;margin:8px 0;
+  border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.05)}
+.tf .st{flex:1 1 260px;min-width:200px}
+.tf .btns{display:flex;gap:6px}
+.tf .btns button{padding:6px 15px;font-size:.82rem;background:rgba(255,255,255,.14);color:#fff}
+.tf .btns button.sel{background:linear-gradient(90deg,var(--violet),var(--cyan));color:#0f0c29}
+.tf.ok{border-color:var(--green);background:rgba(107,207,127,.13)}
+.tf.bad{border-color:var(--pink);background:rgba(255,46,99,.13)}
+
+/* drag & drop */
+.dnd-pool{display:flex;flex-wrap:wrap;gap:8px;padding:12px;border:1px dashed var(--line);
+  border-radius:12px;background:rgba(255,255,255,.04);min-height:56px;margin:10px 0}
+.chip{padding:8px 13px;border-radius:10px;background:linear-gradient(90deg,rgba(161,140,209,.5),rgba(8,217,214,.35));
+  border:1px solid var(--line);cursor:pointer;font-size:.88rem;font-weight:600;user-select:none}
+.chip.sel{outline:3px solid var(--yellow);transform:scale(1.04)}
+.slot{display:flex;gap:10px;align-items:center;padding:10px 12px;margin:8px 0;border-radius:12px;
+  border:1px solid var(--line);background:rgba(255,255,255,.05);min-height:52px;cursor:pointer}
+.slot:hover{background:rgba(255,255,255,.1)}
+.slot .nm{font-weight:700;color:var(--violet);flex:0 0 auto}
+.slot .drop{flex:1;min-height:34px;border:1px dashed rgba(255,255,255,.25);border-radius:9px;
+  padding:5px 9px;display:flex;align-items:center;font-size:.9rem;color:#b9b3dd}
+.slot .drop.filled{border-style:solid;color:#fff;background:rgba(161,140,209,.22)}
+.slot.ok{border-color:var(--green)} .slot.bad{border-color:var(--pink)}
+
+/* figure card (hell!) */
+.fig{background:#f7f7fb;border-radius:14px;padding:14px;margin:14px 0;color:#1a1a2e;
+  box-shadow:0 6px 22px rgba(0,0,0,.3)}
+.fig .cap{font-size:.82rem;color:#4a4a68;margin-top:8px;text-align:center}
+.fig svg{display:block;max-width:100%;height:auto;margin:0 auto}
+.figrow{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.figrow .fig{flex:1 1 210px;min-width:190px;margin:0}
+.figttl{font-weight:800;text-align:center;color:#1a1a2e;font-size:.95rem;margin-bottom:4px}
+
+/* feedback */
+.fb{display:none;margin-top:14px;padding:13px 15px;border-radius:13px;font-size:.92rem;border:1px solid}
+.fb.show{display:block}
+.fb.good{background:rgba(107,207,127,.14);border-color:var(--green)}
+.fb.mid{background:rgba(255,217,61,.13);border-color:var(--yellow)}
+.fb.bad{background:rgba(255,46,99,.13);border-color:var(--pink)}
+.fb b{color:#fff}
+.kw{display:inline-block;padding:2px 9px;margin:3px 4px 3px 0;border-radius:99px;font-size:.78rem;font-weight:700}
+.kw.hit{background:rgba(107,207,127,.22);color:var(--green);border:1px solid rgba(107,207,127,.5)}
+.kw.miss{background:rgba(255,46,99,.16);color:var(--pink);border:1px solid rgba(255,46,99,.45)}
+.auto-note{font-size:.76rem;color:#b9b3dd;font-style:italic;margin-top:8px;
+  border-top:1px dashed var(--line);padding-top:7px}
+
+/* panels */
+.panel{display:none;margin-top:12px;padding:14px 16px;border-radius:13px;font-size:.92rem}
+.panel.show{display:block}
+.panel.tip{background:rgba(255,217,61,.1);border:1px solid rgba(255,217,61,.45)}
+.panel.sol{background:rgba(161,140,209,.12);border:1px solid rgba(161,140,209,.5)}
+.panel h5{margin:0 0 8px;font-size:.95rem;color:var(--yellow)}
+.panel.sol h5{color:var(--violet)}
+.panel ol,.panel ul{margin:6px 0 0 20px;padding:0}
+.panel li{margin:5px 0}
+.lock{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin-top:12px;padding:11px 13px;
+  border-radius:12px;background:rgba(161,140,209,.1);border:1px dashed rgba(161,140,209,.5);font-size:.86rem}
+.lock input{max-width:130px}
+
+/* blocks */
+.blockhead{margin:38px 0 4px;padding:16px 20px;border-radius:18px;
+  background:linear-gradient(90deg,rgba(255,46,99,.22),rgba(161,140,209,.16),rgba(8,217,214,.16));
+  border:1px solid var(--line)}
+.blockhead h2{margin:0;font-size:1.45rem}
+.blockhead p{margin:5px 0 0;font-size:.9rem;color:#cfc9ee}
+.upl{margin:12px 0;padding:12px 14px;border:1px dashed rgba(8,217,214,.5);border-radius:12px;
+  background:rgba(8,217,214,.06);font-size:.88rem}
+.upl input[type=file]{margin-top:7px;font-size:.83rem}
+.upl .fn{color:var(--green);font-weight:700}
+.legend{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+.lg{display:flex;gap:7px;align-items:center;font-size:.82rem;background:rgba(255,255,255,.06);
+  padding:6px 11px;border-radius:10px;border:1px solid var(--line)}
+.sw{width:22px;height:4px;border-radius:2px;flex:0 0 auto}
+.final{background:linear-gradient(135deg,rgba(255,46,99,.22),rgba(161,140,209,.2),rgba(8,217,214,.2));
+  border:1px solid var(--line);text-align:center}
+.final h2{background:linear-gradient(90deg,var(--pink),var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+
+/* Strategie-/Regeltabellen in den Info-Kästen */
+table.strat{width:100%;border-collapse:collapse;font-size:.86rem;margin:10px 0}
+table.strat th{background:rgba(8,217,214,.18);color:var(--cyan);font-weight:700;
+  padding:7px 9px;text-align:left;border:1px solid var(--line)}
+table.strat td{padding:7px 9px;border:1px solid var(--line);vertical-align:top}
+table.strat tr:nth-child(even) td{background:rgba(255,255,255,.04)}
+/* Weiterüben-Karten */
+.linkcard{background:linear-gradient(135deg,rgba(161,140,209,.16),rgba(8,217,214,.12));
+  border:1px solid var(--line);border-radius:16px;padding:18px 20px;margin:18px 0 26px}
+.linkcard h3{color:var(--violet);margin:0 0 4px}
+.linkcard p.sub2{font-size:.85rem;color:#b9b3dd;margin:0 0 12px}
+.linkcard a{display:block;text-decoration:none;color:inherit;padding:11px 14px;margin:8px 0;
+  border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.05);transition:.2s}
+.linkcard a:hover{background:rgba(255,255,255,.11);transform:translateX(3px);border-color:var(--cyan)}
+.linkcard a b{color:var(--cyan);display:block;font-size:.95rem}
+.linkcard a span{font-size:.83rem;color:#cfc9ee}
+.linkcard a em{font-size:.75rem;color:#8d86b8;font-style:normal;word-break:break-all}
+
+
+/* ---- ausklappbarer Input-Kasten ---- */
+.infowrap{border:1px solid rgba(8,217,214,.4);border-radius:14px;background:rgba(8,217,214,.06);margin:14px 0;overflow:hidden}
+.infotoggle{display:flex;gap:10px;align-items:center;width:100%;text-align:left;padding:13px 16px;
+  background:rgba(8,217,214,.1);border:none;border-radius:0;color:var(--cyan);font-size:.95rem;font-weight:700;cursor:pointer}
+.infotoggle:hover{background:rgba(8,217,214,.18);transform:none}
+.infotoggle .chev2{transition:transform .25s;font-size:1rem}
+.infowrap.open .infotoggle .chev2{transform:rotate(90deg)}
+.infotoggle .hintx{margin-left:auto;font-weight:400;font-size:.8rem;color:#b9b3dd}
+.infobody{display:none;padding:4px 16px 16px}
+.infowrap.open .infobody{display:block}
+.infobody .info{border:none;background:none;padding:0;margin:0}
+.infobody .info h4{display:none}
+
+/* ---- Strategie-Karten mit Rechenweg ---- */
+.strat-item{border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.05);
+  padding:12px 14px;margin:11px 0}
+.strat-head{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;margin-bottom:9px;
+  padding-bottom:8px;border-bottom:1px dashed var(--line)}
+.strat-nr{flex:0 0 auto;width:23px;height:23px;border-radius:50%;background:var(--cyan);color:#0f0c29;
+  font-weight:800;font-size:.8rem;display:flex;align-items:center;justify-content:center}
+.strat-form{font-family:'Cambria Math',Georgia,serif;font-size:1.05rem;font-weight:700;color:#fff}
+.strat-name{margin-left:auto;font-size:.82rem;color:var(--yellow);font-weight:700}
+.strat-sub{width:100%;font-size:.78rem;color:#b9b3dd;font-style:italic}
+.calcrow{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;padding:4px 0}
+.calcrow .eq{flex:0 0 auto;min-width:170px;font-family:'Cambria Math',Georgia,serif;font-size:1rem}
+.calcrow .cmd{flex:0 0 auto;min-width:64px;color:var(--yellow);font-family:'Cambria Math',Georgia,serif;font-size:.95rem}
+.calcrow .why{flex:1 1 210px;font-size:.84rem;color:#cfc9ee}
+.strat-warn{margin-top:9px;padding:8px 11px;border-radius:9px;background:rgba(255,46,99,.12);
+  border:1px solid rgba(255,46,99,.4);font-size:.83rem;color:#ffd3e0}
+.strat-warn b{color:var(--pink)}
+@media(max-width:640px){.calcrow .eq{min-width:130px}.calcrow .cmd{min-width:52px}}
+
+/* ---- Graph zum Vergleich ---- */
+.btn-graph{background:linear-gradient(90deg,var(--cyan),#4dabf7)}
+.panel.graph{background:rgba(8,217,214,.09);border:1px solid rgba(8,217,214,.45)}
+.panel.graph h5{color:var(--cyan)}
+
+
+/* ---- Rechenweg-Diagnose ---- */
+.diagbox{margin-top:14px;padding:13px 15px;border-radius:12px;background:rgba(161,140,209,.1);
+  border:1px dashed rgba(161,140,209,.5)}
+.diagbox>b{color:var(--violet)}
+.diagopt{display:flex;gap:10px;align-items:flex-start;padding:8px 11px;margin:6px 0;border-radius:10px;
+  border:1px solid var(--line);background:rgba(255,255,255,.05);cursor:pointer;font-size:.88rem}
+.diagopt:hover{background:rgba(255,255,255,.1)}
+.diagopt input{width:auto;flex:0 0 auto;margin-top:3px;accent-color:var(--violet);transform:scale(1.15)}
+.diagout{display:none;margin-top:12px}
+.diagout.show{display:block}
+.dg-part{padding:11px 14px;border-radius:11px;margin:8px 0;font-size:.88rem;border:1px solid}
+.dg-part b{display:block;margin-bottom:5px}
+.dg-part ul{margin:4px 0 0 18px;padding:0}
+.dg-part li{margin:4px 0}
+.dg-good{background:rgba(107,207,127,.13);border-color:rgba(107,207,127,.5)}
+.dg-good b{color:var(--green)}
+.dg-bad{background:rgba(255,46,99,.12);border-color:rgba(255,46,99,.45)}
+.dg-bad b{color:var(--pink)}
+.dg-fix{background:rgba(8,217,214,.11);border-color:rgba(8,217,214,.45)}
+.dg-fix b{color:var(--cyan)}
+.dg-note{background:rgba(255,217,61,.1);border-color:rgba(255,217,61,.45)}
+.dg-note b{color:var(--yellow)}
+.dg-neutral{background:rgba(255,255,255,.06);border-color:var(--line)}
+
+/* ---- Tipp-Assistent ---- */
+.assist{margin-top:14px;padding:13px 15px;border-radius:12px;
+  background:linear-gradient(135deg,rgba(255,217,61,.09),rgba(161,140,209,.09));
+  border:1px solid rgba(255,217,61,.4)}
+.assist>b{color:var(--yellow)}
+.chat{display:none;margin-top:10px;max-height:340px;overflow-y:auto}
+.chat.show{display:block}
+.chat-q{margin:8px 0 0 auto;max-width:82%;padding:8px 12px;border-radius:13px 13px 3px 13px;
+  background:rgba(161,140,209,.28);font-size:.87rem;width:fit-content}
+.chat-a{margin:6px auto 8px 0;max-width:92%;padding:10px 13px;border-radius:13px 13px 13px 3px;
+  background:rgba(255,217,61,.13);border:1px solid rgba(255,217,61,.35);font-size:.87rem;line-height:1.5}
+
+
+/* ---- echte Brüche mit waagerechtem Bruchstrich ---- */
+.frac{display:inline-block;vertical-align:-0.55em;text-align:center;margin:0 3px;
+  font-family:'Cambria Math',Georgia,serif;line-height:1.25}
+.frac>span{display:block;padding:0 5px}
+.frac .num{border-bottom:1.6px solid currentColor;padding-bottom:1px}
+.frac .den{padding-top:2px}
+.fig .frac{color:#1a1a2e}
+
+@media(max-width:640px){h1{font-size:1.6rem}.wrap{padding:16px 12px 70px}.card{padding:15px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>Fit für die Integralrechnung · Teil 2</h1>
+<p class="sub">Ableitungsregeln und grafisches Ableiten · Mathematik Jg. 12, grundlegendes Anforderungsniveau</p>
+<p class="tiny">Block C: Ableitungsregeln · Block D: Grafisches Ableiten &nbsp;|&nbsp; Teil 1 dieser Reihe behandelt Gleichungen und Schnittpunkte.</p>
+
+<div class="card">
+  <h2>Worum es geht</h2>
+  <p style="font-size:.94rem">Ohne sichere <b>Ableitungsregeln</b> gibt es keine Stammfunktionen – und ohne Stammfunktionen keine Integralrechnung. In wenigen Wochen gehen Sie genau den Weg, den Sie hier üben, rückwärts. Dieser zweite Teil frischt das Ableiten auf und übt das Umschalten zwischen Funktion und Ableitungsgraph.</p>
+
+
+  <div class="info" style="margin-top:18px">
+    <h4>So arbeiten Sie</h4>
+    <ul>
+      <li><b>Rechnen statt klicken.</b> Der größte Teil der Aufgaben verlangt einen vollständigen Rechenweg. Halten Sie Papier, Stift und GTR bereit.</li>
+      <li><b>Pflicht sind alle Basisaufgaben</b> (grün), danach je nach Tempo die <b>mittleren</b> (gelb) und <b>anspruchsvollen</b> Aufgaben (pink). Die anspruchsvollen Aufgaben sind fast durchweg Sachaufgaben.</li>
+      <li>Jeder Block beginnt mit einem <b>ausklappbaren Hilfe-Kasten</b> mit vollständigen Rechenwegen. Klappen Sie ihn nur auf, wenn Sie ihn brauchen – das ist kein Schummeln.</li>
+      <li><b>Tipps</b> sind Denkanstöße, keine Lösungen. Bei manchen Aufgaben gibt es zusätzlich einen <b>Graphen zum Vergleich</b> zum Aufklappen.</li><li>Bei jeder Aufgabe finden Sie einen <b>Tipp-Assistenten</b>. Beschreiben Sie dort in einem Satz, wo Sie nicht weiterkommen – Sie bekommen einen gezielten Hinweis, nie die Lösung.</li><li>Wo Sie einen <b>Rechenweg oder eine Zeichnung hochladen</b> können, gibt es darunter eine Selbstdiagnose mit Rückmeldung dazu, was gut lief, was schiefging und worauf Sie beim nächsten Mal achten sollten.</li>
+      <li><b>Musterlösungen:</b> Bei Basisaufgaben direkt aufklappbar. Bei mittleren und anspruchsvollen Aufgaben erst nach Eingabe des <b>4-stelligen Codes</b>, den Sie am Ende des Blocks von der Lehrkraft bekommen – erst rechnen, dann vergleichen.</li>
+      <li>Am Ende jedes Blocks finden Sie <b>Links zum Weiterüben</b> (LearningApps, H5P, GeoGebra-Lernpfade).</li><li>Am Ende laden Sie Ihr <b>Ergebnisprotokoll</b> als Textdatei herunter und geben es ab.</li>
+    </ul>
+  </div>
+
+  <h3 style="margin-top:20px">Legende der Abbildungen</h3>
+  <div class="legend">
+    <span class="lg"><span class="sw" style="background:#0b7285"></span> Graph von f</span>
+    <span class="lg"><span class="sw" style="background:#c2255c"></span> Graph von g bzw. f′</span>
+    <span class="lg"><span class="sw" style="background:#e8590c"></span> Hilfslinie / Gerade</span>
+    <span class="lg"><span class="sw" style="background:#f59f00;height:12px;width:12px;border-radius:50%"></span> markierter Punkt</span>
+    <span class="lg"><span class="sw" style="background:#adb5bd;height:12px;width:12px"></span> gefärbte Fläche</span>
+    <span class="lg">gestrichelt = Hilfslinie zum Ablesen</span>
+  </div>
+</div>
+
+<div class="sticky">
+  <div class="prow">
+    <span class="pstat"><b id="pDone">0</b> / <span id="pAll">0</span> Aufgaben geprüft</span>
+    <span class="pstat">richtig: <b id="pOk">0</b> · teilweise: <b id="pPart">0</b> · offen: <b id="pOpen">0</b></span>
+  </div>
+  <div class="pbar"><div class="pfill" id="pFill"></div></div>
+</div>
+
+<div id="content"></div>
+
+<div class="card" id="exportCard">
+  <h2>Ergebnisprotokoll herunterladen</h2>
+  <p style="font-size:.92rem">Tragen Sie Ihren Namen ein und laden Sie das Protokoll herunter. Es enthält für jede Aufgabe Ihre Eingaben, die Bewertung und – bei Fehlern – die richtige Lösung.</p>
+  <div class="qline">
+    <span class="lab" style="min-width:64px">Name</span>
+    <input type="text" id="stName" class="qtxt" placeholder="Vor- und Nachname">
+    <span class="lab" style="min-width:64px">Kurs</span>
+    <input type="text" id="stKurs" class="inl" placeholder="z. B. MA12-3">
+  </div>
+  <div class="btn-row">
+    <button class="btn-check" onclick="exportTxt()">Protokoll als .txt herunterladen</button>
+    <button class="btn-ghost" onclick="if(confirm('Wirklich alle Eingaben zurücksetzen?'))location.reload()">Alles zurücksetzen</button>
+  </div>
+  <p class="tiny" style="margin-top:10px">Legende in der Datei: <b>[v]</b> richtig · <b>[x]</b> falsch · <b>[~]</b> teilweise richtig · <b>[-]</b> nicht bearbeitet · <b>[i]</b> Freitext mit automatischer Rückmeldung</p>
+</div>
+
+<div class="card final">
+  <h2>Geschafft!</h2>
+  <p style="font-size:.95rem;max-width:640px;margin:0 auto">Sie haben jetzt das Werkzeug beisammen, mit dem die Integralrechnung funktioniert: Sie können Nullstellen und Schnittstellen bestimmen – das brauchen Sie für <b>Integrationsgrenzen</b> – und Sie können ableiten – das brauchen Sie, um <b>Stammfunktionen zu überprüfen</b>.</p>
+  <p style="font-size:.95rem;max-width:640px;margin:12px auto 0"><b>Und die entscheidende Frage der nächsten Wochen lautet:</b> Wenn ich aus dem Graphen von f den Graphen von f′ gewinnen kann – geht das auch rückwärts? Und was hat das mit Flächen zu tun?</p>
+</div>
+
+<p class="tiny" style="text-align:center;margin-top:26px">Erstellt für den Mathematikunterricht Jg. 12 gA · funktioniert offline · keine Daten werden gesendet</p>
+</div>
+
+<script>
+"use strict";
+
+/* ============================ SVG-PLOTTER ============================ */
+function plot(o){
+  const W=o.w||300,H=o.h||230,m=o.m||{l:26,r:12,t:12,b:24};
+  const x0=o.xmin,x1=o.xmax,y0=o.ymin,y1=o.ymax;
+  const px=x=>m.l+(x-x0)/(x1-x0)*(W-m.l-m.r);
+  const py=y=>H-m.b-(y-y0)/(y1-y0)*(H-m.t-m.b);
+  let s=`<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,Arial" font-size="10">`;
+  s+=`<rect x="0" y="0" width="${W}" height="${H}" fill="#ffffff" rx="8"/>`;
+  // grid
+  for(let x=Math.ceil(x0);x<=x1;x++) s+=`<line x1="${px(x)}" y1="${m.t}" x2="${px(x)}" y2="${H-m.b}" stroke="#e3e3ee" stroke-width="1"/>`;
+  for(let y=Math.ceil(y0);y<=y1;y++) s+=`<line x1="${m.l}" y1="${py(y)}" x2="${W-m.r}" y2="${py(y)}" stroke="#e3e3ee" stroke-width="1"/>`;
+  // shading
+  if(o.shade) o.shade.forEach(sh=>{
+    let d=`M ${px(sh.a)} ${py(sh.base!==undefined?sh.base:0)} `;
+    const N=90;
+    for(let i=0;i<=N;i++){const x=sh.a+(sh.b-sh.a)*i/N;d+=`L ${px(x)} ${py(sh.f(x))} `;}
+    d+=`L ${px(sh.b)} ${py(sh.base!==undefined?sh.base:0)} Z`;
+    s+=`<path d="${d}" fill="${sh.color||'#adb5bd'}" fill-opacity="${sh.op||.42}"/>`;
+  });
+  // axes
+  const ax=(y0<=0&&y1>=0)?py(0):H-m.b, ay=(x0<=0&&x1>=0)?px(0):m.l;
+  s+=`<line x1="${m.l-4}" y1="${ax}" x2="${W-m.r}" y2="${ax}" stroke="#212529" stroke-width="1.6"/>`;
+  s+=`<polygon points="${W-m.r},${ax} ${W-m.r-7},${ax-3.5} ${W-m.r-7},${ax+3.5}" fill="#212529"/>`;
+  s+=`<line x1="${ay}" y1="${H-m.b+4}" x2="${ay}" y2="${m.t}" stroke="#212529" stroke-width="1.6"/>`;
+  s+=`<polygon points="${ay},${m.t} ${ay-3.5},${m.t+7} ${ay+3.5},${m.t+7}" fill="#212529"/>`;
+  s+=`<text x="${W-m.r-4}" y="${ax+15}" fill="#212529" text-anchor="end">${o.xlab||'x'}</text>`;
+  s+=`<text x="${ay+7}" y="${m.t+10}" fill="#212529">${o.ylab||'y'}</text>`;
+  // ticks – bei noscale ohne Zahlen (nur Orientierung, kein Ablesen)
+  const stx=o.stepx||1, sty=o.stepy||1;
+  for(let x=Math.ceil(x0/stx)*stx;x<=x1;x+=stx){ if(Math.abs(x)<1e-9)continue;
+    s+=`<line x1="${px(x)}" y1="${ax-3}" x2="${px(x)}" y2="${ax+3}" stroke="#212529" stroke-width="1.4"/>`;
+    if(!o.noscale) s+=`<text x="${px(x)}" y="${ax+14}" fill="#495057" text-anchor="middle">${+x.toFixed(2)}</text>`;}
+  for(let y=Math.ceil(y0/sty)*sty;y<=y1;y+=sty){ if(Math.abs(y)<1e-9)continue;
+    s+=`<line x1="${ay-3}" y1="${py(y)}" x2="${ay+3}" y2="${py(y)}" stroke="#212529" stroke-width="1.4"/>`;
+    if(!o.noscale) s+=`<text x="${ay-6}" y="${py(y)+3.5}" fill="#495057" text-anchor="end">${+y.toFixed(2)}</text>`;}
+  // curves
+  (o.fns||[]).forEach(fn=>{
+    let d='',pen=false;const N=420;
+    for(let i=0;i<=N;i++){const x=x0+(x1-x0)*i/N,y=fn.f(x);
+      if(!isFinite(y)||y<y0-1.5||y>y1+1.5){pen=false;continue;}
+      d+=(pen?'L':'M')+px(x)+' '+py(y)+' ';pen=true;}
+    s+=`<path d="${d}" fill="none" stroke="${fn.color||'#0b7285'}" stroke-width="${fn.wd||2.4}" ${fn.dash?'stroke-dasharray="6 4"':''} stroke-linecap="round" stroke-linejoin="round"/>`;
+    if(fn.label){const lx=fn.lx!==undefined?fn.lx:x1-(x1-x0)*.18, ly=fn.f(lx);
+      s+=`<text x="${px(lx)+6}" y="${py(ly)-6}" fill="${fn.color||'#0b7285'}" font-weight="700">${fn.label}</text>`;}
+  });
+  // extra lines
+  (o.lines||[]).forEach(L=>{s+=`<line x1="${px(L.x1)}" y1="${py(L.y1)}" x2="${px(L.x2)}" y2="${py(L.y2)}" stroke="${L.color||'#e8590c'}" stroke-width="${L.wd||1.7}" ${L.dash?'stroke-dasharray="5 4"':''}/>`;});
+  // points
+  (o.pts||[]).forEach(p=>{
+    s+=`<circle cx="${px(p.x)}" cy="${py(p.y)}" r="${p.r||4.6}" fill="${p.color||'#f59f00'}" stroke="#fff" stroke-width="1.6"/>`;
+    if(p.t&&!o.noscale) s+=`<text x="${px(p.x)+(p.dx||8)}" y="${py(p.y)+(p.dy||-8)}" fill="#212529" font-weight="700">${p.t}</text>`;});
+  // free text
+  (o.texts||[]).forEach(t=>{s+=`<text x="${px(t.x)}" y="${py(t.y)}" fill="${t.color||'#212529'}" font-weight="${t.w||600}" text-anchor="${t.anchor||'middle'}" font-size="${t.size||10}">${t.s}</text>`;});
+  return s+'</svg>';
+}
+function fig(svg,cap,ttl){return `<div class="fig">${ttl?`<div class="figttl">${ttl}</div>`:''}${svg}${cap?`<div class="cap">${cap}</div>`:''}</div>`;}
+
+/* ============================ AUFGABEN-DATEN ============================ */
+
+/* Bruch mit waagerechtem Bruchstrich */
+const fr=(a,b)=>'<span class="frac"><span class="num">'+a+'</span><span class="den">'+b+'</span></span>';
+
+
+/* --- Normalisierung für Term- und Zahleneingaben --- */
+const SUP={'⁰':'0','¹':'1','²':'2','³':'3','⁴':'4','⁵':'5','⁶':'6','⁷':'7','⁸':'8','⁹':'9','⁻':'-','\u235F':'.'};
+function nt(s){
+  return (s||'').toString().toLowerCase()
+    .replace(/\s+/g,'')
+    .replace(/[−–—]/g,'-')
+    /* Dezimalpunkt innerhalb einer Hochstellung (x⁻⁰·⁵) zunächst sichern */
+    .replace(/([⁰¹²³⁴⁵⁶⁷⁸⁹])·([⁰¹²³⁴⁵⁶⁷⁸⁹])/g,'$1\u235F$2')
+    /* zusammenhängende Hochstellungen (x⁻⁴, x², …) zu ^-Schreibweise */
+    .replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹⁻\u235F]+/g,m=>'^'+[...m].map(c=>SUP[c]||c).join(''))
+    .replace(/,/g,'.')
+    .replace(/[·*]/g,'')
+    .replace(/=0$/,'')
+    .replace(/^\+/,'');
+}
+/* T('x^2-6x+5', ...) – akzeptiert alle angegebenen Schreibweisen */
+const T=(...v)=>(x)=>{const n=nt(x);return n!==''&&v.some(a=>nt(a)===n);};
+/* N(2.54, 0.02) – Zahleneingabe mit Toleranz */
+const N=(val,tol)=>(x)=>{
+  const s=nt(x).replace(/[^0-9.\-]/g,'');
+  const z=parseFloat(s);
+  return isFinite(z)&&Math.abs(z-val)<=(tol===undefined?0.005:tol);
+};
+/* TEQ – wie T, aber die Eingabe MUSS „= 0" enthalten (Normalform für die pq-Formel) */
+function ntSide(s){
+  let r=(s||'').toString().replace(/\s+/g,'').replace(/[−–—]/g,'-');
+  if(/^0=/.test(r)) r=r.slice(2);
+  else if(/=0$/.test(r)) r=r.slice(0,-2);
+  else return null;
+  return nt(r);
+}
+const TEQ=(...v)=>(x)=>{const a=ntSide(x); return a!==null&&a!==''&&v.some(b=>nt(b)===a);};
+
+/* KEINE – für Gleichungen ohne reelle Lösung */
+const KEINE=T('keine','keinelösung','keineloesung','keinereellelösung','keinelösunginℝ','keinelösungen','nichtlösbar','∅','leeremenge');
+
+/* ---------- Bausteine für die Rechenweg-Diagnose ---------- */
+const DIAG_NULL={
+ frage:'Kreuzen Sie ehrlich an, was auf Ihren Rechenweg zutrifft. Daraus entsteht Ihre Rückmeldung.',
+ allesGut:'Ihr Weg trägt. Prüfen Sie zum Abschluss nur noch, ob Sie wirklich <b>alle</b> Lösungen aufgeschrieben haben und ob hinter jedem Schritt ein Befehlsstrich steht.',
+ items:[
+  {s:'Ich habe zuerst geprüft, welche Bauart die Gleichung hat, und dann eine Strategie gewählt.',good:true,
+   fb:'Sie haben mit der Analyse begonnen statt sofort loszurechnen – genau so geht man an Gleichungen heran.'},
+  {s:'Ich habe hinter jeden Umformungsschritt einen Befehlsstrich geschrieben.',good:true,
+   fb:'Damit ist Ihr Weg für andere und für Sie selbst nachvollziehbar. In der Klausur gibt das Punkte, auch wenn das Ergebnis am Ende nicht stimmt.'},
+  {s:'Ich habe am Ende die Probe gemacht und meine Lösung eingesetzt.',good:true,
+   fb:'Die Probe ist die einzige Kontrolle, die Sie ohne Lösungsblatt haben. Sehr gut, dass Sie sie machen.'},
+  {s:'Ich habe alle Lösungen aufgeschrieben, auch x = 0.',good:true,
+   fb:'Gerade x = 0 wird beim Ausklammern gern übersehen. Sie haben aufgepasst.'},
+  {s:'Ich habe die pq-Formel angewendet, ohne vorher durch die Zahl vor dem x² zu teilen.',good:false,
+   fb:'Damit stimmen p und q nicht. Die pq-Formel gilt nur, wenn vor dem x² eine 1 steht.',
+   fix:'Teilen Sie zuerst die <b>gesamte</b> Gleichung durch den Vorfaktor – jeden einzelnen Summanden. Aus 2x² − 12x + 10 = 0 wird so x² − 6x + 5 = 0, und erst hier sind p = −6 und q = 5 ablesbar.',
+   merke:'Vor der pq-Formel immer zwei Dinge prüfen: Steht auf einer Seite eine 0? Steht vor dem x² eine 1?'},
+  {s:'Ich habe die Gleichung durch x geteilt.',good:false,
+   fb:'Dabei geht die Lösung x = 0 verloren – Sie haben also mindestens eine Lösung zu wenig.',
+   fix:'Klammern Sie x aus, statt zu teilen: Aus 2x² + 6x = 0 wird 2x(x + 3) = 0. Dann liefert der Satz vom Nullprodukt beide Lösungen, x = 0 und x = −3.',
+   merke:'Durch x darf man nie teilen, weil x auch null sein könnte. Ausklammern ist immer der sichere Weg.'},
+  {s:'Beim Wurzelziehen habe ich nur die positive Lösung angegeben.',good:false,
+   fb:'Es fehlt die zweite Lösung. Aus x² = 16 folgt nicht nur x = 4, sondern auch x = −4.',
+   fix:'Schreiben Sie beim Wurzelziehen konsequent x = ± … und lösen Sie danach beide Fälle einzeln auf.',
+   merke:'Wurzelziehen liefert zwei Lösungen – außer wenn rechts eine 0 steht, dann ist es genau eine.'},
+  {s:'Ich habe ausgeklammert, obwohl nicht in jedem Summanden ein x steckt.',good:false,
+   fb:'Ausklammern ist hier nicht erlaubt, deshalb stimmt schon der erste Schritt nicht.',
+   fix:'Prüfen Sie vorher jeden Summanden einzeln. Bei x² + 6x + 5 = 0 enthält die 5 kein x – hier brauchen Sie die pq-Formel.',
+   merke:'Ausklammern nur, wenn wirklich <b>jeder</b> Summand ein x enthält.'},
+  {s:'Ich habe ein Produkt ausmultipliziert, obwohl es schon faktorisiert dastand.',good:false,
+   fb:'Das ist nicht falsch, macht die Aufgabe aber unnötig schwer – und schafft neue Fehlerquellen.',
+   fix:'Steht der Term als Produkt da, etwa (x + 3)(4 − x) = 0, setzen Sie direkt jeden Faktor null.',
+   merke:'Ein Produkt gleich null ist ein Geschenk. Nicht ausmultiplizieren!'},
+  {s:'Ich habe beim Sortieren ein Vorzeichen verwechselt.',good:false,
+   fb:'Vorzeichenfehler sind der häufigste Grund für falsche Ergebnisse – und sie fallen ohne Probe nicht auf.',
+   fix:'Schreiben Sie jeden Schritt einzeln und nur eine Umformung pro Zeile. Machen Sie am Ende die Probe in der <b>ursprünglichen</b> Gleichung.',
+   merke:'Lieber eine Zeile mehr als zwei Umformungen im Kopf.'},
+  {s:'Ich bin an einer Stelle steckengeblieben und habe nicht zu Ende gerechnet.',good:false,
+   fb:'Das ist kein Beinbruch, aber Sie sollten wissen, wo genau der Faden gerissen ist.',
+   fix:'Markieren Sie die Zeile, ab der es nicht weiterging, und vergleichen Sie sie mit den Bauarten im Hilfe-Kasten. Nutzen Sie den Tipp-Assistenten und beschreiben Sie genau diese Stelle.',
+   merke:'Notieren Sie sich die Stelle. Wer weiß, wo es hakt, kann gezielt fragen.'}]};
+
+const DIAG_SCHNITT={
+ frage:'Kreuzen Sie ehrlich an, was auf Ihren Rechenweg zutrifft. Daraus entsteht Ihre Rückmeldung.',
+ allesGut:'Ihr Weg trägt. Kontrollieren Sie nur noch, ob jeder Schnittpunkt als Koordinatenpaar S(x | y) dasteht und ob Sie die Probe in beiden Funktionen gemacht haben.',
+ items:[
+  {s:'Ich habe mit dem Ansatz f(x) = g(x) begonnen.',good:true,
+   fb:'Der Ansatz sitzt. Damit ist der wichtigste Schritt getan.'},
+  {s:'Ich habe alle x-Terme auf eine Seite und alle Zahlen auf die andere gebracht.',good:true,
+   fb:'Sauber sortiert – so entsteht von selbst eine Gleichung, die Sie mit den Strategien aus Block A lösen können.'},
+  {s:'Ich habe hinter jeden Umformungsschritt einen Befehlsstrich geschrieben.',good:true,
+   fb:'Genau so soll ein Rechenweg aussehen. Das ist auch in der Klausur punktrelevant.'},
+  {s:'Ich habe die x-Werte eingesetzt und die Schnittpunkte als S(x | y) angegeben.',good:true,
+   fb:'Die Aufgabe ist damit wirklich beantwortet – ein Punkt braucht beide Koordinaten.'},
+  {s:'Ich habe die Probe gemacht und in beide Funktionen eingesetzt.',good:true,
+   fb:'Die beste Kontrolle überhaupt: Kommt zweimal derselbe y-Wert heraus, stimmt Ihr Ergebnis.'},
+  {s:'Ich habe nur die x-Werte hingeschrieben, keine Punkte.',good:false,
+   fb:'Damit ist die Aufgabe nur halb beantwortet. Gefragt waren Schnitt<b>punkte</b>.',
+   fix:'Setzen Sie jeden x-Wert in f oder g ein, berechnen Sie den y-Wert und schreiben Sie S(x | y).',
+   merke:'Eine Zahl ist noch kein Punkt. Ein Punkt hat immer zwei Koordinaten.'},
+  {s:'Ich habe beim Sortieren ein Vorzeichen verwechselt.',good:false,
+   fb:'Das ist die häufigste Fehlerquelle in diesem Aufgabentyp – besonders wenn auf beiden Seiten x-Terme stehen.',
+   fix:'Machen Sie nur eine Umformung pro Zeile und schreiben Sie den Befehlsstrich dazu. Aus „= −x + 5" wird beim Hinüberbringen ein „+ x" auf beiden Seiten.',
+   merke:'Eine Umformung pro Zeile. Das kostet Papier und spart Fehler.'},
+  {s:'Ich habe durch x geteilt, statt x auszuklammern.',good:false,
+   fb:'Dabei geht der Schnittpunkt bei x = 0 verloren.',
+   fix:'Klammern Sie x aus: Aus x³ − x² − 6x = 0 wird x(x² − x − 6) = 0. Der erste Faktor liefert x = 0, die Klammer die übrigen Lösungen.',
+   merke:'Bei ganzrationalen Gleichungen ohne konstantes Glied immer ausklammern, nie teilen.'},
+  {s:'Ich habe bei der quadratischen Gleichung nicht durch den Vorfaktor geteilt.',good:false,
+   fb:'Dann sind p und q falsch abgelesen und alle folgenden Werte stimmen nicht mehr.',
+   fix:'Teilen Sie die gesamte Gleichung durch die Zahl vor dem x², bevor Sie p und q bestimmen.',
+   merke:'Die pq-Formel setzt eine 1 vor dem x² voraus.'},
+  {s:'Ich habe weniger Schnittpunkte gefunden, als der Grad der Gleichung erlaubt hätte.',good:false,
+   fb:'Möglicherweise fehlt Ihnen eine Lösung – bei einer Gleichung dritten Grades sind bis zu drei möglich.',
+   fix:'Prüfen Sie: Haben Sie beim Ausklammern den Faktor x als eigene Lösung mitgezählt? Und haben Sie die Klammer vollständig gelöst?',
+   merke:'Der Grad der Gleichung sagt Ihnen, wie viele Lösungen höchstens möglich sind. Das ist eine gute Kontrolle.'},
+  {s:'Ich bin an einer Stelle steckengeblieben und habe nicht zu Ende gerechnet.',good:false,
+   fb:'Wichtig ist jetzt, dass Sie die Stelle genau benennen können.',
+   fix:'Markieren Sie die Zeile, ab der es nicht weiterging, und fragen Sie den Tipp-Assistenten genau danach.',
+   merke:'Wer weiß, wo es hakt, kann gezielt fragen – und kommt schneller weiter.'}]};
+
+const DIAG_GTR={
+ frage:'Kreuzen Sie ehrlich an, wie Sie mit dem GTR gearbeitet haben. Daraus entsteht Ihre Rückmeldung.',
+ allesGut:'Ihr Vorgehen passt. Achten Sie zum Abschluss nur noch darauf, dass zu jedem Zahlenwert die Einheit dabeisteht und dass Ihre Antwort im Sachzusammenhang formuliert ist.',
+ items:[
+  {s:'Ich habe beide Funktionen eingegeben und das Anzeigefenster passend eingestellt.',good:true,
+   fb:'Das richtige Fenster ist die halbe Miete – nur so sehen Sie überhaupt alle Schnittpunkte.'},
+  {s:'Ich habe die Analysefunktion des Rechners benutzt (Intersect, Root oder Maximum).',good:true,
+   fb:'So bekommen Sie genaue Werte statt geschätzter. Genau dafür ist der GTR da.'},
+  {s:'Ich habe Fenstereinstellung und verwendete Befehle im Heft notiert.',good:true,
+   fb:'Damit ist Ihr Vorgehen nachvollziehbar. Bei GTR-Aufgaben ist genau das der geforderte „Rechenweg".'},
+  {s:'Ich habe zu jedem Ergebnis die Einheit geschrieben und es im Sachzusammenhang gedeutet.',good:true,
+   fb:'Die Deutung ist der Teil, der in Klausuren am häufigsten vergessen wird. Sehr gut.'},
+  {s:'Ich habe das Standardfenster benutzt und nichts verändert.',good:false,
+   fb:'Im Standardfenster liegen viele Schnittpunkte außerhalb des sichtbaren Bereichs – Sie übersehen sie dann einfach.',
+   fix:'Überlegen Sie vorher, in welchem Bereich die Lösung liegen kann, und stellen Sie das Fenster entsprechend ein. Bei einer Stückzahl bis 300 zum Beispiel 0 ≤ x ≤ 300.',
+   merke:'Erst denken, dann das Fenster einstellen. Was man nicht sieht, findet der Rechner auch nicht.'},
+  {s:'Ich habe die Werte vom Bildschirm abgeschätzt, statt die Analysefunktion zu nutzen.',good:false,
+   fb:'Abgelesene Werte sind ungenau – auf zwei Nachkommastellen kommen Sie so nicht.',
+   fix:'Nutzen Sie „Intersect" für Schnittpunkte, „Root" für Nullstellen und „Maximum"/„Minimum" für Extrempunkte.',
+   merke:'Ablesen ist Schätzen. Die Analysefunktionen liefern die Zahlen, die gefragt sind.'},
+  {s:'Ich habe nur einen Schnittpunkt gefunden, obwohl es mehrere geben könnte.',good:false,
+   fb:'Der GTR findet mit „Intersect" immer nur einen Punkt – den in der Nähe des Cursors.',
+   fix:'Verschieben Sie den Cursor und wiederholen Sie „Intersect" für jeden weiteren Schnittpunkt. Überlegen Sie vorab über den Grad, wie viele es sein können.',
+   merke:'Ein Aufruf, ein Schnittpunkt. Für alle weiteren muss man erneut suchen.'},
+  {s:'Ich habe eine unrealistische Lösung mit angegeben, zum Beispiel eine negative Zeit oder Stückzahl.',good:false,
+   fb:'Rechnerisch mag der Wert stimmen, im Sachzusammenhang ist er ohne Bedeutung.',
+   fix:'Geben Sie beide Lösungen an, begründen Sie aber ausdrücklich, welche Sie verwerfen und warum – etwa weil die Zeitmessung erst bei t = 0 beginnt.',
+   merke:'Der Sachkontext schränkt den Definitionsbereich ein. Immer prüfen, ob die Lösung sinnvoll ist.'},
+  {s:'Ich habe das Ergebnis nicht auf die geforderte Genauigkeit gerundet.',good:false,
+   fb:'Bei Sachaufgaben gehört die Rundung zur Antwort dazu.',
+   fix:'Runden Sie erst am Ende und nur so weit, wie in der Aufgabe verlangt. Bei Stückzahlen muss man außerdem überlegen, ob auf- oder abgerundet wird.',
+   merke:'Zwischenergebnisse nie runden, das Endergebnis immer sinnvoll.'},
+  {s:'Ich habe die Aufgabe von Hand gerechnet, obwohl der GTR verlangt war.',good:false,
+   fb:'Rechnen können Sie offenbar – hier ging es aber darum, den zweiten Weg zu üben.',
+   fix:'Rechnen Sie die Aufgabe noch einmal ausschließlich grafisch: beide Funktionen plotten, Fenster einstellen, Analysefunktion nutzen.',
+   merke:'Im Abitur gibt es beide Aufgabentypen. Der grafische Weg muss genauso sitzen wie der rechnerische.'}]};
+
+const DIAG_ABL={
+ frage:'Kreuzen Sie ehrlich an, was auf Ihren Rechenweg zutrifft. Daraus entsteht Ihre Rueckmeldung.',
+ allesGut:'Ihr Weg traegt. Pruefen Sie zum Abschluss, ob Sie f und f\u2032 sauber untereinander geschrieben haben und ob zu jedem Punkt beide Koordinaten dastehen.',
+ items:[
+  {s:'Ich habe zuerst f\u2032 vollstaendig aufgestellt und erst danach Werte eingesetzt.',good:true,
+   fb:'Genau die richtige Reihenfolge. Wer sofort einsetzt, verliert schnell den Ueberblick.'},
+  {s:'Ich habe Brueche und Wurzeln vor dem Ableiten in Potenzschreibweise gebracht.',good:true,
+   fb:'Damit ist die Potenzregel ueberhaupt erst anwendbar.'},
+  {s:'Ich habe hinter jeden Schritt einen Befehlsstrich oder eine kurze Begruendung geschrieben.',good:true,
+   fb:'So ist Ihr Weg nachvollziehbar. Das gibt in der Klausur Punkte, auch wenn das Endergebnis nicht stimmt.'},
+  {s:'Ich habe das Endergebnis ohne negative Exponenten angegeben, also als Bruch.',good:true,
+   fb:'Genau so soll ein Ergebnis aussehen. Negative Exponenten gehoeren in den Rechenweg, nicht in die Antwort.'},
+  {s:'Ich habe eine Konstante wie plus 4 in die Ableitung uebernommen.',good:false,
+   fb:'Ein konstanter Summand wird beim Ableiten zu 0 und darf in f\u2032 nicht mehr auftauchen.',
+   fix:'Aus f(x) = 3x\u2074 \u2212 5x\u00b2 + 2x \u2212 7 wird f\u2032(x) = 12x\u00b3 \u2212 10x + 2. Die \u22127 verschwindet vollstaendig.',
+   merke:'Konstanter Summand faellt weg, konstanter Faktor bleibt stehen.'},
+  {s:'Bei negativen Exponenten habe ich den Exponenten groesser statt kleiner gemacht.',good:false,
+   fb:'Damit stimmt die Ableitung nicht. Aus x hoch \u22122 wird nicht \u22122 mal x hoch \u22121.',
+   fix:'Der Exponent wird immer um 1 verringert, auch im Negativen: aus x hoch \u22122 wird \u22122 mal x hoch \u22123.',
+   merke:'Um 1 kleiner gilt auf der ganzen Zahlengeraden \u2013 von 2 auf 1 genauso wie von \u22122 auf \u22123.'},
+  {s:'Ich habe eine Klammer nicht ausmultipliziert, sondern die Faktoren einzeln abgeleitet.',good:false,
+   fb:'So funktioniert das Ableiten eines Produkts nicht \u2013 die Produktregel kennen Sie noch nicht.',
+   fix:'Multiplizieren Sie zuerst aus: (2x \u2212 1)\u00b2 = 4x\u00b2 \u2212 4x + 1. Danach summandenweise ableiten.',
+   merke:'Bei Klammern immer erst ausmultiplizieren, dann ableiten.'},
+  {s:'Ich habe den x-Wert in f eingesetzt, obwohl die Steigung gefragt war.',good:false,
+   fb:'Dann haben Sie den Funktionswert statt der Steigung berechnet.',
+   fix:'Die Steigung an der Stelle a bekommen Sie mit f\u2032(a). Fuer den Punkt selbst brauchen Sie zusaetzlich f(a).',
+   merke:'f gibt die Hoehe an, f\u2032 die Steigung.'},
+  {s:'Ich habe f\u2032(x) = 0 aufgestellt, die Gleichung aber nicht zu Ende geloest.',good:false,
+   fb:'Der Ansatz stimmt, es fehlt nur der letzte Teil.',
+   fix:'f\u2032(x) = 0 ist eine gewoehnliche Gleichung. Steckt in jedem Summanden ein x, klammern Sie aus \u2013 sonst pq-Formel.',
+   merke:'Ableiten und Gleichungen loesen sind zwei Werkzeuge. Beide muessen sitzen.'},
+  {s:'Ich bin an einer Stelle steckengeblieben und habe nicht zu Ende gerechnet.',good:false,
+   fb:'Wichtig ist, dass Sie die Stelle benennen koennen.',
+   fix:'Markieren Sie die Zeile, ab der es hakt, und beschreiben Sie sie im Tipp-Assistenten.',
+   merke:'Wer weiss, wo es hakt, kann gezielt fragen.'}]};
+
+const BLOCKS=[
+/* ================================================================= BLOCK C */
+{id:'C',title:'Block C · Ableitungsregeln',
+ lead:'Ohne sicheres Ableiten keine Stammfunktionen. In wenigen Wochen gehen Sie genau diesen Weg rückwärts.',
+ code:'6194',
+ info:`<div class="info">
+   <p>Kennen Sie die Ableitungen bestimmter Funktionen, so können Sie mit den folgenden Regeln auch „Verwandte" dieser Funktionen schnell und sicher ableiten. Zu jeder Regel steht hier ein durchgerechnetes Beispiel.</p>
+   <p class="tiny">Lesen Sie jeden Rechenweg von oben nach unten: links die Rechnung, in der Mitte der Befehlsstrich, rechts die Begründung.</p>
+
+   <div class="strat-item">
+     <div class="strat-head"><span class="strat-nr">1</span><span class="strat-form">Potenzregel</span><span class="strat-name">f(x) = xⁿ &nbsp;⟹&nbsp; f′(x) = n · xⁿ⁻¹</span><span class="strat-sub">Beispiel: f(x) = x⁶</span></div>
+     <div class="calcrow"><span class="eq">f(x) = x⁶</span><span class="cmd">|</span><span class="why">Exponent ablesen: n = 6</span></div>
+     <div class="calcrow"><span class="eq">f′(x) = 6 · x⁶⁻¹</span><span class="cmd">|</span><span class="why">Exponent nach vorn holen, Exponent um 1 verringern</span></div>
+     <div class="calcrow"><span class="eq">f′(x) = 6x⁵</span><span class="cmd">|</span><span class="why">Ergebnis</span></div>
+   </div>
+
+   <div class="strat-item">
+     <div class="strat-head"><span class="strat-nr">2</span><span class="strat-form">Konstante Summanden</span><span class="strat-name">f(x) = g(x) + c &nbsp;⟹&nbsp; f′(x) = g′(x)</span><span class="strat-sub">Beispiel: f(x) = x⁶ + 10</span></div>
+     <div class="calcrow"><span class="eq">f(x) = x⁶ + 10</span><span class="cmd">|</span><span class="why">Die 10 ist ein konstanter Summand</span></div>
+     <div class="calcrow"><span class="eq">f′(x) = 6x⁵ + 0</span><span class="cmd">|</span><span class="why">x⁶ nach der Potenzregel, die 10 wird zu 0</span></div>
+     <div class="calcrow"><span class="eq">f′(x) = 6x⁵</span><span class="cmd">|</span><span class="why">Ein konstanter Summand fällt beim Ableiten weg</span></div>
+     <div class="strat-warn">Anschaulich: Die 10 verschiebt den Graphen nur nach oben. An der <b>Steigung</b> ändert das nichts – deshalb taucht sie in f′ nicht mehr auf.</div>
+   </div>
+
+   <div class="strat-item">
+     <div class="strat-head"><span class="strat-nr">3</span><span class="strat-form">Faktorregel</span><span class="strat-name">f(x) = a · g(x) &nbsp;⟹&nbsp; f′(x) = a · g′(x)</span><span class="strat-sub">Beispiel: f(x) = 2,5x²</span></div>
+     <div class="calcrow"><span class="eq">f(x) = 2,5 · x²</span><span class="cmd">|</span><span class="why">2,5 ist ein konstanter Faktor</span></div>
+     <div class="calcrow"><span class="eq">f′(x) = 2,5 · 2x</span><span class="cmd">|</span><span class="why">Der Faktor bleibt stehen, nur x² wird abgeleitet</span></div>
+     <div class="calcrow"><span class="eq">f′(x) = 5x</span><span class="cmd">|</span><span class="why">Zusammenfassen</span></div>
+     <div class="strat-warn">Ein konstanter <b>Faktor</b> bleibt erhalten, ein konstanter <b>Summand</b> fällt weg. Diese beiden Regeln werden am häufigsten verwechselt.</div>
+   </div>
+
+   <div class="strat-item">
+     <div class="strat-head"><span class="strat-nr">4</span><span class="strat-form">Summenregel</span><span class="strat-name">f(x) = g(x) + h(x) &nbsp;⟹&nbsp; f′(x) = g′(x) + h′(x)</span><span class="strat-sub">Beispiel: f(x) = x² + x⁶</span></div>
+     <div class="calcrow"><span class="eq">f(x) = x² + x⁶</span><span class="cmd">|</span><span class="why">Zwei Summanden</span></div>
+     <div class="calcrow"><span class="eq">f′(x) = 2x + 6x⁵</span><span class="cmd">|</span><span class="why">Jeden Summanden einzeln ableiten</span></div>
+   </div>
+
+   <div class="strat-item">
+     <div class="strat-head"><span class="strat-nr">5</span><span class="strat-form">Sinus und Kosinus</span><span class="strat-name">(sin x)′ = cos x &nbsp;·&nbsp; (cos x)′ = −sin x</span><span class="strat-sub">Beispiel: f(x) = 3x + sin(x)</span></div>
+     <div class="calcrow"><span class="eq">f(x) = 3x + sin(x)</span><span class="cmd">|</span><span class="why">Summenregel: beide Summanden einzeln</span></div>
+     <div class="calcrow"><span class="eq">f′(x) = 3 + cos(x)</span><span class="cmd">|</span><span class="why">3x wird zu 3, sin(x) wird zu cos(x)</span></div>
+     <div class="strat-warn">Nur beim <b>Kosinus</b> kommt ein Minus dazu. Beim Sinus nicht.</div>
+   </div>
+
+   <div class="strat-item">
+     <div class="strat-head"><span class="strat-nr">6</span><span class="strat-form">Brüche zuerst umschreiben</span><span class="strat-name">${fr('1','xⁿ')} = x⁻ⁿ &nbsp;und&nbsp; x⁻ⁿ = ${fr('1','xⁿ')}</span><span class="strat-sub">Beispiel: f(x) = ${fr('1','x²')}</span></div>
+     <div class="calcrow"><span class="eq">f(x) = ${fr('1','x²')}</span><span class="cmd">|</span><span class="why">So greift keine Regel – erst als Potenz schreiben</span></div>
+     <div class="calcrow"><span class="eq">f(x) = x⁻²</span><span class="cmd">|</span><span class="why">Jetzt ist die Potenzregel anwendbar</span></div>
+     <div class="calcrow"><span class="eq">f′(x) = −2 · x⁻³</span><span class="cmd">|</span><span class="why">Exponent nach vorn, Exponent um 1 verringern</span></div>
+     <div class="calcrow"><span class="eq">f′(x) = −${fr('2','x³')}</span><span class="cmd">|</span><span class="why">Zum Schluss wieder als Bruch schreiben</span></div>
+     <div class="strat-warn"><b>Zwei Dinge merken:</b> Der Exponent wird auch im Negativen <b>kleiner</b> – von −2 auf −3, nicht auf −1. Und: Das <b>Endergebnis wird immer ohne negative Exponenten</b> angegeben, also als Bruch.</div>
+   </div>
+
+   <div class="strat-item">
+     <div class="strat-head"><span class="strat-nr">7</span><span class="strat-form">Wurzeln zuerst umschreiben</span><span class="strat-name">ⁿ√(x<sup>m</sup>) = x<sup>m/n</sup></span><span class="strat-sub">Beispiel: f(x) = √x</span></div>
+     <div class="calcrow"><span class="eq">√x = ²√(x¹) = x<sup>1/2</sup></span><span class="cmd">|</span><span class="why">Allgemein: Wurzelexponent n kommt in den Nenner, Potenz m in den Zähler</span></div>
+     <div class="calcrow"><span class="eq">³√(x²) = x<sup>2/3</sup></span><span class="cmd">|</span><span class="why">Zweites Beispiel zur Regel</span></div>
+     <div class="calcrow"><span class="eq">f(x) = x<sup>0,5</sup></span><span class="cmd">|</span><span class="why">Zurück zum Beispiel: √x als Potenz geschrieben</span></div>
+     <div class="calcrow"><span class="eq">f′(x) = 0,5 · x⁻⁰·⁵</span><span class="cmd">|</span><span class="why">Potenzregel: 0,5 nach vorn, Exponent 0,5 − 1 = −0,5</span></div>
+     <div class="calcrow"><span class="eq">f′(x) = ${fr('1','2√x')}</span><span class="cmd">|</span><span class="why">Negativen Exponenten als Bruch schreiben</span></div>
+   </div>
+
+   <div class="strat-item">
+     <div class="strat-head"><span class="strat-nr">8</span><span class="strat-form">Klammern ausmultiplizieren</span><span class="strat-name">erst ausmultiplizieren, dann ableiten</span><span class="strat-sub">Beispiel: f(x) = (2x − 1)²</span></div>
+     <div class="calcrow"><span class="eq">f(x) = (2x − 1)²</span><span class="cmd">|</span><span class="why">Binomische Formel anwenden</span></div>
+     <div class="calcrow"><span class="eq">f(x) = 4x² − 4x + 1</span><span class="cmd">|</span><span class="why">Jetzt Summen- und Faktorregel</span></div>
+     <div class="calcrow"><span class="eq">f′(x) = 8x − 4</span><span class="cmd">|</span><span class="why">Die 1 fällt als konstanter Summand weg</span></div>
+     <div class="strat-warn">Auf keinen Fall die Faktoren einzeln ableiten und multiplizieren. Die Produktregel lernen Sie erst später – bis dahin gilt: <b>ausmultiplizieren</b>.</div>
+   </div>
+
+   <div class="strat-item">
+     <div class="strat-head"><span class="strat-nr">9</span><span class="strat-form">Zweite Ableitung</span><span class="strat-name">f″ ist die Ableitung von f′</span><span class="strat-sub">Beispiel: f(x) = x³ − 3x² + 4</span></div>
+     <div class="calcrow"><span class="eq">f(x) = x³ − 3x² + 4</span><span class="cmd">|</span><span class="why">Ausgangsfunktion</span></div>
+     <div class="calcrow"><span class="eq">f′(x) = 3x² − 6x</span><span class="cmd">|</span><span class="why">Erste Ableitung, die 4 fällt weg</span></div>
+     <div class="calcrow"><span class="eq">f″(x) = 6x − 6</span><span class="cmd">|</span><span class="why">f′ noch einmal ableiten – dieselben Regeln</span></div>
+   </div>
+
+   <div class="strat-item">
+     <div class="strat-head"><span class="strat-nr">10</span><span class="strat-form">Was heißt „waagerechte Tangente"?</span><span class="strat-name">Steigung null</span><span class="strat-sub">Beispiel: f(x) = x² − 4x</span></div>
+     <div class="calcrow"><span class="eq">Tangente waagerecht</span><span class="cmd">|</span><span class="why">Eine waagerechte Gerade hat die Steigung 0</span></div>
+     <div class="calcrow"><span class="eq">f′(x) = 0</span><span class="cmd">|</span><span class="why">f′ gibt die Steigung an – also muss f′ null sein</span></div>
+     <div class="calcrow"><span class="eq">2x − 4 = 0</span><span class="cmd">| + 4</span><span class="why">Das ist eine ganz gewöhnliche Gleichung</span></div>
+     <div class="calcrow"><span class="eq">2x = 4</span><span class="cmd">| : 2</span><span class="why">Nach x auflösen – Verfahren aus Teil 1</span></div>
+     <div class="strat-warn">Wollen Sie nicht nur die <b>Stelle</b>, sondern den <b>Punkt</b> angeben, setzen Sie den gefundenen x-Wert anschließend in <b>f</b> ein – nicht in f′.</div>
+   </div>
+
+   <p style="margin-top:16px"><b>Was die Ableitungen über den Graphen verraten</b></p>
+   <table class="strat">
+     <thead><tr><th>Eigenschaft von f</th><th>Bedingung</th><th>Beispiel</th></tr></thead>
+     <tbody>
+       <tr><td>f steigt</td><td>f′(x) &gt; 0</td><td>f(x) = x² für x &gt; 0, denn f′(x) = 2x</td></tr>
+       <tr><td>f fällt</td><td>f′(x) &lt; 0</td><td>f(x) = x² für x &lt; 0</td></tr>
+       <tr><td>waagerechte Tangente bei a</td><td>f′(a) = 0</td><td>f(x) = x² bei a = 0</td></tr>
+       <tr><td>Hochpunkt bei a</td><td>f′(a) = 0 und f″(a) &lt; 0</td><td>f(x) = −x² bei a = 0</td></tr>
+       <tr><td>Tiefpunkt bei a</td><td>f′(a) = 0 und f″(a) &gt; 0</td><td>f(x) = x² bei a = 0</td></tr>
+       <tr><td>Wendepunkt bei a</td><td>f″(a) = 0 mit Vorzeichenwechsel</td><td>f(x) = x³ bei a = 0</td></tr>
+     </tbody>
+   </table>
+   <p class="tiny">Schreibweise für Ihre Eingaben: <span class="formula">3x^2-4x+7</span> oder <span class="formula">3x²-4x+7</span>. Brüche tippen Sie mit Schrägstrich, also <span class="formula">-2/x^3</span> – auf dem Papier schreiben Sie sie natürlich mit waagerechtem Bruchstrich.</p>
+ </div>`,
+ links:[
+  {t:'ZUM-Lernpfad: Graph und Ableitung (mit GeoGebra)',u:'https://unterrichten.zum.de/wiki/Zusammenhang_zwischen_Graph_einer_Funktion_und_Ableitung',
+   d:'Tangenten am Graphen wandern lassen, waagerechte Tangenten finden und den Ableitungsgraphen live entstehen sehen. Mit Arbeitsblatt zum Ausdrucken.'},
+  {t:'LearningApps: Training von Ableitungen',u:'https://learningapps.org/3661412',
+   d:'Zu jeder Funktion die richtige Ableitung auswählen – Potenz-, Faktor- und Summenregel im Wechsel. Papier und Stift bereitlegen.'},
+ ],
+ tasks:[
+
+ {id:'C1',n:'Basis',fmt:'Eingabe',t:12,ttl:'Die Grundregeln anwenden',type:'input',assist:'ableiten',
+  body:'<p>Geben Sie die Ableitung an. Schreibweise ohne Leerzeichen, z. B. <span class="formula">3x^2-4x+7</span>.</p>',
+  items:[
+   {l:'a)',q:'f(x) = x⁵ → f′(x) =',chk:T('5x^4','5x⁴'),sol:'5x⁴'},
+   {l:'b)',q:'f(x) = 3x⁴ → f′(x) =',chk:T('12x^3','12x³'),sol:'12x³'},
+   {l:'c)',q:'f(x) = x³ − 2x² + 7x − 5 → f′(x) =',chk:T('3x^2-4x+7','3x²-4x+7'),sol:'3x² − 4x + 7'},
+   {l:'d)',q:'f(x) = 8 → f′(x) =',chk:T('0'),sol:'0'},
+   {l:'e)',q:'f(x) = ⅓x³ + 2x → f′(x) =',chk:T('x^2+2','x²+2','2+x^2'),sol:'x² + 2'},
+   {l:'f)',q:'f(t) = 10t² − t + 1 → f′(t) =',chk:T('20t-1','-1+20t'),sol:'20t − 1'},
+   {l:'g)',q:'f(x) = sin(x) → f′(x) =',chk:T('cos(x)','cosx','cos x'),sol:'cos(x)'},
+   {l:'h)',q:'f(x) = cos(x) → f′(x) =',chk:T('-sin(x)','-sinx','-sin x'),sol:'−sin(x)'},
+   {l:'i)',q:'f(x) = 2x + sin(x) → f′(x) =',chk:T('2+cos(x)','cos(x)+2','2+cosx'),sol:'2 + cos(x)'},
+   {l:'j)',q:'f(x) = 4x³ + cos(x) → f′(x) =',chk:T('12x^2-sin(x)','12x²-sin(x)','12x^2-sinx'),sol:'12x² − sin(x)'}],
+  tip:`<p>Leiten Sie jeden Summanden einzeln ab. Was passiert mit „7x"? Und was mit der −5?</p>
+   <p>Bei f) heißt die Variable t statt x – am Vorgehen ändert das nichts.</p>
+   <p>Bei g) bis j): Nur beim Kosinus kommt ein Minuszeichen dazu. Der Sinus wird einfach zum Kosinus.</p>`,
+  sol:`<p><b>a)</b> Potenzregel: 5 nach vorn, Exponent minus 1 ⟹ <b>5x⁴</b></p>
+   <p><b>b)</b> Faktorregel: 3 · 4x³ = <b>12x³</b></p>
+   <p><b>c)</b> x³→3x²; −2x²→−4x; 7x→7 (denn 7x = 7x¹); −5→0 ⟹ <b>3x² − 4x + 7</b></p>
+   <p><b>d)</b> Eine konstante Funktion hat überall die Steigung 0 ⟹ <b>0</b></p>
+   <p><b>e)</b> ⅓x³ → 3 · ⅓ · x² = x²; 2x → 2 ⟹ <b>x² + 2</b></p>
+   <p><b>f)</b> 10t² → 20t; −t → −1; +1 → 0 ⟹ <b>20t − 1</b></p>
+   <p><b>g)</b> <b>cos(x)</b> &nbsp;·&nbsp; <b>h)</b> <b>−sin(x)</b></p>
+   <p><b>i)</b> 2x → 2 und sin(x) → cos(x) ⟹ <b>2 + cos(x)</b></p>
+   <p><b>j)</b> 4x³ → 12x² und cos(x) → −sin(x) ⟹ <b>12x² − sin(x)</b></p>`},
+
+ {id:'C2',n:'Mittel',fmt:'Eingabe',t:14,ttl:'Erst umschreiben, dann ableiten',type:'input',assist:'ableiten',
+  body:`<p>Brüche und Wurzeln lassen sich nicht direkt ableiten. Schreiben Sie sie zuerst als Potenz um – danach greift die Potenzregel.</p>
+   <div class="fig" style="background:#f7f7fb;color:#1a1a2e">
+     <div class="figttl">So geht es Schritt für Schritt</div>
+     <div style="font-family:Georgia,serif;font-size:1rem;line-height:2;padding:6px 10px">
+       f(x) = ${fr('1','x²')} &nbsp;&nbsp;<span style="color:#b58900">|</span>&nbsp; Bruch als Potenz schreiben<br>
+       f(x) = x⁻² &nbsp;&nbsp;<span style="color:#b58900">|</span>&nbsp; jetzt greift die Potenzregel<br>
+       f′(x) = −2 · x⁻³ &nbsp;&nbsp;<span style="color:#b58900">|</span>&nbsp; Exponent nach vorn, Exponent um 1 kleiner<br>
+       f′(x) = −${fr('2','x³')} &nbsp;&nbsp;<span style="color:#b58900">|</span>&nbsp; wieder als Bruch schreiben
+     </div>
+   </div>
+   <p><b>Wichtig:</b> Geben Sie Ihre Ergebnisse <b>ohne negative Exponenten</b> an, also als Bruch. Zum Tippen benutzen Sie den Schrägstrich: <span class="formula">-2/x^3</span>.</p>`,
+  items:[
+   {l:'a)',q:'f(x) = 1/x³ → f′(x) =',chk:T('-3/x^4','-3/x⁴'),sol:'−3/x⁴'},
+   {l:'b)',q:'f(x) = 4/x → f′(x) =',chk:T('-4/x^2','-4/x²'),sol:'−4/x²'},
+   {l:'c)',q:'f(x) = 1/x → f′(x) =',chk:T('-1/x^2','-1/x²'),sol:'−1/x²'},
+   {l:'d)',q:'f(x) = √x → f′(x) =',chk:T('1/(2√x)','1/(2wurzelx)','1/(2*wurzel(x))','1/(2√(x))'),sol:'1/(2√x)'},
+   {l:'e)',q:'f(x) = (x + 3)(x − 2) → f′(x) =',chk:T('2x+1','1+2x'),sol:'2x + 1'},
+   {l:'f)',q:'f(x) = (2x − 1)² → f′(x) =',chk:T('8x-4','-4+8x'),sol:'8x − 4'}],
+  tip:`<p>a) bis c): Schreiben Sie den Bruch zuerst als Potenz mit negativem Exponenten. Aus ${fr('1','x³')} wird x⁻³. Nach dem Ableiten schreiben Sie das Ergebnis wieder als Bruch.</p>
+   <p>Achten Sie darauf: Der Exponent wird auch im Negativen <b>kleiner</b>. Aus x⁻³ wird −3 · x⁻⁴, also −${fr('3','x⁴')}.</p>
+   <p>b) Die 4 ist ein konstanter Faktor: ${fr('4','x')} = 4 · x⁻¹.</p>
+   <p>d) Schreiben Sie die Wurzel als Potenz: √x = x<sup>0,5</sup>.</p>
+   <p>e) und f): Zuerst ausmultiplizieren, dann summandenweise ableiten.</p>`,
+  sol:`<p><b>a)</b> f(x) = ${fr('1','x³')} = x⁻³ &nbsp;⟹&nbsp; f′(x) = −3 · x⁻⁴ = <b>−${fr('3','x⁴')}</b></p>
+   <p><b>b)</b> f(x) = ${fr('4','x')} = 4 · x⁻¹ &nbsp;⟹&nbsp; f′(x) = 4 · (−1) · x⁻² = <b>−${fr('4','x²')}</b></p>
+   <p><b>c)</b> f(x) = ${fr('1','x')} = x⁻¹ &nbsp;⟹&nbsp; f′(x) = −1 · x⁻² = <b>−${fr('1','x²')}</b></p>
+   <p><b>d)</b> f(x) = √x = x<sup>0,5</sup> &nbsp;⟹&nbsp; f′(x) = 0,5 · x⁻⁰·⁵ = <b>${fr('1','2√x')}</b></p>
+   <p><b>e)</b> (x + 3)(x − 2) = x² + x − 6 &nbsp;⟹&nbsp; f′(x) = <b>2x + 1</b></p>
+   <p><b>f)</b> (2x − 1)² = 4x² − 4x + 1 &nbsp;⟹&nbsp; f′(x) = <b>8x − 4</b></p>
+   <p class="tiny">Genau diese Umformungen brauchen Sie bald wieder – nur rückwärts. Eine Stammfunktion von ${fr('1','x²')} finden Sie nur, wenn Sie den Term als Potenz schreiben können.</p>`},
+
+ {id:'C3',n:'Mittel',fmt:'Fehlersuche',t:14,ttl:'Wo steckt der Fehler?',type:'input',assist:'ableiten',
+  body:`<p>In allen fünf Rechnungen steckt genau ein Fehler. Finden Sie ihn und geben Sie die <b>richtige</b> Ableitung an.</p>
+   <table class="strat"><thead><tr><th></th><th>gegeben</th><th>angeblich</th></tr></thead><tbody>
+     <tr><td><b>a)</b></td><td>f(x) = 3x⁴ − 2x² + 5</td><td>f′(x) = 12x³ − 4x + 5</td></tr>
+     <tr><td><b>b)</b></td><td>f(x) = 3x⁵</td><td>f′(x) = 12x⁴</td></tr>
+     <tr><td><b>c)</b></td><td>f(x) = 4x</td><td>f′(x) = 1</td></tr>
+     <tr><td><b>d)</b></td><td>f(x) = ${fr('4','x')}</td><td>f′(x) = ${fr('4','x²')}</td></tr>
+     <tr><td><b>e)</b></td><td>f(x) = x² · x³</td><td>f′(x) = 2x · 3x² = 6x³</td></tr>
+   </tbody></table>`,
+  items:[
+   {l:'a)',q:'richtig ist f′(x) =',chk:T('12x^3-4x','12x³-4x'),sol:'12x³ − 4x'},
+   {l:'b)',q:'richtig ist f′(x) =',chk:T('15x^4','15x⁴'),sol:'15x⁴'},
+   {l:'c)',q:'richtig ist f′(x) =',chk:T('4'),sol:'4'},
+   {l:'d)',q:'richtig ist f′(x) =',chk:T('-4/x^2','-4/x²'),sol:'−4/x²'},
+   {l:'e)',q:'richtig ist f′(x) =',chk:T('5x^4','5x⁴'),sol:'5x⁴'}],
+  free:{q:'Ordnen Sie den fünf Aufgaben ihre Fehlertypen zu. Mögliche Typen: konstanter Summand mitgeschleppt · Faktor falsch berechnet · Faktorregel vergessen · Vorzeichen vergessen · Produkt falsch behandelt.',
+   kw:[{k:['summand','konstante','+5','5 mitgenommen','5 stehen'],n:'a) konstanter Summand mitgeschleppt'},
+       {k:['faktor falsch','3·5','15','falsch multipliz','12 statt 15'],n:'b) Faktor falsch berechnet'},
+       {k:['faktorregel','4 bleibt','faktor vergess','4 verloren'],n:'c) Faktorregel vergessen'},
+       {k:['vorzeichen','minus','negativ'],n:'d) Vorzeichen vergessen'},
+       {k:['produkt','zusammenfass','x^5','x⁵','erst multipli','potenzgesetz'],n:'e) Produkt falsch behandelt'}],
+   sol:`<p><b>a) Konstanter Summand mitgeschleppt.</b> Die +5 muss beim Ableiten zu 0 werden und darf in f′ nicht mehr auftauchen.</p>
+    <p><b>b) Faktor falsch berechnet.</b> 3 · 5 = 15, nicht 12. Der Exponent 5 wird nach vorn geholt und mit dem Faktor 3 multipliziert.</p>
+    <p><b>c) Faktorregel vergessen.</b> 4x = 4 · x¹. Der konstante Faktor 4 bleibt erhalten, also f′(x) = 4 · 1 = 4.</p>
+    <p><b>d) Vorzeichen vergessen.</b> ${fr('4','x')} = 4x⁻¹, abgeleitet 4 · (−1) · x⁻² = −${fr('4','x²')}. Das Minus fehlt.</p>
+    <p><b>e) Produkt falsch behandelt.</b> Man darf Faktoren nicht einzeln ableiten und dann multiplizieren. Erst zusammenfassen: x² · x³ = x⁵, dann ableiten: f′(x) = 5x⁴.</p>`},
+  tip:`<p>Gehen Sie jede Rechnung Summand für Summand durch und prüfen Sie jeden einzeln mit den Regeln aus dem Hilfe-Kasten.</p>
+   <p>Fragen Sie sich bei jedem Term: Ist es ein <b>Summand</b> ohne x? Dann fällt er weg. Ist es ein <b>Faktor</b>? Dann bleibt er stehen.</p>
+   <p>Bei e) hilft ein Potenzgesetz: Was ergibt x² · x³?</p>`,
+  sol:`<p><b>a)</b> f′(x) = <b>12x³ − 4x</b>. Die +5 fällt weg.</p>
+   <p><b>b)</b> f′(x) = 3 · 5x⁴ = <b>15x⁴</b>.</p>
+   <p><b>c)</b> f(x) = 4x = 4x¹ ⟹ f′(x) = <b>4</b>. Die Steigung einer Ursprungsgeraden ist konstant.</p>
+   <p><b>d)</b> f(x) = 4x⁻¹ ⟹ f′(x) = −4x⁻² = <b>−${fr('4','x²')}</b>.</p>
+   <p><b>e)</b> x² · x³ = x⁵ ⟹ f′(x) = <b>5x⁴</b>.</p>`},
+
+ {id:'C4',n:'Mittel',fmt:'Eingabe',t:14,ttl:'Steigungen und besondere Punkte',type:'input',assist:'ableiten',
+  body:`<p>Bestimmen Sie zuerst f′ und beantworten Sie damit die Fragen. Denken Sie daran: Ein <b>Punkt</b> braucht immer beide Koordinaten.</p>`,
+  items:[
+   {l:'a)',q:'f(x) = x³ → f′(x) =',chk:T('3x^2','3x²'),sol:'3x²'},
+   {l:'',q:'f′(0,5) =',chk:N(0.75,0.01),sol:'0,75'},{l:'',q:'f′(1) =',chk:N(3),sol:'3'},{l:'',q:'f′(3) =',chk:N(27),sol:'27'},
+   {l:'b)',q:'f(x) = x⁴ → f′(x) =',chk:T('4x^3','4x³'),sol:'4x³'},
+   {l:'',q:'f′(0,5) =',chk:N(0.5,0.01),sol:'0,5'},{l:'',q:'f′(3) =',chk:N(108),sol:'108'},
+   {l:'c)',q:'f(x) = x² − 4x → f′(x) =',chk:T('2x-4','-4+2x'),sol:'2x − 4'},
+   {l:'',q:'In welchem Punkt hat der Graph eine waagerechte Tangente? x =',chk:N(2),sol:'2'},
+   {l:'',q:'y =',chk:N(-4),sol:'−4'},
+   {l:'',q:'In welchem Punkt beträgt die Steigung 6? x =',chk:N(5),sol:'5'},
+   {l:'',q:'y =',chk:N(5),sol:'5'},
+   {l:'',q:'In welchem Punkt beträgt die Steigung −2? x =',chk:N(1),sol:'1'},
+   {l:'',q:'y =',chk:N(-3),sol:'−3'}],
+  upload:true, diag:DIAG_ABL,
+  tip:`<p><b>Was heißt „waagerechte Tangente"?</b> Eine waagerechte Gerade hat die Steigung 0. Und f′ gibt genau die Steigung an. Sie suchen also die Stelle, an der f′(x) = 0 gilt.</p>
+   <p>Bei den anderen beiden Fragen ist es dasselbe Prinzip: „Steigung 6" bedeutet f′(x) = 6. Das ist jeweils eine gewöhnliche lineare Gleichung.</p>
+   <p><b>Und für den Punkt:</b> Wenn Sie den x-Wert haben, setzen Sie ihn in <b>f</b> ein – nicht in f′. f′ liefert die Steigung, f die Höhe.</p>`,
+  sol:`<p><b>a)</b> f′(x) = <b>3x²</b>. f′(0,5) = 3 · 0,25 = <b>0,75</b>; f′(1) = <b>3</b>; f′(3) = <b>27</b></p>
+   <p><b>b)</b> f′(x) = <b>4x³</b>. f′(0,5) = 4 · 0,125 = <b>0,5</b>; f′(3) = 4 · 27 = <b>108</b></p>
+   <p class="tiny">Vergleichen Sie a) und b) an der Stelle 0,5: Die höhere Potenz hat dort die <i>kleinere</i> Steigung. Zwischen 0 und 1 verläuft x⁴ flacher als x³.</p>
+   <p><b>c)</b> f′(x) = <b>2x − 4</b></p>
+   <p>Waagerechte Tangente: f′(x) = 0 ⟹ 2x − 4 = 0 ⟹ x = 2. Einsetzen in f: f(2) = 4 − 8 = −4 ⟹ <b>P(2 | −4)</b>. Das ist der Scheitel der Parabel.</p>
+   <p>Steigung 6: 2x − 4 = 6 ⟹ x = 5. f(5) = 25 − 20 = 5 ⟹ <b>P(5 | 5)</b></p>
+   <p>Steigung −2: 2x − 4 = −2 ⟹ x = 1. f(1) = 1 − 4 = −3 ⟹ <b>P(1 | −3)</b></p>`},
+
+ {id:'C5',n:'Anspruchsvoll',fmt:'Sachaufgabe mit dem GTR',t:16,ttl:'Wasserstand im Behälter',type:'mixed',assist:'ableiten',
+  body:`<p>Der Wasserstand in einem Behälter wird für 0 ≤ t ≤ 8 modelliert durch</p>
+   <span class="formula fbig">h(t) = −0,1·t³ + 1,2·t² − 3·t + 20</span>
+   <p class="tiny">t in Stunden, h(t) in Zentimetern.</p>
+   <p><b>Diese Aufgabe dürfen Sie vollständig mit dem GTR lösen.</b> Geben Sie h ein, arbeiten Sie mit den Analysefunktionen und notieren Sie in Ihrem Heft, welches Fenster und welche Befehle Sie benutzt haben. Runden Sie auf zwei Nachkommastellen.</p>`,
+  graph:{note:'Kontrollbild ohne Skala. Achten Sie darauf, wo der Graph steigt, wo er fällt und wo er am steilsten ist.',
+   svg:fig(plot({xmin:-0.3,xmax:8.4,ymin:14,ymax:34,w:420,h:240,stepx:1,stepy:4,noscale:true,xlab:'t',ylab:'h(t)',
+     fns:[{f:t=>-0.1*t*t*t+1.2*t*t-3*t+20,color:'#0b7285',label:'h',lx:6.3}]}),
+     'Wasserstand über der Zeit')},
+  items:[
+   {l:'a)',q:'h′(t) = &nbsp;(z. B. -0.3t^2+2.4t-3)',
+    chk:T('-0.3t^2+2.4t-3','-0,3t^2+2,4t-3','-0.3t²+2.4t-3','-0.3x^2+2.4x-3'),sol:'h′(t) = −0,3t² + 2,4t − 3'},
+   {l:'b)',q:'h′(2) =',chk:N(0.6,0.02),sol:'0,6'},
+   {l:'',q:'h′(5) =',chk:N(1.5,0.02),sol:'1,5'},
+   {l:'',q:'h′(7) =',chk:N(-0.9,0.02),sol:'−0,9'},
+   {l:'c)',q:'Zu welchen Zeitpunkten ändert sich der Wasserstand momentan nicht? t₁ =',chk:N(1.55,0.03),sol:'1,55 h'},
+   {l:'',q:'t₂ =',chk:N(6.45,0.03),sol:'6,45 h'},
+   {l:'d)',q:'Zu welchem Zeitpunkt steigt der Wasserstand am schnellsten? t =',chk:N(4,0.05),sol:'4 h'},
+   {l:'',q:'Wie groß ist die Änderungsrate dort? (in cm/h)',chk:N(1.8,0.05),sol:'1,8 cm/h'},
+   {l:'',q:'Wie hoch steht das Wasser zu diesem Zeitpunkt? (in cm)',chk:N(20.8,0.1),sol:'20,8 cm'}],
+  upload:true,
+  diag:DIAG_GTR,
+  free:{q:'e) Deuten Sie h′(2) und h′(7) im Sachzusammenhang. Nennen Sie jeweils die Einheit. Erklären Sie außerdem, was der Zeitpunkt aus d) im Sachzusammenhang bedeutet.',
+   kw:[{k:['änderungsrate','steigung','rate','geschwindigkeit','tempo'],n:'Begriff Änderungsrate'},
+       {k:['cm/h','cm pro stunde','zentimeter pro stunde','cm je stunde'],n:'Einheit cm pro Stunde'},
+       {k:['steigt','wächst','zunimmt','nimmt zu','ansteig'],n:'bei t = 2 steigt der Wasserstand'},
+       {k:['fällt','sinkt','abnimmt','nimmt ab','verringert'],n:'bei t = 7 sinkt der Wasserstand'},
+       {k:['schnellst','am stärksten','am steilsten','maximal'],n:'t = 4 ist die schnellste Zunahme'},
+       {k:['wendepunkt','wende'],n:'Bezug zum Wendepunkt'}],
+   sol:`<p><b>h′(2) = 0,6 cm pro Stunde.</b> Das ist die momentane Änderungsrate zum Zeitpunkt t = 2 h – geometrisch die Steigung der Tangente. Der Wert ist <b>positiv</b>, der Wasserstand <b>steigt</b> also.</p>
+    <p><b>h′(7) = −0,9 cm pro Stunde.</b> Der Wert ist <b>negativ</b>, der Wasserstand <b>sinkt</b> also.</p>
+    <p><b>Zum Zeitpunkt t = 4 h</b> ist die Änderungsrate mit 1,8 cm/h am größten – hier steigt der Wasserstand <b>am schnellsten</b>. Der Graph von h ist an dieser Stelle am steilsten. Das ist genau der <b>Wendepunkt</b> von h.</p>
+    <p><b>Wichtig zu unterscheiden:</b> Bei t = 4 ist nicht der Wasserstand am höchsten, sondern seine Zunahme am stärksten. Der Wasserstand selbst steigt noch bis t ≈ 6,45 weiter – erst dort wechselt h′ das Vorzeichen.</p>
+    <p class="tiny">Genau diese Beziehung drehen Sie in Kapitel 1 um: Wenn Sie die Rate h′ und den Anfangsbestand kennen, können Sie daraus den Bestand rekonstruieren.</p>`},
+  tip:`<p>a) Leiten Sie summandenweise ab und behalten Sie die Dezimalzahlen bei.</p>
+   <p>b) Geben Sie h′ als zweite Funktion in den GTR ein. Dann liefern Ihnen Tabelle oder „Wert berechnen" die gesuchten Werte direkt.</p>
+   <p>c) „Ändert sich momentan nicht" bedeutet: Die Änderungsrate ist null. Suchen Sie also die Nullstellen von h′ – mit „Root" an der Funktion h′.</p>
+   <p>d) „Am schnellsten" bedeutet: Die Änderungsrate ist maximal. Suchen Sie also den <b>Hochpunkt von h′</b> mit der Funktion „Maximum". Achtung: Nicht das Maximum von h!</p>`,
+  sol:`<p><b>a)</b> h′(t) = <b>−0,3t² + 2,4t − 3</b></p>
+   <p><b>b)</b> h′(2) = −1,2 + 4,8 − 3 = <b>0,6</b> · h′(5) = −7,5 + 12 − 3 = <b>1,5</b> · h′(7) = −14,7 + 16,8 − 3 = <b>−0,9</b></p>
+   <p><b>c)</b> h′(t) = 0. Mit „Root" an h′ liefert der GTR <b>t₁ ≈ 1,55 h</b> und <b>t₂ ≈ 6,45 h</b>.<br>
+   <span class="tiny">Zur Kontrolle von Hand: −0,3t² + 2,4t − 3 = 0 | : (−0,3) ⟹ t² − 8t + 10 = 0 ⟹ t = 4 ± √6.</span></p>
+   <p><b>d)</b> Gesucht ist der Hochpunkt von h′. Mit „Maximum" an h′ erhält man <b>t = 4 h</b> und die Rate <b>1,8 cm/h</b>.<br>
+   Der Wasserstand dort: h(4) = −6,4 + 19,2 − 12 + 20 = <b>20,8 cm</b>.<br>
+   <span class="tiny">Zur Kontrolle: h″(t) = −0,6t + 2,4 = 0 ⟹ t = 4. Das ist die Wendestelle von h.</span></p>`}
+]},
+/* ================================================================= BLOCK D */
+{id:'D',title:'Block D · Grafisches Ableiten',
+ lead:'Vom Graphen von f zum Graphen von f′ – und die entscheidende Frage: Geht das auch rückwärts?',
+ code:'5023',
+ info:`<div class="info">
+   <p>Der Wert von f′ an einer Stelle ist die <b>Steigung</b> von f an dieser Stelle. Am besten sieht man den Zusammenhang, wenn man f, f′ und f″ untereinander betrachtet.</p>`+
+   fig(plot({xmin:-2.4,xmax:2.4,ymin:-4,ymax:4,w:440,h:190,stepx:1,stepy:2,m:{l:26,r:14,t:10,b:22},
+     fns:[{f:x=>x*x*x-3*x,color:'#08d9d6',label:'f',lx:2.0,ldy:-6,wd:2.6}],
+     lines:[{x1:-1,y1:-4,x2:-1,y2:4,dash:true,color:'#adb5bd',wd:1.2},
+            {x1:0,y1:-4,x2:0,y2:4,dash:true,color:'#adb5bd',wd:1.2},
+            {x1:1,y1:-4,x2:1,y2:4,dash:true,color:'#adb5bd',wd:1.2}],
+     pts:[{x:-1,y:2,t:'H'},{x:1,y:-2,t:'T',dy:18},{x:0,y:0,t:'W',dx:8,dy:-8}]}),
+     'f(x) = x³ − 3x  ·  Hochpunkt bei −1, Tiefpunkt bei 1, Wendepunkt bei 0')+
+   fig(plot({xmin:-2.4,xmax:2.4,ymin:-4,ymax:8,w:440,h:190,stepx:1,stepy:2,m:{l:26,r:14,t:10,b:22},
+     fns:[{f:x=>3*x*x-3,color:'#ff2e63',label:"f′",lx:1.9,ldy:-6,wd:2.6}],
+     lines:[{x1:-1,y1:-4,x2:-1,y2:8,dash:true,color:'#adb5bd',wd:1.2},
+            {x1:0,y1:-4,x2:0,y2:8,dash:true,color:'#adb5bd',wd:1.2},
+            {x1:1,y1:-4,x2:1,y2:8,dash:true,color:'#adb5bd',wd:1.2}],
+     pts:[{x:-1,y:0},{x:1,y:0},{x:0,y:-3,t:'Min',dy:18}]}),
+     'f′(x) = 3x² − 3  ·  Nullstellen genau unter H und T  ·  Tiefpunkt genau unter W')+
+   fig(plot({xmin:-2.4,xmax:2.4,ymin:-10,ymax:10,w:440,h:190,stepx:1,stepy:5,m:{l:30,r:14,t:10,b:22},
+     fns:[{f:x=>6*x,color:'#a18cd1',label:"f″",lx:1.4,ldy:-6,wd:2.6}],
+     lines:[{x1:-1,y1:-10,x2:-1,y2:10,dash:true,color:'#adb5bd',wd:1.2},
+            {x1:0,y1:-10,x2:0,y2:10,dash:true,color:'#adb5bd',wd:1.2},
+            {x1:1,y1:-10,x2:1,y2:10,dash:true,color:'#adb5bd',wd:1.2}],
+     pts:[{x:0,y:0}]}),
+     'f″(x) = 6x  ·  Nullstelle genau unter dem Wendepunkt W von f')+
+  `<p style="margin-top:10px">Lesen Sie die drei Bilder von oben nach unten an denselben Stellen ab. Daraus ergeben sich die vier Leseregeln:</p>
+   <ul>
+     <li>f <b>steigt</b> &nbsp;⟹&nbsp; f′ liegt <b>über</b> der x-Achse (f′ &gt; 0)</li>
+     <li>f <b>fällt</b> &nbsp;⟹&nbsp; f′ liegt <b>unter</b> der x-Achse (f′ &lt; 0)</li>
+     <li>f hat einen <b>Hoch-, Tief- oder Sattelpunkt</b> &nbsp;⟹&nbsp; f′ hat dort eine <b>Nullstelle</b></li>
+     <li>f hat einen <b>Wendepunkt</b> (steilste Stelle) &nbsp;⟹&nbsp; f′ hat dort einen <b>Extrempunkt</b> und f″ eine <b>Nullstelle</b></li>
+   </ul>
+   <p><b>Grad-Regel:</b> Ist f ganzrational vom Grad n, so ist f′ vom Grad n − 1. Aus einer S-Kurve wird eine Parabel, aus einer Parabel eine Gerade, aus einer Geraden eine Waagerechte.</p>
+   <p><b>Unterschied Hochpunkt und Sattelpunkt:</b> In beiden Fällen ist f′ = 0. Beim Hoch- oder Tiefpunkt <b>schneidet</b> f′ die x-Achse, beim Sattelpunkt <b>berührt</b> f′ sie nur.</p>
+   <p class="tiny">Und jetzt die Frage, um die es in den nächsten Wochen geht: Wenn man aus f den Graphen von f′ zeichnen kann – kann man dann auch aus f′ den Graphen von f zurückgewinnen?</p>
+ </div>`,
+ links:[
+  {t:'ZUM-Lernpfad: Graph und Ableitung (mit GeoGebra)',u:'https://unterrichten.zum.de/wiki/Zusammenhang_zwischen_Graph_einer_Funktion_und_Ableitung',
+   d:'Punkt entlang des Graphen ziehen und den Ableitungsgraphen live entstehen sehen. Enthält auch ein Arbeitsblatt zum Ausdrucken.'},
+  {t:'LearningApps: Finden Sie die zugehörige Ableitung',u:'https://learningapps.org/1688183',
+   d:'Zuordnung von Funktionsgraph und Ableitungsgraph – dieselbe Denkarbeit wie in Aufgabe D2, nur mit anderen Funktionen.'},
+  {t:'Ableitungspuzzle (mathe-online.at)',u:'http://www.mathe-online.at/tests/diff1/ablerkennen.html',
+   d:'Deutlich schwieriger: Hier kommen auch Graphen mit Polstellen und Knicken vor.'},
+ ],
+ tasks:[
+
+ {id:'D1',n:'Basis',fmt:'Wahr / Falsch',t:6,ttl:'Die vier Leseregeln',type:'tf',assist:'grafisch',
+  body:'<p>Richtig oder falsch?</p>',
+  items:[
+   {s:'Wo f eine waagerechte Tangente hat, hat f′ eine Nullstelle.',a:true},
+   {s:'In einem Bereich, in dem f steigt, ist f′ negativ.',a:false},
+   {s:'Ein Wendepunkt von f entspricht einem Extrempunkt von f′.',a:true},
+   {s:'Ist f eine Parabel (Grad 2), so ist der Graph von f′ eine Gerade.',a:true},
+   {s:'Der Graph von f′ verläuft immer unterhalb des Graphen von f.',a:false},
+   {s:'Wird der Graph von f um 5 nach oben verschoben, ändert sich f′ nicht.',a:true},
+   {s:'An einer Wendestelle von f hat f″ eine Nullstelle.',a:true}],
+  tip:'Zeichnen Sie sich f(x) = x² und f′(x) = 2x nebeneinander und prüfen Sie jede Aussage daran. Für Aussage 5: Wo liegt 2x im Vergleich zu x² an der Stelle 0,5?',
+  sol:`<ol>
+   <li><b>Richtig.</b> Waagerechte Tangente heißt Steigung 0, und f′ gibt die Steigung an.</li>
+   <li><b>Falsch.</b> Genau umgekehrt: Steigt f, ist die Steigung positiv, also f′ &gt; 0.</li>
+   <li><b>Richtig.</b> Im Wendepunkt ist die Steigung von f am größten oder kleinsten – ein Extremwert von f′.</li>
+   <li><b>Richtig.</b> f(x) = ax² + bx + c ⟹ f′(x) = 2ax + b. Allgemein: Grad n ⟹ Grad n − 1.</li>
+   <li><b>Falsch.</b> Es gibt keinen festen Lagezusammenhang. Bei f(x) = x² gilt an der Stelle 0,5: f(0,5) = 0,25, aber f′(0,5) = 1 – hier liegt f′ deutlich <i>über</i> f.</li>
+   <li><b>Richtig.</b> Verschieben ändert die Höhe, nicht die Steigung. Genau deshalb gibt es beim Aufleiten das „+ C".</li>
+   <li><b>Richtig.</b> Im Wendepunkt hat f′ einen Extrempunkt – und dort ist die Ableitung von f′, also f″, gleich null.</li></ol>`},
+
+ {id:'D2',n:'Basis',fmt:'Zuordnung mit Abbildungen',t:14,ttl:'Welcher Graph gehört zu welcher Ableitung?',type:'mixed',assist:'grafisch',
+  body:'<p>Oben sehen Sie sechs Graphen von Funktionen f, darunter sechs Graphen von Ableitungsfunktionen. Ordnen Sie zu. Achtung: Einige Paare sehen sich zum Verwechseln ähnlich – zählen Sie genau.</p>'+
+   '<div class="figrow">'+
+    fig(plot({xmin:-2.4,xmax:2.4,ymin:-1,ymax:5,w:200,h:160,stepx:1,stepy:1,m:{l:20,r:10,t:8,b:18},fns:[{f:x=>x*x,color:'#08d9d6'}]}),'','A')+
+    fig(plot({xmin:-2.4,xmax:2.4,ymin:-5,ymax:1,w:200,h:160,stepx:1,stepy:1,m:{l:20,r:10,t:8,b:18},fns:[{f:x=>-x*x,color:'#08d9d6'}]}),'','B')+
+    fig(plot({xmin:-2,xmax:2,ymin:-5,ymax:5,w:200,h:160,stepx:1,stepy:2,m:{l:20,r:10,t:8,b:18},fns:[{f:x=>x*x*x,color:'#08d9d6'}]}),'','C')+
+   '</div><div class="figrow" style="margin-top:8px">'+
+    fig(plot({xmin:-2.4,xmax:2.4,ymin:-4,ymax:4,w:200,h:160,stepx:1,stepy:2,m:{l:20,r:10,t:8,b:18},fns:[{f:x=>x*x*x-3*x,color:'#08d9d6'}]}),'','D')+
+    fig(plot({xmin:-1.4,xmax:3.4,ymin:-5,ymax:3,w:200,h:160,stepx:1,stepy:2,m:{l:20,r:10,t:8,b:18},fns:[{f:x=>x*x*x-3*x*x,color:'#08d9d6'}]}),'','E')+
+    fig(plot({xmin:-2.4,xmax:2.4,ymin:-4,ymax:4,w:200,h:160,stepx:1,stepy:2,m:{l:20,r:10,t:8,b:18},fns:[{f:x=>-x*x*x+3*x,color:'#08d9d6'}]}),'','F')+
+   '</div><div class="figrow" style="margin-top:16px">'+
+    fig(plot({xmin:-1.4,xmax:3.4,ymin:-4,ymax:8,w:200,h:160,stepx:1,stepy:2,m:{l:20,r:10,t:8,b:18},fns:[{f:x=>3*x*x-6*x,color:'#ff2e63'}]}),'','1')+
+    fig(plot({xmin:-2.4,xmax:2.4,ymin:-5,ymax:5,w:200,h:160,stepx:1,stepy:2,m:{l:20,r:10,t:8,b:18},fns:[{f:x=>-2*x,color:'#ff2e63'}]}),'','2')+
+    fig(plot({xmin:-2.4,xmax:2.4,ymin:-4,ymax:8,w:200,h:160,stepx:1,stepy:2,m:{l:20,r:10,t:8,b:18},fns:[{f:x=>3*x*x-3,color:'#ff2e63'}]}),'','3')+
+   '</div><div class="figrow" style="margin-top:8px">'+
+    fig(plot({xmin:-2.4,xmax:2.4,ymin:-5,ymax:5,w:200,h:160,stepx:1,stepy:2,m:{l:20,r:10,t:8,b:18},fns:[{f:x=>2*x,color:'#ff2e63'}]}),'','4')+
+    fig(plot({xmin:-2.4,xmax:2.4,ymin:-8,ymax:4,w:200,h:160,stepx:1,stepy:2,m:{l:20,r:10,t:8,b:18},fns:[{f:x=>-3*x*x+3,color:'#ff2e63'}]}),'','5')+
+    fig(plot({xmin:-2,xmax:2,ymin:-1,ymax:10,w:200,h:160,stepx:1,stepy:2,m:{l:20,r:10,t:8,b:18},fns:[{f:x=>3*x*x,color:'#ff2e63'}]}),'','6')+
+   '</div>',
+  match2:{q:'Ordnen Sie zu:',opts:['Abbildung 1','Abbildung 2','Abbildung 3','Abbildung 4','Abbildung 5','Abbildung 6'],
+   items:[{q:'Zu Graph A gehört …',a:3},{q:'Zu Graph B gehört …',a:1},{q:'Zu Graph C gehört …',a:5},
+          {q:'Zu Graph D gehört …',a:2},{q:'Zu Graph E gehört …',a:0},{q:'Zu Graph F gehört …',a:4}]},
+  free:{q:'Die Paare C, D und F sind besonders leicht zu verwechseln. Erklären Sie, woran Sie sie unterschieden haben.',
+   kw:[{k:['berühr','sattel','tangiert','nur einmal','doppelt'],n:'C: Ableitung berührt die Achse (Sattelpunkt)'},
+       {k:['zwei nullstellen','zweimal','schneidet','zwei stellen'],n:'D und F: Ableitung schneidet zweimal'},
+       {k:['gespiegelt','umgekehrt','nach unten','geöffnet','vorzeichen'],n:'F ist D gespiegelt – Parabel nach unten geöffnet'},
+       {k:['steigt','fällt','erst','zuerst'],n:'Reihenfolge von Steigen und Fallen'}],
+   sol:`<p><b>C (f = x³):</b> Der Graph steigt überall, hat aber bei x = 0 einen <b>Sattelpunkt</b>. Die Ableitung 3x² ist deshalb überall ≥ 0 und <b>berührt</b> die x-Achse nur – Abbildung 6.</p>
+    <p><b>D (f = x³ − 3x):</b> Hochpunkt bei −1, Tiefpunkt bei 1. Die Ableitung 3x² − 3 <b>schneidet</b> die x-Achse an genau diesen beiden Stellen und ist dazwischen negativ – Abbildung 3.</p>
+    <p><b>F (f = −x³ + 3x):</b> Genau umgekehrt zu D: erst fallend, dann steigend, dann wieder fallend. Die Ableitung −3x² + 3 ist eine <b>nach unten</b> geöffnete Parabel, dazwischen positiv – Abbildung 5.</p>
+    <p><b>Der Schlüssel:</b> Erst zählen, wie viele waagerechte Tangenten f hat. Dann prüfen, ob die Ableitung die Achse schneidet oder nur berührt. Zum Schluss auf das Vorzeichen achten.</p>`},
+  tip:`<p>Gehen Sie in dieser Reihenfolge vor:</p>
+   <ul>
+     <li><b>Zählen</b> Sie die waagerechten Tangenten von f. So viele Nullstellen muss die Ableitung haben.</li>
+     <li><b>Prüfen</b> Sie, ob die Ableitung die x-Achse an diesen Stellen <b>schneidet</b> (Hoch-/Tiefpunkt) oder nur <b>berührt</b> (Sattelpunkt).</li>
+     <li><b>Vergleichen</b> Sie das Vorzeichen: Wo f steigt, muss die Ableitung oberhalb der Achse liegen.</li>
+     <li><b>Kontrolle über den Grad:</b> Aus einer Parabel wird eine Gerade, aus einer S-Kurve eine Parabel.</li>
+   </ul>
+   <p>Achten Sie besonders auf E: Die waagerechten Tangenten liegen dort nicht symmetrisch zur y-Achse.</p>`,
+  sol:`<ul>
+   <li><b>A → 4.</b> x² fällt links, waagerechte Tangente bei 0, steigt rechts – wie 2x negativ, null, positiv.</li>
+   <li><b>B → 2.</b> −x² steigt links und fällt rechts, also ist −2x links positiv und rechts negativ.</li>
+   <li><b>C → 6.</b> x³ steigt überall, hat bei 0 einen Sattelpunkt. 3x² ist überall ≥ 0 und berührt die Achse.</li>
+   <li><b>D → 3.</b> Zwei waagerechte Tangenten bei −1 und 1 ⟹ 3x² − 3 hat genau dort seine Nullstellen.</li>
+   <li><b>E → 1.</b> f = x³ − 3x² hat waagerechte Tangenten bei 0 und 2 ⟹ 3x² − 6x = 3x(x − 2) hat genau dort Nullstellen. Die Ableitung ist deshalb <b>nicht</b> symmetrisch zur y-Achse.</li>
+   <li><b>F → 5.</b> Spiegelbild von D: −3x² + 3 ist eine nach unten geöffnete Parabel.</li></ul>`},
+
+ {id:'D3',n:'Mittel',fmt:'Zuordnung + Begründung',t:14,ttl:'Rückwärts: Welches f passt zu diesem f′?',type:'mixed',assist:'grafisch',
+  body:`<p>Diesmal ist nur die <b>Ableitung</b> gegeben:</p>`+
+   fig(plot({xmin:-0.5,xmax:4.4,ymin:-6,ymax:12,w:430,h:230,stepx:1,stepy:3,
+     fns:[{f:x=>3*x*x-12*x+9,color:'#ff2e63',label:"f′",lx:3.9,ldy:-6,wd:2.8}],
+     pts:[{x:1,y:0},{x:3,y:0}]}),
+     'Gegeben: der Graph von f′')+
+   `<p>Welcher der vier Graphen kann der zugehörige Graph von f sein? Genau einer passt.</p>
+   <div class="figrow">`+
+    fig(plot({xmin:-0.5,xmax:4.3,ymin:-12,ymax:12,w:215,h:175,stepx:1,stepy:4,m:{l:26,r:10,t:8,b:18},
+      fns:[{f:x=>x*x*x-6*x*x+9*x,color:'#08d9d6'}]}),'','Graph 1')+
+    fig(plot({xmin:-0.5,xmax:4.3,ymin:-12,ymax:12,w:215,h:175,stepx:1,stepy:4,m:{l:26,r:10,t:8,b:18},
+      fns:[{f:x=>Math.pow(x-2,3),color:'#08d9d6'}]}),'','Graph 2')+
+   `</div><div class="figrow" style="margin-top:8px">`+
+    fig(plot({xmin:-0.5,xmax:4.3,ymin:-12,ymax:12,w:215,h:175,stepx:1,stepy:4,m:{l:26,r:10,t:8,b:18},
+      fns:[{f:x=>-x*x*x+6*x*x-9*x,color:'#08d9d6'}]}),'','Graph 3')+
+    fig(plot({xmin:-0.5,xmax:4.3,ymin:-12,ymax:12,w:215,h:175,stepx:1,stepy:4,m:{l:26,r:10,t:8,b:18},
+      fns:[{f:x=>x*x*x-6*x*x+5*x,color:'#08d9d6'}]}),'','Graph 4')+
+   `</div>`,
+  items:[
+   {l:'a)',q:'Nullstellen von f′: x₁ =',chk:N(1),sol:'1'},{l:'',q:'x₂ =',chk:N(3),sol:'3'},
+   {l:'b)',q:'Welcher Graph gehört zu f′? Nummer:',chk:N(1),sol:'Graph 1'},
+   {l:'c)',q:'Bei x = 1 hat f einen … (Hochpunkt oder Tiefpunkt)',chk:T('hochpunkt','hoch','maximum','lokales maximum','hp'),sol:'Hochpunkt'},
+   {l:'',q:'Bei x = 3 hat f einen …',chk:T('tiefpunkt','tief','minimum','lokales minimum','tp'),sol:'Tiefpunkt'},
+   {l:'d)',q:'Wendestelle von f: x =',chk:N(2),sol:'2'}],
+  free:{q:'Begründen Sie Ihre Wahl aus b). Gehen Sie dabei auf mindestens zwei der abgelehnten Graphen ein und erklären Sie, warum sie nicht passen.',
+   kw:[{k:['zwei','waagerecht','extrem','hoch und tief','bei 1','bei 3'],n:'zwei waagerechte Tangenten bei 1 und 3'},
+       {k:['sattel','berühr','keine extrem','nur ein','monoton'],n:'Graph 2 hat einen Sattelpunkt statt zweier Extrema'},
+       {k:['gespiegelt','umgekehrt','erst tief','vertauscht','falsche reihenfolge'],n:'Graph 3 hat Hoch- und Tiefpunkt vertauscht'},
+       {k:['falsche stelle','nicht bei 1','verschoben','andere stelle'],n:'Graph 4 hat die Extrema an falschen Stellen'},
+       {k:['steigt','fällt','positiv','negativ','zwischen'],n:'Vorzeichenvergleich zwischen 1 und 3'}],
+   sol:`<p><b>Graph 1 passt.</b> f′ hat Nullstellen bei 1 und 3, ist links von 1 positiv, zwischen 1 und 3 negativ und rechts von 3 wieder positiv. Genau so verhält sich Graph 1: erst steigend, dann fallend, dann wieder steigend – also Hochpunkt bei 1 und Tiefpunkt bei 3.</p>
+    <p><b>Graph 2 passt nicht.</b> Er hat gar keine Extrempunkte, sondern nur einen Sattelpunkt bei x = 2. Seine Ableitung müsste die x-Achse bei 2 <b>berühren</b>, nicht bei 1 und 3 <b>schneiden</b>.</p>
+    <p><b>Graph 3 passt nicht.</b> Er hat zwar waagerechte Tangenten bei 1 und 3, aber in vertauschter Reihenfolge: erst Tiefpunkt, dann Hochpunkt. Seine Ableitung wäre eine nach unten geöffnete Parabel.</p>
+    <p><b>Graph 4 passt nicht.</b> Seine waagerechten Tangenten liegen bei etwa 0,5 und 3,5 – nicht bei 1 und 3.</p>
+    <p class="tiny">Beachten Sie: Auch Graph 1 um eine Konstante nach oben oder unten verschoben hätte dieselbe Ableitung. Aus f′ allein lässt sich f nur bis auf eine Konstante bestimmen – genau daher kommt später das „+ C".</p>`},
+  tip:`<p>Lesen Sie zuerst am Graphen von f′ ab, <b>wo</b> die Nullstellen liegen. Genau dort muss der gesuchte Graph von f waagerechte Tangenten haben.</p>
+   <p>Schauen Sie dann auf das <b>Vorzeichen</b> von f′: Wo f′ oberhalb der Achse liegt, muss f steigen. Wo f′ unterhalb liegt, muss f fallen.</p>
+   <p>Damit können Sie die vier Graphen der Reihe nach ausschließen.</p>`,
+  sol:`<p><b>a)</b> 3x² − 12x + 9 = 0 &nbsp;|&nbsp; : 3 &nbsp;⟹&nbsp; x² − 4x + 3 = 0 ⟹ x = 2 ± 1 ⟹ <b>x₁ = 1, x₂ = 3</b></p>
+   <p><b>b)</b> <b>Graph 1</b> – er hat einen Hochpunkt bei 1 und einen Tiefpunkt bei 3.</p>
+   <p><b>c)</b> Links von 1 ist f′ &gt; 0 (f steigt), zwischen 1 und 3 ist f′ &lt; 0 (f fällt). Bei x = 1 wechselt f also von Steigen zu Fallen ⟹ <b>Hochpunkt</b>. Bei x = 3 ist es umgekehrt ⟹ <b>Tiefpunkt</b>.</p>
+   <p><b>d)</b> Der Tiefpunkt von f′ liegt bei x = <b>2</b>. Dort ist f am steilsten, also liegt dort die Wendestelle von f.</p>`},
+
+ {id:'D4',n:'Mittel',fmt:'Drag & Drop',t:8,ttl:'Eigenschaft von f ↔ Eigenschaft von f′',type:'dnd',assist:'grafisch',
+  body:'<p>Ordnen Sie jeder Eigenschaft des Graphen von f die passende Eigenschaft des Graphen von f′ zu. Baustein antippen, dann Zielfeld antippen.</p>',
+  slots:['f hat einen Hochpunkt','f fällt in einem Bereich','f hat einen Wendepunkt','f hat einen Sattelpunkt','f ist eine Gerade mit Steigung 3'],
+  chips:['f′ hat dort einen Extrempunkt','f′ ist dort negativ','f′ berührt dort die x-Achse, ohne sie zu schneiden',
+         'f′ ist die konstante Funktion 3','f′ hat dort eine Nullstelle mit Vorzeichenwechsel von + nach −'],
+  answer:[4,1,0,2,3],
+  tip:'Der Unterschied zwischen Hochpunkt und Sattelpunkt ist entscheidend: In beiden Fällen ist die Tangente waagerecht – aber wechselt f dabei auch die Richtung?',
+  sol:`<ul>
+   <li><b>Hochpunkt</b> → f′ hat dort eine <b>Nullstelle mit Vorzeichenwechsel von + nach −</b>.</li>
+   <li><b>f fällt</b> → f′ ist dort <b>negativ</b>.</li>
+   <li><b>Wendepunkt</b> → f′ hat dort einen <b>Extrempunkt</b>.</li>
+   <li><b>Sattelpunkt</b> → f′ <b>berührt</b> die x-Achse, ohne sie zu schneiden (Beispiel: f(x) = x³ bei x = 0).</li>
+   <li><b>Gerade mit Steigung 3</b> → f′ ist die <b>konstante Funktion 3</b>.</li></ul>`},
+
+ {id:'D5',n:'Anspruchsvoll',fmt:'Freie Erklärung',t:10,ttl:'Anleitung zum grafischen Ableiten',type:'free',assist:'grafisch',
+  body:'<p>Eine Mitschülerin hat die Stunde verpasst. Erklären Sie ihr in eigenen Worten <b>Schritt für Schritt</b>, wie man aus dem Graphen von f den Graphen von f′ skizziert. Gehen Sie auf mindestens vier Merkmale ein.</p>',
+  free:{q:'Ihre Erklärung:',
+    kw:[{k:['waagerecht','extrem','hochpunkt','tiefpunkt','extrempunkt','maximum','minimum'],n:'Extrempunkte → Nullstellen von f′'},
+        {k:['nullstelle','null','achse schneid','x-achse'],n:'Nullstellen von f′ zuerst eintragen'},
+        {k:['steig','positiv','oberhalb','über der'],n:'f steigt ⟹ f′ > 0'},
+        {k:['fällt','fallend','negativ','unterhalb','unter der'],n:'f fällt ⟹ f′ < 0'},
+        {k:['wendepunkt','wende','steilst'],n:'Wendepunkt → Extrempunkt von f′'},
+        {k:['grad','eins weniger','n-1','parabel wird','gerade'],n:'Grad verringert sich um 1'},
+        {k:['steigung','tangente','lineal','anlegen'],n:'Steigung / Tangente als Grundidee'}],
+    sol:`<p><b>Eine mögliche vollständige Erklärung:</b></p>
+     <ol>
+       <li><b>Grundidee:</b> Der y-Wert von f′ an einer Stelle ist die <i>Steigung</i> von f dort. Man liest also nicht die Höhe des Graphen ab, sondern wie steil er verläuft. Hilfsvorstellung: ein Lineal als Tangente anlegen.</li>
+       <li><b>Zuerst die Nullstellen von f′:</b> Überall dort, wo f eine <b>waagerechte Tangente</b> hat – in Hoch-, Tief- und Sattelpunkten – ist die Steigung null.</li>
+       <li><b>Dann das Vorzeichen:</b> Wo f <b>steigt</b>, verläuft f′ <b>oberhalb</b> der x-Achse. Wo f <b>fällt</b>, verläuft f′ <b>unterhalb</b>.</li>
+       <li><b>Dann die Extrempunkte von f′:</b> An den <b>Wendepunkten</b> von f ist der Graph am steilsten. Dort hat f′ einen Hochpunkt (steilster Anstieg) oder Tiefpunkt (steilstes Gefälle).</li>
+       <li><b>Plausibilitätsprüfung über den Grad:</b> Ist f vom Grad n, so ist f′ vom Grad n − 1.</li>
+       <li><b>Zum Schluss</b> die eingetragenen Punkte zu einer glatten Kurve verbinden.</li>
+     </ol>
+     <p class="tiny"><b>Häufiger Fehler:</b> Den Graphen von f′ „parallel" zu f zu zeichnen. f′ hat mit der <i>Höhe</i> von f nichts zu tun – nur mit der Steigung.</p>`},
+  tip:'Gehen Sie in einer sinnvollen Reihenfolge vor: Was zeichnet man zuerst ein – die Nullstellen oder den Kurvenverlauf? Und woran erkennt man, ob f′ oberhalb oder unterhalb der Achse verläuft?'},
+
+ {id:'D6',n:'Anspruchsvoll',fmt:'Selbst zeichnen + PDF hochladen',t:20,ttl:'Zeichnen Sie den Ableitungsgraphen',type:'mixed',assist:'grafisch',
+  body:`<p>Gegeben ist die Funktion</p>
+   <span class="formula fbig">f(x) = x³ − 3x²</span>
+   <p><b>So gehen Sie vor:</b></p>
+   <ol style="margin-left:20px">
+     <li>Zeichnen Sie in Ihr Heft <b>zwei Koordinatensysteme direkt untereinander</b> – mit derselben x-Achse und demselben Maßstab.</li>
+     <li>Zeichnen Sie in das <b>obere</b> System den Graphen von f für −1 ≤ x ≤ 3,5. Nutzen Sie eine Wertetabelle oder den GTR.</li>
+     <li>Zeichnen Sie in das <b>untere</b> System den Graphen von f′ – <b>ohne</b> f′ zu berechnen, nur aus dem Verlauf von f abgelesen.</li>
+     <li>Ziehen Sie senkrechte Hilfslinien von den besonderen Punkten von f nach unten, damit man Ihre Überlegung nachvollziehen kann.</li>
+   </ol>
+   <p>Fotografieren oder scannen Sie Ihre Zeichnung und laden Sie sie unten hoch. Tragen Sie außerdem die folgenden Kontrollwerte ein.</p>`,
+  items:[
+   {l:'a)',q:'Bei welchen x-Werten hat f eine waagerechte Tangente? x₁ =',chk:N(0),sol:'0'},
+   {l:'',q:'x₂ =',chk:N(2),sol:'2'},
+   {l:'b)',q:'Wo muss Ihr Graph von f′ die x-Achse schneiden? Erste Stelle x =',chk:N(0),sol:'0'},
+   {l:'',q:'zweite Stelle x =',chk:N(2),sol:'2'},
+   {l:'c)',q:'In welchem Bereich verläuft f′ unterhalb der x-Achse? von x =',chk:N(0),sol:'0'},
+   {l:'',q:'bis x =',chk:N(2),sol:'2'},
+   {l:'d)',q:'Welchen Grad hat f′?',chk:N(2),sol:'2 (eine Parabel)'},
+   {l:'e)',q:'Bei welchem x liegt der Tiefpunkt von f′? x =',chk:N(1),sol:'1'},
+   {l:'',q:'Zur Kontrolle: f′(x) = &nbsp;(erst nach dem Zeichnen ausrechnen!)',chk:T('3x^2-6x','3x²-6x'),sol:'3x² − 6x'}],
+  upload:true,
+  diag:{frage:'Kreuzen Sie an, was auf Ihre Zeichnung zutrifft. Vergleichen Sie dazu mit der Musterlösung.',
+   allesGut:'Ihre Zeichnung erfüllt alle wesentlichen Kriterien. Prüfen Sie zum Schluss nur noch, ob beide Koordinatensysteme wirklich denselben Maßstab auf der x-Achse haben.',
+   items:[
+    {s:'Ich habe zwei Koordinatensysteme direkt untereinander gezeichnet, mit derselben x-Achse.',good:true,
+     fb:'Genau so gehört es sich. Nur so kann man die Stellen senkrecht vergleichen.'},
+    {s:'Mein Graph von f′ schneidet die x-Achse genau unter den waagerechten Tangenten von f.',good:true,
+     fb:'Das ist das wichtigste Kriterium überhaupt – hier steckt die eigentliche Idee des grafischen Ableitens.'},
+    {s:'Mein Graph von f′ liegt dort unterhalb der Achse, wo f fällt, und oberhalb, wo f steigt.',good:true,
+     fb:'Damit stimmt das Vorzeichen in allen Bereichen. Sehr gut.'},
+    {s:'Ich habe senkrechte Hilfslinien von den besonderen Punkten nach unten gezogen.',good:true,
+     fb:'Dadurch ist Ihre Überlegung für andere nachvollziehbar – in der Klausur gibt das Punkte.'},
+    {s:'Mein Graph von f′ ist eine Parabel, also vom Grad 2.',good:true,
+     fb:'Die Grad-Regel stimmt: Aus einer S-Kurve dritten Grades wird eine Parabel.'},
+    {s:'Mein f′ sieht ähnlich aus wie f, nur nach unten verschoben.',good:false,
+     fb:'Das ist der klassische Fehler: f′ wurde „parallel" zu f gezeichnet.',
+     fix:'f′ hat mit der <b>Höhe</b> von f nichts zu tun, nur mit der <b>Steigung</b>. Zeichnen Sie neu und tragen Sie zuerst nur die Nullstellen von f′ ein – dort, wo f waagerechte Tangenten hat.',
+     merke:'Nicht die Kurvenform kopieren. Immer fragen: Wie steil ist f hier?'},
+    {s:'Mein f′ hat die Nullstellen an anderen Stellen als die waagerechten Tangenten von f.',good:false,
+     fb:'Damit stimmt der Kern der Zuordnung nicht.',
+     fix:'Suchen Sie im oberen Bild die Stellen, an denen die Tangente waagerecht liegt – hier bei x = 0 und x = 2. Ziehen Sie von dort senkrechte Linien nach unten und setzen Sie dort die Nullstellen von f′.',
+     merke:'Waagerechte Tangente oben bedeutet Nullstelle unten. Immer senkrecht darunter.'},
+    {s:'Mein f′ liegt im Bereich zwischen 0 und 2 oberhalb der x-Achse.',good:false,
+     fb:'Dort fällt f – also muss f′ dort negativ sein.',
+     fix:'Prüfen Sie bereichsweise: Zwischen x = 0 und x = 2 geht der Graph von f nach unten. Negative Steigung bedeutet f′ unterhalb der Achse.',
+     merke:'Erst die Nullstellen eintragen, dann in jedem Bereich einzeln das Vorzeichen bestimmen.'},
+    {s:'Ich habe f′ berechnet und den Graphen danach gezeichnet.',good:false,
+     fb:'Das Ergebnis mag stimmen, geübt werden sollte aber das <b>Ablesen</b> aus dem Bild.',
+     fix:'Zeichnen Sie die Aufgabe noch einmal, diesmal nur aus dem Verlauf von f heraus. Rechnen Sie erst zum Schluss nach – als Kontrolle.',
+     merke:'In der Klausur wird der Ableitungsgraph oft ohne Funktionsterm verlangt. Das Ablesen muss deshalb sitzen.'},
+    {s:'Ich habe keinen Tiefpunkt von f′ eingezeichnet.',good:false,
+     fb:'Es fehlt ein wichtiges Merkmal: An der Wendestelle von f hat f′ einen Extrempunkt.',
+     fix:'Suchen Sie die steilste fallende Stelle von f – hier bei x = 1. Genau darunter liegt der Tiefpunkt von f′.',
+     merke:'Wendepunkt oben bedeutet Extrempunkt unten.'},
+    {s:'Ich bin beim Zeichnen unsicher geworden und habe nicht fertig gezeichnet.',good:false,
+     fb:'Wichtig ist jetzt, dass Sie benennen können, an welcher Stelle es hakte.',
+     fix:'Arbeiten Sie den Fahrplan im Tipp Schritt für Schritt ab und markieren Sie den Punkt, ab dem Sie unsicher wurden. Fragen Sie den Tipp-Assistenten genau danach.',
+     merke:'Der Fahrplan hat vier Schritte. Wer weiß, bei welchem es hakt, kommt schneller weiter.'}]},
+  graph:{note:'Erst nach Ihrer eigenen Zeichnung ansehen. So sollte das Ergebnis aussehen – f oben, f′ direkt darunter.',
+   svg:fig(plot({xmin:-1.4,xmax:3.4,ymin:-5,ymax:3,w:420,h:190,stepx:1,stepy:2,m:{l:26,r:14,t:10,b:20},
+     fns:[{f:x=>x*x*x-3*x*x,color:'#08d9d6',label:'f',lx:3.0,ldy:-6,wd:2.6}],
+     lines:[{x1:0,y1:-5,x2:0,y2:3,dash:true,color:'#adb5bd',wd:1.2},
+            {x1:1,y1:-5,x2:1,y2:3,dash:true,color:'#adb5bd',wd:1.2},
+            {x1:2,y1:-5,x2:2,y2:3,dash:true,color:'#adb5bd',wd:1.2}],
+     pts:[{x:0,y:0,t:'H'},{x:2,y:-4,t:'T',dy:18},{x:1,y:-2,t:'W',dx:8}]}),
+     'oben: f(x) = x³ − 3x²')+
+    fig(plot({xmin:-1.4,xmax:3.4,ymin:-4,ymax:8,w:420,h:190,stepx:1,stepy:2,m:{l:26,r:14,t:10,b:20},
+     fns:[{f:x=>3*x*x-6*x,color:'#ff2e63',label:"f′",lx:3.0,ldy:-6,wd:2.6}],
+     lines:[{x1:0,y1:-4,x2:0,y2:8,dash:true,color:'#adb5bd',wd:1.2},
+            {x1:1,y1:-4,x2:1,y2:8,dash:true,color:'#adb5bd',wd:1.2},
+            {x1:2,y1:-4,x2:2,y2:8,dash:true,color:'#adb5bd',wd:1.2}],
+     pts:[{x:0,y:0},{x:2,y:0},{x:1,y:-3,t:'Min',dy:18}]}),
+     'unten: f′(x) = 3x² − 6x')},
+  tip:`<p><b>Fahrplan zum Zeichnen – arbeiten Sie ihn der Reihe nach ab:</b></p>
+   <ol style="margin-left:18px">
+     <li><b>Extremstellen markieren.</b> Suchen Sie im oberen Bild alle Stellen mit waagerechter Tangente. Ziehen Sie von dort eine senkrechte Hilfslinie nach unten und setzen Sie im unteren System einen Punkt <b>auf</b> die x-Achse. Das sind die Nullstellen von f′.</li>
+     <li><b>Vorzeichen bereichsweise eintragen.</b> Gehen Sie die Bereiche zwischen den Hilfslinien einzeln durch. Steigt f dort, liegt f′ oberhalb der Achse. Fällt f, liegt f′ darunter. Setzen Sie in jedem Bereich einen groben Punkt.</li>
+     <li><b>Wendestelle suchen.</b> Wo ist f am steilsten? Ziehen Sie auch von dort eine Hilfslinie nach unten – dort liegt der Hoch- oder Tiefpunkt von f′.</li>
+     <li><b>Grad prüfen und verbinden.</b> Ist f vom Grad 3, muss f′ eine Parabel sein. Verbinden Sie Ihre Punkte zu einer glatten Kurve, die dazu passt.</li>
+   </ol>
+   <p class="tiny">Rechnen Sie f′ erst ganz am Schluss aus – als Kontrolle, nicht als Abkürzung.</p>`,
+  sol:`<p><b>Die besonderen Stellen von f(x) = x³ − 3x²:</b></p>
+   <ul>
+     <li><b>Hochpunkt bei x = 0</b> mit f(0) = 0. Links davon steigt f, rechts davon fällt f.</li>
+     <li><b>Tiefpunkt bei x = 2</b> mit f(2) = 8 − 12 = −4. Ab hier steigt f wieder.</li>
+     <li><b>Wendepunkt bei x = 1</b> mit f(1) = 1 − 3 = −2. Dort fällt f am steilsten.</li>
+   </ul>
+   <p><b>Daraus ergibt sich der Graph von f′ Schritt für Schritt:</b></p>
+   <ol>
+     <li>Unter x = 0 und x = 2 liegen die <b>Nullstellen</b> von f′, denn dort hat f waagerechte Tangenten.</li>
+     <li>Für x &lt; 0 steigt f, also verläuft f′ dort <b>oberhalb</b> der x-Achse.</li>
+     <li>Zwischen 0 und 2 fällt f, also verläuft f′ dort <b>unterhalb</b> der x-Achse.</li>
+     <li>Für x &gt; 2 steigt f wieder, also liegt f′ dort wieder <b>oberhalb</b>.</li>
+     <li>Bei x = 1 ist f am steilsten (Wendepunkt), also hat f′ dort seinen <b>Tiefpunkt</b>.</li>
+     <li>f ist vom Grad 3, also ist f′ vom Grad 2 – eine nach oben geöffnete <b>Parabel</b>.</li>
+   </ol>
+   <p><b>Rechnerische Kontrolle:</b> f′(x) = 3x² − 6x = 3x(x − 2). Nullstellen bei 0 und 2 ✓, Scheitel bei x = 1 mit f′(1) = 3 − 6 = −3 ✓. Genau das, was Sie aus dem Bild abgelesen haben.</p>
+   <p class="tiny">Klappen Sie den „Graph zum Vergleich" auf, um Ihre Zeichnung mit der Musterlösung zu vergleichen. Kreuzen Sie danach in der Selbstdiagnose an, was auf Ihre Zeichnung zutrifft – Sie erhalten dann eine gezielte Rückmeldung.</p>`}
+]}
+];
+
+/* ============================ RENDERING ============================ */
+const S={}; // state per task
+const nBadge=n=>n==='Basis'?'b-basis':(n==='Mittel'?'b-mittel':'b-schwer');
+/* eine oder mehrere Freitext-Aufgaben je Übung */
+const frees=T=>T.frees||(T.free?[T.free]:[]);
+
+function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+function build(){
+  let totT=0,totBasis=0,n=0,html='';
+  BLOCKS.forEach(B=>{
+    html+=`<div class="blockhead"><h2>${B.title}</h2><p>${B.lead}</p></div>`;
+    html+=`<div class="infowrap" id="iw_${B.id}">
+      <button class="infotoggle" onclick="document.getElementById('iw_${B.id}').classList.toggle('open')">
+        <span class="chev2">▶</span> Hilfe und Rechenwege – bei Bedarf aufklappen
+        <span class="hintx">öffnen, wenn Sie nicht weiterkommen</span></button>
+      <div class="infobody">${B.info}</div></div>`;
+    B.tasks.forEach(T=>{
+      n++; totT+=T.t; if(T.n==='Basis') totBasis+=T.t;
+      S[T.id]={task:T,block:B,checked:false,score:null,ans:{},unlocked:T.n==='Basis'};
+      html+=renderTask(T,B);
+    });
+    if(B.links&&B.links.length){
+      html+=`<div class="linkcard"><h3>Weiterüben zu Block ${B.id}</h3>
+        <p class="sub2">Frei zugängliche Übungen zum Vertiefen – öffnen sich in einem neuen Tab.</p>`;
+      B.links.forEach(L=>{
+        html+=`<a href="${L.u}" target="_blank" rel="noopener">
+          <b>${L.t}</b><span>${L.d}</span><em>${L.u}</em></a>`;
+      });
+      html+=`</div>`;
+    }
+    html+=`<div class="card tight" style="border-color:rgba(161,140,209,.5)">
+      <h3 style="color:var(--violet)">Musterlösungen für Block ${B.id} freischalten</h3>
+      <p style="font-size:.9rem;margin:0 0 8px">Die Musterlösungen der <b>mittleren</b> und <b>anspruchsvollen</b> Aufgaben dieses Blocks sind gesperrt. Den 4-stelligen Code erhalten Sie von Ihrer Lehrkraft, wenn Sie die Aufgaben bearbeitet haben.</p>
+      <div class="qline"><input type="text" class="inl" id="code_${B.id}" placeholder="4-stelliger Code" maxlength="4" inputmode="numeric">
+      <button class="btn-sol" onclick="unlock('${B.id}')">Freischalten</button>
+      <span id="codemsg_${B.id}" style="font-size:.85rem"></span></div></div>`;
+  });
+  document.getElementById('content').innerHTML=html;
+  document.getElementById('pAll').textContent=n;
+  document.getElementById('pOpen').textContent=n;
+  bindAll();
+}
+
+function renderTask(T,B){
+  let b='';
+  b+=T.body||'';
+  const id=T.id;
+
+  if(T.type==='tf'){
+    b+='<div>';
+    T.items.forEach((it,i)=>{
+      b+=`<div class="tf" id="tf_${id}_${i}"><span class="st">${i+1}. ${it.s}</span>
+        <span class="btns"><button onclick="setTF('${id}',${i},true)" id="tfw_${id}_${i}">wahr</button>
+        <button onclick="setTF('${id}',${i},false)" id="tff_${id}_${i}">falsch</button></span>
+        <span id="tfm_${id}_${i}" style="font-weight:800;min-width:20px"></span></div>`;
+    });
+    b+='</div>';
+  }
+  if(T.type==='mc'){
+    b+=mcHTML(id,T.opts,T.multi);
+  }
+  if(T.type==='match'){
+    T.items.forEach((it,i)=>{
+      b+=`<div class="qline" id="mt_${id}_${i}"><span class="qtxt">${it.q}</span>
+        <select id="ms_${id}_${i}" class="inl" style="max-width:280px"><option value="-1">– bitte wählen –</option>`;
+      T.opts.forEach((o,j)=>{b+=`<option value="${j}">${o}</option>`;});
+      b+=`</select><span id="mm_${id}_${i}" style="font-weight:800;min-width:20px"></span></div>`;
+    });
+  }
+  if(T.type==='dnd'){
+    b+=`<div class="dnd-pool" id="pool_${id}"></div>`;
+    T.slots.forEach((s,i)=>{
+      b+=`<div class="slot" id="slot_${id}_${i}" onclick="dropChip('${id}',${i})">
+        <span class="nm">${s}</span><span class="drop" id="drop_${id}_${i}">hier ablegen</span>
+        <span id="dm_${id}_${i}" style="font-weight:800;min-width:20px"></span></div>`;
+    });
+  }
+  if(T.type==='input'||T.type==='mixed'){
+    (T.items||[]).forEach((it,i)=>{
+      b+=`<div class="qline"><span class="lab">${it.l||''}</span>
+        <span class="qtxt">${it.q}</span>
+        <input type="text" class="inl" id="in_${id}_${i}" autocomplete="off">
+        <span id="im_${id}_${i}" style="font-weight:800;min-width:20px"></span></div>`;
+    });
+  }
+  if(T.match2){
+    b+=`<p style="margin-top:18px"><b>${T.match2.q||'Ordnen Sie jedem Paar das passende Bild zu.'}</b></p>`;
+    T.match2.items.forEach((it,i)=>{
+      b+=`<div class="qline"><span class="qtxt">${it.q}</span>
+        <select id="m2_${id}_${i}" class="inl" style="max-width:200px"><option value="-1">– bitte wählen –</option>`;
+      T.match2.opts.forEach((o,j)=>{b+=`<option value="${j}">${o}</option>`;});
+      b+=`</select><span id="m2m_${id}_${i}" style="font-weight:800;min-width:20px"></span></div>`;
+    });
+  }
+  if(T.mc){ b+=`<p style="margin-top:16px"><b>${T.mc.q}</b></p>`+mcHTML(id+'_mc',T.mc.opts,false); }
+  const FR=frees(T);
+  FR.forEach((F,k)=>{
+    b+=`<p style="margin-top:16px"><b>${F.q}</b></p>
+      <textarea id="fr_${id}_${k}" placeholder="${F.ph||'Schreiben Sie hier in ganzen Sätzen …'}"></textarea>`;
+  });
+  if(T.upload){
+    b+=`<div class="upl"><b>Rechenweg abgeben (optional)</b><br>
+      Fotografieren oder scannen Sie Ihren Rechenweg und laden Sie ihn hier hoch (PDF oder Bild).
+      Der Dateiname wird in Ihrem Protokoll vermerkt.
+      <input type="file" id="up_${id}" accept="application/pdf,image/*" onchange="noteFile('${id}')">
+      <div id="upn_${id}" class="fn"></div>`;
+    if(T.diag){
+      b+=`<div class="diagbox" id="dg_${id}">
+        <b>Rückmeldung zu Ihrem Rechenweg</b>
+        <p style="font-size:.86rem;margin:6px 0 10px">${T.diag.frage}</p>`;
+      T.diag.items.forEach((d,i)=>{
+        b+=`<label class="diagopt"><input type="checkbox" id="dgc_${id}_${i}"><span>${d.s}</span></label>`;
+      });
+      b+=`<div class="btn-row" style="margin-top:10px">
+            <button class="btn-tip" onclick="diagnose('${id}')">Rückmeldung anzeigen</button></div>
+          <div class="diagout" id="dgo_${id}"></div></div>`;
+    }
+    b+=`</div>`;
+  }
+  if(T.assist){
+    b+=`<div class="assist" id="as_${id}">
+      <b>Tipp-Assistent</b>
+      <p style="font-size:.86rem;margin:6px 0 9px">Beschreiben Sie in einem Satz, <b>wo genau</b> Sie nicht weiterkommen – zum Beispiel „Ich weiß nicht, ob ich ausklammern oder die pq-Formel nehmen soll" oder „Nach dem Umformen komme ich nicht weiter". Sie bekommen einen Tipp, keine Lösung.</p>
+      <div class="qline">
+        <input type="text" id="asq_${id}" class="qtxt" placeholder="Ich komme nicht weiter bei …"
+          onkeydown="if(event.key==='Enter')askAssist('${id}')">
+        <button class="btn-tip" onclick="askAssist('${id}')">Tipp holen</button>
+      </div>
+      <div class="chat" id="asc_${id}"></div></div>`;
+  }
+
+  b+=`<div class="btn-row">
+      <button class="btn-check" onclick="check('${id}')">Lösung prüfen</button>
+      <button class="btn-tip" onclick="tog('tip_${id}')">Tipp anzeigen</button>
+      ${T.graph?`<button class="btn-graph" onclick="tog('gr_${id}')">Graph zum Vergleich</button>`:''}
+      <button class="btn-sol" onclick="showSol('${id}')">Musterlösung${T.n!=='Basis'?' (Code nötig)':''}</button>
+     </div>
+     <div class="fb" id="fb_${id}"></div>
+     <div class="panel tip" id="tip_${id}"><h5>Tipp – ein Denkanstoß, keine Lösung</h5>${T.tip||''}</div>
+     ${T.graph?`<div class="panel graph" id="gr_${id}"><h5>Graph zum Vergleich – bewusst ohne Skala</h5>
+        <p style="font-size:.86rem;margin:0 0 8px">${T.graph.note||''}</p>${T.graph.svg}</div>`:''}
+     <div class="panel sol" id="sol_${id}"><h5>Musterlösung</h5>${T.sol||''}${
+       FR.filter(f=>f.sol).map((f,k)=>'<hr style="border:none;border-top:1px solid var(--line);margin:14px 0"><h5>'+(f.h||'Zur Erklärungsaufgabe')+'</h5>'+f.sol).join('')}</div>`;
+
+  return `<div class="acc" id="acc_${id}">
+    <div class="acc-h" onclick="togAcc('${id}')">
+      <span class="chev">▶</span>
+      <span class="stat-dot" id="dot_${id}"></span>
+      <span class="ttl">${id} · ${T.ttl}</span>
+      <span class="badge ${nBadge(T.n)}">${T.n}</span>
+      <span class="badge b-fmt">${T.fmt}</span>
+      <span class="badge b-time">${T.t} min</span>
+    </div>
+    <div class="acc-b">${b}</div></div>`;
+}
+
+function mcHTML(id,opts,multi){
+  let s='';
+  opts.forEach((o,i)=>{
+    s+=`<label class="opt" id="op_${id}_${i}">
+      <input type="${multi?'checkbox':'radio'}" name="mc_${id}" value="${i}">
+      <span>${o.s}</span><span class="mk" id="opm_${id}_${i}"></span></label>`;
+  });
+  if(multi) s+='<p class="tiny">Mehrfachauswahl möglich.</p>';
+  return s;
+}
+
+function bindAll(){
+  BLOCKS.forEach(B=>B.tasks.forEach(T=>{
+    if(T.type==='dnd'){
+      const pool=document.getElementById('pool_'+T.id);
+      T.chips.forEach((c,i)=>{
+        const d=document.createElement('div');
+        d.className='chip';d.textContent=c;d.dataset.idx=i;d.id='chip_'+T.id+'_'+i;
+        d.onclick=e=>{e.stopPropagation();selChip(T.id,i);};
+        pool.appendChild(d);
+      });
+      S[T.id].placed={};S[T.id].sel=null;
+    }
+  }));
+}
+
+/* ---- interactions ---- */
+function togAcc(id){document.getElementById('acc_'+id).classList.toggle('open');}
+function tog(id){document.getElementById(id).classList.toggle('show');}
+function noteFile(id){
+  const f=document.getElementById('up_'+id).files[0];
+  S[id].file=f?f.name:null;
+  document.getElementById('upn_'+id).textContent=f?('Hochgeladen: '+f.name):'';
+}
+function setTF(id,i,val){
+  S[id].ans['tf'+i]=val;
+  document.getElementById('tfw_'+id+'_'+i).classList.toggle('sel',val===true);
+  document.getElementById('tff_'+id+'_'+i).classList.toggle('sel',val===false);
+}
+function selChip(tid,i){
+  const st=S[tid];
+  if(st.placed[i]!==undefined){ // zurück in den Pool
+    const slot=st.placed[i];delete st.placed[i];
+    const d=document.getElementById('drop_'+tid+'_'+slot);
+    d.textContent='hier ablegen';d.classList.remove('filled');
+    document.getElementById('pool_'+tid).appendChild(document.getElementById('chip_'+tid+'_'+i));
+  }
+  document.querySelectorAll('#pool_'+tid+' .chip').forEach(c=>c.classList.remove('sel'));
+  if(st.sel===i){st.sel=null;return;}
+  st.sel=i;
+  const el=document.getElementById('chip_'+tid+'_'+i);
+  if(el&&el.parentElement.id==='pool_'+tid) el.classList.add('sel');
+}
+function dropChip(tid,slot){
+  const st=S[tid];if(st.sel===null||st.sel===undefined)return;
+  for(const k in st.placed) if(st.placed[k]===slot){ // Platz belegt -> alten Chip zurück
+    delete st.placed[k];
+    document.getElementById('pool_'+tid).appendChild(document.getElementById('chip_'+tid+'_'+k));
+  }
+  st.placed[st.sel]=slot;
+  const d=document.getElementById('drop_'+tid+'_'+slot);
+  d.textContent=BLOCKS.flatMap(b=>b.tasks).find(t=>t.id===tid).chips[st.sel];
+  d.classList.add('filled');
+  const c=document.getElementById('chip_'+tid+'_'+st.sel);
+  c.classList.remove('sel');c.style.display='none';
+  st.sel=null;
+}
+/* ---------- Rechenweg-Diagnose ---------- */
+function diagnose(id){
+  const T=S[id].task, D=T.diag, out=document.getElementById('dgo_'+id);
+  const gut=[],fehler=[],fix=[],merke=[];
+  D.items.forEach((d,i)=>{
+    if(!document.getElementById('dgc_'+id+'_'+i).checked) return;
+    if(d.good) gut.push(d.fb); else { fehler.push(d.fb); if(d.fix) fix.push(d.fix); if(d.merke) merke.push(d.merke); }
+  });
+  S[id].diagSel=D.items.map((d,i)=>document.getElementById('dgc_'+id+'_'+i).checked?d.s:null).filter(Boolean);
+  if(!gut.length&&!fehler.length){
+    out.innerHTML='<div class="dg-part dg-neutral">Kreuzen Sie zuerst an, was auf Ihren Rechenweg zutrifft. Seien Sie dabei ehrlich – die Rückmeldung nützt Ihnen nur dann etwas.</div>';
+    out.classList.add('show'); return;
+  }
+  let h='';
+  h+=`<div class="dg-part dg-good"><b>Das ist gut gelaufen</b>`+
+     (gut.length?'<ul>'+gut.map(x=>'<li>'+x+'</li>').join('')+'</ul>'
+                :'<p>Hier war diesmal noch nichts dabei – das ist beim Üben völlig normal. Arbeiten Sie die Punkte unten durch und rechnen Sie die Aufgabe danach noch einmal komplett neu.</p>')+`</div>`;
+  if(fehler.length){
+    h+=`<div class="dg-part dg-bad"><b>Hier ist etwas schiefgegangen</b><ul>${fehler.map(x=>'<li>'+x+'</li>').join('')}</ul></div>`;
+    h+=`<div class="dg-part dg-fix"><b>So machen Sie es richtig</b><ul>${fix.map(x=>'<li>'+x+'</li>').join('')}</ul></div>`;
+    h+=`<div class="dg-part dg-note"><b>Darauf achten Sie beim nächsten Mal</b><ul>${merke.map(x=>'<li>'+x+'</li>').join('')}</ul></div>`;
+  }else{
+    h+=`<div class="dg-part dg-fix"><b>Nächster Schritt</b><p>${D.allesGut||'Ihr Weg trägt. Vergleichen Sie Ihre Zahlen jetzt noch mit der Musterlösung und achten Sie darauf, dass Sie jeden Befehlsstrich notiert haben.'}</p></div>`;
+  }
+  h+=`<p class="auto-note">Diese Rückmeldung entsteht aus dem, was Sie angekreuzt haben. Sie ersetzt keine Korrektur durch Ihre Lehrkraft – Ihre hochgeladene Datei wird nicht automatisch gelesen.</p>`;
+  out.innerHTML=h; out.classList.add('show');
+  S[id].diagText=out.innerText||'';
+}
+
+/* ---------- Tipp-Assistent: erkennt Stichworte, gibt Hinweise, nie Lösungen ---------- */
+const ASSIST={
+ nullstellen:[
+  {k:['durch x teilen','geteilt durch x'],a:'Teilen Sie niemals durch x. Dabei verlieren Sie die Lösung x = 0. Klammern Sie stattdessen x aus.'},
+  {k:['ausklammern','klammer','ausklammer'],a:'Prüfen Sie zuerst: Steckt in <b>jedem</b> Summanden ein x? Nur dann dürfen Sie ausklammern. Fehlt in einem Summanden das x, brauchen Sie ein anderes Verfahren.'},
+  {k:['pq','p und q','formel'],a:'Die pq-Formel braucht zwei Voraussetzungen: Auf einer Seite muss 0 stehen, und vor dem x² muss eine 1 stehen. Gehen Sie die beiden Punkte der Reihe nach durch – meistens fehlt das Teilen durch den Vorfaktor.'},
+  {k:['vorfaktor','teilen','dividieren','zahl vor'],a:'Teilen Sie die <b>gesamte</b> Gleichung durch den Vorfaktor, also jeden einzelnen Summanden. Wenn Sie einen vergessen, stimmen p und q nicht mehr.'},
+  {k:['wurzel','plus minus','±','zwei lösungen','nur eine'],a:'Beim Wurzelziehen entstehen fast immer <b>zwei</b> Lösungen – eine mit Plus und eine mit Minus. Nur wenn rechts eine 0 steht, gibt es genau eine.'},
+  {k:['negativ','minus unter der wurzel','keine lösung','geht nicht'],a:'Wenn unter der Wurzel eine negative Zahl steht oder eine gerade Potenz gleich einer negativen Zahl sein soll, gibt es keine Lösung in ℝ. Schreiben Sie das als Ergebnis hin – das ist eine vollständige Antwort.'},
+  {k:['produkt','faktor','nullprodukt','klammern multiplizieren','ausmultiplizieren'],a:'Steht der Term bereits als Produkt da? Dann nicht ausmultiplizieren, sondern jeden Faktor einzeln null setzen.'},
+  {k:['welche strategie','welches verfahren','womit anfangen','wo anfangen','weiß nicht'],a:'Schauen Sie sich nur das <b>Aussehen</b> der Gleichung an und vergleichen Sie es mit den neun Bauarten im Hilfe-Kasten. Zwei Fragen führen fast immer weiter: Steht auf einer Seite eine 0? Steckt in jedem Summanden ein x?'},
+  {k:['umformen','umgeformt','nicht weiter','stecke fest','komme nicht'],a:'Schreiben Sie den Stand Ihrer Gleichung auf ein separates Blatt und vergleichen Sie ihn mit den Bauarten im Hilfe-Kasten. Meist ist man näher am Ziel, als man denkt – oft fehlt nur noch ein Sortierschritt.'},
+  {k:['vorzeichen','minus','falsches ergebnis','probe'],a:'Machen Sie die Probe: Setzen Sie Ihre Lösung in die <b>ursprüngliche</b> Gleichung ein. Kommt nicht null heraus, liegt der Fehler fast immer bei einem Vorzeichen beim Sortieren.'},
+  {k:['grad','wie viele lösungen','anzahl'],a:'Eine Gleichung vom Grad n hat höchstens n Lösungen. Das ist eine gute Kontrolle: Haben Sie bei einer Gleichung dritten Grades nur eine Lösung gefunden, kann das stimmen – vier Lösungen können es aber nicht sein.'}],
+ schnitt:[
+  {k:['durch x teilen'],a:'Nicht durch x teilen! Dabei verlieren Sie den Schnittpunkt bei x = 0. Klammern Sie x aus.'},
+  {k:['ansatz','wie anfangen','wo anfangen','erster schritt','weiß nicht'],a:'Der Ansatz ist immer derselbe: Setzen Sie die beiden Funktionsterme gleich, also f(x) = g(x). Danach formen Sie nach x um wie bei jeder anderen Gleichung auch.'},
+  {k:['x auf eine seite','sortieren','umformen','zusammenfassen'],a:'Bringen Sie alle x-Terme auf eine Seite und alle Zahlen auf die andere. Rechnen Sie dabei Schritt für Schritt und notieren Sie jeden Befehlsstrich – so finden Sie Vorzeichenfehler später wieder.'},
+  {k:['y','zweite koordinate','punkt angeben','koordinaten'],a:'Der berechnete x-Wert ist erst die halbe Miete. Setzen Sie ihn in f oder g ein, um den y-Wert zu bekommen, und geben Sie den Punkt als S(x | y) an.'},
+  {k:['probe','kontrolle','stimmt das'],a:'Setzen Sie Ihren x-Wert in <b>beide</b> Funktionen ein. Kommt zweimal derselbe y-Wert heraus, stimmt Ihr Ergebnis. Kommen zwei verschiedene heraus, steckt ein Rechenfehler drin.'},
+  {k:['kubisch','x^3','x³','dritten grades','ganzrational'],a:'Bei einer Gleichung dritten Grades sortieren Sie zuerst alles auf eine Seite. Steht dann in jedem Summanden ein x, klammern Sie es aus – der Rest ist eine quadratische Gleichung.'},
+  {k:['wie viele','anzahl','schnittpunkte gibt'],a:'Denken Sie an die Formen der Graphen: Zwei Geraden treffen sich höchstens einmal, eine Parabel und eine Gerade höchstens zweimal, eine Kurve dritten Grades und eine Gerade höchstens dreimal – und mindestens einmal.'},
+  {k:['berühr','tangente','doppelt','nur ein schnittpunkt'],a:'Wenn beim Lösen eine Lösung doppelt auftritt, etwa in der Form (x − 2)² = 0, dann berühren sich die Graphen dort nur, statt sich zu kreuzen.'},
+  {k:['gtr','rechner','intersect','zeichnen'],a:'Zeichnen Sie beide Funktionen mit dem GTR und wählen Sie das Fenster groß genug. Am Bild sehen Sie, wie viele Schnittpunkte Sie erwarten müssen – die Werte selbst sollen Sie aber rechnerisch bestimmen.'},
+  {k:['nicht weiter','stecke fest','komme nicht'],a:'Notieren Sie, wie Ihre Gleichung gerade aussieht, und fragen Sie sich: Welchen Typ habe ich vor mir – linear, quadratisch oder höheren Grades? Danach richtet sich der nächste Schritt.'}],
+ ableiten:[
+  {k:['zweite ableitung',"f''",'f″','nochmal ableiten','zweimal'],a:'Die zweite Ableitung entsteht, indem Sie f′ noch einmal ableiten – mit genau denselben Regeln. Schreiben Sie f′ sauber hin, bevor Sie weitermachen.'},
+  {k:['negativ','exponent kleiner','x^-','hoch minus'],a:'Auch bei negativen Exponenten wird der Exponent um 1 <b>kleiner</b>: aus x⁻² wird −2·x⁻³, nicht −2·x⁻¹. Das ist die häufigste Falle.'},
+  {k:['bruch','nenner','1/x','durch x'],a:'Schreiben Sie den Bruch zuerst als Potenz mit negativem Exponenten, zum Beispiel 1/x² = x⁻². Danach greift die Potenzregel ganz normal.'},
+  {k:['wurzel','√'],a:'Schreiben Sie die Wurzel als Potenz: √x = x hoch 0,5. Danach leiten Sie wie gewohnt mit der Potenzregel ab.'},
+  {k:['klammer','produkt','ausmultipl','kettenregel','produktregel'],a:'Produkt- und Kettenregel lernen Sie erst später. Multiplizieren Sie die Klammern aus und leiten Sie dann summandenweise ab.'},
+  {k:['konstante','zahl ohne x','summand','fällt weg','plus 5','minus 7'],a:'Ein konstanter Summand ohne x wird beim Ableiten zu 0 – er fällt also weg und wird nicht mitgeschleppt.'},
+  {k:['faktor','zahl vor'],a:'Ein konstanter Faktor bleibt beim Ableiten stehen. Leiten Sie nur den x-Teil ab und multiplizieren Sie den Faktor anschließend hinein.'},
+  {k:['potenzregel','exponent','hoch'],a:'Zwei Schritte gehören zusammen: Exponent nach vorn multiplizieren <b>und</b> Exponent um 1 verringern. Prüfen Sie, ob Sie beide gemacht haben.'},
+  {k:['sin','cos','sinus','kosinus'],a:'Sinus wird zu Kosinus, Kosinus wird zu minus Sinus. Nur beim Kosinus kommt ein Minus dazu.'},
+  {k:['steigung','tangente','an der stelle','einsetzen'],a:'Die Steigung an einer Stelle bekommen Sie, indem Sie den x-Wert in <b>f′</b> einsetzen – nicht in f.'},
+  {k:['waagerecht','extrem','hochpunkt','tiefpunkt'],a:'Waagerechte Tangente bedeutet f′(x) = 0. Das ist eine gewöhnliche Gleichung – lösen Sie sie mit den Strategien aus Teil 1, meistens durch Ausklammern.'},
+  {k:['hoch oder tief','unterscheiden','welche art','hochpunkt oder'],a:'Setzen Sie die gefundene Stelle in f″ ein: Ist f″ negativ, liegt ein Hochpunkt vor, ist f″ positiv, ein Tiefpunkt.'},
+  {k:['wende','krümmung','links','rechts'],a:'Wendestellen findet man über f″(x) = 0. Für die Krümmung setzen Sie einen Wert aus dem jeweiligen Bereich in f″ ein: positiv bedeutet linksgekrümmt.'},
+  {k:['nicht weiter','stecke fest','komme nicht','weiß nicht'],a:'Schreiben Sie f und f′ untereinander und markieren Sie die Zeile, ab der es hakt. Fast immer fehlt einer dieser Schritte: umformen, Faktor mitnehmen, Konstante weglassen.'}],
+ grafisch:[
+  {k:['waagerecht','extrem','hochpunkt','tiefpunkt','nullstelle von'],a:'Überall dort, wo f eine waagerechte Tangente hat, hat f′ eine <b>Nullstelle</b>. Suchen Sie zuerst diese Stellen und tragen Sie sie ein.'},
+  {k:['steigt','fällt','vorzeichen','oberhalb','unterhalb'],a:'Steigt f, verläuft f′ <b>über</b> der x-Achse. Fällt f, verläuft f′ <b>darunter</b>. Prüfen Sie das bereichsweise.'},
+  {k:['wendepunkt','wende','steilst'],a:'Im Wendepunkt ist f am steilsten. Genau dort hat f′ einen Hoch- oder Tiefpunkt.'},
+  {k:['sattel','berühr'],a:'Unterschied Hoch-/Tiefpunkt und Sattelpunkt: Beim Sattelpunkt <b>berührt</b> f′ die x-Achse, beim Hoch- oder Tiefpunkt <b>schneidet</b> sie sie.'},
+  {k:['grad','parabel wird','gerade wird','wie sieht'],a:'Ist f vom Grad n, so ist f′ vom Grad n − 1. Aus einer Parabel wird eine Gerade, aus einer S-Kurve eine Parabel. Das ist eine gute Plausibilitätsprüfung.'},
+  {k:['verschieb','nach oben','+ c','plus c'],a:'Verschieben ändert nur die Höhe von f, nicht die Steigung. Der Graph von f′ bleibt völlig unverändert.'},
+  {k:['zuordnen','welcher graph','welches bild','passt zu'],a:'Zählen Sie zuerst die waagerechten Tangenten von f. So viele Nullstellen muss die zugehörige Ableitung haben. Danach entscheidet das Vorzeichen.'},
+  {k:['rate','bestand','wasser','zufluss','maximal'],a:'Unterscheiden Sie Rate und Bestand: Solange die Rate positiv ist, wächst der Bestand weiter – auch wenn die Rate schon wieder kleiner wird. Erst beim Vorzeichenwechsel kippt es.'},
+  {k:['parallel','gleich aussehen','ähnlich'],a:'Zeichnen Sie f′ nicht parallel zu f. f′ hat mit der Höhe von f nichts zu tun, nur mit der Steigung.'},
+  {k:['nicht weiter','stecke fest','komme nicht','weiß nicht'],a:'Gehen Sie in dieser Reihenfolge vor: erst die Nullstellen von f′ eintragen, dann bereichsweise das Vorzeichen, dann die Extrempunkte von f′ an den Wendestellen von f.'}]
+};
+function askAssist(id){
+  const T=S[id].task, topic=ASSIST[T.assist]||[];
+  const el=document.getElementById('asq_'+id), box=document.getElementById('asc_'+id);
+  const q=(el.value||'').trim();
+  if(q.length<3){el.classList.add('bad-in');return;}
+  el.classList.remove('bad-in');
+  const low=q.toLowerCase().replace(/ß/g,'ss');
+  const treffer=topic.filter(r=>r.k.some(k=>low.includes(k)));
+  const antwort = treffer.length
+    ? treffer.slice(0,2).map(r=>r.a).join('<br><br>')
+    : 'Ihre Frage kann ich nicht sicher zuordnen. Versuchen Sie es konkreter – zum Beispiel: „Ich weiß nicht, ob ich ausklammern darf", „Ich komme nach dem Umformen nicht weiter" oder „Ich habe zwei Lösungen, weiß aber nicht, ob das stimmt". Und werfen Sie einen Blick in den Hilfe-Kasten oben: Vergleichen Sie das <b>Aussehen</b> Ihrer Gleichung mit den Bauarten dort.';
+  box.innerHTML += `<div class="chat-q">${esc(q)}</div><div class="chat-a">${antwort}</div>`;
+  box.classList.add('show');
+  el.value='';
+  S[id].chat=(S[id].chat||[]).concat([{q, a:antwort.replace(/<[^>]+>/g,'')}]);
+  box.scrollTop=box.scrollHeight;
+}
+
+function unlock(bid){
+  const B=BLOCKS.find(b=>b.id===bid);
+  const v=document.getElementById('code_'+bid).value.trim();
+  const m=document.getElementById('codemsg_'+bid);
+  if(v===B.code){
+    B.tasks.forEach(t=>{S[t.id].unlocked=true;});
+    m.innerHTML='<span style="color:var(--green);font-weight:700">Freigeschaltet – alle Musterlösungen in Block '+bid+' sind jetzt verfügbar.</span>';
+  }else{
+    m.innerHTML='<span style="color:var(--pink);font-weight:700">Der Code stimmt nicht.</span>';
+  }
+}
+function showSol(id){
+  if(!S[id].unlocked){
+    const b=S[id].block.id;
+    alert('Die Musterlösung dieser Aufgabe ist noch gesperrt.\n\nGeben Sie den 4-stelligen Code am Ende von Block '+b+' ein. Ihre Lehrkraft gibt ihn heraus, sobald alle die Aufgaben bearbeitet haben.');
+    return;
+  }
+  tog('sol_'+id);
+}
+
+/* ---- Freitext-Auswertung ---- */
+function evalFreeKw(F,txt){
+  const t=(txt||'').toLowerCase().replace(/ß/g,'ss');
+  const hits=[],miss=[];
+  F.kw.forEach(g=>{
+    (g.k.some(k=>t.includes(k.toLowerCase()))?hits:miss).push(g.n);
+  });
+  return {hits,miss,words:(txt||'').trim().split(/\s+/).filter(Boolean).length};
+}
+
+/* ---- Prüfen ---- */
+function check(id){
+  const st=S[id],T=st.task;
+  let right=0,total=0,det=[];
+  const mark=(el,ok)=>{if(!el)return;el.classList.remove('ok-in','bad-in','ok','bad');el.classList.add(ok?(el.tagName==='INPUT'?'ok-in':'ok'):(el.tagName==='INPUT'?'bad-in':'bad'));};
+
+  if(T.type==='tf'){
+    T.items.forEach((it,i)=>{
+      total++;const v=st.ans['tf'+i];const ok=(v===it.a);
+      if(ok)right++;
+      const row=document.getElementById('tf_'+id+'_'+i);
+      row.classList.remove('ok','bad');row.classList.add(v===undefined?'':(ok?'ok':'bad'));
+      document.getElementById('tfm_'+id+'_'+i).textContent=v===undefined?'':(ok?'✓':'✗');
+      det.push({q:'Aussage '+(i+1),a:v===undefined?null:(v?'wahr':'falsch'),ok:v===undefined?null:ok,sol:it.a?'wahr':'falsch'});
+    });
+  }
+  if(T.type==='mc'){ const r=chkMC(id,T.opts,T.multi);right+=r.r;total+=r.t;det=det.concat(r.det); }
+  if(T.mc){ const r=chkMC(id+'_mc',T.mc.opts,false);right+=r.r;total+=r.t;det=det.concat(r.det); }
+  if(T.match2){
+    T.match2.items.forEach((it,i)=>{
+      total++;const sel=document.getElementById('m2_'+id+'_'+i);
+      const v=parseInt(sel.value,10);const ok=(v===it.a);
+      if(ok)right++;
+      sel.classList.remove('ok-in','bad-in');
+      if(v>=0) sel.classList.add(ok?'ok-in':'bad-in');
+      document.getElementById('m2m_'+id+'_'+i).textContent=v<0?'':(ok?'✓':'✗');
+      det.push({q:it.q.replace(/<[^>]+>/g,''),a:v>=0?T.match2.opts[v]:null,ok:v<0?null:ok,sol:T.match2.opts[it.a]});
+    });
+  }
+
+  if(T.type==='match'){
+    T.items.forEach((it,i)=>{
+      total++;const sel=document.getElementById('ms_'+id+'_'+i);
+      const v=parseInt(sel.value,10);const ok=(v===it.a);
+      if(ok)right++;
+      mark(sel,ok&&v>=0);
+      if(v<0){sel.classList.remove('ok-in','bad-in');}
+      document.getElementById('mm_'+id+'_'+i).textContent=v<0?'':(ok?'✓':'✗');
+      det.push({q:it.q.replace(/<[^>]+>/g,''),a:v>=0?T.opts[v]:null,ok:v<0?null:ok,sol:T.opts[it.a]});
+    });
+  }
+  if(T.type==='dnd'){
+    T.slots.forEach((s,slot)=>{
+      total++;
+      let chip=null;for(const k in st.placed) if(st.placed[k]===slot) chip=parseInt(k,10);
+      const ok=(chip===T.answer[slot]);
+      if(ok)right++;
+      const el=document.getElementById('slot_'+id+'_'+slot);
+      el.classList.remove('ok','bad');if(chip!==null)el.classList.add(ok?'ok':'bad');
+      document.getElementById('dm_'+id+'_'+slot).textContent=chip===null?'':(ok?'✓':'✗');
+      det.push({q:s,a:chip!==null?T.chips[chip]:null,ok:chip===null?null:ok,sol:T.chips[T.answer[slot]]});
+    });
+  }
+  if(T.items&&(T.type==='input'||T.type==='mixed')){
+    T.items.forEach((it,i)=>{
+      total++;const el=document.getElementById('in_'+id+'_'+i);
+      const v=el.value.trim();
+      const ok=v!==''&&it.chk(v);
+      if(ok)right++;
+      el.classList.remove('ok-in','bad-in');if(v!=='')el.classList.add(ok?'ok-in':'bad-in');
+      document.getElementById('im_'+id+'_'+i).textContent=v===''?'':(ok?'✓':'✗');
+      det.push({q:((it.l?it.l+' ':'')+it.q).replace(/<[^>]+>/g,'').replace(/&nbsp;/g,' '),a:v||null,ok:v===''?null:ok,sol:it.sol});
+    });
+  }
+
+  // Freitexte (eine oder mehrere)
+  let freeHTML='';
+  const FR=frees(T);
+  st.freeTexts=[];st.freeEvals=[];
+  FR.forEach((F,k)=>{
+    const el=document.getElementById('fr_'+id+'_'+k);
+    const txt=el?el.value:'';
+    st.freeTexts[k]=txt;
+    const label=FR.length>1?('<b>'+(F.h||('Teilaufgabe '+(k+1)))+':</b> '):'<b>Erklärungsaufgabe:</b> ';
+    if(txt.trim().length<12){
+      st.freeEvals[k]=null;
+      freeHTML+=`<div style="margin-top:12px;padding-top:10px;border-top:1px dashed var(--line)">
+        ${label}Noch keine ausreichende Eingabe – schreiben Sie mindestens einen vollständigen Satz.</div>`;
+    }else{
+      const e=evalFreeKw(F,txt);st.freeEvals[k]=e;
+      freeHTML+=`<div style="margin-top:12px;padding-top:10px;border-top:1px dashed var(--line)">
+        ${label}<span style="font-size:.85rem;color:#b9b3dd">${e.words} Wörter</span>
+        <div style="margin-top:7px">Erkennbar dargestellt: ${e.hits.length?e.hits.map(h=>`<span class="kw hit">✓ ${h}</span>`).join(''):'<i>keiner der erwarteten Kernaspekte</i>'}</div>
+        <div style="margin-top:7px">Noch nicht erkennbar: ${e.miss.length?e.miss.map(h=>`<span class="kw miss">? ${h}</span>`).join(''):'<span class="kw hit">alle Kernaspekte enthalten</span>'}</div></div>`;
+    }
+  });
+  if(FR.length) freeHTML+=`<div class="auto-note">Hinweis: Dies ist eine <b>automatische, stichwortbasierte Orientierung</b>. Sie erkennt Schlüsselbegriffe, aber nicht, ob Ihre Argumentation fachlich schlüssig ist. Ein fehlender Punkt kann auch bedeuten, dass Sie ihn anders formuliert haben. Vergleichen Sie deshalb immer mit der Musterlösung.</div>`;
+
+  st.checked=true;st.det=det;
+  const fb=document.getElementById('fb_'+id);
+  let cls,msg;
+  if(total===0){cls='mid';msg='<b>Erklärungsaufgaben geprüft.</b>';
+    const ok=st.freeEvals.filter(e=>e&&e.hits.length>=Math.ceil((e.hits.length+e.miss.length)/2)).length;
+    st.score=st.freeEvals.length?ok/st.freeEvals.length:0;}
+  else{
+    const q=right/total;st.score=q;
+    if(q===1){cls='good';msg=`<b>Alles richtig!</b> ${right} von ${total} Teilaufgaben korrekt.`;}
+    else if(q>=0.5){cls='mid';msg=`<b>Fast.</b> ${right} von ${total} Teilaufgaben korrekt. Schauen Sie sich die rot markierten Stellen noch einmal an – der Tipp hilft weiter.`;}
+    else{cls='bad';msg=`<b>Da geht noch was.</b> ${right} von ${total} Teilaufgaben korrekt. Lesen Sie den Info-Kasten am Anfang des Blocks noch einmal und nutzen Sie den Tipp.`;}
+  }
+  fb.className='fb show '+cls;fb.innerHTML=msg+freeHTML;
+
+  const dot=document.getElementById('dot_'+id);
+  dot.className='stat-dot '+(st.score===1?'ok':(st.score>=0.5?'part':'bad'));
+  document.getElementById('acc_'+id).classList.toggle('done',st.score===1);
+  updProgress();
+}
+function chkMC(key,opts,multi){
+  let r=0,t=0,det=[],chosen=[];
+  opts.forEach((o,i)=>{
+    const inp=document.querySelector(`#op_${key}_${i} input`);
+    const el=document.getElementById('op_'+key+'_'+i);
+    el.classList.remove('ok','bad');
+    const sel=inp.checked;if(sel)chosen.push(o.s);
+    if(multi){
+      t++;const ok=(sel===o.a);if(ok)r++;
+      if(sel||o.a) el.classList.add(ok?'ok':'bad');
+      document.getElementById('opm_'+key+'_'+i).textContent=o.a?'✓ richtig':(sel?'✗':'');
+    }else{
+      if(sel){t=1;if(o.a)r=1;el.classList.add(o.a?'ok':'bad');
+        document.getElementById('opm_'+key+'_'+i).textContent=o.a?'✓':'✗';}
+      else if(o.a){document.getElementById('opm_'+key+'_'+i).textContent='';}
+    }
+  });
+  if(!multi&&t===0)t=1;
+  det.push({q:'Multiple-Choice',a:chosen.length?chosen.join(' | '):null,ok:chosen.length?(r===t):null,
+    sol:opts.filter(o=>o.a).map(o=>o.s).join(' | ')});
+  return {r,t,det};
+}
+
+function updProgress(){
+  let done=0,ok=0,part=0,all=0;
+  BLOCKS.forEach(B=>B.tasks.forEach(T=>{all++;const s=S[T.id];
+    if(s.checked){done++;if(s.score===1)ok++;else if(s.score>=0.5)part++;}}));
+  document.getElementById('pDone').textContent=done;
+  document.getElementById('pOk').textContent=ok;
+  document.getElementById('pPart').textContent=part;
+  document.getElementById('pOpen').textContent=all-done;
+  document.getElementById('pFill').style.width=(done/all*100)+'%';
+}
+
+/* ---- Export ---- */
+function exportTxt(){
+  const name=document.getElementById('stName').value.trim()||'ohne_Name';
+  const kurs=document.getElementById('stKurs').value.trim();
+  const d=new Date();const p=n=>String(n).padStart(2,'0');
+  const dat=`${p(d.getDate())}.${p(d.getMonth()+1)}.${d.getFullYear()}`;
+  let L=[];
+  L.push('==========================================================');
+  L.push('  ERGEBNISPROTOKOLL');
+  L.push('  Fit fuer die Integralrechnung - Wiederholung Vorkenntnisse');
+  L.push('  Mathematik Jg. 12 gA');
+  L.push('==========================================================');
+  L.push('Name:  '+name);
+  L.push('Kurs:  '+(kurs||'-'));
+  L.push('Datum: '+dat+', '+p(d.getHours())+':'+p(d.getMinutes()));
+  L.push('');
+  L.push('Legende: [v] richtig  [x] falsch  [~] teilweise  [-] nicht bearbeitet  [i] Freitext');
+  L.push('');
+
+  let gOk=0,gAll=0,gDone=0;
+  BLOCKS.forEach(B=>{
+    L.push('');L.push('----------------------------------------------------------');
+    L.push(B.title.toUpperCase().replace(/·/g,'-'));
+    L.push('----------------------------------------------------------');
+    B.tasks.forEach(T=>{
+      const s=S[T.id];gAll++;
+      let flag='[-]';
+      if(s.checked){gDone++;flag=s.score===1?'[v]':(s.score>=0.5?'[~]':'[x]');if(s.score===1)gOk++;}
+      L.push('');
+      L.push(`${flag} ${T.id} - ${T.ttl}   (${T.n}, ${T.fmt}, ${T.t} min)`);
+      if(!s.checked){L.push('    nicht bearbeitet');return;}
+      (s.det||[]).forEach(dd=>{
+        const m=dd.ok===null?'[-]':(dd.ok?'[v]':'[x]');
+        L.push(`    ${m} ${dd.q}`);
+        L.push(`         Antwort: ${dd.a===null?'(leer)':dd.a}`);
+        if(dd.ok!==true) L.push(`         Richtig: ${dd.sol}`);
+      });
+      frees(T).forEach((F,k)=>{
+        L.push('    [i] Erklaerungsaufgabe '+(F.h||('Teil '+(k+1))));
+        L.push('         Frage: '+F.q.replace(/<[^>]+>/g,''));
+        const txt=((s.freeTexts&&s.freeTexts[k])||'').trim();
+        L.push('         Antwort des Schuelers/der Schuelerin:');
+        if(!txt) L.push('           (leer)');
+        else txt.split('\n').forEach(z=>L.push('           '+z));
+        const e=s.freeEvals&&s.freeEvals[k];
+        if(e){
+          L.push('         Automatische Rueckmeldung (stichwortbasiert):');
+          L.push('           erkannt : '+(e.hits.join('; ')||'-'));
+          L.push('           fehlt   : '+(e.miss.join('; ')||'-'));
+          L.push('           Hinweis : automatische Orientierung, keine fachliche Bewertung');
+        }
+      });
+      if(T.upload){
+        L.push('    Rechenweg-Datei: '+(s.file||'nicht hochgeladen'));
+        if(s.diagSel&&s.diagSel.length){
+          L.push('    Selbstdiagnose zum Rechenweg – angekreuzt:');
+          s.diagSel.forEach(x=>L.push('       - '+x.replace(/<[^>]+>/g,'')));
+        }
+      }
+      if(s.chat&&s.chat.length){
+        L.push('    Fragen an den Tipp-Assistenten:');
+        s.chat.forEach(c=>{L.push('       Frage: '+c.q);L.push('       Tipp : '+c.a);});
+      }
+    });
+  });
+  L.push('');L.push('==========================================================');
+  L.push(`ZUSAMMENFASSUNG: ${gDone} von ${gAll} Aufgaben bearbeitet, davon ${gOk} vollstaendig richtig.`);
+  L.push('==========================================================');
+
+  const blob=new Blob([L.join('\r\n')],{type:'text/plain;charset=utf-8'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download=`Integralrechnung_Wiederholung_${name.replace(/[^A-Za-zÄÖÜäöüß0-9]/g,'_')}_${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}.txt`;
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+  URL.revokeObjectURL(a.href);
+}
+
+build();
+</script>
+</body>
+</html>
