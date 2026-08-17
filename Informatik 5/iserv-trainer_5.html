@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>IServ-Trainer</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap');
+
+:root{
+  --page-bg:#dbe4ec; --white:#ffffff; --border:#e3e8ee; --border-strong:#d3dce4;
+  --navy:#16324f; --text:#22323f; --muted:#7c8a9a;
+  --teal:#1a8f86; --teal-light:#e4f5f3; --teal-text:#0f6b63;
+  --blue-dark:#1f4e8c; --green:#23a55a; --red:#e5484d; --red-light:#fdeceb;
+  --amber:#ffb703; --amber-bg:#fff6e0; --amber-text:#8a6100;
+  --purple:#7c5cff; --purple-light:#efe9ff;
+  --shadow:0 18px 44px rgba(22,50,79,0.18);
+  --font-display:'Baloo 2', sans-serif; --font-body:'Nunito', sans-serif;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0; min-height:100vh;
+  background: radial-gradient(circle at 8% 6%, #c9dcec 0%, transparent 42%),
+              radial-gradient(circle at 92% 92%, #ffe3ae 0%, transparent 38%), var(--page-bg);
+  font-family: var(--font-body); color: var(--text);
+  display:flex; justify-content:center; padding: 22px 14px 130px;
+}
+h1,h2,h3{ font-family: var(--font-display); margin:0; }
+
+.browser-frame{ width:100%; max-width: 1020px; border-radius: 18px; overflow:hidden; box-shadow: var(--shadow); background:#0e1f33; }
+.browser-bar{ display:flex; align-items:center; gap:12px; padding: 10px 14px; }
+.browser-dots{ display:flex; gap:6px; }
+.browser-dots span{ width:10px;height:10px;border-radius:50%; background:#3a4e66; }
+.browser-url{ flex:1; background:#16324f; color:#cfe0ee; border-radius: 999px; padding: 7px 16px; font-size:.85rem; font-family: monospace; display:flex; align-items:center; gap:8px; }
+.practice-badge{ background: var(--amber); color:#4a3400; font-family: var(--font-display); font-weight:700; font-size:.72rem; padding: 4px 10px; border-radius: 999px; white-space:nowrap; }
+.app-window{ background: var(--white); min-height: 660px; position:relative; }
+
+.overlay-screen{ display:none; padding: 34px 30px 30px; }
+.overlay-screen.active{ display:block; animation: rise .35s ease; }
+@keyframes rise{ from{opacity:0; transform:translateY(12px);} to{opacity:1; transform:translateY(0);} }
+
+.eyebrow{ font-family: var(--font-display); font-weight:700; color: var(--teal-text); text-transform:uppercase; font-size:.76rem; letter-spacing:.08em; margin-bottom:6px; }
+.title{ font-size:1.55rem; color: var(--navy); margin-bottom:10px; }
+.lead{ font-size:1.02rem; line-height:1.55; color:#4c5d6e; margin-bottom:16px; }
+
+.btn{ font-family: var(--font-display); font-weight:700; font-size:1rem; border:none; border-radius: 12px; padding: 12px 24px; cursor:pointer; background: var(--teal); color:#fff; box-shadow: 0 5px 0 var(--teal-text); transition: transform .08s ease; }
+.btn:active{ transform: translateY(3px); box-shadow: 0 2px 0 var(--teal-text); }
+.btn.secondary{ background:#fff; color: var(--teal-text); box-shadow: 0 5px 0 #cfe6e2; border: 2px solid var(--teal); }
+.btn-row{ display:flex; gap:12px; flex-wrap:wrap; margin-top:18px; }
+
+.class-picker{ background:#f5fafd; border:2px solid var(--border); border-radius:14px; padding:16px 18px; margin-top:6px; }
+.class-picker-label{ font-weight:800; color:var(--navy); margin:0 0 10px; font-family:var(--font-display); font-size:1rem; }
+.class-btn-row{ display:flex; gap:10px; flex-wrap:wrap; }
+.class-btn{ font-family:var(--font-display); font-weight:800; font-size:1.05rem; border:2px solid var(--border-strong); background:#fff; color:var(--navy); border-radius:12px; padding:12px 22px; cursor:pointer; transition: all .12s ease; }
+.class-btn:hover{ border-color: var(--teal); }
+.class-btn.selected{ background: var(--teal); border-color: var(--teal-text); color:#fff; box-shadow: 0 4px 0 var(--teal-text); }
+.class-picker-hint{ margin:10px 0 0; color:var(--muted); font-size:.85rem; font-weight:700; }
+
+.checklist{ display:grid; gap:10px; margin: 16px 0; }
+.check-item{ display:flex; align-items:center; gap:14px; background:#f5fafd; border:2px solid var(--border); border-radius:12px; padding:12px 14px; }
+.check-item .icon{ width:38px;height:38px;flex:0 0 38px; display:flex;align-items:center;justify-content:center; background:#fff;border-radius:9px;font-size:1.2rem;box-shadow: inset 0 0 0 2px var(--border-strong); }
+.check-item p{ margin:0; font-weight:700; color:var(--navy); }
+.check-item span{ display:block; font-weight:400; color:var(--muted); font-size:.9rem; }
+
+/* keyboard */
+.keyboard-wrap{ background:#f0f4f8; border:2px solid var(--border-strong); border-radius:16px; padding: 16px; margin: 16px 0; }
+.keyboard-flex{ display:flex; gap:16px; align-items:flex-start; }
+.main-keys{ flex:1; display:flex; flex-direction:column; gap:5px; }
+.numpad{ flex:0 0 168px; display:flex; flex-direction:column; gap:5px; }
+.krow{ display:flex; gap:5px; }
+.key{ background:#fff; border:1px solid #cfd9e2; border-bottom:3px solid #b9c6d2; border-radius:7px; font-family: var(--font-body); font-weight:700; font-size:.78rem; color: var(--navy); height:34px; flex:1; display:flex;align-items:center;justify-content:center; }
+.key.w15{ flex:1.5; } .key.w2{ flex:2; } .key.wspace{ flex:7; }
+.key.shift{ background: var(--teal-light); border-color:#9fd6d0; color: var(--teal-text); font-size:1.05rem; }
+.key.shift.pulse{ animation: pulseKey 1.2s infinite; }
+@keyframes pulseKey{ 0%{ box-shadow: 0 0 0 0 rgba(26,143,134,0.45), 0 3px 0 #9fd6d0;} 70%{ box-shadow: 0 0 0 9px rgba(26,143,134,0), 0 3px 0 #9fd6d0;} 100%{ box-shadow: 0 0 0 0 rgba(26,143,134,0), 0 3px 0 #9fd6d0;} }
+.keyboard-caption{ text-align:center; margin-top:12px; font-weight:700; color: var(--teal-text); background: var(--teal-light); border-radius:10px; padding:10px 14px; font-size:.95rem; }
+.numpad-label{ text-align:center; font-size:.7rem; color:var(--muted); font-weight:800; text-transform:uppercase; margin-bottom:2px; }
+
+/* login */
+.login-card{ max-width: 380px; margin: 10px auto 0; background: linear-gradient(180deg,#f7fbfe,#eef6fb); border: 2px solid #dceaf4; border-radius: 16px; padding: 24px; text-align:center; }
+.login-card .logo{ width:54px;height:54px;border-radius:14px; background: var(--teal); color:#fff; display:flex;align-items:center;justify-content:center; font-family:'Baloo 2', sans-serif; font-weight:800; font-size:1.4rem; margin: 0 auto 10px; }
+.login-field{ text-align:left; margin-bottom:12px; }
+.login-field label{ display:block; font-weight:700; color:var(--navy); margin-bottom:5px; font-size:.9rem; }
+.login-field input{ width:100%; font-family: var(--font-body); font-size:1rem; padding: 11px 13px; border-radius: 10px; border: 2px solid var(--border-strong); background:#fbfdff; color: var(--navy); }
+.login-field input:focus{ outline:none; border-color: var(--teal); }
+.info-banner{ background: var(--teal-light); border: 1px solid #bfe6e1; color: var(--teal-text); border-radius:10px; padding: 10px 12px; font-size:.82rem; font-weight:700; margin-top:14px; text-align:left; }
+
+/* mail app shell */
+.iserv-app{ display:none; }
+.iserv-app.active{ display:flex; flex-direction:column; min-height:660px; }
+.top-strip{ display:flex; align-items:center; justify-content:space-between; padding: 12px 20px; border-bottom:1px solid var(--border); background:#fff; }
+.breadcrumb{ display:flex; align-items:center; gap:8px; color:var(--muted); font-weight:700; font-size:.92rem;}
+.breadcrumb b{ color: var(--navy); }
+.help-btn{ background: var(--blue-dark); color:#fff; border:none; border-radius:10px; padding:8px 16px; font-family: var(--font-display); font-weight:700; cursor:pointer; font-size:.88rem; }
+
+.task-banner{ display:flex; align-items:center; gap:16px; background: linear-gradient(135deg, var(--teal-light), #d9f0ee); border-bottom:2px solid #bfe6e1; padding: 16px 24px; }
+.task-banner .badge{ font-family: var(--font-display); font-weight:800; color:#fff; background: var(--teal); padding:8px 16px; border-radius:999px; font-size:.95rem; white-space:nowrap; box-shadow:0 3px 0 var(--teal-text); }
+.task-banner p{ margin:0; font-weight:800; color: var(--navy); font-size:1.08rem; }
+.task-banner span{ display:block; font-weight:600; color:#375166; font-size:.94rem; margin-top:3px;}
+
+.mail-shell{ display:flex; flex:1; min-height:520px; }
+.folder-sidebar{ width: 220px; flex:0 0 220px; background:#fff; border-right:1px solid var(--border); padding: 16px 14px; display:flex; flex-direction:column; }
+.mail-identity{ font-size:.8rem; color: var(--navy); font-weight:700; word-break:break-all; margin-bottom:14px; line-height:1.3;}
+.folder-nav{ display:flex; flex-direction:column; gap:3px; flex:1; }
+.folder-item{ display:flex; align-items:center; justify-content:space-between; gap:8px; padding:9px 10px; border-radius:9px; cursor:pointer; font-weight:700; color:#4c5d6e; font-size:.9rem; }
+.folder-item .fi-left{ display:flex; align-items:center; gap:9px; }
+.folder-item:hover{ background:#f3f6f9; }
+.folder-item.active{ background: var(--teal-light); color: var(--teal-text); }
+.folder-item .count{ background:#eef2f6; color:#6b7a8d; font-size:.72rem; padding:2px 7px; border-radius:999px; font-weight:800; }
+.folder-item.active .count{ background:#cdece7; color:var(--teal-text); }
+.settings-btn{ margin-top:14px; background:#fff; border:2px solid var(--blue-dark); color: var(--blue-dark); font-family: var(--font-display); font-weight:700; border-radius:10px; padding:9px; cursor:pointer; font-size:.85rem; }
+
+.list-col{ width: 310px; flex:0 0 310px; border-right:1px solid var(--border); display:flex; flex-direction:column; }
+.list-toolbar{ padding: 12px 14px 8px; border-bottom:1px solid var(--border); }
+.compose-btn{ width:100%; background: var(--blue-dark); color:#fff; border:none; border-radius:10px; padding:11px; font-family:var(--font-display); font-weight:700; cursor:pointer; font-size:.92rem; display:flex; align-items:center; justify-content:center; gap:8px; margin-bottom:8px; }
+.search-box{ width:100%; border:1px solid var(--border-strong); border-radius:9px; padding:8px 10px; font-size:.85rem; color:var(--navy); background:#f7f9fb; }
+.filter-row{ display:flex; gap:14px; padding:8px 14px; font-size:.82rem; color:var(--muted); font-weight:700; border-bottom:1px solid var(--border);}
+.mail-list{ flex:1; overflow-y:auto; }
+.mail-row{ padding: 12px 14px; border-bottom:1px solid var(--border); cursor:pointer; transition:background .12s; }
+.mail-row:hover{ background:#f7fafc; }
+.mail-row.selected{ background: var(--teal-light); }
+.mail-row .row-top{ display:flex; justify-content:space-between; align-items:center; gap:6px; }
+.mail-row .sender{ font-weight:700; color: var(--navy); font-size:.9rem; }
+.mail-row.unread .sender{ font-weight:800; }
+.mail-row .time{ font-size:.74rem; color:var(--muted); white-space:nowrap; }
+.mail-row .subject{ font-size:.85rem; color:#4c5d6e; margin-top:2px; }
+.mail-row.unread .subject{ color:var(--navy); font-weight:700; }
+.unread-dot{ width:8px;height:8px;border-radius:50%; background:var(--red); display:inline-block; margin-right:6px;}
+.folder-pill{ font-size:.68rem; font-weight:800; color: var(--teal-text); background: var(--teal-light); padding:2px 7px; border-radius:999px; margin-top:4px; display:inline-block; }
+.empty-note{ padding: 30px 18px; color:#a9b6c2; font-weight:700; font-size:.88rem; }
+
+.detail-col{ flex:1; padding:0; display:flex; flex-direction:column; }
+.empty-state{ flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; color:#a9b6c2; gap:10px; }
+.empty-state p{ font-weight:700; }
+
+.detail-view{ display:none; flex-direction:column; flex:1; padding: 18px 22px; overflow-y:auto; }
+.detail-view.active{ display:flex; animation: rise .25s ease; }
+.detail-meta{ font-size:.86rem; color:var(--muted); line-height:1.6; }
+.detail-meta b{ color: var(--navy); }
+.detail-subject{ font-size:1.2rem; color:var(--navy); margin: 8px 0 14px; }
+.toolbar-row{ display:flex; align-items:center; justify-content:space-between; padding: 10px 0; border-top:1px solid var(--border); border-bottom:1px solid var(--border); margin-bottom:14px; }
+.tool-icons{ display:flex; gap:4px; }
+.tool-btn{ width:36px;height:36px; border-radius:9px; border:none; background:transparent; cursor:pointer; font-size:1.05rem; display:flex; align-items:center; justify-content:center; color:#4c5d6e; }
+.tool-btn:hover{ background:#f0f3f6; }
+.tool-btn.trash:hover{ background: var(--red-light); color: var(--red); }
+.tool-btn.pulse{ animation: pulseKey 1.2s infinite; background: var(--teal-light); }
+.reply-btn{ background:#fff; border:2px solid var(--border-strong); color:var(--navy); font-weight:700; border-radius:9px; padding:7px 14px; font-size:.85rem; display:flex; gap:6px; align-items:center; cursor:not-allowed; opacity:.55; }
+.blocked-banner{ background: var(--amber-bg); border:1px solid #ffdf8a; color: var(--amber-text); border-radius:10px; padding:12px 14px; font-size:.88rem; font-weight:700; margin-bottom:14px; display:flex; align-items:center; gap:10px; }
+.blocked-banner button{ background:#fff; border:1px solid #ffdf8a; color:var(--amber-text); border-radius:7px; padding:5px 10px; font-weight:700; cursor:pointer; font-size:.8rem; }
+.detail-body{ line-height:1.65; color:#33444f; font-size:.96rem; white-space:pre-wrap; }
+.trash-note{ margin-top:16px; background:var(--amber-bg); border:1px solid #ffdf8a; color:var(--amber-text); border-radius:10px; padding:10px 14px; font-size:.85rem; font-weight:700; }
+
+/* compose */
+.compose-view{ display:none; flex-direction:column; flex:1; padding: 20px 26px; overflow-y:auto; }
+.compose-view.active{ display:flex; animation: rise .25s ease; }
+.field-block{ border:1px solid var(--border-strong); border-radius:11px; margin-bottom:10px; position:relative; }
+.field-block label{ display:block; font-size:.72rem; font-weight:800; color:var(--muted); text-transform:uppercase; letter-spacing:.04em; padding: 8px 14px 0; }
+.field-block input, .field-block textarea{ width:100%; border:none; outline:none; font-family:var(--font-body); font-size:1rem; padding: 4px 14px 12px; color: var(--text); background:transparent; resize:none; }
+.field-block.error{ border-color: var(--red); }
+.recipient-chip{ display:inline-flex; align-items:center; gap:7px; background: var(--teal-light); color: var(--teal-text); font-weight:800; padding:6px 12px; border-radius:999px; margin: 6px 14px 12px; font-size:.9rem; }
+.recipient-chip button{ background:none; border:none; color:var(--teal-text); cursor:pointer; font-weight:900; font-size:.95rem; }
+.suggest-box{ position:absolute; left:14px; right:14px; top:100%; background:#fff; border:1px solid var(--border-strong); border-radius:10px; box-shadow: var(--shadow); z-index:5; overflow:hidden; }
+.suggest-item{ padding:10px 14px; cursor:pointer; display:flex; flex-direction:column; }
+.suggest-item:hover{ background: var(--teal-light); }
+.suggest-item b{ color:var(--navy); font-size:.92rem; }
+.suggest-item span{ color:var(--muted); font-size:.82rem; }
+.attach-row{ display:flex; align-items:center; justify-content:space-between; padding:10px 14px; color:var(--muted); font-weight:700; font-size:.9rem; }
+.format-toolbar{ display:flex; gap:16px; align-items:center; padding: 8px 2px 10px; color:var(--muted); font-size:.85rem; font-weight:700; border-bottom:1px solid var(--border); margin-bottom:12px;}
+.compose-body{ flex:1; }
+.compose-body textarea{ min-height:150px; padding:14px; }
+.tip-strip{ background: var(--teal-light); border-radius:11px; padding:12px 14px; margin: 8px 0 14px; font-size:.86rem; color: var(--teal-text); font-weight:700; display:flex; gap:10px; align-items:flex-start; }
+.tip-strip ul{ margin:4px 0 0; padding-left:18px; font-weight:600; }
+.compose-actions{ display:flex; gap:10px; margin-top:auto; padding-top:14px; }
+.send-btn{ background: var(--green); color:#fff; border:none; border-radius:10px; padding:11px 22px; font-family:var(--font-display); font-weight:700; cursor:pointer; }
+.save-btn{ background: var(--blue-dark); color:#fff; border:none; border-radius:10px; padding:11px 22px; font-family:var(--font-display); font-weight:700; cursor:pointer; }
+.cancel-btn{ background:transparent; color:var(--muted); border:none; font-weight:700; cursor:pointer; padding: 11px 6px;}
+.feedback-box{ margin-top:12px; background: var(--red-light); border:1px solid #f5c6c4; color:#b3261e; border-radius:10px; padding:12px 14px; font-weight:700; font-size:.88rem; display:none; }
+.feedback-box.show{ display:block; animation: rise .2s ease; }
+.feedback-box ul{ margin:6px 0 0; padding-left:18px; font-weight:600; }
+
+.end-stars{ display:flex; gap:10px; justify-content:center; margin:18px 0; font-size:2.2rem; }
+
+.toast{ position:fixed; top:22px; left:50%; transform: translateX(-50%) translateY(-20px); background: var(--navy); color:#fff; padding:12px 22px; border-radius:12px; font-weight:700; box-shadow: var(--shadow); z-index:200; opacity:0; transition: all .25s ease; font-size:.92rem; }
+.toast.show{ opacity:1; transform: translateX(-50%) translateY(0); }
+
+.mascot-wrap{ position:fixed; right:16px; bottom:16px; display:flex; align-items:flex-end; gap:9px; max-width:250px; z-index:80; }
+.bubble{ background:#fff; border-radius:14px 14px 4px 14px; padding:9px 13px; box-shadow: var(--shadow); font-weight:700; font-size:.82rem; color:var(--navy); max-width:195px; }
+.owl{ width:44px;height:44px;flex:0 0 44px; }
+
+/* big centered servi modal */
+.servi-overlay{ display:none; position:fixed; inset:0; background:rgba(16,30,48,0.55); z-index:400; align-items:center; justify-content:center; padding:20px; }
+.servi-overlay.show{ display:flex; animation: rise .2s ease; }
+.servi-modal{ background:linear-gradient(160deg,#fff,#eef9f7); border-radius:22px; padding:26px 28px 24px; max-width:420px; width:100%; text-align:center; box-shadow: var(--shadow); border: 3px solid var(--teal-light); }
+.servi-modal .owl-big{ width:82px; height:82px; margin: 0 auto 12px; }
+.servi-modal-bubble{ background:#fff; border:2px solid var(--teal-light); border-radius:16px; padding:16px 18px; font-weight:700; color:var(--navy); font-size:1rem; line-height:1.5; margin-bottom:16px; }
+.servi-modal .btn{ padding:11px 30px; }
+
+.confetti{ position:fixed; inset:0; pointer-events:none; overflow:hidden; z-index:300; }
+.confetti span{ position:absolute; top:-20px; width:9px;height:14px;border-radius:2px; animation: fall linear forwards; }
+@keyframes fall{ to{ transform: translateY(110vh) rotate(360deg); opacity:.9; } }
+
+@media (max-width: 760px){
+  .mail-shell{ flex-direction:column; }
+  .folder-sidebar{ width:100%; flex:none; flex-direction:row; overflow-x:auto; }
+  .folder-nav{ flex-direction:row; }
+  .list-col{ width:100%; flex:none; }
+  .mascot-wrap{ display:none; }
+  .keyboard-flex{ flex-direction:column; }
+  .numpad{ flex:none; width:100%; }
+}
+</style>
+</head>
+<body>
+
+<div class="browser-frame">
+  <div class="browser-bar">
+    <div class="browser-dots"><span></span><span></span><span></span></div>
+    <div class="browser-url">🔒 iserv.greselius-gymnasium.de</div>
+    <div class="practice-badge">ÜBUNGSVERSION</div>
+  </div>
+
+  <div class="app-window">
+
+    <!-- INTRO -->
+    <section class="overlay-screen active" id="screen-intro">
+      <div class="eyebrow">Bevor es losgeht</div>
+      <h2 class="title">Willkommen bei deinem IServ-Training! 🦉</h2>
+      <p class="lead">Servi, die IServ-Eule, begleitet dich heute. Du übst hier auf einer Seite, die genauso aussieht wie das echte IServ.</p>
+      <div class="info-banner" style="margin-bottom:16px;">⚠️ <b>Wichtig:</b> Die E-Mails in diesem Postfach sind nur zum Üben erfunden. Der „Wandertag“ darin findet zum Beispiel <b>nicht wirklich</b> statt! Nur eine Sache stimmt wirklich: Unser <b>Sommerfest findet am 28.08.2026</b> statt – das ist ein echter Termin.</div>
+      <div class="checklist">
+        <div class="check-item"><div class="icon">🔑</div><div><p>Anmelden üben</p><span>Mit deinem Benutzernamen und Passwort</span></div></div>
+        <div class="check-item"><div class="icon">📬</div><div><p>Postfach erkunden</p><span>Was bedeuten Posteingang, Gesendet, Papierkorb & Co.?</span></div></div>
+        <div class="check-item"><div class="icon">✉️</div><div><p>E-Mails schreiben</p><span>Mit Kontakt, Betreff, Anrede, Text und Grußformel</span></div></div>
+        <div class="check-item"><div class="icon">🔒</div><div><p>Danach: das echte IServ</p><span>Wenn du dich sicher fühlst, geht's im echten Postfach weiter</span></div></div>
+      </div>
+
+      <div class="class-picker">
+        <p class="class-picker-label">Wähle zuerst deine Klasse aus:</p>
+        <div class="class-btn-row" id="classBtnRow">
+          <button class="class-btn" data-class="5a" onclick="selectClass('5a')">5a</button>
+          <button class="class-btn" data-class="5b" onclick="selectClass('5b')">5b</button>
+          <button class="class-btn" data-class="5c" onclick="selectClass('5c')">5c</button>
+          <button class="class-btn" data-class="5d" onclick="selectClass('5d')">5d</button>
+        </div>
+        <p class="class-picker-hint" id="classPickerHint">Das entscheidet, an wen deine erste E-Mail geht.</p>
+      </div>
+
+      <div class="btn-row"><button class="btn" onclick="goFromIntro()">Weiter →</button></div>
+    </section>
+
+    <!-- KEYBOARD INFO -->
+    <section class="overlay-screen" id="screen-keyboard">
+      <div class="eyebrow">Kurzer Tipp vorab</div>
+      <h2 class="title">Großbuchstaben tippen</h2>
+      <p class="lead">Für einen Großbuchstaben hältst du eine der beiden <b>Umschalttasten</b> gedrückt. Auf der echten Tastatur steht dort kein Wort – nur ein Symbol. Hier siehst du eine normale deutsche Tastatur mit Nummernblock:</p>
+
+      <div class="keyboard-wrap">
+        <div class="keyboard-flex">
+          <div class="main-keys">
+            <div class="krow">
+              <div class="key">^</div><div class="key">1</div><div class="key">2</div><div class="key">3</div><div class="key">4</div><div class="key">5</div><div class="key">6</div><div class="key">7</div><div class="key">8</div><div class="key">9</div><div class="key">0</div><div class="key">ß</div><div class="key">´</div><div class="key w2">⌫</div>
+            </div>
+            <div class="krow">
+              <div class="key w15">⇥</div><div class="key">Q</div><div class="key">W</div><div class="key">E</div><div class="key">R</div><div class="key">T</div><div class="key">Z</div><div class="key">U</div><div class="key">I</div><div class="key">O</div><div class="key">P</div><div class="key">Ü</div><div class="key">+</div>
+            </div>
+            <div class="krow">
+              <div class="key w2">⇪</div><div class="key">A</div><div class="key">S</div><div class="key">D</div><div class="key">F</div><div class="key">G</div><div class="key">H</div><div class="key">J</div><div class="key">K</div><div class="key">L</div><div class="key">Ö</div><div class="key">Ä</div><div class="key w15">⏎</div>
+            </div>
+            <div class="krow">
+              <div class="key shift pulse w2">⇧</div><div class="key">Y</div><div class="key">X</div><div class="key">C</div><div class="key">V</div><div class="key">B</div><div class="key">N</div><div class="key">M</div><div class="key">,</div><div class="key">.</div><div class="key">-</div><div class="key shift pulse w2">⇧</div>
+            </div>
+            <div class="krow">
+              <div class="key w15">Strg</div><div class="key">⊞</div><div class="key">Alt</div><div class="key wspace"></div><div class="key">AltGr</div><div class="key w15">Strg</div>
+            </div>
+          </div>
+          <div class="numpad">
+            <div class="numpad-label">Nummernblock</div>
+            <div class="krow"><div class="key">⇭</div><div class="key">/</div><div class="key">*</div><div class="key">⌫</div></div>
+            <div class="krow"><div class="key">7</div><div class="key">8</div><div class="key">9</div><div class="key">-</div></div>
+            <div class="krow"><div class="key">4</div><div class="key">5</div><div class="key">6</div><div class="key">+</div></div>
+            <div class="krow"><div class="key">1</div><div class="key">2</div><div class="key">3</div><div class="key">⏎</div></div>
+            <div class="krow"><div class="key w2">0</div><div class="key">,</div><div class="key">⏎</div></div>
+          </div>
+        </div>
+        <div class="keyboard-caption">⇧ = Umschalttaste. Gedrückt halten + Buchstabe tippen = GROSSER Buchstabe.</div>
+      </div>
+
+      <div class="btn-row"><button class="btn" onclick="goToOverlay('screen-login')">Weiter →</button></div>
+    </section>
+
+    <!-- LOGIN -->
+    <section class="overlay-screen" id="screen-login">
+      <div class="eyebrow">Schritt 3</div>
+      <h2 class="title">Jetzt meldest du dich an</h2>
+      <p class="lead">Genau wie im echten IServ meldest du dich mit deinem Benutzernamen (Vorname.Nachname) und deinem Passwort an.</p>
+
+      <div class="login-card">
+        <div class="logo">IS</div>
+        <h3 style="margin-bottom:14px;">Anmeldung</h3>
+        <div class="login-field">
+          <label for="userInput">Benutzername</label>
+          <input type="text" id="userInput" placeholder="vorname.nachname">
+        </div>
+        <div class="login-field">
+          <label for="passInput">Passwort</label>
+          <input type="password" id="passInput" placeholder="Dein Passwort">
+        </div>
+        <button class="btn" style="width:100%;" onclick="checkLogin()">Anmelden</button>
+        <div class="info-banner">💡 Du kannst hier ruhig deinen echten Benutzernamen und dein echtes Passwort eingeben – diese Übungsseite ist aber nicht mit dem echten IServ verbunden. Es wird nichts gespeichert.</div>
+      </div>
+    </section>
+
+    <!-- END -->
+    <section class="overlay-screen" id="screen-end">
+      <div class="eyebrow">Geschafft</div>
+      <h2 class="title">Super gemacht! 🎉</h2>
+      <p class="lead">Du kannst jetzt dein Postfach erkunden, einen Kontakt suchen, eine E-Mail mit Anrede, Text und Grußformel schreiben, Groß-/Kleinschreibung beachten und eine Mail löschen.</p>
+      <div class="end-stars" id="endStars"></div>
+      <p class="lead" id="endRealWorldTip"><b>Wenn du dich sicher fühlst:</b> Melde dich jetzt im echten IServ an und schreibe eine E-Mail an deine Klassenlehrerin / deinen Klassenlehrer <b>und</b> an eine gute Freundin / einen guten Freund – zum Beispiel darüber, was du in den Sommerferien erlebt hast!</p>
+      <div class="btn-row"><button class="btn secondary" onclick="resetAll()">Nochmal üben 🔁</button></div>
+    </section>
+
+    <!-- IServ APP -->
+    <div class="iserv-app" id="iservApp">
+      <div class="top-strip">
+        <div class="breadcrumb">🏠 <span>›</span> E-Mail <span>›</span> <b id="breadcrumbTail">Posteingang</b></div>
+        <button class="help-btn" onclick="showHelp()">Hilfe</button>
+      </div>
+
+      <div class="task-banner" id="taskBanner">
+        <div class="badge" id="taskBadge">Aufgabe 1/5</div>
+        <div><p id="taskTitle">Titel</p><span id="taskDesc">Beschreibung</span></div>
+      </div>
+
+      <div class="mail-shell">
+        <aside class="folder-sidebar">
+          <div class="mail-identity" id="mailIdentity">dein.name@greselius-gymnasium.de</div>
+          <nav class="folder-nav">
+            <div class="folder-item active" data-folder="inbox" onclick="openFolder('inbox')"><span class="fi-left">📥 Posteingang</span><span class="count" id="countInbox">0</span></div>
+            <div class="folder-item" data-folder="sent" onclick="openFolder('sent')"><span class="fi-left">📤 Gesendet</span><span class="count" id="countSent">0</span></div>
+            <div class="folder-item" data-folder="drafts" onclick="openFolder('drafts')"><span class="fi-left">📝 Entwürfe</span><span class="count" id="countDrafts">0</span></div>
+            <div class="folder-item" data-folder="trash" onclick="openFolder('trash')"><span class="fi-left">🗑️ Papierkorb</span><span class="count" id="countTrash">0</span></div>
+            <div class="folder-item" data-folder="junk" onclick="openFolder('junk')"><span class="fi-left">🌀 Unerwünscht</span><span class="count" id="countJunk">0</span></div>
+            <div class="folder-item" data-folder="archive" onclick="openFolder('archive')"><span class="fi-left">📦 Archiv</span><span class="count" id="countArchive">0</span></div>
+          </nav>
+          <button class="settings-btn">⚙️ Einstellungen</button>
+        </aside>
+
+        <div class="list-col">
+          <div class="list-toolbar">
+            <button class="compose-btn" onclick="openCompose()">✏️ Verfassen</button>
+            <input class="search-box" id="searchBox" placeholder="Suchen in deinem Postfach ..." oninput="onSearchInput(this.value)">
+          </div>
+          <div class="filter-row"><span>▽ Filtern</span><span>↕ Sortieren</span></div>
+          <div class="mail-list" id="mailList"></div>
+        </div>
+
+        <div class="detail-col">
+          <div class="empty-state" id="emptyState">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 8l9 6 9-6M4 5h16a1 1 0 011 1v12a1 1 0 01-1 1H4a1 1 0 01-1-1V6a1 1 0 011-1z"/></svg>
+            <p>Keine Nachricht ausgewählt</p>
+          </div>
+
+          <div class="detail-view" id="detailView">
+            <div class="detail-meta">
+              <div><b>Von:</b> <span id="dvFrom"></span></div>
+              <div><b>An:</b> <span id="dvTo"></span></div>
+              <div id="dvDate"></div>
+            </div>
+            <h3 class="detail-subject" id="dvSubject"></h3>
+            <div class="toolbar-row">
+              <div class="tool-icons">
+                <button class="tool-btn trash" id="trashBtn" title="In den Papierkorb verschieben" onclick="deleteCurrentMail()">🗑️</button>
+                <button class="tool-btn" title="Verschieben">📁</button>
+                <button class="tool-btn" title="Markieren">⭐</button>
+                <button class="tool-btn" title="Archivieren">📦</button>
+                <button class="tool-btn" title="Als ungelesen">🙈</button>
+                <button class="tool-btn" title="Termin">📅</button>
+                <button class="tool-btn" title="Mehr">⋮</button>
+              </div>
+              <div><button class="reply-btn" title="In diesem Training nicht nötig">↩ Antworten</button></div>
+            </div>
+            <div class="blocked-banner" id="blockedBanner" style="display:none;">⚠️ Externe Inhalte wurden blockiert.<button onclick="document.getElementById('blockedBanner').style.display='none'">Trotzdem anzeigen</button></div>
+            <div class="detail-body" id="dvBody"></div>
+            <div class="trash-note" id="trashNote" style="display:none;">🗑️ Mails im Papierkorb werden automatisch nach 7 Tagen endgültig gelöscht.</div>
+          </div>
+
+          <div class="compose-view" id="composeView">
+            <div class="field-block" id="toBlock">
+              <label>An</label>
+              <input type="text" id="toInput" placeholder="Vorname.Nachname eingeben ..." autocomplete="off" oninput="onToInput()">
+              <div class="suggest-box" id="suggestBox" style="display:none;"></div>
+            </div>
+            <div id="chipHolder"></div>
+
+            <div class="field-block" id="subjectBlock">
+              <label>Betreff</label>
+              <input type="text" id="subjectInput" placeholder="Worum geht es?">
+            </div>
+
+            <div class="attach-row">📎 Anhänge <span>›</span></div>
+            <div class="format-toolbar"><span>↺</span><span>↻</span><span>✎ Formatiert</span><span>✒ Signatur ⌄</span><span style="margin-left:auto;">☑ Lesebestätigung anfordern</span></div>
+
+            <div class="tip-strip">💡 <div>Eine gute E-Mail hat 3 Teile:
+              <ul><li><b>Anrede</b> – z. B. „Hallo Frau Huber,“</li><li><b>Text</b> – dein Anliegen, höflich formuliert</li><li><b>Grußformel</b> – z. B. „Viele Grüße, Dein Vorname“</li></ul>
+            </div></div>
+
+            <div class="field-block compose-body" id="bodyBlock"><label>Nachricht</label><textarea id="bodyInput" placeholder="Schreibe hier deine Nachricht ..."></textarea></div>
+            <div class="feedback-box" id="composeFeedback"></div>
+            <div class="compose-actions">
+              <button class="send-btn" onclick="sendMail()">📨 Senden</button>
+              <button class="save-btn" onclick="toast('Entwurf gespeichert (nur zur Übung).')">💾 Speichern</button>
+              <button class="cancel-btn" onclick="cancelCompose()">✕ Abbrechen</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="mascot-wrap">
+  <svg class="owl" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <ellipse cx="50" cy="58" rx="34" ry="30" fill="#1a8f86"/><circle cx="36" cy="42" r="14" fill="#fff"/><circle cx="64" cy="42" r="14" fill="#fff"/>
+    <circle cx="36" cy="42" r="6" fill="#16324f"/><circle cx="64" cy="42" r="6" fill="#16324f"/><polygon points="50,50 44,60 56,60" fill="#ffb703"/>
+    <path d="M30 26 L20 10 L36 18 Z" fill="#12706a"/><path d="M70 26 L80 10 L64 18 Z" fill="#12706a"/>
+  </svg>
+  <div class="bubble" id="mascotText">Hallo, ich bin Servi! 🦉</div>
+</div>
+
+<div class="servi-overlay" id="serviOverlay">
+  <div class="servi-modal">
+    <svg class="owl-big" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="50" cy="58" rx="34" ry="30" fill="#1a8f86"/><circle cx="36" cy="42" r="14" fill="#fff"/><circle cx="64" cy="42" r="14" fill="#fff"/>
+      <circle cx="36" cy="42" r="6" fill="#16324f"/><circle cx="64" cy="42" r="6" fill="#16324f"/><polygon points="50,50 44,60 56,60" fill="#ffb703"/>
+      <path d="M30 26 L20 10 L36 18 Z" fill="#12706a"/><path d="M70 26 L80 10 L64 18 Z" fill="#12706a"/>
+    </svg>
+    <div class="servi-modal-bubble" id="serviModalText"></div>
+    <button class="btn" onclick="closeServiModal()">Verstanden!</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ===================== CONFIG (hier passt die jeweilige Lehrkraft an) ===================== */
+const DOMAIN = 'greselius.net';
+const CONFIG = {
+  studentAddress: 'dein.name@greselius-gymnasium.de'
+};
+const TEACHERS = [
+  { name:'Sabrina Leonard', local:'sabrina.leonard' },
+  { name:'Martina Porysiak', local:'martina.porysiak' },
+  { name:'Hubertus Eisenhauer', local:'hubertus.eisenhauer' },
+  { name:'Christian von der Heide', local:'christian.vonderHeide' },
+  { name:'Franziska Huber', local:'franziska.huber' }
+].map(t => ({ ...t, mail: t.local + '@' + DOMAIN }));
+const FRIEND = { name:'Max Mustermann', local:'max.mustermann', mail:'max.mustermann@' + DOMAIN };
+const ALL_CONTACTS = [...TEACHERS, FRIEND];
+
+/* Klasse -> Klassenlehrkraft. Aufgabe 1 (Vorstellungsmail) geht IMMER an diese Person. */
+const CLASS_TEACHER = { '5a':'sabrina.leonard', '5b':'martina.porysiak', '5c':'hubertus.eisenhauer', '5d':'christian.vonderHeide' };
+
+document.getElementById('mailIdentity').textContent = CONFIG.studentAddress;
+document.getElementById('dvTo').textContent = CONFIG.studentAddress;
+
+/* ===================== Klassenwahl ===================== */
+let selectedClass = null;
+let myTeacher = null;
+let otherTeacher = null;
+
+function selectClass(cls){
+  selectedClass = cls;
+  document.querySelectorAll('.class-btn').forEach(b=>b.classList.toggle('selected', b.dataset.class===cls));
+  const t = TEACHERS.find(x=>x.local === CLASS_TEACHER[cls]);
+  document.getElementById('classPickerHint').textContent = `Deine erste E-Mail geht an ${t.name}.`;
+}
+function goFromIntro(){
+  if(!selectedClass){ toast('Bitte wähle zuerst deine Klasse aus.'); return; }
+  setupForClass(selectedClass);
+  goToOverlay('screen-keyboard');
+}
+function setupForClass(cls){
+  const myLocal = CLASS_TEACHER[cls];
+  myTeacher = TEACHERS.find(t => t.local === myLocal);
+  const idx = TEACHERS.findIndex(t => t.local === myLocal);
+  otherTeacher = TEACHERS[(idx+1) % TEACHERS.length];
+  tasks = buildTasks();
+  mail = seedData();
+  taskIndex = 0; stars = 0; visitedFolders = new Set();
+  document.getElementById('endRealWorldTip').innerHTML =
+    `<b>Wenn du dich sicher fühlst:</b> Melde dich jetzt im echten IServ an und schreibe eine E-Mail an ${myTeacher.name} <b>und</b> an eine gute Freundin / einen guten Freund – zum Beispiel darüber, was du in den Sommerferien erlebt hast!`;
+}
+
+/* ===================== TASKS ===================== */
+let stars = 0;
+let taskIndex = 0;
+const REQUIRED_FOLDERS = ['sent','drafts','trash','junk','archive'];
+let visitedFolders = new Set();
+let tasks = [];
+
+function buildTasks(){
+  return [
+    { type:'explore', title:'🔎 Aufgabe 1/5: Erkunde dein Postfach',
+      desc:'Klicke links durch ALLE Ordner (Gesendet, Entwürfe, Papierkorb, Unerwünscht, Archiv) und schau dir an, was dort zu finden ist.' },
+
+    { type:'compose', title:'✉️ Aufgabe 2/5: Stell dich deiner Klassenlehrkraft vor', targetLocal: myTeacher.local,
+      desc:`Schreibe eine E-Mail an deine Klassenlehrkraft ${myTeacher.name} (${myTeacher.local}) und stell dich kurz vor: Wie heißt du, was magst du?`,
+      subjectKeywords:['vorstell','hallo','neu','kennenlernen','ich bin'], nouns:['Klasse'], requireQuestion:false,
+      bodyKeywords:['heiße','heisse','bin','ich'] },
+
+    { type:'compose', title:'✉️ Aufgabe 3/5: Frag nach dem Sommerfest', targetLocal: otherTeacher.local,
+      desc:`Schreibe eine E-Mail an ${otherTeacher.name} (${otherTeacher.local}) und frage: „Welche Attraktionen wird es beim Sommerfest am 28.08.2026 geben?“ Dieses Sommerfest findet wirklich statt! Denk an das Fragezeichen!`,
+      subjectKeywords:['sommerfest','fest'], nouns:['Sommerfest','Attraktionen'], requireQuestion:true,
+      bodyKeywords:['sommerfest'],
+      autoReply:{ fromLocal: otherTeacher.local, subject:'Antwort: Attraktionen beim Sommerfest',
+        body:`Hallo,\n\nschön, dass du fragst! Unser Sommerfest findet am 28.08.2026 statt – und ja, das ist ein echter Termin, kein Übungsbeispiel! Es wird folgende Attraktionen geben:\n\n- Wasserolympiade\n- Eisverkauf\n- Spiele und Wettbewerbe\n- Musik von der Schulband\n- Essensstände\n\nWir freuen uns auf einen tollen Tag mit euch!\n\nViele Grüße\n${otherTeacher.name}` } },
+
+    { type:'compose', title:'✉️ Aufgabe 4/5: Frag nach den Hausaufgaben', targetLocal: myTeacher.local,
+      desc:`Schreibe eine E-Mail an deine Klassenlehrkraft ${myTeacher.name} (${myTeacher.local}) und frage höflich, welche Hausaufgaben du bis morgen erledigen sollst.`,
+      subjectKeywords:['hausaufgabe','aufgabe'], nouns:['Hausaufgaben'], requireQuestion:true,
+      bodyKeywords:['hausaufgabe','hausaufgaben','aufgabe','aufgaben'],
+      autoReply:{ fromLocal: myTeacher.local, subject:'Antwort: Eure Hausaufgaben',
+        body:`Hallo,\n\nschön, dass du nachfragst! Bis morgen bearbeitet ihr bitte die Seiten 12–13 im Mathebuch (Aufgabe 1–4) und lest Kapitel 3 im Lesebuch.\n\nKleine Zusatzaufgabe: Schreib mir bis morgen im ECHTEN IServ eine kurze E-Mail und erzähl mir, was du heute Neues gelernt hast!\n\nViele Grüße\n${myTeacher.name}` } },
+
+    { type:'delete', title:'🗑️ Aufgabe 5/5: Postfach aufräumen',
+      desc:'Öffne die Werbe-Mail von „KlassenTrip24 Team“ im Posteingang und lösche sie über das Papierkorb-Symbol oben links.' }
+  ];
+}
+
+/* ===================== SEED DATA ===================== */
+function seedData(){
+  return {
+    inbox: [
+      { id:'ad1', from:'KlassenTrip24 Team', mail:'info@klassentrip24-beispiel.de', subject:'Sichere dir jetzt den Frühbucherpreis für 2027! 😉', time:'19:31', unread:true, blocked:true, isTarget:true,
+        body:'Alle Spartipps und Highlights für die Klassenfahrt 2027.\n\nWird diese Nachricht nicht richtig dargestellt, klicken Sie bitte HIER.' },
+      { id:'h01', from:'Schulsekretariat', mail:'sekretariat@greselius-gymnasium.de', subject:'Infos zum Wandertag am Freitag', time:'Mittwoch', unread:true, blocked:false,
+        body:'Liebe Klasse,\n\nam Freitag, den 21. August 2026 findet unser Wandertag statt. Treffpunkt ist um 8:00 Uhr am Schultor.\n\nBitte denkt an:\n- festes Schuhwerk\n- eine Trinkflasche\n- ein Vesper\n\nViele Grüße\nDas Schulsekretariat\n\n(Hinweis: Dieser Wandertag ist nur ein erfundenes Beispiel für diese Übung und findet nicht wirklich statt.)' },
+      { id:'h02', from: myTeacher.name, mail: myTeacher.mail, subject:'Neuer Stundenplan für die Klasse', time:'Dienstag', unread:false, blocked:false,
+        body:`Hallo zusammen,\n\nab nächster Woche gilt ein neuer Stundenplan. Am Montag habt ihr in der ersten Stunde Deutsch, danach Mathematik.\n\nViele Grüße\n${myTeacher.name}` },
+      { id:'h03', from:'Bücherei-Team', mail:'buecherei@greselius-gymnasium.de', subject:'Neue Bücher eingetroffen', time:'Montag', unread:false, blocked:false,
+        body:'Hallo,\n\nin unserer Schulbücherei stehen ab sofort neue Abenteuerbücher bereit. Schau doch mal vorbei!\n\nViele Grüße\nEuer Bücherei-Team' },
+      { id:'h04', from:'Hausmeister', mail:'hausmeister@greselius-gymnasium.de', subject:'Fundsachen im Sekretariat', time:'Freitag', unread:false, blocked:false,
+        body:'Hallo zusammen,\n\nim Sekretariat liegen einige Fundsachen: Jacken und Trinkflaschen. Bitte schaut vorbei, falls euch etwas fehlt.\n\nGruß\nDer Hausmeister' },
+      { id:'h05', from:'Schulsekretariat', mail:'sekretariat@greselius-gymnasium.de', subject:'Einladung zum Elternabend', time:'Montag', unread:true, blocked:false,
+        body:'Liebe Eltern und Schüler,\n\nder Elternabend findet am 3. September 2026 um 18:30 Uhr im Klassenraum statt.\n\nViele Grüße\nDas Schulsekretariat' },
+      { id:'h06', from:'Sportlehrkraft', mail:'sport@greselius-gymnasium.de', subject:'Schwimmbad-Ausflug', time:'Sonntag', unread:false, blocked:false,
+        body:'Hallo zusammen,\n\nam Donnerstag geht es mit der Klasse ins Schwimmbad. Bitte Badesachen und ein Handtuch mitbringen!\n\nSportliche Grüße\nEure Sportlehrkraft' },
+      { id:'h07', from:'Mensa-Team', mail:'mensa@greselius-gymnasium.de', subject:'Neuer Speiseplan', time:'Samstag', unread:false, blocked:false,
+        body:'Hallo,\n\nunser neuer Speiseplan steht: Mittwochs gibt es ab sofort Nudeln mit Tomatensoße.\n\nGuten Appetit!\nEuer Mensa-Team' },
+      { id:'h08', from:'Musiklehrkraft', mail:'musik@greselius-gymnasium.de', subject:'Chorprobe diese Woche', time:'Freitag', unread:false, blocked:false,
+        body:'Hallo Chorkinder,\n\ndie nächste Chorprobe ist am Dienstag um 14 Uhr im Musikraum. Bringt bitte eure Liedermappe mit.\n\nMusikalische Grüße\nEure Musiklehrkraft' },
+      { id:'h09', from:'AG-Leitung Schach', mail:'schach-ag@greselius-gymnasium.de', subject:'Anmeldung Schach-AG', time:'Donnerstag', unread:true, blocked:false,
+        body:'Hallo,\n\nwer bei der Schach-AG mitmachen möchte, kann sich noch bis zum 30. August 2026 im Sekretariat anmelden.\n\nViele Grüße\nDie AG-Leitung' },
+      { id:'h10', from:'Elternbeirat', mail:'elternbeirat@greselius-gymnasium.de', subject:'Kuchenverkauf am Wandertag', time:'Donnerstag', unread:false, blocked:false,
+        body:'Liebe Eltern und Schüler,\n\nam Wandertag verkaufen wir wieder Kuchen. Ein Stück kostet 1 Euro.\n\nViele Grüße\nDer Elternbeirat\n\n(Hinweis: Auch dieser Wandertag ist nur erfunden und dient nur der Übung.)' },
+      { id:'h11', from:'Schulleitung', mail:'leitung@greselius-gymnasium.de', subject:'Feueralarm-Übung', time:'Mittwoch', unread:false, blocked:false,
+        body:'Liebe Schulgemeinschaft,\n\nam Mittwoch findet in der 3. Stunde eine Feueralarm-Übung statt. Bitte bleibt ruhig und folgt euren Lehrkräften.\n\nViele Grüße\nDie Schulleitung' },
+      { id:'h12', from:'Wahlausschuss', mail:'wahlausschuss@greselius-gymnasium.de', subject:'Wahl der Klassensprecher', time:'Dienstag', unread:false, blocked:false,
+        body:'Hallo zusammen,\n\ndie Wahl der Klassensprecher findet nächste Woche Montag statt. Überlegt euch schon mal, wen ihr wählen möchtet!\n\nViele Grüße\nDer Wahlausschuss' },
+      { id:'h13', from:'Fotostudio Lichtblick', mail:'info@fotostudio-beispiel.de', subject:'Termin Klassenfoto', time:'Montag', unread:false, blocked:false,
+        body:'Hallo,\n\nam Freitag machen wir das Klassenfoto. Zieht bitte etwas Schönes an – am besten keinen Kapuzenpulli.\n\nViele Grüße\nEuer Fotostudio' },
+      { id:'h14', from:'IT-Support', mail:'it-support@greselius-gymnasium.de', subject:'Tipps für ein sicheres Passwort', time:'Sonntag', unread:false, blocked:false,
+        body:'Hallo,\n\nein sicheres Passwort sollte mindestens 8 Zeichen lang sein und Zahlen enthalten. Verrate es niemandem!\n\nViele Grüße\nEuer IT-Support' },
+      { id:'h15', from:'Schulzahnpflege', mail:'zahnpflege@greselius-gymnasium.de', subject:'Zahnprophylaxe in der Schule', time:'Samstag', unread:false, blocked:false,
+        body:'Hallo,\n\nübernächste Woche kommt das Team der Zahnprophylaxe in eure Klasse und zeigt euch das richtige Zähneputzen.\n\nViele Grüße\nEure Schulzahnpflege' },
+      { id:'h16', from:'Beratungslehrkraft', mail:'beratung@greselius-gymnasium.de', subject:'Unser Beratungsangebot', time:'Freitag', unread:false, blocked:false,
+        body:'Hallo,\n\nwenn du mal reden möchtest: Meine Tür in Raum 204 steht immer offen.\n\nViele Grüße\nEure Beratungslehrkraft' },
+      { id:'h17', from:'Verkehrswacht', mail:'info@verkehrswacht-beispiel.de', subject:'Fahrradprüfung', time:'Donnerstag', unread:false, blocked:false,
+        body:'Hallo,\n\nzur Fahrradprüfung bringt bitte euer eigenes Fahrrad und einen Helm mit.\n\nViele Grüße\nEure Verkehrswacht' },
+      { id:'h18', from:'Lerncoach', mail:'lerncoach@greselius-gymnasium.de', subject:'Lernzeiten in der Schule', time:'Mittwoch', unread:false, blocked:false,
+        body:'Hallo,\n\nunsere Lernzeit findet immer montags und mittwochs in der Bibliothek statt. Komm gerne vorbei!\n\nViele Grüße\nEuer Lerncoach' },
+      { id:'h19', from:'Max Mustermann', mail: FRIEND.mail, subject:'Treffen wir uns?', time:'Dienstag', unread:true, blocked:false,
+        body:'Hallo,\n\nhast du Lust, dich um 15 Uhr mit mir auf dem Spielplatz zu treffen?\n\nBis dann!\nMax' }
+    ],
+    sent: [],
+    drafts: [
+      { id:'d1', from:'Du', mail:CONFIG.studentAddress, subject:'(kein Betreff)', time:'vor 2 Tagen', unread:false, blocked:false, body:'Hallo, ich wollte fragen ob' },
+      { id:'d2', from:'Du', mail:CONFIG.studentAddress, subject:'Frage zur Klassenfahrt', time:'vor 5 Tagen', unread:false, blocked:false, body:'Hallo Frau' }
+    ],
+    trash: [
+      { id:'t1', from:'Elternbeirat', mail:'elternbeirat@greselius-gymnasium.de', subject:'Kuchenverkauf beim Sommerfest abgesagt', time:'12.08.2026', unread:false, blocked:false,
+        body:'Liebe Eltern und Schüler,\n\nder Kuchenverkauf beim Sommerfest musste leider abgesagt werden.\n\nViele Grüße\nDer Elternbeirat' },
+      { id:'t2', from:'IT-Support', mail:'it-support@greselius-gymnasium.de', subject:'Wartungsarbeiten am Freitag', time:'10.08.2026', unread:false, blocked:false,
+        body:'Hallo,\n\nam Freitag von 18 bis 20 Uhr ist IServ wegen Wartungsarbeiten nicht erreichbar.\n\nViele Grüße\nIT-Support' }
+    ],
+    junk: [
+      { id:'j1', from:'Gewinnspiel-Info', mail:'info@gewinnspiel-beispiel.de', subject:'Herzlichen Glückwunsch! Du hast gewonnen 🎉', time:'Montag', unread:false, blocked:true, body:'Klicke jetzt hier, um deinen Gewinn abzuholen!' },
+      { id:'j2', from:'Superrabatt24', mail:'info@superrabatt24-beispiel.de', subject:'Nur heute: -70% auf alles!', time:'Sonntag', unread:false, blocked:true, body:'Verpasse nicht unser Riesenangebot ...' }
+    ],
+    archive: [
+      { id:'a1', from: myTeacher.name, mail: myTeacher.mail, subject:'Willkommen im neuen Schuljahr!', time:'01.08.2026', unread:false, blocked:false,
+        body:`Hallo,\n\nherzlich willkommen im neuen Schuljahr! Ich freue mich auf eine tolle Zeit mit euch.\n\nViele Grüße\n${myTeacher.name}` }
+    ]
+  };
+}
+let mail = null;
+let currentFolder = 'inbox';
+let currentMailId = null;
+let currentMailFolder = 'inbox';
+let recipientSelected = null;
+let searchTerm = '';
+
+const folderExplanations = {
+  sent:'📤 Hier landet jede E-Mail, die DU verschickt hast. So kannst du später nachschauen, was du schon geschrieben hast.',
+  drafts:'📝 Hier liegen Mails, die du angefangen, aber noch nicht abgeschickt hast. Sie warten darauf, fertig geschrieben zu werden!',
+  trash:'🗑️ Der Papierkorb sammelt gelöschte Mails. Du kannst sie noch ein paar Tage zurückholen – danach werden sie endgültig gelöscht.',
+  junk:'🌀 Hier landen Mails, die wie Werbung oder Spam aussehen. Das System sortiert sie automatisch aus deinem Posteingang.',
+  archive:'📦 Im Archiv kannst du wichtige Mails ablegen, die du behalten, aber nicht mehr im Posteingang sehen willst.'
+};
+
+const tips = {
+  intro:'Hallo, ich bin Servi! 🦉',
+  keyboard:'⇧ gedrückt halten + Buchstabe tippen = GROSS.',
+  login:'Nutze ruhig deinen echten Benutzernamen!',
+  explore:'Klicke links auf die anderen Ordner!',
+  inbox:'Klicke oben links auf „Verfassen“ für eine neue Mail.',
+  compose:'Tipp den Namen ins An-Feld und wähle den Vorschlag aus.',
+  delete:'Öffne die Werbe-Mail und klicke auf 🗑️.',
+  end:'Super gemacht! Ich bin stolz auf dich! 🎉'
+};
+function setMascot(key){ document.getElementById('mascotText').textContent = tips[key] || tips.intro; }
+
+/* ===================== Servi modal ===================== */
+let serviQueue = null;
+function showServiModal(text, after){
+  document.getElementById('serviModalText').textContent = text;
+  document.getElementById('serviOverlay').classList.add('show');
+  serviQueue = after || null;
+}
+function closeServiModal(){
+  document.getElementById('serviOverlay').classList.remove('show');
+  if(serviQueue) { const fn = serviQueue; serviQueue = null; fn(); }
+}
+
+/* ===================== Overlay nav ===================== */
+function goToOverlay(id){
+  document.querySelectorAll('.overlay-screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if(id==='screen-keyboard') setMascot('keyboard');
+  if(id==='screen-login') setMascot('login');
+  if(id==='screen-end') setMascot('end');
+}
+function checkLogin(){
+  const u = document.getElementById('userInput').value.trim();
+  const p = document.getElementById('passInput').value.trim();
+  if(u.length>0 && p.length>0){
+    toast('Anmeldung erfolgreich! ✅');
+    setTimeout(enterApp, 700);
+  } else {
+    toast('Bitte fülle beide Felder aus.');
+  }
+}
+function enterApp(){
+  document.querySelectorAll('.overlay-screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('iservApp').classList.add('active');
+  renderTask();
+  openFolder('inbox');
+  showServiModal('Das ist dein Postfach! 📬 Schau dich erstmal um – klicke links durch alle Ordner. Ich erkläre dir, was jeder Ordner bedeutet.');
+}
+
+/* ===================== Tasks ===================== */
+function renderTask(){
+  const t = tasks[taskIndex];
+  document.getElementById('taskBadge').textContent = 'Aufgabe ' + (taskIndex+1) + '/' + tasks.length;
+  document.getElementById('taskTitle').textContent = t.title;
+  document.getElementById('taskDesc').textContent = t.desc;
+  setMascot(t.type === 'delete' ? 'delete' : t.type === 'explore' ? 'explore' : 'compose');
+}
+function advanceTask(){
+  taskIndex++;
+  if(taskIndex < tasks.length){ renderTask(); } else { finishTasks(); }
+}
+
+/* ===================== Folder navigation ===================== */
+function openFolder(name){
+  currentFolder = name;
+  searchTerm = '';
+  document.getElementById('searchBox').value = '';
+  document.querySelectorAll('.folder-item').forEach(f=>f.classList.toggle('active', f.dataset.folder===name));
+  showEmptyDetail();
+  renderList();
+
+  if(name !== 'inbox' && !visitedFolders.has(name)){
+    visitedFolders.add(name);
+    showServiModal(folderExplanations[name], ()=>{
+      if(tasks[taskIndex] && tasks[taskIndex].type==='explore'){
+        const allDone = REQUIRED_FOLDERS.every(f=>visitedFolders.has(f));
+        if(allDone){ addStar(); toast('Postfach erkundet! ✅'); advanceTask(); openFolder('inbox'); }
+      }
+    });
+  }
+}
+
+function updateCounts(){
+  document.getElementById('countInbox').textContent = mail.inbox.length;
+  document.getElementById('countSent').textContent = mail.sent.length;
+  document.getElementById('countDrafts').textContent = mail.drafts.length;
+  document.getElementById('countTrash').textContent = mail.trash.length;
+  document.getElementById('countJunk').textContent = mail.junk.length;
+  document.getElementById('countArchive').textContent = mail.archive.length;
+}
+
+const FOLDER_LABELS = { inbox:'Posteingang', sent:'Gesendet', drafts:'Entwürfe', trash:'Papierkorb', junk:'Unerwünscht', archive:'Archiv' };
+
+function renderList(){
+  updateCounts();
+  const list = document.getElementById('mailList');
+  list.innerHTML = '';
+
+  let items = [];
+  if(searchTerm){
+    Object.keys(mail).forEach(key=>{
+      mail[key].forEach(m=>{
+        const hay = (m.from+' '+m.subject+' '+m.body).toLowerCase();
+        if(hay.includes(searchTerm.toLowerCase())) items.push({...m, _folder:key});
+      });
+    });
+    document.getElementById('breadcrumbTail').textContent = 'Suche: „' + searchTerm + '“';
+  } else {
+    items = mail[currentFolder].map(m=>({...m, _folder:currentFolder}));
+    document.getElementById('breadcrumbTail').textContent = FOLDER_LABELS[currentFolder];
+  }
+
+  if(items.length===0){
+    const p = document.createElement('div');
+    p.className = 'empty-note';
+    p.textContent = searchTerm ? `Keine Treffer für „${searchTerm}“.` : (currentFolder==='sent' ? 'Hier erscheinen deine gesendeten Übungsmails.' : 'Hier ist gerade nichts.');
+    list.appendChild(p);
+    return;
+  }
+
+  items.slice().reverse().forEach(m=>{
+    const row = document.createElement('div');
+    row.className = 'mail-row' + (m.unread ? ' unread' : '') + (m.id===currentMailId ? ' selected' : '');
+    row.onclick = ()=>openMail(m, m._folder);
+    row.innerHTML = `
+      <div class="row-top">
+        <span class="sender">${m.unread ? '<span class="unread-dot"></span>' : ''}${m.from}</span>
+        <span class="time">${m.time}</span>
+      </div>
+      <div class="subject">${m.subject}</div>
+      ${searchTerm ? `<span class="folder-pill">${FOLDER_LABELS[m._folder]}</span>` : ''}`;
+    list.appendChild(row);
+  });
+}
+function onSearchInput(val){ searchTerm = val.trim(); renderList(); }
+
+function showEmptyDetail(){
+  currentMailId = null;
+  document.getElementById('emptyState').style.display = 'flex';
+  document.getElementById('detailView').classList.remove('active');
+  document.getElementById('composeView').classList.remove('active');
+}
+
+/* ===================== Reading mail ===================== */
+function openMail(m, folder){
+  currentMailId = m.id;
+  currentMailFolder = folder;
+  const arr = mail[folder];
+  const found = arr.find(x=>x.id===m.id);
+  if(found) found.unread = false;
+
+  document.getElementById('emptyState').style.display = 'none';
+  document.getElementById('composeView').classList.remove('active');
+  document.getElementById('detailView').classList.add('active');
+
+  document.getElementById('dvFrom').textContent = `${m.from} <${m.mail}>`;
+  document.getElementById('dvSubject').textContent = m.subject;
+  document.getElementById('dvDate').innerHTML = '<b>Zeit:</b> ' + m.time;
+  document.getElementById('dvBody').textContent = m.body;
+  document.getElementById('blockedBanner').style.display = m.blocked ? 'flex' : 'none';
+  document.getElementById('trashNote').style.display = folder==='trash' ? 'block' : 'none';
+
+  const trashBtn = document.getElementById('trashBtn');
+  const isDeleteTask = tasks[taskIndex] && tasks[taskIndex].type==='delete';
+  trashBtn.classList.toggle('pulse', isDeleteTask && m.isTarget && folder==='inbox');
+  trashBtn.style.display = folder==='trash' ? 'none' : 'flex';
+
+  renderList();
+}
+
+function deleteCurrentMail(){
+  if(currentMailFolder !== 'inbox' || !currentMailId) return;
+  const idx = mail.inbox.findIndex(m=>m.id===currentMailId);
+  if(idx===-1) return;
+  const m = mail.inbox[idx];
+  mail.inbox.splice(idx,1);
+  mail.trash.push(m);
+  showEmptyDetail();
+  renderList();
+  toast('E-Mail in den Papierkorb verschoben 🗑️');
+
+  if(tasks[taskIndex] && tasks[taskIndex].type==='delete' && m.isTarget){
+    addStar();
+    setTimeout(()=>{
+      showServiModal('Super! 🗑️ Mails im Papierkorb werden automatisch nach 7 Tagen endgültig gelöscht – du musst dich um nichts weiter kümmern.', finishTasks);
+    }, 500);
+  }
+}
+
+/* ===================== Compose ===================== */
+function openCompose(){
+  currentMailId = null;
+  document.getElementById('emptyState').style.display = 'none';
+  document.getElementById('detailView').classList.remove('active');
+  document.getElementById('composeView').classList.add('active');
+
+  document.getElementById('toInput').value = '';
+  document.getElementById('subjectInput').value = '';
+  document.getElementById('bodyInput').value = '';
+  document.getElementById('chipHolder').innerHTML = '';
+  document.getElementById('toInput').style.display = 'block';
+  document.getElementById('suggestBox').style.display = 'none';
+  document.getElementById('composeFeedback').className = 'feedback-box';
+  document.getElementById('toBlock').classList.remove('error');
+  document.getElementById('subjectBlock').classList.remove('error');
+  recipientSelected = null;
+  setMascot('compose');
+}
+function cancelCompose(){ showEmptyDetail(); renderList(); }
+
+function onToInput(){
+  const val = document.getElementById('toInput').value.trim().toLowerCase().replace(/\s+/g,'.');
+  const box = document.getElementById('suggestBox');
+  if(val.length >= 2){
+    const matches = ALL_CONTACTS.filter(c => c.local.toLowerCase().startsWith(val) || c.name.toLowerCase().startsWith(val));
+    if(matches.length){
+      box.innerHTML = matches.slice(0,4).map(c=>`<div class="suggest-item" onclick="selectRecipient('${c.local}')"><b>${c.name}</b><span>${c.mail}</span></div>`).join('');
+      box.style.display = 'block';
+      return;
+    }
+  }
+  box.style.display = 'none';
+}
+function selectRecipient(local){
+  const c = ALL_CONTACTS.find(x=>x.local===local);
+  if(!c) return;
+  recipientSelected = c;
+  document.getElementById('suggestBox').style.display = 'none';
+  document.getElementById('toInput').style.display = 'none';
+  document.getElementById('chipHolder').innerHTML = `<div class="recipient-chip">${c.name} <button onclick="clearRecipient()">✕</button></div>`;
+  document.getElementById('toBlock').classList.remove('error');
+}
+function clearRecipient(){
+  recipientSelected = null;
+  document.getElementById('chipHolder').innerHTML = '';
+  document.getElementById('toInput').style.display = 'block';
+  document.getElementById('toInput').value = '';
+  document.getElementById('toInput').focus();
+}
+
+function checkSentenceCaps(body){
+  const re = /(^\s*|[.!?]\s+)([a-zäöüß])/g;
+  return re.test(body);
+}
+function checkLowercaseNouns(body, nouns){
+  const hits = [];
+  (nouns||[]).forEach(n=>{
+    const re = new RegExp('(?<![A-ZÄÖÜ\\wß])' + n.toLowerCase() + '\\b');
+    if(re.test(body)) hits.push(n);
+  });
+  return hits;
+}
+
+/* ===================== Inhaltsprüfung: Beleidigungen ===================== */
+const BADWORDS = [
+  'idiot','trottel','dummkopf','blödmann','bloedmann','bekloppt','behindert','spast','spasti',
+  'opfer','hurensohn','fotze','wichser','arschloch','arsch','scheiße','scheisse','scheiss',
+  'kacke','missgeburt','mistgeburt','hässlich','haesslich','schlampe','nutte','mongo','krüppel',
+  'krueppel','vollidiot','depp','loser','versager','ekelhaft','widerlich','fresse',
+  'halt die fresse','verpiss dich','scheißkerl','scheisskerl','fett wie','du stinkst','hasse dich',
+  'du nervst','blöde kuh','doofe kuh','saudumm'
+];
+function checkInsults(text){
+  const lower = (text||'').toLowerCase();
+  return BADWORDS.some(w => {
+    const escaped = w.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+    return new RegExp('\\b'+escaped+'\\b','i').test(lower);
+  });
+}
+function checkBodyOnTopic(body, keywords){
+  if(!keywords || !keywords.length) return true;
+  const lower = body.toLowerCase();
+  return keywords.some(k=>lower.includes(k));
+}
+
+function sendMail(){
+  const t = tasks[taskIndex];
+  const subject = document.getElementById('subjectInput').value.trim();
+  const body = document.getElementById('bodyInput').value.trim();
+  const problems = [];
+
+  document.getElementById('toBlock').classList.toggle('error', !recipientSelected);
+  document.getElementById('subjectBlock').classList.toggle('error', subject.length===0);
+
+  const hasInsult = checkInsults(subject) || checkInsults(body);
+  document.getElementById('bodyBlock').classList.toggle('error', hasInsult);
+  if(hasInsult){
+    const fb = document.getElementById('composeFeedback');
+    fb.innerHTML = '🚫 Deine E-Mail enthält ein unhöfliches oder beleidigendes Wort. In E-Mails – wie überall – schreiben wir freundlich und respektvoll. Bitte überarbeite deinen Text, bevor du sendest.';
+    fb.classList.add('show');
+    return;
+  }
+
+  if(!recipientSelected){
+    problems.push('Wähle zuerst einen Kontakt aus dem Vorschlag im An-Feld aus.');
+  } else if(t.targetLocal && recipientSelected.local.toLowerCase() !== t.targetLocal.toLowerCase()){
+    const target = ALL_CONTACTS.find(c=>c.local.toLowerCase()===t.targetLocal.toLowerCase());
+    problems.push(`Diese Mail soll an ${target ? target.name : t.targetLocal} gehen.`);
+  }
+  if(subject.length===0){ problems.push('Vergiss den Betreff nicht.'); }
+  else if(t.subjectKeywords && !t.subjectKeywords.some(k=>subject.toLowerCase().includes(k))){
+    problems.push(`Der Betreff soll zum Thema passen. Nutze z. B. ein Wort wie „${t.subjectKeywords[0]}“.`);
+  }
+  if(!/^(hallo|liebe|lieber|guten tag|sehr geehrte)/i.test(body)) problems.push('Deine Mail braucht noch eine Anrede am Anfang (z. B. „Hallo Frau Huber,“).');
+  if(!/(viele grüße|liebe grüße|beste grüße|tschüss|bis (bald|morgen))/i.test(body)) problems.push('Vergiss die Grußformel am Ende nicht (z. B. „Viele Grüße, Dein Vorname“).');
+  if(body.replace(/\s/g,'').length < 25) problems.push('Schreib noch etwas mehr zu deinem Thema.');
+  if(t.requireQuestion && !body.includes('?')) problems.push('Du stellst eine Frage – vergiss das Fragezeichen „?“ nicht!');
+  if(!checkBodyOnTopic(body, t.bodyKeywords)) problems.push(`Schreib in deiner Nachricht wirklich zum Thema der Aufgabe (z. B. das Wort „${t.bodyKeywords[0]}“ sollte vorkommen).`);
+  if(checkSentenceCaps(body)) problems.push('Achte darauf, dass jeder Satz mit einem GROSSEN Buchstaben beginnt.');
+  const lowerNouns = checkLowercaseNouns(body, t.nouns);
+  lowerNouns.forEach(n=>problems.push(`Kleiner Tipp: „${n}“ ist ein Nomen (Namenwort) und wird großgeschrieben.`));
+
+  const fb = document.getElementById('composeFeedback');
+  if(problems.length){
+    fb.innerHTML = 'Fast geschafft! Bitte noch prüfen:<ul>' + problems.map(p=>`<li>${p}</li>`).join('') + '</ul>';
+    fb.classList.add('show');
+    return;
+  }
+  fb.classList.remove('show');
+
+  mail.sent.push({ id:'s'+Date.now(), from:'Du', mail:CONFIG.studentAddress, subject, time:'gerade eben', unread:false, blocked:false, body });
+  toast('E-Mail gesendet! 📨');
+  addStar();
+  showEmptyDetail();
+
+  if(t.autoReply){
+    const fromC = ALL_CONTACTS.find(c=>c.local.toLowerCase()===t.autoReply.fromLocal.toLowerCase());
+    setTimeout(()=>{
+      mail.inbox.push({ id:'r'+Date.now(), from:fromC.name, mail:fromC.mail, subject:t.autoReply.subject, time:'gerade eben', unread:true, blocked:false, body:t.autoReply.body });
+      toast('Neue Antwort erhalten! 📬');
+      renderList();
+    }, 1300);
+  }
+
+  advanceTask();
+  openFolder('inbox');
+}
+
+/* ===================== Finish / stars / toast / confetti ===================== */
+function addStar(){ stars++; burstConfetti(); }
+function finishTasks(){
+  goToOverlay('screen-end');
+  const el = document.getElementById('endStars');
+  el.innerHTML = '';
+  for(let i=0;i<tasks.length;i++){ el.innerHTML += (i < stars ? '⭐' : '☆'); }
+}
+function toast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2200);
+}
+function showHelp(){ const t = tasks[taskIndex]; toast(t ? t.desc : 'Viel Erfolg! 🦉'); }
+function burstConfetti(){
+  const colors = ['#1a8f86','#ffb703','#ff6f8e','#8ecae6'];
+  const wrap = document.createElement('div'); wrap.className = 'confetti';
+  for(let i=0;i<24;i++){
+    const s = document.createElement('span');
+    s.style.left = Math.random()*100 + 'vw';
+    s.style.background = colors[i % colors.length];
+    s.style.animationDuration = (2 + Math.random()*1.5) + 's';
+    s.style.transform = `rotate(${Math.random()*360}deg)`;
+    wrap.appendChild(s);
+  }
+  document.body.appendChild(wrap);
+  setTimeout(()=>wrap.remove(), 3600);
+}
+
+/* ===================== Reset ===================== */
+function resetAll(){
+  stars = 0; taskIndex = 0; currentMailId = null; recipientSelected = null; searchTerm='';
+  visitedFolders = new Set();
+  selectedClass = null; myTeacher = null; otherTeacher = null; tasks = []; mail = null;
+  document.querySelectorAll('.class-btn').forEach(b=>b.classList.remove('selected'));
+  document.getElementById('classPickerHint').textContent = 'Das entscheidet, an wen deine erste E-Mail geht.';
+  goToOverlay('screen-intro');
+}
+</script>
+</body>
+</html>
