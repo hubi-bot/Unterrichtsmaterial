@@ -1,0 +1,411 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Digitale Mission 001</title>
+<style>
+  :root{
+    --bg:#0f172a;
+    --card:#ffffff;
+    --text:#0f172a;
+    --muted:#64748b;
+    --accent:#2563eb;
+    --soft:#e2e8f0;
+    --ok:#15803d;
+    --bad:#b91c1c;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+    background:linear-gradient(180deg,#0f172a,#1e293b);
+    color:#fff;
+    min-height:100vh;
+  }
+  .wrap{
+    max-width:760px;
+    margin:0 auto;
+    padding:24px 16px 40px;
+  }
+  .top{text-align:center;margin-bottom:18px}
+  .badge{
+    display:inline-block;
+    padding:8px 12px;
+    border:1px solid rgba(255,255,255,.35);
+    border-radius:999px;
+    font-weight:800;
+    letter-spacing:.08em;
+    font-size:.82rem;
+  }
+  h1{
+    margin:14px 0 6px;
+    font-size:clamp(2rem,7vw,3.4rem);
+    line-height:1;
+  }
+  .sub{color:#cbd5e1;margin:0}
+  .progress{display:flex;gap:8px;margin:18px 0}
+  .dot{
+    height:8px;
+    flex:1;
+    border-radius:999px;
+    background:#334155;
+  }
+  .dot.on{background:#60a5fa}
+  .card{
+    background:var(--card);
+    color:var(--text);
+    border-radius:22px;
+    padding:22px;
+    box-shadow:0 18px 50px rgba(0,0,0,.22);
+  }
+  .mission{display:none}
+  .mission.active{display:block}
+  .kicker{
+    font-size:.85rem;
+    font-weight:900;
+    color:var(--accent);
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    margin-bottom:6px;
+  }
+  h2{
+    margin:0 0 18px;
+    font-size:clamp(1.6rem,5vw,2.2rem);
+  }
+  .step{
+    display:flex;
+    gap:12px;
+    align-items:flex-start;
+    padding:15px 0;
+    border-top:1px solid var(--soft);
+    font-size:1.08rem;
+  }
+  .step:first-of-type{border-top:0}
+  .num{
+    width:34px;height:34px;flex:0 0 34px;
+    border-radius:50%;
+    display:grid;place-items:center;
+    background:#dbeafe;color:#1d4ed8;
+    font-weight:900;
+  }
+  .explain{
+    display:block;
+    margin-top:6px;
+    color:var(--muted);
+    font-size:.88rem;
+    line-height:1.4;
+  }
+  code{
+    background:#f1f5f9;
+    padding:3px 7px;
+    border-radius:7px;
+    font-size:.95em;
+    word-break:break-word;
+  }
+  .btns{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-top:20px;
+  }
+  button{
+    border:0;
+    border-radius:12px;
+    padding:13px 18px;
+    font-size:1rem;
+    font-weight:800;
+    cursor:pointer;
+  }
+  .primary{background:var(--accent);color:white}
+  .secondary{background:#e2e8f0;color:#0f172a}
+  .primary:disabled{opacity:.45;cursor:not-allowed}
+  .check{
+    margin-top:16px;
+    padding:16px;
+    border-radius:14px;
+    background:#f8fafc;
+    border:1px solid #e2e8f0;
+  }
+  label{
+    display:block;
+    font-weight:800;
+    margin:12px 0 6px;
+  }
+  input{
+    width:100%;
+    padding:13px;
+    border:2px solid #cbd5e1;
+    border-radius:10px;
+    font-size:1.2rem;
+    text-align:center;
+    letter-spacing:.2em;
+    font-weight:800;
+  }
+  input:focus{outline:3px solid #bfdbfe;border-color:#2563eb}
+  .msg{margin-top:12px;font-weight:800;min-height:24px}
+  .ok{color:var(--ok)}
+  .bad{color:var(--bad)}
+  .reward{text-align:center;padding:8px 0 4px}
+  .reward .big{font-size:3rem;margin-bottom:8px}
+  .secret{
+    display:block;
+    background:#111827;
+    color:white;
+    margin-top:18px;
+    width:100%;
+    padding:16px;
+    font-size:1.08rem;
+    font-weight:800;
+    text-decoration:none;
+    border-radius:12px;
+    text-align:center;
+  }
+  .tiny{margin-top:14px;color:var(--muted);font-size:.9rem}
+  @media (max-width:520px){
+    .card{padding:18px}
+    .step{font-size:1rem}
+    .btns button{width:100%}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <span class="badge">🔒 STRENG GEHEIM</span>
+    <h1>DIGITALE MISSION 001</h1>
+    <p class="sub">Arbeite Schritt für Schritt.</p>
+  </div>
+
+  <div class="progress" aria-label="Fortschritt">
+    <div class="dot on" id="d1"></div>
+    <div class="dot" id="d2"></div>
+    <div class="dot" id="d3"></div>
+    <div class="dot" id="d4"></div>
+  </div>
+
+  <main class="card">
+    <section class="mission active" id="m1">
+      <div class="kicker">Mission 1</div>
+      <h2>📁 Baue dein Versteck</h2>
+
+      <div class="step">
+        <span class="num">1</span>
+        <div>
+          Öffne deinen <b>eigenen Dateibereich</b> in IServ.
+          <span class="explain">Du findest ihn unter <b>Dateien → Eigene</b>.</span>
+        </div>
+      </div>
+
+      <div class="step">
+        <span class="num">2</span>
+        <div>
+          Erstelle einen Ordner mit dem Namen <code>DIGITAL-AGENT</code>.
+          <span class="explain">Agenten brauchen einen festen Ort für ihre geheimen Unterlagen.</span>
+        </div>
+      </div>
+
+      <div class="step">
+        <span class="num">3</span>
+        <div>
+          Öffne den Ordner <code>DIGITAL-AGENT</code> und erstelle darin einen weiteren Ordner mit dem Namen <code>MISSION-001</code>.
+          <span class="explain">So bleibt alles ordentlich und du findest deine Mission später schnell wieder.</span>
+        </div>
+      </div>
+
+      <div class="btns">
+        <button class="primary" data-next="2">Fertig ✓</button>
+      </div>
+    </section>
+
+    <section class="mission" id="m2">
+      <div class="kicker">Mission 2</div>
+      <h2>🔗 Kopiere den Geheimlink</h2>
+
+      <div class="step">
+        <span class="num">1</span>
+        <div>
+          Öffne in IServ wieder den Link zur Übungsaufgabe.
+          <span class="explain">Pfad: <b>Dateien → Gruppen → Klasse 5 → 00 Medientraining → 00 Übungsaufgabe</b></span>
+        </div>
+      </div>
+
+      <div class="step">
+        <span class="num">2</span>
+        <div>
+          Setze vor dem Link ein <b>Häkchen</b>.
+          <span class="explain">So wählst du genau diesen Link aus.</span>
+        </div>
+      </div>
+
+      <div class="step">
+        <span class="num">3</span>
+        <div>
+          Klicke auf <b>Weitere Aktionen</b> und dann auf <b>Kopieren</b>.
+          <span class="explain">Der Link wird dadurch zum Einfügen vorbereitet.</span>
+        </div>
+      </div>
+
+      <div class="step">
+        <span class="num">4</span>
+        <div>
+          Gehe zurück in deinen eigenen Dateibereich.
+          <span class="explain">Pfad: <b>Dateien → Eigene</b></span>
+        </div>
+      </div>
+
+      <div class="step">
+        <span class="num">5</span>
+        <div>
+          Öffne <code>DIGITAL-AGENT → MISSION-001</code>.
+          <span class="explain">Dort soll deine Kopie gespeichert werden.</span>
+        </div>
+      </div>
+
+      <div class="step">
+        <span class="num">6</span>
+        <div>
+          Klicke wieder auf <b>Weitere Aktionen</b> und diesmal auf <b>Einfügen</b>.
+          <span class="explain">Jetzt liegt die Kopie des Links in deinem Ordner.</span>
+        </div>
+      </div>
+
+      <div class="btns">
+        <button class="secondary" data-next="1">← Zurück</button>
+        <button class="primary" data-next="3">Fertig ✓</button>
+      </div>
+    </section>
+
+    <section class="mission" id="m3">
+      <div class="kicker">Mission 3</div>
+      <h2>🕵️ Gib dem Link einen Tarnnamen</h2>
+
+      <div class="step">
+        <span class="num">1</span>
+        <div>
+          Setze vor deiner kopierten Datei ein <b>Häkchen</b>.
+          <span class="explain">So wählst du genau die Datei aus, die du umbenennen möchtest.</span>
+        </div>
+      </div>
+
+      <div class="step">
+        <span class="num">2</span>
+        <div>
+          Klicke auf den Button <b>Umbenennen</b>.
+          <span class="explain">Jetzt kannst du der Kopie einen neuen Namen geben.</span>
+        </div>
+      </div>
+
+      <div class="step">
+        <span class="num">3</span>
+        <div>
+          Gib als neuen Namen <code>Mathematik.url</code> ein.
+          <span class="explain"><b>Wichtig:</b> Schreibe auch <b>.url</b> dazu. Sonst funktioniert der Link nicht mehr.</span>
+        </div>
+      </div>
+
+      <div class="step">
+        <span class="num">4</span>
+        <div>
+          Lass den Ordner <code>MISSION-001</code> geöffnet.
+          <span class="explain">So kannst du am Ende schnell zeigen, dass deine Mission vollständig ist.</span>
+        </div>
+      </div>
+
+      <div class="btns">
+        <button class="secondary" data-next="2">← Zurück</button>
+        <button class="primary" data-next="4">Zum Schloss →</button>
+      </div>
+    </section>
+
+    <section class="mission" id="m4">
+      <div class="kicker">Letzte Mission</div>
+      <h2>🔐 Öffne das Schloss</h2>
+
+      <div class="step">
+        <span class="num">1</span>
+        <div>
+          Öffne die <b>Gruppendateien</b>.
+          <span class="explain">Du findest sie unter <b>Dateien → Gruppen → Klasse 5</b>.</span>
+        </div>
+      </div>
+
+      <div class="step">
+        <span class="num">2</span>
+        <div>
+          Öffne dort den Ordner <code>00 Mathematik</code>.
+          <span class="explain">Dort ist etwas für deine letzte Mission versteckt.</span>
+        </div>
+      </div>
+
+      <div class="step">
+        <span class="num">3</span>
+        <div>
+          Finde die richtige <b>PDF-Datei</b> und untersuche sie ganz genau.
+          <span class="explain">Ein guter Agent übersieht auch kleine Hinweise nicht.</span>
+        </div>
+      </div>
+
+      <div class="check">
+        <label for="code">🔐 Was gehört hier hinein?</label>
+        <input id="code" inputmode="numeric" maxlength="4" autocomplete="off" placeholder="????" aria-label="Eingabe für das Schloss">
+
+        <div class="msg" id="msg" aria-live="polite"></div>
+
+        <div class="btns">
+          <button class="secondary" data-next="3">← Zurück</button>
+          <button class="primary" id="checkBtn">Schloss öffnen 🔎</button>
+        </div>
+      </div>
+
+      <div class="reward" id="reward" hidden>
+        <div class="big">🏆</div>
+        <h2>Mission geschafft!</h2>
+        <p>Der Geheimzugang ist jetzt freigeschaltet.</p>
+        <a class="secret" id="secretBtn" href="https://www.google.com/logos/2010/pacman10-i.html" target="_blank" rel="noopener noreferrer">🔓 GEHEIMZUGANG ÖFFNEN</a>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script>
+(() => {
+  const missions = [...document.querySelectorAll('.mission')];
+  const dots = [1,2,3,4].map(n => document.getElementById('d'+n));
+
+  function show(n){
+    missions.forEach((m,i)=>m.classList.toggle('active', i===n-1));
+    dots.forEach((d,i)=>d.classList.toggle('on', i<=n-1));
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+
+  document.querySelectorAll('[data-next]').forEach(btn=>{
+    btn.addEventListener('click',()=>show(Number(btn.dataset.next)));
+  });
+
+  const codeInput = document.getElementById('code');
+  const msg = document.getElementById('msg');
+  const reward = document.getElementById('reward');
+
+  codeInput.addEventListener('input', () => {
+    codeInput.value = codeInput.value.replace(/\D/g,'').slice(0,4);
+  });
+
+  document.getElementById('checkBtn').addEventListener('click',()=>{
+    if(codeInput.value === '0408'){
+      msg.textContent = '✓ Schloss geöffnet!';
+      msg.className = 'msg ok';
+      reward.hidden = false;
+      document.getElementById('checkBtn').disabled = true;
+      codeInput.disabled = true;
+    } else {
+      msg.textContent = 'Das Schloss bleibt zu. Untersuche deinen Fund noch einmal ganz genau.';
+      msg.className = 'msg bad';
+      reward.hidden = true;
+    }
+  });
+
+})();
+</script>
+</body>
+</html>
