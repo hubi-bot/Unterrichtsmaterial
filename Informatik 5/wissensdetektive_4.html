@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wissensdetektive – Forschungsstationen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;0,700;1,500&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#101b2d;
+    --ink-2:#182842;
+    --paper:#f6f1e4;
+    --paper-2:#efe7d3;
+    --gold:#e7a94c;
+    --gold-deep:#c98a2e;
+    --line:#2c3c58;
+    --text-dark:#20293b;
+    --text-soft:#5a6a85;
+
+    --good:#2f8f5b;
+    --good-bg:#e2f5e9;
+    --mid:#b9821f;
+    --mid-bg:#faf0da;
+    --bad:#c1442e;
+    --bad-bg:#fbe4df;
+
+    --c-sonne:#e2703a;
+    --c-sonne-bg:#fbe7db;
+    --c-sterne:#5b56c9;
+    --c-sterne-bg:#e6e4fa;
+    --c-voegel:#3f8f61;
+    --c-voegel-bg:#dcf0e2;
+    --c-vulkan:#c1442e;
+    --c-vulkan-bg:#f8dcd6;
+    --c-traum:#8355ad;
+    --c-traum-bg:#ede2f6;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(1200px 600px at 15% -10%, #1c3055 0%, transparent 60%),
+      radial-gradient(1000px 700px at 110% 10%, #142238 0%, transparent 55%),
+      var(--ink);
+    font-family:'Inter', sans-serif;
+    color: var(--text-dark);
+    min-height:100vh;
+  }
+
+  .stars{
+    position:fixed; inset:0; pointer-events:none; z-index:0; opacity:.5;
+    background-image:
+      radial-gradient(1.5px 1.5px at 20% 30%, #fff 100%, transparent 100%),
+      radial-gradient(1.5px 1.5px at 70% 15%, #fff 100%, transparent 100%),
+      radial-gradient(1px 1px at 40% 70%, #fff 100%, transparent 100%),
+      radial-gradient(1px 1px at 85% 60%, #fff 100%, transparent 100%),
+      radial-gradient(1.5px 1.5px at 55% 40%, #fff 100%, transparent 100%),
+      radial-gradient(1px 1px at 10% 85%, #fff 100%, transparent 100%),
+      radial-gradient(1px 1px at 92% 90%, #fff 100%, transparent 100%);
+  }
+
+  .wrap{
+    position:relative; z-index:1;
+    max-width:980px; margin:0 auto; padding: 28px 20px 80px;
+  }
+
+  header.top{
+    display:flex; align-items:center; justify-content:space-between;
+    color:#f3ede0; padding: 8px 4px 28px;
+    border-bottom: 1px solid rgba(231,169,76,.25);
+    margin-bottom: 30px;
+  }
+  .brand{ display:flex; align-items:center; gap:14px; }
+  .brand-badge{
+    width:46px; height:46px; border-radius:50%;
+    background: radial-gradient(circle at 35% 30%, #ffe4b0, var(--gold) 60%, var(--gold-deep) 100%);
+    display:flex; align-items:center; justify-content:center;
+    font-size:22px; box-shadow: 0 0 0 3px rgba(231,169,76,.18);
+  }
+  .brand h1{ font-family:'Fraunces', serif; font-weight:700; font-size:1.4rem; margin:0; letter-spacing:.2px;}
+  .brand p{ margin:2px 0 0; font-size:.82rem; color:#a9b7d1; }
+  .back-btn{
+    background:transparent; border:1px solid rgba(231,169,76,.5); color:#f0e3c5;
+    padding:9px 16px; border-radius:999px; font-family:'Inter'; font-size:.85rem;
+    cursor:pointer; display:none; align-items:center; gap:6px; transition:.15s;
+  }
+  .back-btn:hover{ background:rgba(231,169,76,.12); }
+  .back-btn.show{ display:inline-flex; }
+
+  .screen{ display:none; animation: fadein .35s ease; }
+  .screen.active{ display:block; }
+  @keyframes fadein{ from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:none;} }
+
+  /* HOME */
+  .intro{ text-align:center; color:#f3ede0; margin-bottom:34px; }
+  .intro .eyebrow{ color: var(--gold); font-family:'Fraunces', serif; font-style:italic; font-size:1.05rem; }
+  .intro h2{ font-family:'Fraunces', serif; font-size:2rem; margin:8px 0 12px; line-height:1.2;}
+  .intro p{ color:#b7c2da; max-width:560px; margin:0 auto; line-height:1.55; font-size:.98rem;}
+
+  .grid{
+    display:grid; grid-template-columns: repeat(auto-fit, minmax(260px,1fr));
+    gap:20px;
+  }
+  .group-card{
+    background: var(--paper);
+    border-radius:18px;
+    padding:24px 22px 22px;
+    cursor:pointer;
+    border: 2px solid transparent;
+    position:relative;
+    box-shadow: 0 14px 28px -14px rgba(0,0,0,.55);
+    transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+  }
+  .group-card:hover{ transform: translateY(-4px); box-shadow: 0 18px 34px -12px rgba(0,0,0,.6); }
+  .group-card .g-icon{
+    width:54px; height:54px; border-radius:14px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:26px; margin-bottom:14px;
+  }
+  .group-card h3{ font-family:'Fraunces', serif; font-size:1.18rem; margin:0 0 8px; color: var(--text-dark);}
+  .group-card p.q{ font-size:.92rem; color:var(--text-soft); line-height:1.45; margin:0 0 14px;}
+  .group-card .go{ font-size:.82rem; font-weight:700; letter-spacing:.2px; }
+
+  .group-card[data-c="sonne"] .g-icon{ background:var(--c-sonne-bg); }
+  .group-card[data-c="sonne"] .go{ color:var(--c-sonne); }
+  .group-card[data-c="sonne"]:hover{ border-color:var(--c-sonne); }
+  .group-card[data-c="sterne"] .g-icon{ background:var(--c-sterne-bg); }
+  .group-card[data-c="sterne"] .go{ color:var(--c-sterne); }
+  .group-card[data-c="sterne"]:hover{ border-color:var(--c-sterne); }
+  .group-card[data-c="voegel"] .g-icon{ background:var(--c-voegel-bg); }
+  .group-card[data-c="voegel"] .go{ color:var(--c-voegel); }
+  .group-card[data-c="voegel"]:hover{ border-color:var(--c-voegel); }
+  .group-card[data-c="vulkan"] .g-icon{ background:var(--c-vulkan-bg); }
+  .group-card[data-c="vulkan"] .go{ color:var(--c-vulkan); }
+  .group-card[data-c="vulkan"]:hover{ border-color:var(--c-vulkan); }
+  .group-card[data-c="traum"] .g-icon{ background:var(--c-traum-bg); }
+  .group-card[data-c="traum"] .go{ color:var(--c-traum); }
+  .group-card[data-c="traum"]:hover{ border-color:var(--c-traum); }
+
+  /* GROUP SCREEN */
+  .g-header{
+    background: var(--paper); border-radius:20px; padding:26px 28px;
+    margin-bottom:26px; position:relative; overflow:hidden;
+    border-left: 8px solid var(--accent, var(--gold));
+  }
+  .g-header .tag{
+    display:inline-block; font-size:.75rem; font-weight:700; letter-spacing:.3px;
+    color:#fff; background: var(--accent, var(--gold)); padding:4px 12px; border-radius:999px;
+    margin-bottom:12px;
+  }
+  .g-header h2{ font-family:'Fraunces', serif; font-size:1.55rem; margin:0 0 8px; color:var(--text-dark); line-height:1.3;}
+  .g-header p{ margin:0; color:var(--text-soft); font-size:.95rem; max-width:640px; line-height:1.5;}
+
+  section.block{
+    background:#fff; border-radius:18px; padding:22px 24px 26px; margin-bottom:22px;
+    box-shadow: 0 10px 24px -16px rgba(0,0,0,.25);
+  }
+  section.block h3{
+    font-family:'Fraunces', serif; font-size:1.15rem; margin:0 0 4px; color:var(--text-dark);
+    display:flex; align-items:center; gap:8px;
+  }
+  section.block .sub{ color:var(--text-soft); font-size:.88rem; margin:0 0 18px; font-style:italic; }
+
+  .cards-row{ display:grid; grid-template-columns: repeat(auto-fit,minmax(210px,1fr)); gap:14px; }
+
+  .pick-card{
+    border:2px solid #e6e1d3; border-radius:14px; padding:16px; cursor:pointer;
+    transition:.15s; background:#fdfbf6; position:relative;
+  }
+  .pick-card:hover{ border-color: var(--accent, var(--gold)); }
+  .pick-card.selected{ border-color: var(--accent, var(--gold)); background: color-mix(in srgb, var(--accent,var(--gold)) 8%, #fff); }
+  .pick-card .check{
+    position:absolute; top:12px; right:12px; width:22px; height:22px; border-radius:50%;
+    border:2px solid #d8d2c0; background:#fff; display:flex; align-items:center; justify-content:center;
+    font-size:13px; color:transparent;
+  }
+  .pick-card.selected .check{ background:var(--accent, var(--gold)); border-color:var(--accent, var(--gold)); color:#fff; }
+  .pick-card .p-icon{ font-size:26px; margin-bottom:8px; }
+  .pick-card h4{ margin:0 0 6px; font-size:1rem; }
+  .pick-card p{ margin:0; font-size:.86rem; line-height:1.45; color:var(--text-soft); }
+
+  .texts-grid{ display:grid; grid-template-columns: repeat(auto-fit,minmax(260px,1fr)); gap:16px; }
+  .text-card{
+    border:2px solid #e6e1d3; border-radius:14px; padding:18px; cursor:pointer; background:#fdfbf6; transition:.15s;
+  }
+  .text-card:hover{ border-color: var(--accent, var(--gold)); }
+  .text-card.selected{ border-color: var(--accent, var(--gold)); background: color-mix(in srgb, var(--accent,var(--gold)) 8%, #fff);}
+  .text-card .t-top{ display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px;}
+  .text-card h4{ margin:0; font-size:.95rem; letter-spacing:.3px; }
+  .badge-ai{
+    font-size:.68rem; font-weight:700; background:#e9e4fb; color:#5b4b9c; padding:3px 9px; border-radius:999px;
+    white-space:nowrap;
+  }
+  .text-card .body p{ font-size:.85rem; line-height:1.55; color:var(--text-dark); margin:0 0 8px; }
+  .text-card .body p:last-child{ margin-bottom:0; }
+  .text-card .check{
+    width:20px; height:20px; border-radius:50%; border:2px solid #d8d2c0; background:#fff;
+    display:inline-flex; align-items:center; justify-content:center; font-size:12px; color:transparent; margin-left:8px; flex-shrink:0;
+  }
+  .text-card.selected .check{ background:var(--accent, var(--gold)); border-color:var(--accent, var(--gold)); color:#fff;}
+
+  .browser-mock{
+    border-radius:12px; overflow:hidden; border:1px solid #dcd6c4; margin-bottom:14px;
+  }
+  .browser-bar{
+    background:#e9e4d5; padding:8px 12px; display:flex; align-items:center; gap:6px;
+  }
+  .browser-bar .dot{ width:9px; height:9px; border-radius:50%; background:#c8c2ae; }
+  .browser-bar .url{
+    margin-left:8px; background:#fff; border-radius:999px; padding:4px 12px; font-size:.75rem; color:#7a7565;
+    flex:1; font-family:monospace;
+  }
+  .fragfinn-strip{
+    background:#1c9b6a; padding:12px 16px; color:#fff; font-family:'Fraunces', serif; font-weight:700; font-size:1rem;
+    display:flex; align-items:center; gap:10px;
+  }
+  .fragfinn-strip .lens{ font-size:1.1rem; }
+
+  .result-card{
+    border:2px solid #e6e1d3; border-radius:12px; padding:14px 16px; margin-bottom:10px; cursor:pointer; transition:.15s;
+    background:#fdfbf6; display:flex; gap:12px; align-items:flex-start;
+  }
+  .result-card:hover{ border-color: var(--accent, var(--gold)); }
+  .result-card.selected{ border-color: var(--accent, var(--gold)); background: color-mix(in srgb, var(--accent,var(--gold)) 8%, #fff);}
+  .result-card .r-icon{ font-size:20px; margin-top:2px;}
+  .result-card .r-body{ flex:1; }
+  .result-card .r-title{ color:#1a5fb4; font-weight:700; font-size:.94rem; margin-bottom:3px; }
+  .result-card .r-url{ color:#3a7a3a; font-size:.76rem; margin-bottom:5px; font-family:monospace; }
+  .result-card .r-snippet{ font-size:.85rem; color:var(--text-soft); line-height:1.45; }
+  .result-card .check{
+    width:20px; height:20px; border-radius:50%; border:2px solid #d8d2c0; background:#fff; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center; font-size:12px; color:transparent;
+  }
+  .result-card.selected .check{ background:var(--accent, var(--gold)); border-color:var(--accent, var(--gold)); color:#fff;}
+
+  /* FEEDBACK PANEL */
+  .feedback{
+    margin-top:14px; padding:13px 16px; border-radius:12px; font-size:.88rem; line-height:1.5;
+    display:none; align-items:flex-start; gap:10px; animation: fadein .25s ease;
+  }
+  .feedback.show{ display:flex; }
+  .feedback .f-icon{ font-size:1.15rem; line-height:1; margin-top:1px;}
+  .feedback.good{ background:var(--good-bg); color:#1f5c3c; }
+  .feedback.mid{ background:var(--mid-bg); color:#7a5810; }
+  .feedback.bad{ background:var(--bad-bg); color:#8c2c1c; }
+  .feedback strong{ display:block; margin-bottom:2px; }
+
+  .talk-box{
+    margin-top:16px; padding:16px 18px; background:#f7f4ec; border-radius:12px;
+    border-left:4px solid var(--accent, var(--gold));
+  }
+  .talk-box .talk-title{ font-weight:700; font-size:.9rem; display:flex; align-items:center; gap:7px; margin-bottom:6px; color:var(--text-dark);}
+  .talk-box p.hint{ margin:0; font-size:.85rem; color:var(--text-soft); line-height:1.5; }
+
+  .search-cta{
+    display:flex; flex-wrap:wrap; align-items:center; gap:14px; margin-top:18px;
+    background:#f7f4ec; border-radius:14px; padding:16px 18px;
+  }
+  .search-cta p{ margin:0; font-size:.88rem; color:var(--text-soft); flex:1; min-width:200px; }
+  .btn{
+    display:inline-flex; align-items:center; gap:8px; padding:11px 20px; border-radius:999px;
+    background: var(--accent, var(--gold)); color:#fff; font-weight:700; font-size:.88rem; text-decoration:none;
+    border:none; cursor:pointer; transition:.15s;
+  }
+  .btn:hover{ filter:brightness(1.06); transform:translateY(-1px); }
+
+  .mission-block{
+    background: linear-gradient(135deg, #fff, #fdfaf2);
+    border:2px solid var(--accent, var(--gold));
+  }
+  .mission-list{ margin:0 0 4px; padding-left:20px; font-size:.92rem; line-height:1.75; color:var(--text-dark); }
+  .mission-list strong{ color: var(--accent, var(--gold-deep)); }
+
+  .note-block{
+    background: linear-gradient(135deg, #fff9ec, #fbf3df);
+    border:2px dashed #d9c58f; border-radius:16px; padding:20px 22px;
+  }
+  .note-block h3{ margin-top:0; }
+  .note-block ol{ margin:10px 0 0; padding-left:20px; font-size:.92rem; line-height:1.7; color:var(--text-dark); }
+  .note-block strong{ color: var(--accent, var(--gold-deep)); }
+
+  footer.foot{ text-align:center; color:#8b98b2; font-size:.78rem; margin-top:40px; }
+
+  @media (max-width:600px){
+    .g-header{ padding:20px; }
+    section.block{ padding:18px; }
+  }
+</style>
+</head>
+<body>
+<div class="stars"></div>
+<div class="wrap">
+
+  <header class="top">
+    <div class="brand">
+      <div class="brand-badge">🔎</div>
+      <div>
+        <h1>Wissensdetektive</h1>
+        <p>Forschungsstationen für neugierige Köpfe</p>
+      </div>
+    </div>
+    <button class="back-btn" id="backBtn" onclick="goHome()">← Zur Gruppenauswahl</button>
+  </header>
+
+  <!-- HOME SCREEN -->
+  <div class="screen active" id="screen-home">
+    <div class="intro">
+      <div class="eyebrow">Willkommen, Detektivinnen und Detektive!</div>
+      <h2>Wählt eure Forschungsgruppe</h2>
+      <p>Jede Gruppe bearbeitet eine eigene Forschungsfrage. Ihr bekommt Hinweise von Expertinnen und Experten, unterschiedliche Texte und Suchergebnisse aus dem Internet. Wählt jeweils aus, was euch am besten weiterhilft – ihr bekommt sofort eine Rückmeldung dazu. Eure Auswahl wird automatisch gespeichert, auch wenn ihr die Seite aus Versehen schließt.</p>
+    </div>
+    <div class="grid" id="homeGrid"></div>
+  </div>
+
+  <!-- GROUP SCREENS get injected here -->
+  <div id="groupScreens"></div>
+
+  <footer class="foot">so geht Medien – Wissensdetektive · digitales Arbeitsblatt</footer>
+</div>
+
+<script>
+// fit: "good" | "mid" | "bad"  -> controls feedback color and icon
+const GROUPS = [
+  {
+    id:"sonne", color:"sonne", accent:"#e2703a", icon:"☀️",
+    title:"Sonne & Haut", tag:"Gesundheit",
+    question:"Warum bekommen wir einen Sonnenbrand?",
+    keyword:"Sonnenbrand",
+    personen:[
+      {icon:"🔭", name:"Astrophysikerin", text:"Ich erforsche Planeten, Galaxien und das ganze Universum. Auch mit unserer Sonne habe ich mich beschäftigt: Sie ist der Stern, der der Erde am nächsten ist. In ihrem Inneren verschmelzen unzählige Teilchen miteinander – dabei entsteht eine riesige Menge Energie, die als Licht und Strahlung ins All strahlt.", fit:"mid", feedback:"Die Astrophysikerin kennt sich super mit der Sonne aus – aber sie erklärt nicht, was dabei in unserer Haut passiert."},
+      {icon:"🚒", name:"Feuerwehrmann", text:"Mein Beruf ist spannend, aber auch gefährlich. Bei lang anhaltender Hitze oder Trockenheit kann es zu einem Brand kommen – dann bin ich gefragt. Ich helfe außerdem bei Unfällen, Überschwemmungen oder der Rettung von Menschen in Notsituationen.", fit:"bad", feedback:"Der Feuerwehrmann kennt sich mit echten Bränden aus – Sonnenbrand ist aber kein Feuer. Er kann euch hier nicht direkt weiterhelfen."},
+      {icon:"🩺", name:"Hautärztin", text:"Ich untersuche die Haut meiner Patientinnen und Patienten. Durch starke Sonneneinstrahlung kann ein Sonnenbrand entstehen. Dann behandle ich die verbrannte Haut und achte darauf, dass sie sich nicht entzündet. Häufiger Sonnenbrand erhöht das Risiko für Hautkrebs.", fit:"good", feedback:"Genau richtig! Die Hautärztin kennt sich am besten mit Sonnenbrand aus – sie weiß, wie er entsteht und welche Folgen er haben kann."}
+    ],
+    texte:[
+      {label:"Sachtext", ai:false, title:"SONNENBRAND", fit:"good", feedback:"Guter Griff: ein sachlicher Text mit den wichtigsten Fakten – gut geeignet für eure Recherche.", body:[
+        "Die Sonne ist rund 150 Millionen Kilometer von der Erde entfernt – trotzdem kann sie für uns gefährlich werden. Der Grund sind ihre Strahlen. Besonders die UV-Strahlen tragen viel Energie, obwohl wir sie gar nicht sehen können. Trifft zu viel UV-Strahlung auf unsere Haut, werden die Hautzellen geschädigt: Es entsteht ein Sonnenbrand.",
+        "Man erkennt einen Sonnenbrand an geröteter, heißer Haut, die juckt und schmerzt. Wer häufig einen Sonnenbrand bekommt, erhöht sein Risiko, später an Hautkrebs zu erkranken.",
+        "Schützen kann man sich mit Sonnencreme, Kleidung und einem Aufenthalt im Schatten. Auch die Augen sollten mit einer Sonnenbrille geschützt werden."
+      ]},
+      {label:"Gedicht", ai:true, title:"SONNENTAG", fit:"mid", feedback:"Hübsch geschrieben, aber von einer KI erstellt und eher unterhaltsam als informativ. Fakten findet ihr besser im Sachtext.", body:[
+        "Die Sonne lacht vom blauen Zelt, sie wärmt uns und die ganze Welt. Doch bleibst du lang in ihrem Schein, kann schnell die Haut ganz rot dir sein.",
+        "Drum creme dich gut, vergiss es nie, so schützt du deine Haut vor ihr. Ein Hut, ein Schatten, kühles Nass – so wird der Sonnentag ein Spaß!"
+      ]}
+    ],
+    suchergebnisse:[
+      {icon:"🐾", title:"Auch Tiere können einen Sonnenbrand bekommen", url:"tierchenwelt.de › tierleben", snippet:"Nicht nur Menschen, auch manche Tiere mit heller Haut können in der Sonne einen Sonnenbrand bekommen …", fit:"mid", feedback:"Interessant, aber es geht um Tiere – nicht um Menschen. Für eure Frage nicht die beste Quelle."},
+      {icon:"🦜", title:"UV-Strahlen – Woher kommt ein Sonnenbrand?", url:"kakadu.de › wissen", snippet:"In dieser Folge erfahrt ihr, wie UV-Strahlen unsere Haut verändern und wie ein Sonnenbrand entsteht …", fit:"good", feedback:"Treffer! Das passt genau zu eurer Frage und stammt von einer vertrauenswürdigen Kinderwissensseite."},
+      {icon:"🛒", title:"Sonnencreme-Angebote – jetzt günstig bestellen", url:"sonnenshop24.de › angebote", snippet:"Große Auswahl an Sonnencremes mit Rabatt. Jetzt bestellen und schnell liefern lassen! Werbung.", fit:"bad", feedback:"Das ist Werbung für ein Produkt – keine Antwort auf eure Forschungsfrage."}
+    ]
+  },
+  {
+    id:"sterne", color:"sterne", accent:"#5b56c9", icon:"✨",
+    title:"Nachthimmel", tag:"Astronomie",
+    question:"Warum funkeln Sterne am Nachthimmel?",
+    keyword:"Sterne",
+    personen:[
+      {icon:"🔭", name:"Astronomin", text:"Ich beobachte nachts den Himmel und untersuche Sterne, Planeten und ferne Galaxien. Sterne sind riesige, heiße Gaskugeln, die durch Kernfusion ihr eigenes Licht erzeugen. Mit großen Teleskopen sehe ich, wie sich ihr Licht auf dem Weg zur Erde verändert.", fit:"good", feedback:"Beste Wahl! Die Astronomin erforscht genau solche Phänomene am Nachthimmel."},
+      {icon:"✈️", name:"Pilotin", text:"Ich fliege nachts große Passagierflugzeuge über den Wolken. Von dort oben sehe ich die Sterne besonders klar, weil kaum Lichter der Stadt stören. Für die Navigation nutze ich heute aber vor allem moderne Technik, keine Sterne mehr.", fit:"mid", feedback:"Die Pilotin sieht Sterne oft und gut – erklären, warum sie funkeln, kann sie aber nicht."},
+      {icon:"🎂", name:"Konditor", text:"Ich backe Torten und verziere sie mit essbaren Sternen aus Zucker. Die glitzern zwar auch – aber das hat nichts mit den echten Sternen am Himmel zu tun.", fit:"bad", feedback:"Der Konditor macht nur Zucker-Sterne auf Torten – das hat nichts mit echten Sternen am Himmel zu tun."}
+    ],
+    texte:[
+      {label:"Sachtext", ai:false, title:"WARUM FUNKELN STERNE?", fit:"good", feedback:"Guter Griff: erklärt sachlich und nachvollziehbar, warum Sterne funkeln.", body:[
+        "Sterne senden ihr Licht eigentlich ganz gleichmäßig aus – sie funkeln also gar nicht wirklich. Das Funkeln entsteht erst, wenn das Sternenlicht durch die Erdatmosphäre zu uns hindurchreist.",
+        "Die Luft in der Atmosphäre ist ständig in Bewegung: Warme und kalte Luftschichten mischen sich, Wind weht in unterschiedliche Richtungen. Dadurch wird das Licht der Sterne auf seinem Weg immer wieder ein kleines bisschen abgelenkt.",
+        "Für unser Auge sieht es dann so aus, als würde der Stern flackern. Planeten funkeln übrigens kaum – sie sind uns so nah, dass ihr Licht als kleine Scheibe und nicht nur als winziger Punkt bei uns ankommt."
+      ]},
+      {label:"Gedicht", ai:true, title:"NACHTLICHT", fit:"mid", feedback:"Schön geschrieben, aber von einer KI erstellt – enthält kaum überprüfbare Fakten.", body:[
+        "Am Himmel steht ein funkelnd Licht, ein Stern, der wandert, fällt doch nicht. Er zwinkert dir die ganze Nacht, weil Luft ihn zittern macht.",
+        "Millionen Kilometer weit, reist sein Licht durch Raum und Zeit. Schau hinauf und mach dir klar: Was du siehst, ist ewig war."
+      ]}
+    ],
+    suchergebnisse:[
+      {icon:"🦜", title:"Warum funkeln Sterne? Eine Frage – eine Antwort", url:"kakadu.de › wissen", snippet:"Sterne funkeln eigentlich gar nicht selbst – hier erfahrt ihr, was in der Atmosphäre wirklich passiert …", fit:"good", feedback:"Treffer! Passt genau zu eurer Frage und stammt von einer vertrauenswürdigen Kinderwissensseite."},
+      {icon:"⭐", title:"Warum heißt der Seestern eigentlich Stern?", url:"tierchenwelt.de › meerestiere", snippet:"Der Seestern hat fünf Arme und lebt im Meer. Woher sein Name kommt und wie er sich bewegt …", fit:"mid", feedback:"Vorsicht bei ähnlichen Wörtern: Das handelt vom Seestern im Meer, nicht von Sternen am Himmel."},
+      {icon:"🛒", title:"Kinderteleskope im Vergleich – jetzt bestellen", url:"weltraumshop.de › teleskope", snippet:"Die besten Einsteiger-Teleskope für kleine Sternforscher. Versandkostenfrei ab 30 €! Werbung.", fit:"bad", feedback:"Das ist Werbung für ein Produkt – keine Antwort auf eure Forschungsfrage."}
+    ]
+  },
+  {
+    id:"voegel", color:"voegel", accent:"#3f8f61", icon:"🐦",
+    title:"Zugvögel", tag:"Tierverhalten",
+    question:"Wie finden Zugvögel im Herbst den Weg in den Süden?",
+    keyword:"Zugvögel",
+    personen:[
+      {icon:"🪶", name:"Vogelforscherin", text:"Ich erforsche das Verhalten von Vögeln, vor allem wie sie sich orientieren. Viele Zugvögel legen jedes Jahr tausende Kilometer zurück und finden trotzdem ihr Ziel – das untersuche ich mit kleinen Sendern, die ich den Vögeln anlege.", fit:"good", feedback:"Beste Wahl! Die Vogelforscherin untersucht genau, wie sich Zugvögel orientieren."},
+      {icon:"🚆", name:"Zugbegleiter", text:"Ich arbeite auf einem Fernverkehrszug und kontrolliere Fahrkarten. Mit ‚Zugvögeln‘ habe ich beruflich nichts zu tun – auch wenn beide Wörter mit ‚Zug‘ beginnen.", fit:"bad", feedback:"Nur weil beide Wörter mit „Zug“ beginnen, heißt das nicht, dass er etwas über Zugvögel weiß."},
+      {icon:"🗺️", name:"Kartografin", text:"Ich zeichne Landkarten und beschäftige mich damit, wie Menschen sich mit Karte und Kompass orientieren. Wie Vögel das ganz ohne Karte schaffen, ist auch für mich eine spannende Frage.", fit:"mid", feedback:"Sie kennt sich mit Orientierung aus, aber nicht speziell mit Vögeln – für eure Frage nur teilweise hilfreich."}
+    ],
+    texte:[
+      {label:"Sachtext", ai:false, title:"WIE FINDEN ZUGVÖGEL IHREN WEG?", fit:"good", feedback:"Guter Griff: erklärt sachlich, welche „Kompasse“ Zugvögel wirklich nutzen.", body:[
+        "Jedes Jahr im Herbst fliegen viele Vogelarten tausende Kilometer in wärmere Länder, weil dort im Winter mehr Futter zu finden ist. Erstaunlich: Sie haben den Weg nie geübt – und kommen trotzdem sicher an.",
+        "Forschende haben herausgefunden, dass Zugvögel mehrere ‚Kompasse‘ gleichzeitig nutzen: Sie orientieren sich am Stand der Sonne und der Sterne, erkennen Landschaften wie Flüsse und Küsten wieder und können sogar das Magnetfeld der Erde spüren.",
+        "Junge Vögel tragen die Flugroute bereits als eine Art angeborenen Plan in sich. Ältere Vögel merken sich die Strecke zusätzlich aus Erfahrung."
+      ]},
+      {label:"Gedicht", ai:true, title:"HERBSTFLUG", fit:"mid", feedback:"Schön geschrieben, aber von einer KI erstellt – enthält kaum überprüfbare Fakten.", body:[
+        "Im Herbstwind zieht ein Vogelschwarm, kein Kompass nötig, keinen Arm. Sie fühlen einfach, wo es langgeht, weil tief in ihnen ein Gefühl fürs Ziel besteht.",
+        "Am Sternenhimmel, in der Erde Kraft, liegt der Plan, der sie sicher schafft. Zum Frühling kehren sie zurück – ein jährlich weiter Vogelblick."
+      ]}
+    ],
+    suchergebnisse:[
+      {icon:"🐦", title:"Zugvögel: So finden sie den Weg in den Süden", url:"tierchenwelt.de › vogelwissen", snippet:"Sonne, Sterne und das Magnetfeld der Erde – so orientieren sich Zugvögel auf ihrer langen Reise …", fit:"good", feedback:"Treffer! Passt genau zu eurer Frage und stammt von einer vertrauenswürdigen Kinderwissensseite."},
+      {icon:"🐋", title:"Wale auf großer Wanderschaft", url:"kakadu.de › ozean", snippet:"Auch Wale ziehen jedes Jahr tausende Kilometer durch die Ozeane. Wie sie sich dabei orientieren …", fit:"mid", feedback:"Spannend, aber es geht um Wale im Meer – nicht um Zugvögel in der Luft."},
+      {icon:"🛒", title:"Nistkästen und Vogelhäuschen für den Garten", url:"gartenwelt-shop.de › voegel", snippet:"Jetzt Nistkästen und Futterhäuschen für heimische Gartenvögel entdecken. Werbung.", fit:"bad", feedback:"Das ist Werbung für ein Produkt – keine Antwort auf eure Forschungsfrage."}
+    ]
+  },
+  {
+    id:"vulkan", color:"vulkan", accent:"#c1442e", icon:"🌋",
+    title:"Vulkane", tag:"Erdkunde",
+    question:"Warum spucken Vulkane Feuer?",
+    keyword:"Vulkane",
+    personen:[
+      {icon:"🌋", name:"Vulkanologin", text:"Ich erforsche Vulkane auf der ganzen Welt und untersuche, wie und warum sie ausbrechen. Dafür nehme ich Gesteinsproben und beobachte, wie sich der Boden vor einem Ausbruch verändert.", fit:"good", feedback:"Beste Wahl! Die Vulkanologin erforscht genau die Entstehung von Vulkanausbrüchen."},
+      {icon:"🚒", name:"Feuerwehrmann", text:"Ich lösche Brände, die durch Hitze und Trockenheit entstehen. Mit dem Feuer aus einem Vulkan habe ich aber nichts zu tun – das kann niemand einfach löschen.", fit:"bad", feedback:"Vulkanfeuer kann niemand löschen – das ist kein Fall für die Feuerwehr."},
+      {icon:"🍞", name:"Bäckerin", text:"Ich backe Brot bei großer Hitze im Ofen. Ein Vulkan wird zwar auch unglaublich heiß, aber statt Brotteig kommt dort geschmolzenes Gestein heraus.", fit:"mid", feedback:"Sie kennt große Hitze aus dem Backofen – aber nicht aus dem Inneren der Erde."}
+    ],
+    texte:[
+      {label:"Sachtext", ai:false, title:"WARUM SPUCKEN VULKANE FEUER?", fit:"good", feedback:"Guter Griff: erklärt Magma, Druck und Lava sachlich und verständlich.", body:[
+        "Tief unter der Erdoberfläche ist es so heiß, dass Gestein schmilzt. Diese glühend heiße, flüssige Masse nennt man Magma. Weil im Magma auch Gase eingeschlossen sind, entsteht Druck – ähnlich wie in einer geschüttelten Limonadenflasche.",
+        "Wird der Druck zu groß, sucht sich das Magma einen Weg nach oben und schießt als Lava aus dem Vulkan. Was wie Feuer aussieht, ist eigentlich glühend heißes, geschmolzenes Gestein – oft über 1000 Grad heiß.",
+        "Nicht jeder Vulkan bricht ständig aus. Manche schlafen jahrhundertelang, bevor sich wieder genug Druck aufgebaut hat."
+      ]},
+      {label:"Gedicht", ai:true, title:"FEUERBERG", fit:"mid", feedback:"Schön geschrieben, aber von einer KI erstellt – enthält kaum überprüfbare Fakten.", body:[
+        "Tief im Berg, da brodelt es, glühend heiß, ein Feuernest. Der Druck wird groß, die Erde bebt, bis Lava sich den Weg dann webt.",
+        "Sie fließt hinab, so rot wie Glut, gefährlich schön, voll wilder Wut. Ein Vulkan schläft, dann wacht er auf – die Erde nimmt so ihren Lauf."
+      ]}
+    ],
+    suchergebnisse:[
+      {icon:"🦜", title:"Wie entsteht ein Vulkanausbruch?", url:"kakadu.de › erde", snippet:"Magma, Druck und Lava – hier erfahrt ihr Schritt für Schritt, wie ein Vulkan ausbricht …", fit:"good", feedback:"Treffer! Passt genau zu eurer Frage und stammt von einer vertrauenswürdigen Kinderwissensseite."},
+      {icon:"🦎", title:"Diese Tiere leben sogar in der Nähe von Vulkanen", url:"tierchenwelt.de › lebensraum", snippet:"Erstaunlich: Manche Tierarten fühlen sich direkt am Vulkan besonders wohl …", fit:"mid", feedback:"Spannend, aber es geht um Tiere in Vulkannähe – nicht um die Entstehung eines Ausbruchs."},
+      {icon:"🛒", title:"Vulkan-Experimentierkasten für Kinder – im Angebot", url:"forscherkiste.de › experimente", snippet:"Baue deinen eigenen Vulkan nach und lass ihn ausbrechen! Jetzt bestellen. Werbung.", fit:"bad", feedback:"Das ist Werbung für ein Produkt – keine Antwort auf eure Forschungsfrage."}
+    ]
+  },
+  {
+    id:"traum", color:"traum", accent:"#8355ad", icon:"💤",
+    title:"Träume", tag:"Gehirn & Schlaf",
+    question:"Warum träumen wir?",
+    keyword:"Träume",
+    personen:[
+      {icon:"🧠", name:"Schlafforscherin", text:"Ich untersuche im Schlaflabor, was im Gehirn passiert, während Menschen schlafen. Mit speziellen Geräten kann ich messen, wann jemand träumt und wie aktiv das Gehirn dabei ist.", fit:"good", feedback:"Beste Wahl! Die Schlafforscherin untersucht genau, was beim Träumen im Gehirn passiert."},
+      {icon:"🔦", name:"Nachtwächter", text:"Früher liefen Nachtwächter nachts durch die Stadt, um aufzupassen, dass alles in Ordnung ist. Ich bin zwar nachts wach, aber mit dem Träumen von schlafenden Menschen habe ich nichts zu tun.", fit:"bad", feedback:"Nur weil er nachts wach ist, weiß der Nachtwächter noch nichts über das Träumen im Schlaf."},
+      {icon:"🎬", name:"Filmregisseur", text:"Ich erzähle Geschichten in bewegten Bildern für das Kino. Manche sagen, Träume seien wie kleine Filme im Kopf – gedreht habe ich sie aber nicht.", fit:"mid", feedback:"Ein netter Vergleich zum „Kopfkino“ – aber er weiß nichts über echte Träume im Gehirn."}
+    ],
+    texte:[
+      {label:"Sachtext", ai:false, title:"WARUM TRÄUMEN WIR?", fit:"good", feedback:"Guter Griff: erklärt sachlich, was beim Träumen im Gehirn passiert.", body:[
+        "Jeder Mensch träumt jede Nacht mehrmals – auch wenn sich viele danach nicht daran erinnern. Träume entstehen vor allem in einer bestimmten Schlafphase, die REM-Schlaf genannt wird. In dieser Phase ist das Gehirn fast so aktiv wie im Wachzustand.",
+        "Forschende glauben, dass Träume dem Gehirn helfen, Erlebtes zu verarbeiten und im Gedächtnis zu ordnen. Auch Gefühle wie Angst oder Freude werden im Traum oft noch einmal durchgespielt.",
+        "Warum wir manchmal fliegen können oder seltsame Wesen im Traum erscheinen, ist bis heute nicht vollständig erforscht – Träume gehören zu den großen Rätseln der Wissenschaft."
+      ]},
+      {label:"Gedicht", ai:true, title:"KOPFKINO", fit:"mid", feedback:"Schön geschrieben, aber von einer KI erstellt – enthält kaum überprüfbare Fakten.", body:[
+        "Die Augen zu, die Welt wird still, das Kopfkino zeigt, was es will. Mal fliegst du hoch, mal fällst du tief, als hätte dich ein Zauber gerufen, der schlief.",
+        "Am Morgen dann, das Bild verblasst, du weißt nicht mehr, was du erfasst. Doch tief im Kopf bleibt es bewahrt – ein Traum, der in dir weitergeht, ganz zart."
+      ]}
+    ],
+    suchergebnisse:[
+      {icon:"🦜", title:"Warum wir träumen", url:"kakadu.de › koerper", snippet:"Jede Nacht träumen wir mehrmals – hier erfahrt ihr, was im Gehirn dabei passiert …", fit:"good", feedback:"Treffer! Passt genau zu eurer Frage und stammt von einer vertrauenswürdigen Kinderwissensseite."},
+      {icon:"🐶", title:"Träumen Hunde und Katzen auch?", url:"tierchenwelt.de › haustiere", snippet:"Zucken im Schlaf, leises Bellen – deuten diese Anzeichen bei Tieren auf Träume hin? …", fit:"mid", feedback:"Spannend, aber es geht um Tiere – nicht direkt um menschliche Träume."},
+      {icon:"🛒", title:"Traumfänger und Kuscheltiere – jetzt entdecken", url:"kinderzimmerwelt.de › deko", snippet:"Schöne Traumfänger fürs Kinderzimmer, versandkostenfrei ab 20 €. Werbung.", fit:"bad", feedback:"Das ist Werbung für ein Produkt – keine Antwort auf eure Forschungsfrage."}
+    ]
+  }
+];
+
+const FIT_ICON = { good:"✅", mid:"⚠️", bad:"❌" };
+const FIT_LABEL = { good:"Gut geeignet", mid:"Teilweise geeignet", bad:"Nicht geeignet" };
+
+const homeGrid = document.getElementById('homeGrid');
+const groupScreens = document.getElementById('groupScreens');
+const STORAGE_PREFIX = "wd_";
+
+function storeGet(key){
+  try{ return localStorage.getItem(STORAGE_PREFIX + key); }catch(e){ return null; }
+}
+function storeSet(key, value){
+  try{ localStorage.setItem(STORAGE_PREFIX + key, value); }catch(e){ /* storage unavailable */ }
+}
+
+GROUPS.forEach(g=>{
+  // ---- HOME CARD ----
+  const card = document.createElement('div');
+  card.className='group-card';
+  card.dataset.c = g.color;
+  card.onclick=()=>showScreen(g.id);
+  card.innerHTML = `
+    <div class="g-icon">${g.icon}</div>
+    <h3>${g.title}</h3>
+    <p class="q">${g.question}</p>
+    <span class="go">Station betreten →</span>
+  `;
+  homeGrid.appendChild(card);
+
+  // ---- GROUP SCREEN ----
+  const screen = document.createElement('div');
+  screen.className='screen';
+  screen.id='screen-'+g.id;
+  screen.style.setProperty('--accent', g.accent);
+
+  const personenHtml = g.personen.map((p,i)=>`
+    <div class="pick-card" data-store="${g.id}_person" data-idx="${i}" onclick="pickOne(this)">
+      <div class="check">✓</div>
+      <div class="p-icon">${p.icon}</div>
+      <h4>${p.name}</h4>
+      <p>${p.text}</p>
+    </div>
+  `).join('');
+  const personenFeedback = g.personen.map((p,i)=>`
+    <div class="feedback ${p.fit}" data-fb="${g.id}_person" data-fbidx="${i}">
+      <span class="f-icon">${FIT_ICON[p.fit]}</span>
+      <span><strong>${FIT_LABEL[p.fit]}</strong>${p.feedback}</span>
+    </div>
+  `).join('');
+
+  const texteHtml = g.texte.map((t,i)=>`
+    <div class="text-card" data-store="${g.id}_text" data-idx="${i}" onclick="pickOne(this)">
+      <div class="t-top">
+        <h4>${t.title}</h4>
+        <div style="display:flex; align-items:center;">
+          ${t.ai ? '<span class="badge-ai">🤖 KI-generiert</span>' : ''}
+          <div class="check">✓</div>
+        </div>
+      </div>
+      <span style="font-size:.72rem; color:var(--text-soft); text-transform:uppercase; letter-spacing:.4px;">${t.label}</span>
+      <div class="body" style="margin-top:8px;">${t.body.map(p=>`<p>${p}</p>`).join('')}</div>
+    </div>
+  `).join('');
+  const texteFeedback = g.texte.map((t,i)=>`
+    <div class="feedback ${t.fit}" data-fb="${g.id}_text" data-fbidx="${i}">
+      <span class="f-icon">${FIT_ICON[t.fit]}</span>
+      <span><strong>${FIT_LABEL[t.fit]}</strong>${t.feedback}</span>
+    </div>
+  `).join('');
+
+  const resultsHtml = g.suchergebnisse.map((r,i)=>`
+    <div class="result-card" data-store="${g.id}_result" data-idx="${i}" onclick="pickOne(this)">
+      <div class="r-icon">${r.icon}</div>
+      <div class="r-body">
+        <div class="r-title">${r.title}</div>
+        <div class="r-url">${r.url}</div>
+        <div class="r-snippet">${r.snippet}</div>
+      </div>
+      <div class="check">✓</div>
+    </div>
+  `).join('');
+  const resultsFeedback = g.suchergebnisse.map((r,i)=>`
+    <div class="feedback ${r.fit}" data-fb="${g.id}_result" data-fbidx="${i}">
+      <span class="f-icon">${FIT_ICON[r.fit]}</span>
+      <span><strong>${FIT_LABEL[r.fit]}</strong>${r.feedback}</span>
+    </div>
+  `).join('');
+
+  const fragfinnUrl = "https://www.fragfinn.de/";
+
+  screen.innerHTML = `
+    <div class="g-header">
+      <span class="tag">${g.tag}</span>
+      <h2>${g.icon} ${g.question}</h2>
+      <p>Ihr seid eine Gruppe von Wissensdetektiven. Wählt bei jedem Material die Option aus, die euch am besten weiterhilft – ihr bekommt sofort eine Rückmeldung, ob sie wirklich geeignet ist.</p>
+    </div>
+
+    <section class="block">
+      <h3>👥 Personen</h3>
+      <p class="sub">Welche Person kann euch am besten weiterhelfen? Klickt sie an.</p>
+      <div class="cards-row">${personenHtml}</div>
+      ${personenFeedback}
+      <div class="talk-box">
+        <div class="talk-title">💬 Sprecht darüber</div>
+        <p class="hint">Besprecht mit eurem Sitznachbarn: Warum passt eure ausgewählte Person besser als die anderen? Haltet eure Begründung bei Bedarf auf der Rückseite eures Forschungsprotokolls fest.</p>
+      </div>
+    </section>
+
+    <section class="block">
+      <h3>📄 Texte</h3>
+      <p class="sub">Welcher Text hilft euch am besten weiter? Achtet auch darauf, wie ein Text entstanden ist.</p>
+      <div class="texts-grid">${texteHtml}</div>
+      ${texteFeedback}
+      <div class="talk-box">
+        <div class="talk-title">💬 Sprecht darüber</div>
+        <p class="hint">Besprecht mit eurem Sitznachbarn: Weshalb ist der eine Text besser geeignet als der andere? Haltet eure Begründung bei Bedarf auf der Rückseite eures Forschungsprotokolls fest.</p>
+      </div>
+    </section>
+
+    <section class="block">
+      <h3>🔍 Suchergebnisse von fragFINN</h3>
+      <p class="sub">Wir haben für euch schon einmal auf fragFINN.de nach „${g.keyword}" gesucht. Welches Ergebnis passt wirklich zu eurer Frage?</p>
+      <div class="browser-mock">
+        <div class="browser-bar">
+          <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+          <div class="url">fragfinn.de/?s=${g.keyword}</div>
+        </div>
+        <div class="fragfinn-strip"><span class="lens">🔎</span> fragFINN – die Suchmaschine für Kinder</div>
+      </div>
+      ${resultsHtml}
+      ${resultsFeedback}
+      <div class="talk-box">
+        <div class="talk-title">💬 Sprecht darüber</div>
+        <p class="hint">Besprecht mit eurem Sitznachbarn: Warum ist dieses Suchergebnis besser geeignet als die anderen? Haltet eure Begründung bei Bedarf auf der Rückseite eures Forschungsprotokolls fest.</p>
+      </div>
+    </section>
+
+    <section class="block mission-block">
+      <h3>🧭 Euer Auftrag: Recherchiert jetzt selbst weiter!</h3>
+      <p class="sub">Die Materialien oben sind nur der Einstieg. Jetzt seid ihr dran!</p>
+      <ol class="mission-list">
+        <li>Öffnet fragFINN.de über den Button unten – ihr landet auf der Startseite.</li>
+        <li>Gebt dort selbst ein Suchwort ein, das zu eurer Forschungsfrage passt, zum Beispiel <strong>„${g.keyword}"</strong> oder ein eigenes Wort.</li>
+        <li>Schaut euch mindestens zwei verschiedene Treffer an und vergleicht, was dort steht.</li>
+        <li>Prüft: Passt das Ergebnis wirklich zu eurer Frage? Wirkt die Seite vertrauenswürdig?</li>
+      </ol>
+      <div class="search-cta">
+        <p>Öffnet fragFINN und gebt dort selbst ein passendes Suchwort ein.</p>
+        <a class="btn" href="${fragfinnUrl}" target="_blank" rel="noopener">🔎 fragFINN öffnen</a>
+      </div>
+    </section>
+
+    <div class="note-block">
+      <h3 style="font-family:'Fraunces',serif; margin-bottom:6px;">📝 So geht's weiter</h3>
+      <ol>
+        <li>Öffnet euer <strong>Forschungsprotokoll</strong> (Word-Dokument) und tragt oben eure Forschungsfrage ein: <strong>„${g.question}"</strong></li>
+        <li>Schreibt in eigenen Worten auf, was ihr insgesamt herausgefunden habt – aus den Materialien oben <em>und</em> aus eurer eigenen fragFINN-Recherche.</li>
+        <li>Nutzt die Rückseite des Protokolls für Notizen zu euren Gesprächen mit dem Sitznachbarn.</li>
+      </ol>
+    </div>
+  `;
+  groupScreens.appendChild(screen);
+});
+
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-'+id).classList.add('active');
+  document.getElementById('backBtn').classList.add('show');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+function goHome(){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-home').classList.add('active');
+  document.getElementById('backBtn').classList.remove('show');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+// Single-select per section (radio-like), shows matching feedback, and persists choice.
+function pickOne(el){
+  const key = el.dataset.store;
+  const idx = el.dataset.idx;
+  const siblings = document.querySelectorAll(`[data-store="${key}"]`);
+  siblings.forEach(s=>s.classList.remove('selected'));
+  el.classList.add('selected');
+
+  document.querySelectorAll(`[data-fb="${key}"]`).forEach(f=>f.classList.remove('show'));
+  const fb = document.querySelector(`[data-fb="${key}"][data-fbidx="${idx}"]`);
+  if(fb) fb.classList.add('show');
+
+  storeSet('choice_'+key, idx);
+}
+
+// Restore saved selections on load
+function restoreState(){
+  document.querySelectorAll('[data-store]').forEach(el=>{
+    const key = el.dataset.store;
+    const saved = storeGet('choice_'+key);
+    if(saved !== null && saved === el.dataset.idx){
+      el.classList.add('selected');
+      const fb = document.querySelector(`[data-fb="${key}"][data-fbidx="${saved}"]`);
+      if(fb) fb.classList.add('show');
+    }
+  });
+}
+
+restoreState();
+</script>
+</body>
+</html>
