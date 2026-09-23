@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Rechenheft – Schriftlich rechnen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;700&family=Patrick+Hand&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#fdfcf7; --desk:#e9eef3; --karo:#cfdcec; --text:#25303f; --muted:#5b6677; --ink:#1c3fa0;
+  --red:#cf2f2a; --green:#1d8248; --hl:#fff09a; --focus:#e6eeff;
+  --add:#e0592a; --sub:#2f7fc4; --mul:#8352bf; --rev:#a8791a; --tab:var(--add);
+  --hand:"Patrick Hand","Comic Sans MS","Segoe Print",cursive;
+  --ui:"Lexend",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --cs:clamp(32px,calc((100vw - 76px) / 9),46px);
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#1c2232; --desk:#121620; --karo:#2e3a55; --text:#e7ebf3; --muted:#a4aec3; --ink:#93b6ff;
+    --red:#ff6b64; --green:#55d492; --hl:#5a5120; --focus:#26335a;
+    --add:#ff7a4d; --sub:#5aa9ec; --mul:#ab85e8; --rev:#e0ae45;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#1c2232; --desk:#121620; --karo:#2e3a55; --text:#e7ebf3; --muted:#a4aec3; --ink:#93b6ff;
+  --red:#ff6b64; --green:#55d492; --hl:#5a5120; --focus:#26335a;
+  --add:#ff7a4d; --sub:#5aa9ec; --mul:#ab85e8; --rev:#e0ae45;
+}
+*{box-sizing:border-box}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;min-height:100%;background:var(--desk);color:var(--text);font-family:var(--ui);font-size:16px;line-height:1.5}
+button,input,select{font-family:inherit;font-size:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--tab);outline-offset:2px}
+.hidden{display:none!important}
+main{max-width:820px;margin:0 auto;padding:18px 14px 48px}
+
+/* Heft-Umschlag */
+.cover{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:0}
+.label{background:var(--paper);border:2px solid var(--text);border-radius:6px;padding:8px 18px 6px;transform:rotate(-1.2deg);box-shadow:3px 3px 0 var(--text)}
+.label h1{font-family:var(--hand);font-weight:400;font-size:44px;line-height:1;margin:0;color:var(--ink)}
+.label p{margin:0;font-size:13px;color:var(--muted)}
+.stats{display:flex;gap:8px;flex-wrap:wrap}
+.stat{background:var(--paper);border-radius:999px;padding:4px 12px;font-size:13px;border:1px solid var(--karo)}
+.stat b{font-weight:700}
+
+/* Register-Reiter */
+.tabs{display:flex;gap:6px;margin:22px 0 0 10px;position:relative;z-index:1}
+.tab{border:none;border-radius:12px 12px 0 0;padding:10px 18px 12px;font-weight:700;font-size:17px;color:#fff;opacity:.55;transform:translateY(6px);transition:transform .15s,opacity .15s}
+.tab[data-kind="add"]{background:var(--add)} .tab[data-kind="sub"]{background:var(--sub)} .tab[data-kind="mul"]{background:var(--mul)} .tab[data-kind="rev"]{background:var(--rev)}
+.tab .badge{display:inline-block;min-width:22px;padding:0 6px;margin-left:6px;border-radius:999px;background:rgba(255,255,255,.3);font-size:13px;text-align:center}
+.revinfo{font-size:14px;color:var(--muted);background:var(--paper);padding:2px 8px;border-radius:6px;width:fit-content;margin-top:6px}
+.cell.flash{animation:flash .7s ease}
+@keyframes flash{0%{background:var(--hl)}100%{background:transparent}}
+.tab[aria-selected="true"]{opacity:1;transform:none}
+.tab .sym{font-family:var(--hand);font-size:24px;line-height:0;margin-right:6px;vertical-align:-2px}
+
+/* Heftseite */
+.sheet{position:relative;background:var(--paper);border-radius:4px 14px 14px 14px;border-top:6px solid var(--tab);padding:18px 16px 20px;box-shadow:0 2px 0 var(--karo),0 10px 30px rgba(20,30,50,.08);
+  background-image:linear-gradient(var(--karo) 1px,transparent 1px),linear-gradient(90deg,var(--karo) 1px,transparent 1px);background-size:22px 22px;background-position:-1px -1px}
+.sheet::before{content:"";position:absolute;top:0;bottom:0;left:44px;width:2px;background:color-mix(in srgb,var(--red) 45%,transparent);pointer-events:none}
+.inner{position:relative;padding-left:40px}
+.taskline{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;background:var(--paper);padding:4px 8px;border-radius:8px;width:fit-content}
+.taskline small{color:var(--muted);font-size:14px}
+.task{font-family:var(--hand);font-size:34px;line-height:1.1;color:var(--text)}
+.phases{list-style:none;display:flex;gap:6px;padding:0;margin:12px 0 4px;flex-wrap:wrap}
+.phases li{background:var(--paper);border:1.5px solid var(--karo);border-radius:999px;padding:3px 12px;font-size:13px;color:var(--muted)}
+.phases li.now{border-color:var(--tab);color:var(--text);font-weight:700;box-shadow:inset 0 0 0 1px var(--tab)}
+.phases li.done{color:var(--green);border-color:var(--green)}
+
+/* Rechengitter */
+.gridwrap{position:relative;overflow-x:auto;margin:14px 0 8px;padding:12px 4px 14px}
+.grid{display:grid;grid-template-columns:calc(var(--cs) * .8) repeat(var(--w),var(--cs));width:max-content;margin:0 auto;background:var(--paper);padding:6px 8px;border-radius:6px}
+.cell{width:var(--cs);height:var(--cs);border:1px solid var(--karo);margin:0 -1px -1px 0;display:grid;place-items:center;position:relative;font-family:var(--hand);font-size:calc(var(--cs) * .72);line-height:1;color:var(--text);background:transparent}
+input.cell{padding:0;text-align:center;border-radius:0;color:var(--ink);caret-color:transparent;-moz-appearance:textfield;appearance:none}
+input.cell:focus{outline:none;background:var(--focus);box-shadow:inset 0 0 0 2px var(--ink);z-index:2}
+input.cell:disabled{opacity:1;-webkit-text-fill-color:currentColor;cursor:default}
+.cell.small{height:calc(var(--cs) * .56);font-size:calc(var(--cs) * .44);color:var(--ink)}
+.lab{display:grid;place-items:center;font-family:var(--hand);font-size:calc(var(--cs) * .7);line-height:1;color:var(--text);height:var(--cs)}
+.lab.small{height:calc(var(--cs) * .56);font-family:var(--ui);font-size:11px;color:var(--muted)}
+.lb{border-bottom:3px solid var(--text)!important}
+.lab.lb{border-bottom:3px solid var(--text)}
+.ph{font-family:var(--ui);font-size:11px;font-weight:700;color:var(--muted);height:22px;border:none;display:grid;place-items:end center;padding-bottom:2px}
+.wait{background:color-mix(in srgb,var(--karo) 30%,transparent)!important}
+.cell.bad{color:var(--red)!important;-webkit-text-fill-color:var(--red);background:color-mix(in srgb,var(--red) 11%,transparent)!important;box-shadow:inset 0 0 0 2px var(--red)}
+.cell.ok{color:var(--green)!important;-webkit-text-fill-color:var(--green)}
+.cell.hl,.lab.hl{background:var(--hl)!important}
+.cell.given{color:var(--text)}
+.cell.new{animation:ink .45s ease}
+@keyframes ink{from{transform:scale(1.5);opacity:0}to{transform:none;opacity:1}}
+button.cell{cursor:default;padding:0}
+.pickable button.cell.bd{cursor:pointer;background:color-mix(in srgb,var(--tab) 10%,transparent);box-shadow:inset 0 0 0 2px color-mix(in srgb,var(--tab) 55%,transparent)}
+.pickable button.cell.bd:hover{background:color-mix(in srgb,var(--tab) 22%,transparent)}
+.mk{position:absolute;top:-9px;right:-9px;width:21px;height:21px;border-radius:50%;background:var(--red);color:#fff;font:700 12px/21px var(--ui);text-align:center;z-index:3;box-shadow:0 0 0 2px var(--paper)}
+
+.stamp{position:absolute;right:6%;top:40%;transform:rotate(-14deg);border:4px double var(--red);color:var(--red);font-family:var(--hand);font-size:40px;padding:0 16px;border-radius:10px;background:color-mix(in srgb,var(--paper) 80%,transparent);pointer-events:none;animation:stamp .4s cubic-bezier(.2,1.8,.4,1)}
+@keyframes stamp{from{transform:rotate(-14deg) scale(2.2);opacity:0}to{transform:rotate(-14deg) scale(1);opacity:1}}
+
+/* Rückmeldung */
+.note{background:var(--paper);border:2px solid var(--karo);border-radius:12px;padding:12px 14px;margin:8px 0 14px;max-width:62ch}
+.note p{margin:0}
+.note ul{margin:6px 0 0;padding-left:20px}
+.note li{margin:3px 0}
+.note.good{border-color:var(--green)}
+.note.good strong{color:var(--green)}
+.note.bad{border-color:var(--red)}
+.note.bad strong{color:var(--red)}
+.note strong{font-weight:700}
+
+.actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.btn{border:2px solid var(--text);background:var(--paper);border-radius:10px;padding:9px 14px;font-weight:500;font-size:15px;box-shadow:2px 2px 0 var(--text);transition:transform .06s,box-shadow .06s}
+.btn:active{transform:translate(2px,2px);box-shadow:0 0 0 var(--text)}
+.btn.main{background:var(--tab);border-color:var(--tab);color:#fff;font-weight:700;box-shadow:2px 2px 0 var(--text)}
+.btn:disabled{opacity:.4;cursor:default}
+.opts{display:flex;gap:16px;flex-wrap:wrap;margin-top:14px;font-size:14px;color:var(--muted);background:var(--paper);width:fit-content;padding:4px 8px;border-radius:8px}
+.opts label{display:flex;gap:6px;align-items:center;cursor:pointer}
+.opts select{border:1.5px solid var(--karo);border-radius:8px;background:var(--paper);padding:3px 6px}
+.opts input{width:18px;height:18px;accent-color:var(--tab)}
+
+/* Musterlösung */
+.solution{margin-top:18px}
+.solution h2{font-family:var(--hand);font-weight:400;font-size:32px;margin:0;color:var(--ink);background:var(--paper);width:fit-content;padding:0 8px;border-radius:6px}
+.soltext{background:var(--paper);border-left:4px solid var(--tab);padding:10px 14px;border-radius:0 10px 10px 0;min-height:64px;max-width:62ch;font-size:16px}
+.solnav{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:10px}
+.solnav .count{font-size:14px;color:var(--muted);background:var(--paper);padding:2px 8px;border-radius:6px}
+
+/* Eigene Aufgabe */
+.overlay{position:fixed;inset:0;background:rgba(15,20,35,.5);display:grid;place-items:center;padding:16px;z-index:20}
+.modal{background:var(--paper);border:2px solid var(--text);border-radius:14px;box-shadow:5px 5px 0 var(--text);padding:20px;max-width:420px;width:100%}
+.modal h2{font-family:var(--hand);font-weight:400;font-size:32px;margin:0 0 8px;color:var(--ink)}
+.modal .f{display:flex;align-items:center;gap:10px;margin:8px 0}
+.modal .f span{width:34px;font-family:var(--hand);font-size:28px;text-align:center}
+.modal input{flex:1;border:2px solid var(--karo);border-radius:8px;padding:8px 10px;font-family:var(--hand);font-size:24px;background:var(--paper);min-width:0}
+.modal .err{color:var(--red);min-height:22px;font-size:14px;margin:6px 0}
+.modal .actions{justify-content:flex-end;margin-top:8px}
+
+@media (max-width:560px){
+  .inner{padding-left:26px}
+  .sheet::before{left:28px}
+  .task{font-size:28px}
+  .label h1{font-size:36px}
+  .tab{padding:8px 12px 10px;font-size:15px}
+}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<main>
+  <header class="cover">
+    <div class="label"><h1>Rechenheft</h1><p>Schriftlich rechnen üben</p></div>
+    <div class="stats" id="stats"></div>
+  </header>
+
+  <nav class="tabs" role="tablist" aria-label="Rechenart">
+    <button class="tab" role="tab" data-kind="add"><span class="sym">+</span>Plus</button>
+    <button class="tab" role="tab" data-kind="sub"><span class="sym">−</span>Minus</button>
+    <button class="tab" role="tab" data-kind="mul"><span class="sym">·</span>Mal</button>
+    <button class="tab" role="tab" data-kind="rev">🔁 Fehler-Training<span class="badge" id="revBadge">0</span></button>
+  </nav>
+
+  <section class="sheet">
+    <div class="inner">
+      <div class="taskline"><small>Aufgabe</small><span class="task" id="taskText"></span></div>
+      <div class="revinfo hidden" id="revInfo"></div>
+      <ol class="phases" id="phases"></ol>
+      <div class="gridwrap"><div class="grid" id="grid"></div><div class="stamp hidden" id="stamp"></div></div>
+      <div class="note" id="note" aria-live="polite"></div>
+      <div class="actions">
+        <button class="btn main" id="checkBtn">Prüfen</button>
+        <button class="btn" id="solBtn">👀 Musterlösung</button>
+        <button class="btn" id="resetBtn">↺ Nochmal von vorn</button>
+        <button class="btn" id="newBtn">Neue Aufgabe</button>
+        <button class="btn" id="ownBtn">✏️ Eigene Aufgabe</button>
+      </div>
+      <div class="opts">
+        <label id="helpOpt"><input type="checkbox" id="helpChk"> Stellenwerte anzeigen (HT, ZT, T, H, Z, E)</label>
+        
+      </div>
+
+      <div class="solution hidden" id="solution">
+        <h2>Musterlösung</h2>
+        <div class="gridwrap"><div class="grid" id="solGrid"></div></div>
+        <div class="soltext" id="solText" aria-live="polite"></div>
+        <div class="solnav">
+          <button class="btn" id="solPrev">◀ Zurück</button>
+          <button class="btn main" id="solNext">Weiter ▶</button>
+          <span class="count" id="solCount"></span>
+          <button class="btn" id="solClose">Selbst nochmal probieren</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="overlay hidden" id="overlay">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="ownTitle">
+    <h2 id="ownTitle">Eigene Aufgabe</h2>
+    <div id="ownFields"></div>
+    <div class="err" id="ownErr"></div>
+    <div class="actions"><button class="btn" id="ownCancel">Abbrechen</button><button class="btn main" id="ownOk">Rechnen</button></div>
+  </div>
+</div>
+
+<script>
+(function(){
+"use strict";
+const $=s=>document.querySelector(s);
+const rnd=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const len=n=>String(n).length;
+const dig=(n,p)=>Math.floor(n/Math.pow(10,p))%10;
+const fmt=n=>n.toLocaleString("de-DE");
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const PS=["E","Z","H","T","ZT","HT","M"];
+const PL=["Einer","Zehner","Hunderter","Tausender","Zehntausender","Hunderttausender","Millionen"];
+const CIRC=["①","②","③"];
+const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+
+function digitsMap(n,end){const s=String(n),m={};for(let i=0;i<s.length;i++)m[end-(s.length-1-i)]=+s[i];return m}
+function plDat(p){return (PL[p]||"")+"n"}
+function listJoin(a){return a.length<2?a.join(""):a.slice(0,-1).join(", ")+" und "+a[a.length-1]}
+
+/* Schritt-Sammler für die Musterlösung */
+function stepper(){const vals={},steps=[];return{
+  set(k,c,d){(vals[k]=vals[k]||{})[c]=d},
+  map(k,m){Object.keys(m).forEach(c=>this.set(k,+c,m[c]))},
+  clear(k){delete vals[k]},
+  push(text,hl,marks,fresh){steps.push({text,hl:hl==null?null:hl,marks:marks||[],fresh:fresh||[],values:JSON.parse(JSON.stringify(vals))})},
+  steps}}
+
+/* ---------- Aufgaben bauen ---------- */
+function makeAdd(nums){
+  const W=6,E=5,sum=nums.reduce((a,b)=>a+b,0),carries={},st=stepper();
+  const rows=[
+    {key:"n0",kind:"op",label:"",val:nums[0],name:"Die 1. Zahl",exp:digitsMap(nums[0],E)},
+    {key:"n1",kind:"op",label:"+",val:nums[1],name:"Die 2. Zahl",exp:digitsMap(nums[1],E)},
+    {key:"n2",kind:"op",label:"+",val:nums[2],name:"Die 3. Zahl",exp:digitsMap(nums[2],E)},
+    {key:"c",kind:"carry",label:"Ü",name:"Überträge",exp:carries,lb:true},
+    {key:"r",kind:"res",label:"",val:sum,name:"Das Ergebnis",exp:digitsMap(sum,E),allowLead:true}];
+  rows.slice(0,3).forEach(r=>st.map(r.key,r.exp));
+  st.push("Schreibe alle Zahlen stellengerecht untereinander: Einer unter Einer, Zehner unter Zehner, Hunderter unter Hunderter und so weiter. Die Zahlen stehen also rechtsbündig.",null,[],["n0","n1","n2"]);
+  let carry=0,nC=0;
+  for(let p=0;p<len(sum);p++){
+    const ds=nums.filter(n=>len(n)>p).map(n=>dig(n,p)),s=ds.reduce((a,b)=>a+b,0)+carry,r=s%10,k=Math.floor(s/10);
+    const parts=ds.map(String);if(carry)parts.push(carry+" (Übertrag)");
+    let t=PL[p]+": ";
+    t+=parts.length>1?parts.join(" + ")+" = "+s+". ":"Hier steht nur "+(carry&&!ds.length?"der Übertrag "+carry:"die "+s)+". ";
+    t+="Schreibe "+r+" unter den Strich"+(k?" und notiere den Übertrag "+k+" klein bei den "+plDat(p+1)+".":".");
+    st.set("r",E-p,r);if(k){carries[E-p-1]=k;st.set("c",E-p-1,k);nC++}
+    st.push(t,E-p);carry=k;
+  }
+  st.push("Fertig! "+nums.map(fmt).join(" + ")+" = "+fmt(sum),null);
+  return{kind:"add",W:W,E:E,rows,steps:st.steps,text:nums.map(fmt).join(" + "),answer:sum,nCarries:nC,nums};
+}
+
+function makeSub(a,b,c){
+  const W=6,E=5,res=a-b-c,carries={},st=stepper();
+  const rows=[
+    {key:"n0",kind:"op",label:"",val:a,name:"Die 1. Zahl",exp:digitsMap(a,E)},
+    {key:"n1",kind:"op",label:"−",val:b,name:"Die 2. Zahl",exp:digitsMap(b,E)},
+    {key:"n2",kind:"op",label:"−",val:c,name:"Die 3. Zahl",exp:digitsMap(c,E)},
+    {key:"c",kind:"carry",label:"Ü",name:"Überträge",exp:carries,lb:true},
+    {key:"r",kind:"res",label:"",val:res,name:"Das Ergebnis",exp:digitsMap(res,E),allowLead:true}];
+  rows.slice(0,3).forEach(r=>st.map(r.key,r.exp));
+  st.push("Schreibe die Zahlen stellengerecht untereinander: Einer unter Einer, Zehner unter Zehner … Die größte Zahl steht oben, die beiden anderen darunter – in welcher Reihenfolge, ist egal. Wir rechnen ohne Minus: Wir addieren die unteren Ziffern und schauen, wie viele Schritte es bis zur oberen Ziffer sind.",null,[],["n0","n1","n2"]);
+  let carry=0,nC=0;
+  for(let p=0;p<len(a);p++){
+    const ds=[b,c].filter(n=>len(n)>p).map(n=>dig(n,p)),s=ds.reduce((x,y)=>x+y,0)+carry,ad=dig(a,p);
+    let tg=ad;while(tg<s)tg+=10;const r=tg-s,k=(tg-ad)/10;
+    const lead=p>=len(res)&&r===0;
+    let t=PL[p]+": ";
+    if(s===0){t+="Unten steht nichts mehr. Von 0 bis "+ad+" sind es "+ad+". Schreibe "+ad+"."}
+    else{
+      const parts=ds.map(String);if(carry)parts.push(carry+" (Übertrag)");
+      t+=(parts.length>1?"Unten: "+parts.join(" + ")+" = "+s+". ":"Unten steht "+(ds.length?s:"nur der Übertrag "+s)+". ");
+      t+="Oben steht "+ad+(tg>ad?", wir ergänzen also bis "+tg:"")+". Von "+s+" bis "+tg+" sind es "+r+". ";
+      t+=lead?"Eine 0 ganz vorne brauchen wir nicht zu schreiben.":"Schreibe "+r+(k?" und notiere den Übertrag "+k+" klein bei den "+plDat(p+1)+".":". Kein Übertrag.");
+    }
+    if(!lead)st.set("r",E-p,r);
+    if(k){carries[E-p-1]=k;st.set("c",E-p-1,k);nC++}
+    st.push(t,E-p);carry=k;
+  }
+  st.push("Fertig! "+fmt(a)+" − "+fmt(b)+" − "+fmt(c)+" = "+fmt(res)+". Probe: "+fmt(res)+" + "+fmt(b)+" + "+fmt(c)+" = "+fmt(a)+" ✔",null);
+  return{kind:"sub",W:W,E:E,rows,steps:st.steps,text:fmt(a)+" − "+fmt(b)+" − "+fmt(c),answer:res,nCarries:nC,nums:[a,b,c]};
+}
+
+function makeMul(a,b,order){
+  const W=8,E=7,bs=String(b),as=String(a),prod=a*b,st=stepper();
+  const ord=order==="right"?[7,6,5]:[5,6,7];
+  const taskStatic={};as.split("").forEach((d,i)=>{taskStatic[3-(as.length-1-i)]=d});taskStatic[4]="·";bs.split("").forEach((d,i)=>{taskStatic[5+i]=d});
+  const rows=[{key:"t",kind:"task",label:"",stat:taskStatic},{key:"m",kind:"merk",label:"merk",name:"Merkzeile",exp:{},lb:true}];
+  const parts=ord.map((col,k)=>{const m=+bs[col-5],v=a*m;return{key:"p"+k,kind:"part",label:CIRC[k],val:v,m,col,name:"Zeile "+CIRC[k],exp:digitsMap(v,col),allowLead:true,optional:m===0}});
+  rows.push(...parts);
+  const carries={},res=digitsMap(prod,E);
+  rows.push({key:"c",kind:"carry",label:"Ü",name:"Überträge",exp:carries,lb:true});
+  rows.push({key:"r",kind:"res",label:"",val:prod,name:"Das Ergebnis",exp:res,allowLead:true});
+  const nm=["zuerst","dann","zuletzt"];
+  st.push("Wir rechnen "+fmt(a)+" nacheinander mit jeder Ziffer von "+b+" mal. Du darfst ganz links oder ganz rechts anfangen, beides ist richtig. Hier fangen wir ganz "+(order==="right"?"rechts":"links")+" an: "+ord.map((c,i)=>nm[i]+" mit der "+bs[c-5]).join(", ")+".",null,ord);
+  parts.forEach((p,k)=>{
+    st.clear("m");
+    const fresh=k>0?" Die Merkzeile ist wieder leer.":"";
+    if(p.m===0){st.map(p.key,p.exp);st.push("Zeile "+CIRC[k]+": "+fmt(a)+" · 0 = 0. Schreibe eine 0 genau unter die 0. Du darfst auch mehrere Nullen schreiben."+fresh,p.col,ord,[p.key]);return}
+    const ad=as.split("").map(Number).reverse();let carry=0,had=false;const bits=[];
+    ad.forEach((d,i)=>{const pr=d*p.m,tot=pr+carry,last=i===ad.length-1;let t=d+" · "+p.m+" = "+pr;if(carry)t+=", plus "+carry+" gemerkt = "+tot;
+      if(last)t+=" → schreibe "+tot;else{t+=" → schreibe "+(tot%10);if(tot>=10){t+=", merke "+Math.floor(tot/10);st.set("m",p.col-i-1,Math.floor(tot/10));had=true}carry=Math.floor(tot/10)}bits.push(t)});
+    st.map(p.key,p.exp);
+    st.push("Zeile "+CIRC[k]+": "+fmt(a)+" · "+p.m+"."+fresh+" Rechne von rechts nach links: "+bits.join("; ")+". Das ergibt "+fmt(p.val)+". Die letzte Ziffer kommt genau unter die "+p.m+", mit der wir gerade rechnen."+(had?" Die gemerkten Zahlen stehen klein in der Merkzeile.":""),p.col,ord,[p.key]);
+  });
+  st.clear("m");
+  let carry=0,nC=0;const minCol=Math.min(...Object.keys(res).map(Number));
+  for(let col=E;col>=minCol;col--){
+    const p=E-col,ds=parts.filter(q=>q.exp[col]!==undefined).map(q=>q.exp[col]),s=ds.reduce((x,y)=>x+y,0)+carry,r=s%10,k=Math.floor(s/10);
+    const pp=ds.map(String);if(carry)pp.push(carry+" (Übertrag)");
+    let t="Jetzt addieren wir die Zeilen. "+PL[p]+": ";
+    t+=pp.length>1?pp.join(" + ")+" = "+s+". ":"Hier steht nur "+(carry&&!ds.length?"der Übertrag "+carry:"die "+s)+". ";
+    t+="Schreibe "+r+(k?" und notiere den Übertrag "+k+" klein bei den "+plDat(p+1)+".":".");
+    st.set("r",col,r);if(k){carries[col-1]=k;st.set("c",col-1,k);nC++}
+    st.push(t,col,ord);carry=k;
+  }
+  st.push("Fertig! "+fmt(a)+" · "+fmt(b)+" = "+fmt(prod),null,ord);
+  return{kind:"mul",W:W,E:E,rows,steps:st.steps,text:fmt(a)+" · "+b,answer:prod,ord,nums:[a,b]};
+}
+
+/* ---------- Zufallsaufgaben ---------- */
+function rl(l){return rnd(Math.pow(10,l-1),Math.pow(10,l)-1)}
+function genAdd(){for(let i=0;i<500;i++){const lens=[4,pick([3,4]),pick([2,3,4])].sort(()=>Math.random()-.5);const n=lens.map(rl);if(Math.random()<.07)n[rnd(0,2)]=10000;if(makeAdd(n).nCarries>=2)return n}return[3456,789,5102]}
+function genSub(){for(let i=0;i<800;i++){const a=Math.random()<.08?10000:rnd(2500,9999),b=rl(pick([3,4,4])),c=rl(pick([2,3,3]));if(b+c>=a-50)continue;if(makeSub(a,b,c).nCarries>=2)return[a,b,c]}return[8452,2679,386]}
+function genMul(){const a=Math.random()<.5?rnd(12,99):rnd(101,999);let b=rnd(111,999);if(Math.random()<.3){const s=String(b).split("");s[pick([1,2])]="0";b=+s.join("")}return[a,b]}
+
+/* ---------- Zustand ---------- */
+const S={kind:"add",task:null,phase:"",cells:{},marks:[],firstTry:true,stats:store.get("rh-stats",{add:[0,0],sub:[0,0],mul:[0,0]}),help:store.get("rh-help",false),order:store.get("rh-order","left"),solStep:0,review:false,revIdx:0,wrongSaved:false};
+
+function renderStats(){const n={add:"Plus",sub:"Minus",mul:"Mal"};$("#stats").innerHTML=Object.keys(n).map(k=>'<span class="stat">'+n[k]+": <b>"+S.stats[k][0]+"</b> gelöst"+(S.stats[k][0]?", "+S.stats[k][1]+" auf Anhieb":"")+"</span>").join("")}
+
+function newTask(nums){
+  if(S.review&&!nums){const L=wrongList();if(!L.length){showEmptyReview();return}S.revIdx=S.revIdx%L.length;const it=L[S.revIdx];S.kind=it.kind;nums=it.nums.slice();
+    document.documentElement.style.setProperty("--tab","var(--"+it.kind+")");$("#helpOpt").parentNode.classList.toggle("hidden",it.kind==="mul");
+    $("#revInfo").textContent="Fehler-Aufgabe "+(S.revIdx+1)+" von "+L.length+" · "+{add:"Plus",sub:"Minus",mul:"Mal"}[it.kind]}
+  showTaskUI(true);
+  const k=S.kind;
+  if(!nums)nums=k==="add"?genAdd():k==="sub"?genSub():genMul();
+  S.task=k==="add"?makeAdd(nums):k==="sub"?makeSub(nums[0],nums[1],nums[2]):makeMul(nums[0],nums[1],S.order);
+  $("#taskText").textContent=S.task.text;
+  closeSolution();renderGrid();start();
+}
+function start(){S.activePart=null;S.wrongSaved=false;S.marks=[];S.firstTry=true;$("#stamp").classList.add("hidden");setPhase(S.kind==="mul"?"mark":"write")}
+
+/* ---------- Gitter zeichnen ---------- */
+function renderGrid(){
+  const t=S.task,g=$("#grid");g.innerHTML="";g.style.setProperty("--w",t.W);S.cells={};
+  if(t.kind!=="mul"){g.appendChild(el("div","ph help"));for(let c=0;c<t.W;c++){const d=el("div","ph help");d.textContent=PS[t.E-c]||"";g.appendChild(d)}}
+  t.rows.forEach(row=>{
+    const small=row.kind==="carry"||row.kind==="merk",lab=el("div","lab"+(small?" small":"")+(row.lb?" lb":""));lab.textContent=row.label;lab.dataset.row=row.key;g.appendChild(lab);
+    if(row.kind==="task"){
+      for(let c=0;c<t.W;c++){const v=row.stat[c]||"";const isB=c>=5;const b=el(isB?"button":"div","cell given"+(row.lb?" lb":"")+(isB?" bd":""));b.textContent=v;b.dataset.col=c;if(isB){b.type="button";b.setAttribute("aria-label","Ziffer "+v+" markieren");b.onclick=()=>toggleMark(c)}g.appendChild(b)}
+      return;
+    }
+    S.cells[row.key]=[];
+    for(let c=0;c<t.W;c++){
+      const i=el("input","cell"+(small?" small":"")+(row.lb?" lb":""));
+      i.inputMode="numeric";i.autocomplete="off";i.maxLength=1;i.dataset.row=row.key;i.dataset.col=c;
+      i.setAttribute("aria-label",row.name+", "+(PL[t.E-c]||"Stelle"));
+      g.appendChild(i);S.cells[row.key].push(i);
+    }
+  });
+  applyHelp();
+}
+function el(tag,cls){const e=document.createElement(tag);e.className=cls;return e}
+function applyHelp(){document.querySelectorAll("#grid .help").forEach(e=>e.classList.toggle("hidden",!S.help))}
+function rowOf(k){return S.task.rows.find(r=>r.key===k)}
+
+function editableKinds(ph){return ph==="write"?["op"]:ph==="calc"?["carry","res","part","merk"]:[]}
+function setPhase(ph){
+  S.phase=ph;const kinds=editableKinds(ph);
+  Object.keys(S.cells).forEach(k=>{const row=rowOf(k),on=kinds.includes(row.kind),waiting=!on&&ph!=="done"&&row.kind!=="op";
+    S.cells[k].forEach(i=>{i.disabled=!on;i.classList.toggle("wait",waiting);if(ph==="calc"&&row.kind==="op")i.classList.remove("ok","bad")})});
+  $("#grid").classList.toggle("pickable",ph==="mark");renderMarks();
+  const labels=S.kind==="mul"?["Ziffern markieren","Rechnen","Geschafft"]:["Stellengerecht aufschreiben","Rechnen","Geschafft"];
+  const idx={write:0,mark:0,calc:1,done:2}[ph];
+  $("#phases").innerHTML=labels.map((l,i)=>'<li class="'+(i<idx?"done":i===idx?"now":"")+'">'+(i+1)+". "+l+(i<idx?" ✓":"")+"</li>").join("");
+  $("#checkBtn").textContent=ph==="write"?"✓ Aufschreiben prüfen":ph==="mark"?"✓ Reihenfolge prüfen":"✓ Rechnung prüfen";
+  $("#checkBtn").classList.toggle("hidden",ph==="done");
+  $("#newBtn").classList.toggle("main",ph==="done");
+  const info={
+    write:S.kind==="add"?"Schreibe die drei Zahlen stellengerecht untereinander. Tippe in ein Kästchen und gib die Ziffern ein.":"Schreibe die drei Zahlen stellengerecht untereinander. Die größte Zahl kommt nach oben, die Reihenfolge der beiden anderen ist egal.",
+    mark:"In welcher Reihenfolge willst du rechnen? Tippe die Ziffern von "+String(S.task.nums[1])+" nacheinander an: zuerst die für Zeile ①, dann ②, dann ③. Du darfst ganz links oder ganz rechts anfangen.",
+    calc:S.kind==="add"?"Rechne von rechts nach links, also bei den Einern anfangen. Überträge schreibst du klein in die Zeile Ü über dem Strich.":S.kind==="sub"?"Addiere die unteren Ziffern und schau, wie viele Schritte es bis zur oberen Ziffer sind. Überträge schreibst du klein in die Zeile Ü über dem Strich.":"Rechne jede Zeile aus und achte darauf, wo die letzte Ziffer hinkommt. Was du dir merken musst, schreibst du klein in die Merkzeile unter der Aufgabe. Sobald du mit der nächsten Zeile anfängst, wird sie wieder leer. Zum Schluss addierst du die Zeilen und schreibst die Überträge in die Zeile Ü."};
+  if(info[ph])note("info","<p>"+info[ph]+"</p>");
+}
+function note(type,html){const n=$("#note");n.className="note "+(type==="info"?"":type);n.innerHTML=html}
+
+/* ---------- Markieren (Mal) ---------- */
+function toggleMark(col){
+  if(S.phase!=="mark")return;
+  const i=S.marks.indexOf(col);if(i>=0)S.marks=S.marks.slice(0,i);else if(S.marks.length<3)S.marks.push(col);
+  renderMarks();
+}
+function renderMarks(){document.querySelectorAll("#grid .bd").forEach(b=>{const old=b.querySelector(".mk");if(old)old.remove();const i=S.marks.indexOf(+b.dataset.col);if(i>=0){const m=el("span","mk");m.textContent=i+1;b.appendChild(m)}})}
+
+/* ---------- Eingabe ---------- */
+function typeDir(kind){return kind==="op"?1:(kind==="carry"||kind==="merk")?0:-1}
+function afterType(inp){
+  inp.classList.remove("bad","ok");
+  const row=rowOf(inp.dataset.row),c=+inp.dataset.col,d=typeDir(row.kind);
+  if(!inp.value)return;
+  if(row.kind==="part"){if(S.activePart&&S.activePart!==row.key&&S.cells.m){S.cells.m.forEach(i=>{if(i.value){i.value="";i.classList.remove("flash");void i.offsetWidth;i.classList.add("flash")}})}S.activePart=row.key}
+  if(d===0){const tk=row.kind==="merk"?(S.activePart||"p0"):"r",r=S.cells[tk]&&S.cells[tk][c];if(r&&!r.disabled)r.focus();return}
+  const n=S.cells[row.key][c+d];if(n&&!n.disabled)n.focus();
+}
+$("#grid").addEventListener("keydown",e=>{
+  const inp=e.target;if(inp.tagName!=="INPUT")return;
+  const row=rowOf(inp.dataset.row),c=+inp.dataset.col;
+  if(/^\d$/.test(e.key)){e.preventDefault();inp.value=e.key;afterType(inp);return}
+  if(e.key==="Enter"){e.preventDefault();check();return}
+  if(e.key==="Backspace"||e.key==="Delete"){e.preventDefault();
+    if(inp.value){inp.value="";inp.classList.remove("bad","ok");return}
+    const d=typeDir(row.kind)||1,p=S.cells[row.key][c-d];if(p&&!p.disabled){p.value="";p.classList.remove("bad","ok");p.focus()}return}
+  const mv={ArrowLeft:[0,-1],ArrowRight:[0,1],ArrowUp:[-1,0],ArrowDown:[1,0]}[e.key];
+  if(mv){e.preventDefault();move(inp,mv)}
+});
+$("#grid").addEventListener("input",e=>{const inp=e.target;if(inp.tagName!=="INPUT")return;const v=inp.value.replace(/\D/g,"");inp.value=v.slice(-1);afterType(inp)});
+$("#grid").addEventListener("focusin",e=>{if(e.target.tagName==="INPUT")setTimeout(()=>{try{e.target.select()}catch(x){}},0)});
+function move(inp,[dr,dc]){
+  const keys=Object.keys(S.cells).filter(k=>S.cells[k].some(i=>!i.disabled));let ri=keys.indexOf(inp.dataset.row),c=+inp.dataset.col;
+  for(let n=0;n<12;n++){ri+=dr;c+=dc;if(ri<0||ri>=keys.length||c<0||c>=S.task.W)return;const t=S.cells[keys[ri]][c];if(t&&!t.disabled){t.focus();return}}
+}
+
+/* ---------- Prüfen ---------- */
+function placeName(col,plural){const p=S.task.E-col;return plural?plDat(p):PL[p]}
+function checkRows(keys){
+  const msgs=[];let ok=true;
+  keys.forEach(k=>{
+    const row=rowOf(k),cells=S.cells[k];
+    if(row.optional&&cells.every(c=>c.value==="")){cells.forEach(c=>c.classList.remove("ok","bad"));return}
+    const bad=[],expCols=Object.keys(row.exp).map(Number),minCol=expCols.length?Math.min(...expCols):S.task.W;
+    cells.forEach((inp,col)=>{
+      inp.classList.remove("ok","bad");const v=inp.value,e=row.exp[col];
+      if(row.kind==="carry"){const ev=e||0,vv=v===""?0:+v;if(ev!==vv){bad.push(col);inp.classList.add("bad")}else if(v!=="")inp.classList.add("ok");return}
+      if(e!==undefined){if(v===String(e))inp.classList.add("ok");else{bad.push(col);inp.classList.add("bad")}}
+      else if(v!==""){if(row.allowLead&&v==="0"&&col<minCol){}else{bad.push(col);inp.classList.add("bad")}}
+    });
+    if(bad.length){ok=false;msgs.push(rowMsg(row,cells,bad))}
+  });
+  return{ok,msgs};
+}
+function rowMsg(row,cells,bad){
+  const typed=cells.map(c=>c.value).join("").replace(/^0+(?=\d)/,"");
+  const where=listJoin(bad.map(c=>placeName(c,true)));
+  if(row.kind==="op"){
+    if(!typed)return"<strong>"+row.name+"</strong> fehlt noch.";
+    if(typed===String(row.val))return"<strong>"+row.name+"</strong>: Die Ziffern stimmen, aber die Zahl steht nicht stellengerecht. Einer gehören unter Einer!";
+    if(S.kind==="sub"&&row.key==="n0")return"<strong>Oben</strong> muss die größte Zahl stehen, also "+fmt(row.val)+".";
+    if(S.kind==="sub"&&S.task.nums.slice(1).map(String).includes(typed))return"<strong>"+row.name+"</strong>: Diese Zahl steht schon in der anderen Zeile. Schreibe hier die fehlende Zahl hin.";
+    return"<strong>"+row.name+"</strong> ist nicht richtig abgeschrieben. Schau noch mal bei den "+where+".";
+  }
+  if(row.kind==="part"){
+    if(!typed)return"<strong>"+row.name+"</strong> fehlt noch.";
+    if(typed===String(row.val))return"<strong>"+row.name+"</strong>: Richtig gerechnet, aber an der falschen Stelle. Die letzte Ziffer gehört genau unter die "+row.m+".";
+    return"<strong>"+row.name+"</strong>: Falsch bei den "+where+".";
+  }
+  if(row.kind==="carry")return"<strong>Überträge</strong>: Schau noch mal bei den "+where+" (fehlt oder falsch).";
+  if(!typed)return"<strong>"+row.name+"</strong> fehlt noch.";
+  return"<strong>"+row.name+"</strong>: Falsch bei den "+where+".";
+}
+function check(){
+  const t=S.task;
+  if(S.phase==="mark"){
+    if(S.marks.length<3){note("bad","<p><strong>Noch nicht fertig:</strong> Markiere alle drei Ziffern von "+t.nums[1]+".</p>");return}
+    const mk=S.marks.join();
+    if(mk==="5,6,7"||mk==="7,6,5"){S.order=mk==="5,6,7"?"left":"right";store.set("rh-order",S.order);S.task=makeMul(t.nums[0],t.nums[1],S.order);setPhase("calc");note("good","<p><strong>Richtig markiert!</strong> Jetzt rechne Zeile ① bis ③ aus. Achte darauf, wo die letzte Ziffer jeder Zeile hinkommt. Danach addierst du die Zeilen und schreibst Überträge klein in die Zeile Ü.</p>");return}
+    markWrong();
+    note("bad","<p><strong>So geht die Reihenfolge nicht.</strong> Fang entweder mit der Ziffer ganz links oder ganz rechts an und geh dann der Reihe nach weiter. Tippe eine markierte Ziffer an, um die Markierung wieder zu entfernen.</p>");return;
+  }
+  if(S.phase==="write"){
+    if(S.kind==="sub"){const [a,b,c]=t.nums,ty=k=>S.cells[k].map(i=>i.value).join("").replace(/^0+(?=\d)/,"");
+      if(b!==c&&ty("n1")===String(c)&&ty("n2")===String(b)){const txt=t.text;S.task=makeSub(a,c,b);S.task.text=txt}}
+    const r=checkRows(["n0","n1","n2"]);
+    if(r.ok){setPhase("calc");note("good","<p><strong>Prima, alles steht stellengerecht!</strong> Jetzt rechne von rechts nach links. Überträge schreibst du klein in die Zeile Ü über dem Strich.</p>");const e=S.cells.r[t.E];if(e)e.focus({preventScroll:true});}
+    else{markWrong();note("bad","<p><strong>Noch nicht ganz.</strong> Die roten Kästchen stimmen nicht:</p><ul><li>"+r.msgs.join("</li><li>")+"</li></ul><p>Verbessere und prüfe dann noch einmal.</p>")}
+    return;
+  }
+  if(S.phase==="calc"){
+    const keys=t.kind==="mul"?["p0","p1","p2","c","r"]:["c","r"];
+    const r=checkRows(keys);
+    if(r.ok){
+      setPhase("done");
+      const st=S.stats[S.kind];st[0]++;if(S.firstTry)st[1]++;store.set("rh-stats",S.stats);renderStats();
+      let revMsg="";if(S.review){if(S.firstTry){removeWrong(t);revMsg=" Diesmal ohne Fehler, die Aufgabe fliegt aus dem Fehler-Training! ✂️"}else{S.revIdx++;revMsg=" Die Aufgabe bleibt im Fehler-Training, damit du sie noch einmal übst."}renderBadge()}
+      const s=$("#stamp");s.textContent=pick(["Prima!","Super!","Klasse!","Spitze!","Toll!"]);s.classList.remove("hidden");
+      note("good","<p><strong>Alles richtig gerechnet!</strong> "+esc(t.text)+" = "+fmt(t.answer)+(S.firstTry?" Und das sogar auf Anhieb! 🌟":"")+revMsg+"</p>");
+    }else{
+      markWrong();
+      const n=document.querySelectorAll("#grid input.bad").length;
+      note("bad","<p><strong>"+(n===1?"Ein Kästchen ist":n+" Kästchen sind")+" noch nicht richtig.</strong> Sie sind rot markiert:</p><ul><li>"+r.msgs.join("</li><li>")+"</li></ul><p>Verbessere die roten Kästchen und prüfe noch einmal. Du kannst so oft probieren, wie du willst.</p>");
+    }
+  }
+}
+
+/* ---------- Fehler-Training ---------- */
+function wrongList(){return store.get("rh-wrong",[])}
+function sameTask(x,t){return x.kind===t.kind&&x.nums.slice().sort((a,b)=>a-b).join()===t.nums.slice().sort((a,b)=>a-b).join()&&(x.kind!=="sub"||x.nums[0]===t.nums[0])&&(x.kind!=="mul"||x.nums.join()===t.nums.join())}
+function markWrong(){S.firstTry=false;if(S.wrongSaved||!S.task)return;S.wrongSaved=true;const L=wrongList(),t=S.task;if(!L.some(x=>sameTask(x,t))){L.push({kind:t.kind,nums:t.nums.slice()});store.set("rh-wrong",L.slice(-60))}renderBadge()}
+function removeWrong(t){store.set("rh-wrong",wrongList().filter(x=>!sameTask(x,t)))}
+function renderBadge(){$("#revBadge").textContent=wrongList().length}
+function showTaskUI(on){["#phases",".gridwrap","#checkBtn","#solBtn","#resetBtn","#newBtn"].forEach(q=>$(q).classList.toggle("hidden",!on));$("#ownBtn").classList.toggle("hidden",S.review||!on);$("#revInfo").classList.toggle("hidden",!S.review||!on);$(".opts").classList.toggle("hidden",!on)}
+function showEmptyReview(){closeSolution();showTaskUI(false);$("#stamp").classList.add("hidden");
+  $("#taskText").textContent="Keine Fehler-Aufgaben 🎉";
+  note("good","<p><strong>Hier ist gerade nichts zu tun.</strong> Jede Aufgabe, bei der du dich einmal verrechnest oder verschreibst, landet automatisch hier. Rechnest du sie im Fehler-Training ohne Fehler, verschwindet sie wieder.</p>")}
+
+/* ---------- Musterlösung ---------- */
+function openSolution(){S.solStep=0;$("#solution").classList.remove("hidden");renderSol();setTimeout(()=>$("#solution").scrollIntoView({behavior:"smooth",block:"start"}),30)}
+function closeSolution(){$("#solution").classList.add("hidden")}
+function renderSol(){
+  const t=S.task,st=t.steps[S.solStep],g=$("#solGrid");g.innerHTML="";g.style.setProperty("--w",t.W);
+  const hl=c=>st.hl!==null&&c===st.hl?" hl":"";
+  t.rows.forEach(row=>{
+    const small=row.kind==="carry"||row.kind==="merk",lab=el("div","lab"+(small?" small":"")+(row.lb?" lb":""));lab.textContent=row.label;g.appendChild(lab);
+    for(let c=0;c<t.W;c++){
+      let v="";if(row.kind==="task")v=row.stat[c]||"";else if(st.values[row.key]&&st.values[row.key][c]!==undefined)v=st.values[row.key][c];
+      const prev=S.solStep>0?t.steps[S.solStep-1].values[row.key]:null,isNew=row.kind!=="task"&&v!==""&&(!prev||prev[c]===undefined);
+      const d=el("div","cell"+(small?" small":"")+(row.lb?" lb":"")+(row.kind==="task"?" given":"")+hl(c)+(isNew?" new":""));
+      d.textContent=v;if(row.kind!=="task"&&row.kind!=="op")d.style.color="var(--ink)";
+      if(row.kind==="task"&&c>=5){const i=st.marks.indexOf(c);if(i>=0){const m=el("span","mk");m.textContent=i+1;d.appendChild(m)}}
+      g.appendChild(d);
+    }
+  });
+  $("#solText").textContent=st.text;
+  $("#solCount").textContent="Schritt "+(S.solStep+1)+" von "+t.steps.length;
+  $("#solPrev").disabled=S.solStep===0;$("#solNext").disabled=S.solStep===t.steps.length-1;
+}
+
+/* ---------- Eigene Aufgabe ---------- */
+function openOwn(){
+  const k=S.kind,f=$("#ownFields");
+  const rows=k==="add"?[["","Zahl 1"],["+","Zahl 2"],["+","Zahl 3"]]:k==="sub"?[["","erste Zahl"],["−","zweite Zahl"],["−","dritte Zahl"]]:[["","erste Zahl (2- oder 3-stellig)"],["·","zweite Zahl (3-stellig)"]];
+  f.innerHTML="<p style=\"margin:0 0 6px;font-size:14px;color:var(--muted)\">"+(k==="mul"?"Die erste Zahl 2- oder 3-stellig, die zweite 3-stellig.":"Zahlen von 0 bis 10.000.")+"</p>"+rows.map((r,i)=>'<div class="f"><span>'+r[0]+'</span><input inputmode="numeric" id="own'+i+'" placeholder="'+r[1]+'" aria-label="'+r[1]+'"></div>').join("");
+  $("#ownErr").textContent="";$("#overlay").classList.remove("hidden");setTimeout(()=>$("#own0").focus(),30);
+}
+function ownOk(){
+  const k=S.kind,n=k==="mul"?2:3,v=[];
+  for(let i=0;i<n;i++){const s=$("#own"+i).value.replace(/\D/g,"");if(!s){$("#ownErr").textContent="Bitte alle Felder ausfüllen.";return}v.push(parseInt(s,10))}
+  let err="";
+  if(k!=="mul"&&v.some(x=>x>10000))err="Die Zahlen dürfen höchstens 10.000 sein.";
+  if(k==="sub"&&!err&&v[1]+v[2]>=v[0])err="Die erste Zahl muss größer sein als die beiden anderen zusammen.";
+  if(k==="mul"){if(v[0]<10||v[0]>999)err="Die erste Zahl muss 2- oder 3-stellig sein.";else if(v[1]<100||v[1]>999)err="Die zweite Zahl muss 3-stellig sein.";}
+  if(err){$("#ownErr").textContent=err;return}
+  $("#overlay").classList.add("hidden");newTask(v);
+}
+
+/* ---------- Bedienung ---------- */
+function setKind(k){
+  document.querySelectorAll(".tab").forEach(t=>t.setAttribute("aria-selected",t.dataset.kind===k?"true":"false"));
+  if(k==="rev"){S.review=true;S.revIdx=0;$("#newBtn").textContent="Nächste Fehler-Aufgabe";newTask();return}
+  S.review=false;$("#newBtn").textContent="Neue Aufgabe";
+  S.kind=k;document.documentElement.style.setProperty("--tab","var(--"+k+")");
+  $("#helpOpt").parentNode.classList.toggle("hidden",k==="mul");
+  newTask();
+}
+document.querySelectorAll(".tab").forEach(t=>t.onclick=()=>setKind(t.dataset.kind));
+$("#checkBtn").onclick=check;
+$("#solBtn").onclick=openSolution;
+$("#solPrev").onclick=()=>{if(S.solStep>0){S.solStep--;renderSol()}};
+$("#solNext").onclick=()=>{if(S.solStep<S.task.steps.length-1){S.solStep++;renderSol()}};
+$("#solClose").onclick=()=>{closeSolution();renderGrid();start();window.scrollTo({top:0,behavior:"smooth"})};
+$("#resetBtn").onclick=()=>{renderGrid();start()};
+$("#newBtn").onclick=()=>{if(S.review&&S.phase!=="done")S.revIdx++;newTask()};
+$("#ownBtn").onclick=openOwn;
+$("#ownCancel").onclick=()=>$("#overlay").classList.add("hidden");
+$("#ownOk").onclick=ownOk;
+$("#ownFields").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();ownOk()}});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")$("#overlay").classList.add("hidden")});
+$("#helpChk").checked=S.help;$("#helpChk").onchange=()=>{S.help=$("#helpChk").checked;store.set("rh-help",S.help);applyHelp()};
+
+renderStats();renderBadge();setKind("add");
+})();
+</script>
+</body>
+</html>
