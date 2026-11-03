@@ -1,0 +1,1264 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Startklar für Organik</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@500;700&family=Schibsted+Grotesk:wght@600;800&display=swap">
+<style>
+/* Layout: Lernpfad – Stationsleiste links, Arbeitsblatt auf Karopapier rechts; auf dem Handy wird die Leiste zur Schublade */
+:root {
+  --paper: #F3F6F9; --sheet: #FFFFFF; --ink: #15202B; --muted: #566674; --line: #D3DDE6; --grid: #E2EAF1;
+  --accent: #2346B4; --accent-ink: #FFFFFF; --accent-soft: #E7ECFA;
+  --oxy: #C4352B; --ok: #1E7543; --ok-soft: #E2F2E8; --bad: #B02A1E; --bad-soft: #FBE8E5; --warn: #7A5300; --warn-soft: #FCF0D4;
+  --kit: #9A5B00; --kit-soft: #FBEFD9; --dark: #16202C; --dark-ink: #E3EBF1;
+  --f-display: "Schibsted Grotesk", "Segoe UI", system-ui, sans-serif;
+  --f-body: "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+  --r: 12px;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --paper: #0E141A; --sheet: #151D25; --ink: #E3EBF1; --muted: #93A4B2; --line: #2A3743; --grid: #1D2833;
+  --accent: #8EA7FF; --accent-ink: #0E141A; --accent-soft: #1C2747;
+  --oxy: #FF7D71; --ok: #63CF91; --ok-soft: #133022; --bad: #FF8B80; --bad-soft: #3A1916; --warn: #F2C46B; --warn-soft: #30260E;
+  --kit: #F2B75E; --kit-soft: #33260F; --dark: #1C2733; --dark-ink: #E3EBF1; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --paper: #0E141A; --sheet: #151D25; --ink: #E3EBF1; --muted: #93A4B2; --line: #2A3743; --grid: #1D2833;
+  --accent: #8EA7FF; --accent-ink: #0E141A; --accent-soft: #1C2747;
+  --oxy: #FF7D71; --ok: #63CF91; --ok-soft: #133022; --bad: #FF8B80; --bad-soft: #3A1916; --warn: #F2C46B; --warn-soft: #30260E;
+  --kit: #F2B75E; --kit-soft: #33260F; --dark: #1C2733; --dark-ink: #E3EBF1; color-scheme: dark; }
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { background: var(--paper); color: var(--ink); font-family: var(--f-body); font-size: 17px; line-height: 1.55; }
+h1, h2, h3 { font-family: var(--f-display); text-wrap: balance; line-height: 1.2; margin: 0; }
+p { margin: 0; }
+button, input, select, textarea { font: inherit; color: inherit; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--sheet); }
+
+.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 6; background: var(--sheet); border-bottom: 1px solid var(--line); }
+.top-in { max-width: 1240px; margin: 0 auto; padding-block: 10px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: flex; align-items: center; gap: 10px 16px; flex-wrap: wrap; }
+.brand { font-family: var(--f-display); font-weight: 800; font-size: 1.15rem; margin-right: auto; }
+.brand span { color: var(--accent); }
+.prog { display: flex; align-items: center; gap: 10px; font-size: .85rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.bar { width: 120px; height: 6px; border-radius: 99px; background: var(--line); overflow: hidden; }
+.bar i { display: block; height: 100%; background: var(--accent); width: 0; transition: width .4s; }
+
+.wrap { max-width: 1240px; margin: 0 auto; display: grid; grid-template-columns: 290px minmax(0, 1fr); gap: 32px; padding-block: 24px 64px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+aside.side { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 72px); align-self: start; }
+.side h2 { font-size: .78rem; font-family: var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+#nav { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+.nav-it { width: 100%; display: flex; align-items: center; gap: 10px; text-align: left; background: none; border: 1px solid transparent; border-radius: 10px; padding: 7px 10px; cursor: pointer; color: var(--ink); }
+.nav-it:hover:not(:disabled) { background: var(--sheet); border-color: var(--line); }
+.nav-it.cur { background: var(--accent-soft); border-color: var(--accent); }
+.nav-it:disabled { color: var(--muted); opacity: .6; cursor: default; }
+.nav-no { flex: none; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font-family: var(--f-mono); font-size: .8rem; font-weight: 700; border: 1.5px solid var(--line); background: var(--sheet); }
+.nav-it.done .nav-no { background: var(--ok); border-color: var(--ok); color: var(--sheet); }
+.nav-it.cur .nav-no { border-color: var(--accent); color: var(--accent); }
+.nav-t { font-size: .92rem; line-height: 1.3; min-width: 0; }
+.nav-code { margin-left: auto; font-family: var(--f-mono); font-size: .72rem; font-weight: 700; color: var(--accent); border: 1px solid var(--accent); border-radius: 6px; padding: 0 6px; }
+.side-foot { margin-top: 16px; display: grid; gap: 8px; }
+.confirm { background: var(--bad-soft); border-radius: 10px; padding: 10px 12px; display: grid; gap: 8px; font-size: .9rem; }
+
+main { min-width: 0; }
+.st-head { display: grid; gap: 6px; margin-bottom: 18px; }
+.st-head h2 { font-size: clamp(1.6rem, 4vw, 2.2rem); font-weight: 800; letter-spacing: -.015em; }
+.eyebrow { font-family: var(--f-mono); font-size: .76rem; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+.kind { color: var(--accent); }
+.kind.kit { color: var(--kit); }
+.codehint { color: var(--accent); font-weight: 700; font-size: .95rem; }
+.steps { font-family: var(--f-mono); font-size: .8rem; color: var(--muted); margin-bottom: 10px; }
+.step { display: grid; gap: 18px; }
+.lead { font-size: 1.08rem; max-width: 68ch; }
+.card { background: var(--sheet); border: 1px solid var(--line); border-radius: var(--r); padding: 18px 20px; display: grid; gap: 10px; max-width: 78ch; }
+.card h3 { font-size: 1.1rem; }
+.card.dark { background: var(--dark); color: var(--dark-ink); border-color: transparent; }
+.card.input { border: 0; border-left: 5px solid var(--accent); background: var(--accent-soft); }
+.card.input > h3::before { content: "Input · "; color: var(--accent); }
+.card.input .ct td, .card.input .ct th { background: transparent; }
+.card.input .cfig { min-width: 190px; }
+.card.input .cfig svg { max-height: none; }
+.exrow { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-start; }
+.exrow .fig { flex: 1 1 220px; }
+.stem { display: flex; flex-wrap: wrap; gap: 6px; }
+.stem span { background: var(--sheet); border: 1px solid var(--line); border-radius: 8px; padding: 3px 8px; font-size: .9rem; }
+.stem b { color: var(--accent); }
+.steps .inp { color: var(--accent); font-weight: 700; }
+.card.kitcard { border: 2px dashed var(--kit); background: var(--kit-soft); }
+.card.kitcard h3::before { content: "Baukasten · "; color: var(--kit); }
+.list { margin: 0; padding-left: 22px; display: grid; gap: 6px; }
+.small { font-size: .88rem; color: var(--muted); }
+.sub-h { font-size: 1.2rem; margin-top: 8px; }
+
+.paper { background-color: var(--sheet); background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px); background-size: 20px 20px; border: 1px solid var(--line); border-radius: 10px; padding: 14px; display: flex; justify-content: center; align-items: center; overflow-x: auto; }
+.paper.sm { padding: 8px; }
+.paper.inline { display: inline-flex; }
+svg.mol { max-width: 100%; height: auto; display: block; }
+.mol .bd { stroke: var(--ink); stroke-width: 1.8; stroke-linecap: round; }
+.mol .bh { stroke-width: 1.4; }
+.mol .num { font-family: var(--f-mono); font-size: 12px; font-weight: 700; fill: var(--accent); text-anchor: middle; dominant-baseline: central; }
+.mol .lp { stroke: var(--oxy); stroke-width: 2.2; stroke-linecap: round; }
+.mol .at { font-family: var(--f-body); font-weight: 700; font-size: 17px; text-anchor: middle; dominant-baseline: central; fill: var(--ink); }
+.mol .at-O { fill: var(--oxy); }
+.mol .at-R { fill: var(--accent); }
+.mol .at-H { font-weight: 400; font-size: 15px; }
+.figs { display: flex; flex-wrap: wrap; gap: 14px; }
+.fig { margin: 0; display: grid; gap: 6px; min-width: 0; max-width: 100%; }
+.fig figcaption { font-weight: 700; text-align: center; font-size: .95rem; }
+.path { display: grid; gap: 14px; }
+.path-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; }
+.arrow { font-size: 1.6rem; color: var(--accent); font-weight: 700; }
+.verdict { font-weight: 700; padding: 4px 12px; border-radius: 99px; font-size: .9rem; }
+.verdict.good { background: var(--ok-soft); color: var(--ok); }
+.verdict.bad { background: var(--bad-soft); color: var(--bad); }
+.mirror { display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap; }
+.mline { width: 0; height: 160px; border-left: 2px dashed var(--accent); }
+svg.balls { width: 190px; max-width: 42%; height: auto; }
+.balls .stick { stroke: #8A8F98; stroke-width: 7; stroke-linecap: round; }
+.balls .ball { stroke: rgba(0,0,0,.35); stroke-width: 1.5; }
+
+.tasks { display: grid; gap: 16px; }
+.task-wrap { display: grid; gap: 8px; }
+.q { border: 1px solid var(--line); background: var(--sheet); border-radius: var(--r); padding: 14px 16px; margin: 0; display: grid; gap: 10px; min-width: 0; }
+.q legend, .qlabel { font-weight: 700; padding: 0; }
+fieldset.q legend { float: left; width: 100%; margin-bottom: 8px; }
+.opts { display: grid; gap: 6px; clear: both; }
+.opts.grid2 { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+.opts.row3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.opt { display: flex; gap: 10px; align-items: flex-start; padding: 8px 10px; border: 1px solid var(--line); border-radius: 10px; cursor: pointer; background: var(--paper); }
+.opt:hover { border-color: var(--accent); }
+.opt input { margin-top: 4px; accent-color: var(--accent); width: 18px; height: 18px; flex: none; }
+.opt:has(input:checked) { border-color: var(--accent); background: var(--accent-soft); }
+input.num { width: 110px; font-size: 1.2rem; padding: 8px 10px; border: 1.5px solid var(--line); border-radius: 8px; background: var(--paper); font-variant-numeric: tabular-nums; }
+textarea, #t0-in { width: 100%; border: 1.5px solid var(--line); border-radius: 8px; background: var(--paper); padding: 8px 10px; resize: vertical; }
+.rows { display: grid; gap: 10px; }
+@media (min-width: 1100px) { .rows.two { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 24px; } .rows.two .row-sel:nth-child(2) { border-top: 0; padding-top: 0; } }
+.row-sel { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; align-items: center; border-top: 1px solid var(--line); padding-top: 10px; }
+.row-sel:first-child { border-top: 0; padding-top: 0; }
+.row-ctrl { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; }
+.row-label { width: 100%; font-weight: 700; font-size: .95rem; }
+.sel { display: grid; gap: 2px; font-size: .78rem; color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: .04em; }
+select { font-size: 1rem; padding: 7px 8px; border: 1.5px solid var(--line); border-radius: 8px; background: var(--paper); min-width: 150px; text-transform: none; letter-spacing: 0; font-weight: 400; color: var(--ink); }
+.mark { font-weight: 800; font-size: 1.2rem; min-width: 1.2em; }
+.mark.ok { color: var(--ok); } .mark.bad { color: var(--bad); }
+.tf { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 10px; align-items: center; border-top: 1px solid var(--line); padding-top: 8px; }
+.tf:first-of-type { border-top: 0; }
+.tfbtn { display: flex; gap: 6px; }
+.tfbtn label { cursor: pointer; }
+.tfbtn input { position: absolute; opacity: 0; }
+.tfbtn span { display: inline-block; padding: 5px 12px; border-radius: 99px; border: 1.5px solid var(--line); font-size: .9rem; font-weight: 700; background: var(--paper); }
+.tfbtn input:checked + span { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.tfbtn input:focus-visible + span { outline: 2.5px solid var(--accent); outline-offset: 2px; }
+.rank { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; counter-reset: r; }
+.rank li { display: flex; align-items: center; gap: 10px; background: var(--paper); border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; counter-increment: r; }
+.rank li::before { content: counter(r); font-family: var(--f-mono); font-weight: 700; color: var(--accent); width: 1.4em; }
+.rk-name { font-weight: 700; flex: 1; min-width: 0; }
+.rk-btn { display: flex; gap: 4px; }
+.mini { border: 1px solid var(--line); background: var(--sheet); border-radius: 8px; width: 38px; height: 34px; cursor: pointer; }
+
+.btn { font-weight: 700; border-radius: 10px; padding: 10px 18px; border: 1.5px solid transparent; cursor: pointer; background: none; }
+.btn.primary { background: var(--accent); color: var(--accent-ink); }
+.btn.ghost { border-color: var(--line); background: var(--sheet); }
+.btn.ghost:hover { border-color: var(--accent); color: var(--accent); }
+.btn.danger { background: var(--bad); color: var(--sheet); }
+.btn:disabled { opacity: .45; cursor: default; }
+.btn.small { padding: 6px 12px; font-size: .9rem; }
+.btn:focus-visible, .nav-it:focus-visible, .mini:focus-visible, select:focus-visible, input:focus-visible, textarea:focus-visible { outline: 2.5px solid var(--accent); outline-offset: 2px; }
+.row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.actions { margin-top: 4px; }
+
+.tip { background: var(--warn-soft); border-radius: 10px; padding: 10px 14px; }
+.tip-h { font-weight: 700; color: var(--warn); }
+.tip ul { margin: 4px 0 0; padding-left: 20px; }
+.fb { border-radius: 10px; padding: 12px 16px; display: grid; gap: 6px; border: 1px solid; }
+.fb.good { background: var(--ok-soft); border-color: var(--ok); }
+.fb.bad { background: var(--bad-soft); border-color: var(--bad); }
+.fb.note { background: var(--warn-soft); border-color: transparent; }
+.fb-h { font-family: var(--f-display); font-weight: 800; }
+.corr { margin: 0; padding-left: 20px; }
+.digit { font-family: var(--f-display); font-size: 2.4rem; font-weight: 800; color: var(--accent); vertical-align: middle; margin-left: 6px; }
+
+.lock { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; background: var(--sheet); border: 2px solid var(--ink); border-radius: 16px; padding: 18px; max-width: 520px; }
+.lockdig { display: grid; gap: 4px; text-align: center; font-family: var(--f-mono); font-weight: 700; color: var(--accent); }
+.lockdig input { width: 58px; height: 68px; text-align: center; font-size: 2rem; font-family: var(--f-display); font-weight: 800; border: 2px solid var(--line); border-radius: 10px; background: var(--paper); }
+.badge { max-width: 460px; border-radius: 16px; overflow: hidden; border: 1px solid var(--line); background: var(--sheet); display: grid; gap: 6px; padding: 0 0 18px; }
+.badge > p { padding: 0 20px; }
+.badge-top { background: var(--accent); color: var(--accent-ink); font-family: var(--f-mono); font-size: .78rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: 10px 20px !important; }
+.badge-name { font-family: var(--f-display); font-size: 1.6rem; font-weight: 800; }
+.badge-sk { color: var(--muted); font-size: .9rem; }
+.mapwrap { overflow-x: auto; background: var(--sheet); border: 1px solid var(--line); border-radius: var(--r); padding: 12px; }
+svg.map { min-width: 640px; width: 100%; height: auto; }
+.map .mbox { fill: var(--sheet); stroke: var(--ink); stroke-width: 2; }
+.map .mbox.neu { fill: var(--warn-soft); stroke: var(--oxy); stroke-dasharray: 6 4; }
+.map .mt { font-family: var(--f-body); font-weight: 700; font-size: 19px; text-anchor: middle; fill: var(--ink); }
+.map .ms { font-family: var(--f-body); font-size: 14px; text-anchor: middle; fill: var(--muted); }
+.map .ma { stroke: var(--ok); stroke-width: 3.5; }
+.map .ma.neu { stroke: var(--oxy); stroke-dasharray: 7 5; }
+.map .mhk { fill: var(--ok); } .map .mhn { fill: var(--oxy); }
+.map .ml { font-family: var(--f-body); font-weight: 700; font-size: 15px; fill: var(--ok); }
+.map .ml.neu { fill: var(--oxy); font-size: 20px; }
+.resultcard { margin-top: 16px; max-width: 560px; border-radius: 16px; overflow: hidden; border: 2px solid var(--accent); background: var(--sheet); display: grid; gap: 8px; padding-bottom: 16px; }
+.resultcard > p, .resultcard > table { margin: 0 20px; }
+.rt { border-collapse: collapse; width: calc(100% - 40px); font-size: .92rem; }
+.rt th, .rt td { text-align: left; padding: 5px 8px; border-bottom: 1px solid var(--line); }
+.next { background: var(--accent-soft); padding: 8px 12px !important; border-radius: 8px; }
+
+.cheat { position: fixed; inset: 0; z-index: 20; background: rgba(10, 14, 20, .55); display: grid; place-items: center; padding: max(16px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) max(16px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); }
+.cheat-in { background: var(--sheet); border-radius: 16px; max-width: 820px; width: 100%; max-height: 88vh; overflow: auto; padding: 22px 24px; display: grid; gap: 12px; }
+.cheat-in h2 { font-size: 1.4rem; }
+.cheat-in h3 { font-size: 1.05rem; color: var(--accent); margin-top: 6px; }
+.tablewrap { overflow-x: auto; }
+.ct { border-collapse: collapse; width: 100%; font-size: .9rem; }
+.ct th, .ct td { border-bottom: 1px solid var(--line); padding: 6px 8px; text-align: left; vertical-align: middle; }
+.ct th { font-family: var(--f-mono); font-size: .7rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+.cfig svg { max-height: 70px; width: auto; }
+.suffix { font-family: var(--f-mono); font-weight: 700; color: var(--accent); white-space: nowrap; }
+#navToggle { display: none; }
+.target { font-family: var(--f-mono); font-size: clamp(1.4rem, 4vw, 1.9rem); font-weight: 700; color: var(--accent); }
+input.txt { width: 100%; max-width: 420px; font-family: var(--f-mono); font-size: 1.15rem; padding: 10px 12px; border: 1.5px solid var(--line); border-radius: 8px; background: var(--paper); }
+.nameq .paper { justify-content: center; }
+.pair { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.pickgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; clear: both; }
+.pick { position: relative; display: grid; gap: 6px; border: 2px solid var(--line); border-radius: 12px; padding: 10px; cursor: pointer; background: var(--sheet); }
+.pick input { position: absolute; top: 10px; left: 10px; width: 20px; height: 20px; accent-color: var(--accent); }
+.pick:has(input:checked) { border-color: var(--accent); background: var(--accent-soft); }
+.pickfig { display: flex; justify-content: center; padding-top: 18px; }
+.pickfig svg { max-height: 150px; }
+.pickno { font-weight: 700; text-align: center; font-size: .9rem; }
+.memory { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.mcard { aspect-ratio: 4 / 3; border: 2px solid var(--line); border-radius: 12px; background: var(--accent); color: var(--accent-ink); cursor: pointer; padding: 6px; display: grid; place-items: center; overflow: hidden; max-width: 100%; }
+.mcard .back { font-family: var(--f-display); font-size: 2rem; font-weight: 800; }
+.mcard .face { display: none; width: 100%; height: 100%; place-items: center; }
+.mcard.open { background: var(--sheet); color: var(--ink); border-color: var(--accent); }
+.mcard.open .back { display: none; } .mcard.open .face { display: grid; }
+.mcard.found { border-color: var(--ok); background: var(--ok-soft); cursor: default; }
+.mcard .face svg { max-width: 100%; max-height: 100%; width: auto; height: auto; }
+.mname { font-family: var(--f-mono); font-weight: 700; font-size: clamp(.78rem, 2.6vw, 1.05rem); color: var(--ink); overflow-wrap: anywhere; text-align: center; }
+@media (max-width: 860px) { .memory { grid-template-columns: repeat(3, minmax(0, 1fr)); } .pair { grid-template-columns: 1fr; } }
+
+
+@media (max-width: 860px) {
+  .wrap { grid-template-columns: minmax(0, 1fr); }
+  aside.side { position: fixed; z-index: 15; top: 0; bottom: 0; left: 0; width: min(320px, 88vw); background: var(--sheet); border-right: 1px solid var(--line); padding: calc(env(safe-area-inset-top, 0px) + 16px) 14px 16px max(14px, env(safe-area-inset-left, 0px)); overflow-y: auto; transform: translateX(-105%); transition: transform .25s; }
+  body.navopen aside.side { transform: none; box-shadow: 0 0 40px rgba(0,0,0,.25); }
+  #navToggle { display: inline-flex; }
+  .row-sel { grid-template-columns: minmax(0, 1fr); }
+  .opts.row3 { grid-template-columns: minmax(0, 1fr); }
+  .tf { grid-template-columns: minmax(0, 1fr) auto; }
+  .tf .mark { grid-column: 2; }
+  .tf p { grid-column: 1 / -1; }
+  .prog .bar { width: 70px; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
+</style>
+
+<div class="top"><div class="top-in">
+  <button class="btn ghost small" id="navToggle" aria-label="Stationen anzeigen">Stationen</button>
+  <p class="brand">Startklar für <span>Organik</span></p>
+  <div class="prog"><div class="bar"><i id="progressBar"></i></div><span id="progressTxt"></span></div>
+  <button class="btn ghost small" id="cheatBtn" hidden>Spickzettel</button>
+</div></div>
+
+<div class="wrap">
+  <aside class="side" aria-label="Stationen">
+    <h2>Lernpfad · 5 Stationen</h2>
+    <ol id="nav"></ol>
+    <div class="side-foot">
+      <button class="btn ghost small" id="resetBtn">Neu beginnen</button>
+      <div class="confirm" id="resetConfirm" hidden><span>Alle Fortschritte auf diesem Gerät löschen?</span><div class="row"><button class="btn danger small" id="resetYes">Löschen</button><button class="btn ghost small" id="resetNo">Abbrechen</button></div></div>
+    </div>
+  </aside>
+  <main id="main"></main>
+</div>
+
+<div class="cheat" id="cheat" hidden role="dialog" aria-modal="true" aria-labelledby="cheatTitle">
+  <div class="cheat-in"><div class="row" style="justify-content:space-between"><h2 id="cheatTitle">Spickzettel</h2><button class="btn ghost small" id="cheatClose">Schließen</button></div><div id="cheatBody"></div></div>
+</div>
+
+<script>
+/* ===== Chemie-Kern: Molekülmodell, Benennung, Generator ===== */
+const STEMS = ['meth','eth','prop','but','pent','hex','hept','oct','non','dec'];
+const MULT = ['', '', 'di', 'tri', 'tetra'];
+const ALKYL = ['', 'methyl', 'ethyl', 'propyl', 'butyl'];
+const cap = s => s.replace(/[a-zäöü]/, ch => ch.toUpperCase());
+const rnd = n => Math.floor(Math.random() * n);
+const pick = a => a[rnd(a.length)];
+const rint = (a, b) => a + rnd(b - a + 1);
+
+function adjOf(mol) {
+  const A = mol.atoms.map(() => []);
+  mol.bonds.forEach(b => { A[b.a].push({ to: b.b, o: b.o }); A[b.b].push({ to: b.a, o: b.o }); });
+  return A;
+}
+
+function isTree(mol) {
+  const n = mol.atoms.length;
+  if (!n) return false;
+  if (mol.bonds.length !== n - 1) return false;
+  const A = adjOf(mol); const seen = new Set([0]); const q = [0];
+  while (q.length) { const x = q.pop(); for (const e of A[x]) if (!seen.has(e.to)) { seen.add(e.to); q.push(e.to); } }
+  return seen.size === n;
+}
+
+function valenceProblems(mol) {
+  const A = adjOf(mol); const out = [];
+  mol.atoms.forEach((a, i) => {
+    const s = A[i].reduce((t, e) => t + e.o, 0);
+    const max = a.el === 'C' ? 4 : 2;
+    if (s > max) out.push(i);
+  });
+  return out;
+}
+
+function canon(mol) {
+  const A = adjOf(mol); const n = mol.atoms.length; if (!n) return '';
+  let best = null;
+  const f = (x, p) => {
+    const ch = A[x].filter(e => e.to !== p).map(e => e.o + f(e.to, x)).sort();
+    return mol.atoms[x].el + '(' + ch.join(',') + ')';
+  };
+  for (let r = 0; r < n; r++) { const s = f(r, -1); if (best === null || s < best) best = s; }
+  return best;
+}
+
+function cmpArr(a, b) {
+  for (let i = 0; i < Math.max(a.length, b.length); i++) {
+    const x = a[i], y = b[i];
+    if (x === undefined) return -1; if (y === undefined) return 1;
+    if (Array.isArray(x)) { const c = cmpArr(x, y); if (c) return c; continue; }
+    if (x < y) return -1; if (x > y) return 1;
+  }
+  return 0;
+}
+
+/* ---- Benennung ---- */
+function nameMolecule(mol) {
+  if (!mol || !mol.atoms.length || !isTree(mol) || valenceProblems(mol).length) return null;
+  const A = adjOf(mol);
+  const isC = i => mol.atoms[i].el === 'C';
+  const C = mol.atoms.map((a, i) => i).filter(isC);
+  if (!C.length) return null;
+  const Os = mol.atoms.map((a, i) => i).filter(i => !isC(i));
+  const handled = new Set(); const groups = [];
+  for (const o of Os) {
+    if (handled.has(o)) continue;
+    const nb = A[o];
+    if (nb.some(e => !isC(e.to))) return null;
+    if (nb.length === 1 && nb[0].o === 2) {
+      const c = nb[0].to;
+      const otherO = A[c].filter(e => !isC(e.to) && e.to !== o);
+      const cN = A[c].filter(e => isC(e.to));
+      if (otherO.length > 1) return null;
+      if (otherO.length === 1) {
+        const o2 = otherO[0].to; if (otherO[0].o !== 1) return null;
+        handled.add(o2);
+        const o2C = A[o2].filter(e => isC(e.to) && e.to !== c);
+        if (A[o2].length === 1) groups.push({ type: 'acid', c });
+        else if (A[o2].length === 2 && o2C.length === 1) groups.push({ type: 'ester', c, alkC: o2C[0].to });
+        else return null;
+      } else groups.push({ type: cN.length <= 1 ? 'ald' : 'ket', c });
+      handled.add(o);
+    } else if (nb.length === 1 && nb[0].o === 1) {
+      const c = nb[0].to;
+      if (A[c].some(e => !isC(e.to) && e.o === 2)) continue;
+      groups.push({ type: 'ol', c }); handled.add(o);
+    } else if (nb.length === 2 && nb.every(e => e.o === 1)) {
+      continue; // Ester-Brücke, wird über C=O erfasst
+    } else return null;
+  }
+  if (!Os.every(o => handled.has(o))) return null;
+  if (groups.length > 1) return null;
+  const g = groups[0] || null;
+  if (g && g.type === 'ester') return nameEster(mol, A, g);
+
+  const mbs = mol.bonds.filter(b => b.o > 1 && isC(b.a) && isC(b.b));
+  if (mbs.length > 1) return null;
+  if (mbs.length && g) return null;
+  const mb = mbs[0] || null;
+
+  const CA = {}; C.forEach(c => CA[c] = A[c].filter(e => isC(e.to)).map(e => e.to));
+  const bondO = (x, y) => { const e = A[x].find(e => e.to === y); return e ? e.o : 0; };
+  const hasO = x => A[x].some(e => !isC(e.to));
+
+  const cands = [];
+  for (const u of C) {
+    const par = { [u]: -1 }; const q = [u];
+    while (q.length) { const x = q.shift(); for (const y of CA[x]) if (!(y in par)) { par[y] = x; q.push(y); } }
+    for (const v of C) {
+      const path = []; let x = v; while (x !== -1) { path.push(x); x = par[x]; } path.reverse();
+      const pos = new Map(path.map((a, i) => [a, i + 1]));
+      if (g && !pos.has(g.c)) continue;
+      const fgLocs = g ? [pos.get(g.c)] : [];
+      let mbLocs = [];
+      if (mb && pos.has(mb.a) && pos.has(mb.b) && Math.abs(pos.get(mb.a) - pos.get(mb.b)) === 1) mbLocs = [Math.min(pos.get(mb.a), pos.get(mb.b))];
+      const subs = []; let bad = false;
+      for (const ca of path) for (const r of CA[ca]) {
+        if (pos.has(r)) continue;
+        let prev = ca, cur = r, len = 0, ok = true;
+        while (true) {
+          len++;
+          if (hasO(cur)) ok = false;
+          if (bondO(prev, cur) > 1) ok = false;
+          const nx = CA[cur].filter(y => y !== prev);
+          if (nx.length > 1) { ok = false; break; }
+          if (!nx.length) break;
+          prev = cur; cur = nx[0];
+        }
+        if (!ok || len > 4) bad = true;
+        subs.push({ name: ok && len <= 4 ? ALKYL[len] : '?', loc: pos.get(ca), len });
+      }
+      const subLocs = subs.map(s => s.loc).sort((a, b) => a - b);
+      const alpha = subs.slice().sort((a, b) => a.name < b.name ? -1 : a.name > b.name ? 1 : a.loc - b.loc).map(s => s.loc);
+      cands.push({ path, fgLocs, mbLocs, subs, subLocs, alpha, bad, len: path.length });
+    }
+  }
+  if (!cands.length) return null;
+  const keyA = c => [-c.len, -c.mbLocs.length, c.fgLocs, c.mbLocs, -c.subs.length, c.subLocs, c.alpha];
+  const keyB = c => [-c.len, -c.mbLocs.length, -c.subs.length, c.fgLocs, c.mbLocs, c.subLocs, c.alpha];
+  const best = k => cands.slice().sort((x, y) => cmpArr(k(x), k(y)))[0];
+  const bA = best(keyA), bB = best(keyB);
+  const res = assemble(bA, g, mb);
+  if (!res) return null;
+  const resB = assemble(bB, g, mb);
+  if (!resB || resB.name !== res.name) return null;
+  if (mb && !bA.mbLocs.length) return null;
+  if (bA.bad) return null;
+  return res;
+}
+
+function assemble(c, g, mb) {
+  const n = c.len; if (n > 10) return null;
+  const stem = STEMS[n - 1];
+  const groups = {};
+  c.subs.forEach(s => { (groups[s.name] = groups[s.name] || []).push(s.loc); });
+  const names = Object.keys(groups).sort();
+  if (names.some(nm => groups[nm].length > 4)) return null;
+  const prefix = names.map(nm => groups[nm].sort((a, b) => a - b).join(',') + '-' + MULT[groups[nm].length] + nm).join('-');
+  let cls = 'alkan', mbLoc = null, fgLoc = null, mbType = null;
+  if (mb) { cls = mb.o === 2 ? 'alken' : 'alkin'; mbType = mb.o === 2 ? 'en' : 'in'; mbLoc = c.mbLocs[0]; }
+  if (g) { cls = { ol: 'alkohol', ald: 'aldehyd', ket: 'keton', acid: 'saeure' }[g.type]; fgLoc = c.fgLocs[0]; }
+  const omitOK = (cls === 'alken' || cls === 'alkin') ? n <= 3 : cls === 'alkohol' ? n <= 2 : cls === 'keton' ? n <= 4 : true;
+  const build = (style, omit) => {
+    const p = prefix;
+    let s;
+    if (cls === 'alkan') s = p + stem + 'an';
+    else if (cls === 'aldehyd') s = p + stem + 'anal';
+    else if (cls === 'saeure') s = p + stem + 'ansäure';
+    else {
+      const suf = mbType || (cls === 'alkohol' ? 'ol' : 'on');
+      const base = mbType ? stem : stem + 'an';
+      const loc = mbType ? mbLoc : fgLoc;
+      if (omit) s = p + base + suf;
+      else if (style === 'new') s = p + base + '-' + loc + '-' + suf;
+      else s = p + (p ? '-' : '') + loc + '-' + base + suf;
+    }
+    return cap(s);
+  };
+  const name = build('new', omitOK);
+  const acc = new Set([build('new', false), build('old', false)]);
+  if (omitOK) { acc.add(build('new', true)); }
+  acc.add(name);
+  return {
+    name, accepted: [...acc], cls, n, stem, chain: c.path, subs: c.subs.map(s => ({ name: s.name, loc: s.loc })),
+    groups, mbLoc, mbType, fgLoc, fgType: g ? g.type : null, prefix
+  };
+}
+
+function nameEster(mol, A, g) {
+  const isC = i => mol.atoms[i].el === 'C';
+  const comp = (start) => {
+    const seen = new Set([start]); const q = [start];
+    while (q.length) { const x = q.pop(); for (const e of A[x]) if (isC(e.to) && !seen.has(e.to)) { seen.add(e.to); q.push(e.to); } }
+    return [...seen];
+  };
+  const straight = (atoms, end) => {
+    const set = new Set(atoms);
+    for (const a of atoms) {
+      const cn = A[a].filter(e => set.has(e.to));
+      if (cn.length > 2 || cn.some(e => e.o > 1)) return false;
+      if (a !== g.c && A[a].some(e => !isC(e.to))) {
+        if (!(a === g.alkC)) return false;
+      }
+    }
+    return A[end].filter(e => set.has(e.to)).length <= 1;
+  };
+  const acid = comp(g.c), alk = comp(g.alkC);
+  if (!straight(acid, g.c) || !straight(alk, g.alkC)) return null;
+  if (acid.length > 10 || alk.length > 4) return null;
+  const aStem = STEMS[acid.length - 1];
+  const name = cap(aStem + 'ansäure' + ALKYL[alk.length] + 'ester');
+  const iupac = cap(ALKYL[alk.length] + aStem + 'anoat');
+  return {
+    name, alt: iupac, accepted: [name, iupac], cls: 'ester', n: acid.length, m: alk.length, stem: aStem,
+    chain: orderPath(A, acid, g.c, isC), alkChain: orderPath(A, alk, g.alkC, isC), subs: [], groups: {}, fgType: 'ester'
+  };
+}
+function orderPath(A, atoms, start, isC) {
+  const set = new Set(atoms); const out = [start]; let prev = -1, cur = start;
+  while (true) { const nx = A[cur].filter(e => set.has(e.to) && e.to !== prev); if (!nx.length) break; prev = cur; cur = nx[0].to; out.push(cur); }
+  return out;
+}
+
+/* ---- Antwortprüfung ---- */
+const TRIVIAL = {
+  'essigsäure': 'Ethansäure', 'ameisensäure': 'Methansäure', 'aceton': 'Propanon', 'azeton': 'Propanon',
+  'acetaldehyd': 'Ethanal', 'formaldehyd': 'Methanal', 'ethylen': 'Ethen', 'acetylen': 'Ethin',
+  'ethylacetat': 'Ethansäureethylester', 'essigsäureethylester': 'Ethansäureethylester', 'isopropanol': 'Propan-2-ol',
+  'buttersäure': 'Butansäure', 'propionsäure': 'Propansäure', 'methylalkohol': 'Methanol', 'ethylalkohol': 'Ethanol',
+  'essigester': 'Ethansäureethylester', 'isobutan': '2-Methylpropan'
+};
+function norm(s) {
+  return s.toLowerCase().normalize('NFC').replace(/[‐-―−]/g, '-').replace(/ae/g, 'ä')
+    .replace(/\s+/g, '').replace(/\.$/, '');
+}
+const ENDING = { alkan: 'an', alken: 'en', alkin: 'in', alkohol: 'ol', aldehyd: 'al', keton: 'on', saeure: 'säure', ester: '' };
+function checkName(input, info) {
+  const raw0 = (input || '').trim();
+  if (!raw0) return { status: 'empty' };
+  const raw = raw0.normalize('NFC').replace(/[‐-―−]/g, '-').replace(/\.$/, '');
+  const x = norm(raw);
+  const acc = info.accepted.map(norm);
+  const ae = s => s.replace(/ä/g, 'ae');
+  if (acc.includes(x)) {
+    if (info.accepted.some(a => ae(a) === ae(raw))) return { status: 'correct' };
+    if (/\s/.test(raw)) return { status: 'hint', msg: 'Regel 8: Der Name wird in einem Wort geschrieben, ohne Leerzeichen.' };
+    return { status: 'hint', msg: 'Regel 8: Achte auf Groß- und Kleinschreibung. Der Name beginnt mit einem Großbuchstaben (bei Zahlen am Anfang: der erste Buchstabe), alles andere wird kleingeschrieben – z. B. 2-Methylbutan.' };
+  }
+  const strip = s => s.replace(/[-,]/g, '');
+  if (acc.map(strip).includes(strip(x))) return { status: 'hint', msg: 'Regel 8: Prüfe Komma und Bindestrich. Zahlen untereinander mit Komma (2,3), zwischen Zahl und Buchstabe ein Bindestrich (2-Methyl, But-1-en).' };
+  const triv = TRIVIAL[x];
+  if (triv && norm(triv) === norm(info.name)) return { status: 'hint', msg: '„' + raw + '“ ist ein Trivialname. Gesucht ist der systematische Name nach IUPAC.' };
+  const noDigits = s => strip(s).replace(/\d/g, '');
+  let diag = '';
+  const end = ENDING[info.cls];
+  if (end && !x.endsWith(end)) diag = 'Regel ' + (info.fgType ? '9' : '1') + ': Prüfe die Stoffklasse. Die Endung muss hier „-' + end + '“ lauten.';
+  else if (acc.some(a => noDigits(a) === noDigits(x))) diag = /\d/.test(x) ? 'Regel 4: Die Bausteine stimmen, aber die Nummerierung nicht. Nummeriere vom anderen Ende, wenn dann kleinere Zahlen entstehen.' : 'Regel 5: Die Nummern (Positionsangaben) fehlen.';
+  else if (info.subs && info.subs.length > 1) {
+    const sortL = s => strip(s).replace(/\d/g, '').split('').sort().join('');
+    if (acc.some(a => sortL(a) === sortL(x))) diag = 'Regel 7: Prüfe die Reihenfolge. Seitenketten werden alphabetisch geordnet (Ethyl vor Methyl), di/tri zählen dabei nicht.';
+  }
+  if (!diag && info.stem && !x.includes(info.stem)) diag = 'Regel 2: Zähle die längste Kette noch einmal. Sie hat ' + info.n + ' C-Atome (Stamm ' + cap(info.stem) + '-).';
+  return { status: 'wrong', diag };
+}
+
+function checkDrawing(mol, target) {
+  if (!mol.atoms.length) return { status: 'invalid', msg: 'Das Zeichenfeld ist noch leer.' };
+  const vp = valenceProblems(mol);
+  if (vp.length) return { status: 'invalid', msg: 'Ein Atom hat zu viele Bindungen (C höchstens 4, O höchstens 2). Es ist rot markiert.', bad: vp };
+  if (mol.bonds.length >= mol.atoms.length) return { status: 'invalid', msg: 'Deine Zeichnung enthält einen Ring. In diesem Trainer kommen nur Ketten vor.' };
+  if (!isTree(mol)) return { status: 'invalid', msg: 'Nicht alle Atome sind miteinander verbunden.' };
+  if (canon(mol) === canon(target)) return { status: 'correct' };
+  const cnt = (m, el) => m.atoms.filter(a => a.el === el).length;
+  const notes = [];
+  const cS = cnt(mol, 'C'), cT = cnt(target, 'C'), oS = cnt(mol, 'O'), oT = cnt(target, 'O');
+  if (cS !== cT) notes.push('Du hast ' + cS + ' C-Atome gezeichnet, gesucht sind ' + cT + '.');
+  if (oS !== oT) notes.push('Du hast ' + oS + ' O-Atom' + (oS === 1 ? '' : 'e') + ' gezeichnet, gesucht ' + (oT === 1 ? 'ist 1' : 'sind ' + oT) + '.');
+  const own = nameMolecule(mol);
+  return { status: 'wrong', notes, ownName: own ? own.name : null };
+}
+
+/* ---- Aufbau aus einer Beschreibung (Spec) ---- */
+function buildMol(spec) {
+  if (spec.ester) return buildEster(spec);
+  const atoms = [], bonds = [];
+  const occ = new Map();
+  const k = (x, y) => x + ',' + y;
+  const add = (el, x, y) => { if (occ.has(k(x, y))) throw 'overlap'; atoms.push({ el, x, y }); occ.set(k(x, y), atoms.length - 1); return atoms.length - 1; };
+  const bond = (a, b, o) => bonds.push({ a, b, o });
+  const n = spec.n; const main = [];
+  const bend = spec.bend || null;
+  const vdir = bend ? bend.dir : 0;
+  try {
+    if (bend && bend.end === 'start') {
+      for (let j = 1; j <= bend.k; j++) main.push(add('C', 0, vdir * (bend.k + 1 - j)));
+      for (let j = bend.k + 1; j <= n; j++) main.push(add('C', j - bend.k - 1, 0));
+    } else if (bend && bend.end === 'end') {
+      const h = n - bend.k;
+      for (let j = 1; j <= h; j++) main.push(add('C', j - 1, 0));
+      for (let j = h + 1; j <= n; j++) main.push(add('C', h - 1, vdir * (j - h)));
+    } else for (let j = 1; j <= n; j++) main.push(add('C', j - 1, 0));
+    for (let j = 0; j < n - 1; j++) bond(main[j], main[j + 1], spec.mb && spec.mb.pos === j + 1 ? spec.mb.o : 1);
+    const subDirs = {};
+    const freeVert = (i, len) => [-1, 1].filter(d => { const a = atoms[main[i]]; for (let s = 1; s <= len; s++) if (occ.has(k(a.x, a.y + d * s))) return false; return true; });
+    // funktionelle Gruppe zuerst (nimmt bevorzugt oben)
+    if (spec.fg) {
+      const f = spec.fg; const i = f.pos - 1; const a = atoms[main[i]];
+      const outward = () => { if (n === 1) return [-1, 0]; const nb = atoms[main[i === 0 ? 1 : n - 2]]; return [a.x - nb.x, a.y - nb.y]; };
+      if (f.type === 'ol') {
+        const terminal = (i === 0 || i === n - 1) && n > 1;
+        const fv = freeVert(i, 1);
+        if ((terminal && (f.end || !fv.length)) || (n === 1 && f.end)) { const [dx, dy] = outward(); bond(main[i], add('O', a.x + dx, a.y + dy), 1); }
+        else { const d = f.dir && fv.includes(f.dir) ? f.dir : fv[0]; if (d === undefined) return null; bond(main[i], add('O', a.x, a.y + d), 1); subDirs[i] = [d]; }
+      } else if (f.type === 'ket' || f.type === 'ald') {
+        const fv = freeVert(i, 1); const d = f.dir && fv.includes(f.dir) ? f.dir : fv[0]; if (d === undefined) return null;
+        bond(main[i], add('O', a.x, a.y + d), 2); subDirs[i] = [d];
+      } else if (f.type === 'acid') {
+        const fv = freeVert(i, 1); const d = f.dir && fv.includes(f.dir) ? f.dir : fv[0]; if (d === undefined) return null;
+        bond(main[i], add('O', a.x, a.y + d), 2); subDirs[i] = [d];
+        const [dx, dy] = outward(); bond(main[i], add('O', a.x + dx, a.y + dy), 1);
+      }
+    }
+    const subs = (spec.subs || []).slice().sort((p, q) => q.len - p.len);
+    for (const s of subs) {
+      const i = s.pos - 1;
+      let fv = freeVert(i, s.len);
+      if (!fv.length) return null;
+      const neigh = [...(subDirs[i - 1] || []), ...(subDirs[i + 1] || [])];
+      fv.sort((p, q) => neigh.filter(d => d === p).length - neigh.filter(d => d === q).length);
+      const d = s.dir && fv.includes(s.dir) ? s.dir : fv[0];
+      const a = atoms[main[i]]; let prev = main[i];
+      for (let t = 1; t <= s.len; t++) { const c = add('C', a.x, a.y + d * t); bond(prev, c, 1); prev = c; }
+      (subDirs[i] = subDirs[i] || []).push(d);
+    }
+  } catch (e) { if (e === 'overlap') return null; throw e; }
+  const mol = { atoms, bonds };
+  if (valenceProblems(mol).length) return null;
+  return transform(mol, spec);
+}
+function buildEster(spec) {
+  const atoms = [], bonds = []; const N = spec.acidN, M = spec.alkN;
+  const add = (el, x, y) => { atoms.push({ el, x, y }); return atoms.length - 1; };
+  let prev = -1; let carbonyl;
+  for (let i = N; i >= 1; i--) { const c = add('C', N - i, 0); if (prev >= 0) bonds.push({ a: prev, b: c, o: 1 }); prev = c; if (i === 1) carbonyl = c; }
+  const od = add('O', N - 1, spec.odir || -1); bonds.push({ a: carbonyl, b: od, o: 2 });
+  const oe = add('O', N, 0); bonds.push({ a: carbonyl, b: oe, o: 1 }); prev = oe;
+  for (let j = 1; j <= M; j++) { const c = add('C', N + j, 0); bonds.push({ a: prev, b: c, o: 1 }); prev = c; }
+  return transform({ atoms, bonds }, spec);
+}
+function transform(mol, spec) {
+  if (spec.flip) mol.atoms.forEach(a => a.x = -a.x);
+  if (spec.vflip) mol.atoms.forEach(a => a.y = -a.y);
+  return mol;
+}
+
+/* ---- Generator ---- */
+function chooseSubs(n, count, opts = {}) {
+  const subs = []; const per = {};
+  for (let t = 0; t < 40 && subs.length < count; t++) {
+    const eth = opts.ethyl && n >= 5 && !subs.some(x => x.len === 2) && Math.random() < 0.35;
+    const len = eth ? 2 : 1;
+    const lo = eth ? 3 : 2, hi = eth ? n - 2 : n - 1;
+    if (hi < lo) continue;
+    const pos = rint(lo, hi);
+    if ((per[pos] || 0) >= (opts.maxPer || 2)) continue;
+    if (opts.avoid && opts.avoid.includes(pos)) continue;
+    per[pos] = (per[pos] || 0) + 1; subs.push({ pos, len });
+  }
+  return subs;
+}
+
+function hydro(cls, n, cnt, opts = {}) {
+  const spec = { n, subs: [] }; let avoid = [];
+  if (cls !== 'an') { if (n < 2) return null; const o = cls === 'en' ? 2 : 3; const pos = rint(1, n - 1); spec.mb = { pos, o }; if (o === 3) avoid = [pos, pos + 1]; }
+  if (cnt) { spec.subs = chooseSubs(n, cnt, { ethyl: opts.ethyl, avoid, maxPer: 2 }); if (spec.subs.length !== cnt) return null; }
+  if (opts.bend && n >= 5 && Math.random() < 0.35) spec.bend = { end: pick(['start', 'end']), k: 1, dir: pick([-1, 1]) };
+  return spec;
+}
+const LEVEL_GEN = {
+  K1(p = 1) { const c = pick(['an', 'an', 'en', 'in']); const n = c === 'an' ? (p < 0.4 ? rint(1, 5) : rint(3, 10)) : (p < 0.4 ? rint(2, 5) : rint(2, 8)); return hydro(c, n, 0); },
+  K2(p = 1) { const c = pick(['an', 'an', 'en', 'in']); return hydro(c, p < 0.4 ? rint(4, 5) : rint(4, 7), 1, { ethyl: p > 0.5 }); },
+  K3(p = 1) { const c = pick(['an', 'an', 'en', 'in']); return hydro(c, p < 0.4 ? rint(4, 6) : rint(5, 8), 2, { ethyl: p > 0.4 }); },
+  K4(p = 1) { const c = pick(['an', 'an', 'en', 'in']); const cnt = p < 0.5 ? 2 : 3; return hydro(c, rint(5, 7), cnt, { ethyl: true, bend: true }); },
+  F1() {
+    const n = rint(1, 6); const pos = rint(1, n);
+    const spec = { n, fg: { type: 'ol', pos, end: Math.random() < 0.5 }, subs: [] };
+    if (n >= 4 && Math.random() < 0.45) spec.subs = chooseSubs(n, 1);
+    else if (n === 3 && pos === 2 && Math.random() < 0.3) spec.subs = [{ pos: 2, len: 1 }];
+    return spec;
+  },
+  F2() {
+    if (Math.random() < 0.5) {
+      const n = rint(1, 6); const spec = { n, fg: { type: 'ald', pos: 1 }, subs: [] };
+      if (n >= 3 && Math.random() < 0.4) spec.subs = chooseSubs(n, 1, { avoid: [1] });
+      return spec;
+    }
+    const n = rint(3, 7); const pos = rint(2, n - 1);
+    const spec = { n, fg: { type: 'ket', pos }, subs: [] };
+    if (n >= 4 && Math.random() < 0.4) spec.subs = chooseSubs(n, 1, { avoid: [pos] });
+    return spec;
+  },
+  F3() {
+    const n = rint(1, 6); const spec = { n, fg: { type: 'acid', pos: 1 }, subs: [] };
+    if (n >= 3 && Math.random() < 0.4) spec.subs = chooseSubs(n, 1, { avoid: [1] });
+    return spec;
+  },
+  F4() { const k = pick(['F1', 'F2', 'F3', 'F1', 'F2', 'F3', 'K2', 'K3']); return LEVEL_GEN[k](1); },
+  Z1(p = 1) { return LEVEL_GEN[p < 0.3 ? pick(['K1', 'K2']) : p < 0.65 ? pick(['K2', 'K3']) : pick(['K3', 'K4'])](1); },
+  Z2() { return LEVEL_GEN[pick(['F1', 'F2', 'F3'])](1); }
+};
+
+// FG-Position in Spec-Richtung: für ald/acid ist pos=1 das Kettenende links
+function finalizeSpec(spec) {
+  if (!spec.ester) {
+    spec.flip = Math.random() < 0.5;
+    if (spec.fg && spec.fg.type === 'ol' && !spec.fg.dir) spec.fg.dir = pick([-1, 1]);
+    if (spec.fg && spec.fg.type !== 'ol' && !spec.fg.dir) spec.fg.dir = -1;
+  } else spec.flip = Math.random() < 0.3;
+  return spec;
+}
+
+function makeTask(spec) {
+  const mol = buildMol(spec);
+  if (!mol) return null;
+  const info = nameMolecule(mol);
+  if (!info) return null;
+  if (!spec.ester && (info.n !== spec.n || info.subs.length !== (spec.subs || []).length)) return null;
+  return { spec, mol, info, canon: canon(mol) };
+}
+
+function generateTask(levelId, avoid = new Set(), progress = 1) {
+  for (let t = 0; t < 300; t++) {
+    const raw = LEVEL_GEN[levelId](progress);
+    if (!raw) continue;
+    const spec = finalizeSpec(raw);
+    const task = makeTask(spec);
+    if (!task) continue;
+    if (avoid.has(task.canon) && t < 250) continue;
+    return task;
+  }
+  return null;
+}
+
+/* ---- Erklärung ---- */
+const CLASS_TXT = {
+  alkan: 'Nur C–C-Einfachbindungen → Alkan, Endung <b>-an</b>.',
+  alken: 'Eine C=C-Doppelbindung → Alken, Endung <b>-en</b>.',
+  alkin: 'Eine C≡C-Dreifachbindung → Alkin, Endung <b>-in</b>.',
+  alkohol: 'Hydroxygruppe (–OH) → Alkohol (Alkanol), Endung <b>-ol</b>.',
+  aldehyd: 'Aldehydgruppe (–CHO) am Kettenende → Aldehyd (Alkanal), Endung <b>-al</b>.',
+  keton: 'Carbonylgruppe (C=O) innerhalb der Kette → Keton (Alkanon), Endung <b>-on</b>.',
+  saeure: 'Carboxygruppe (–COOH) → Carbonsäure, Endung <b>-säure</b>.',
+  ester: 'Estergruppe (–COO–) → Ester.'
+};
+const R = n => '<span class="rule">Regel ' + n + '</span> ';
+function explain(info, spec) {
+  const st = [];
+  if (info.cls === 'ester') {
+    st.push(R(9) + CLASS_TXT.ester);
+    st.push(R(12) + 'Säureteil (enthält das C-Atom mit C=O): ' + info.n + ' C-Atom' + (info.n > 1 ? 'e' : '') + ' → <b>' + cap(info.stem) + 'ansäure</b>.');
+    st.push(R(12) + 'Alkylteil (am Brücken-O): ' + info.m + ' C-Atom' + (info.m > 1 ? 'e' : '') + ' → <b>' + cap(ALKYL[info.m]) + '</b> + „ester“.');
+    st.push(R(8) + 'Ein Wort, groß beginnend: <b>' + info.name + '</b> (IUPAC-Form: ' + info.alt + ').');
+    return st;
+  }
+  const fg = !!info.fgType;
+  st.push(R(fg ? 9 : 1) + CLASS_TXT[info.cls]);
+  const withFG = fg ? ' mit dem C-Atom der funktionellen Gruppe' : info.mbType ? ' mit der Mehrfachbindung' : '';
+  st.push(R(fg ? 10 : 2) + 'Längste Kette' + withFG + ' zählen: ' + info.n + ' C-Atom' + (info.n > 1 ? 'e' : '') + ' → Stamm <b>' + cap(info.stem) + '-</b>.' + (spec && spec.bend ? ' Achtung: Die Kette ist abgeknickt gezeichnet.' : ''));
+  const names = Object.keys(info.groups).sort();
+  if (names.length) st.push(R(3) + 'Seitenketten: ' + names.map(nm => info.groups[nm].length + '× ' + cap(nm)).join(', ') + '.');
+  if (info.fgType === 'ald' || info.fgType === 'acid') st.push(R(11) + 'Das C-Atom der ' + (info.fgType === 'ald' ? 'Aldehydgruppe' : 'Carboxygruppe') + ' ist immer C1, deshalb steht keine Nummer vor der Endung.');
+  else if (info.n > 2 && (fg || info.mbType || info.subs.length)) {
+    const what = fg ? 'die ' + (info.fgType === 'ol' ? 'Hydroxygruppe' : 'Carbonylgruppe') : info.mbType ? 'die Mehrfachbindung' : 'die Seitenketten';
+    let t = R(fg ? 11 : 4) + 'Nummerieren: von dem Ende, an dem ' + what + ' die kleinstmögliche Nummer bekomm' + (what.endsWith('ketten') ? 'en' : 't');
+    if ((fg || info.mbType) && info.subs.length) t += ' (Vorrang vor den Seitenketten)';
+    t += '.';
+    if (info.fgLoc && !(info.n <= 2)) t += ' Hier: C' + info.fgLoc + ' → <b>-' + info.fgLoc + '-' + (info.fgType === 'ol' ? 'ol' : 'on') + '</b>.';
+    if (info.mbLoc) t += ' Sie beginnt an C' + info.mbLoc + ' → <b>-' + info.mbLoc + '-' + info.mbType + '</b>.';
+    st.push(t);
+  }
+  if (names.length) {
+    st.push(R(5) + 'Positionen: ' + names.map(nm => cap(nm) + ' an C' + info.groups[nm].join(' und C')).join('; ') + '.');
+    const multi = names.filter(nm => info.groups[nm].length > 1);
+    if (multi.length) st.push(R(6) + multi.map(nm => { const l = info.groups[nm]; return l.length + '× ' + cap(nm) + ' → „' + l.join(',') + '-' + MULT[l.length] + nm + '“'; }).join('; ') + '. Jede Position wird genannt.');
+    if (names.length > 1) st.push(R(7) + 'Alphabetisch ordnen: ' + names.map(cap).join(' vor ') + ' (di/tri zählen nicht).');
+  }
+  st.push(R(8) + 'Zusammensetzen, ein Wort, groß beginnend: <b>' + info.name + '</b>');
+  return st;
+}
+function explainDraw(info) {
+  const st = [];
+  if (info.cls === 'ester') {
+    st.push('„' + cap(info.stem) + 'ansäure“ → Säureteil mit ' + info.n + ' C-Atom' + (info.n > 1 ? 'en' : '') + '; das letzte C trägt =O und ist über ein O-Atom verbunden.');
+    st.push('„' + cap(ALKYL[info.m]) + '…ester“ → am Brücken-O hängt eine Kette mit ' + info.m + ' C-Atom' + (info.m > 1 ? 'en' : '') + '.');
+    st.push('H-Atome ergänzen: jedes C hat 4 Bindungen.');
+    return st;
+  }
+  st.push('Stamm „' + cap(info.stem) + '-“ → Hauptkette mit ' + info.n + ' C-Atom' + (info.n > 1 ? 'en' : '') + ' zeichnen und durchnummerieren.');
+  if (info.mbType) st.push('„-' + (info.mbLoc && info.n > 3 ? info.mbLoc + '-' : '') + info.mbType + '“ → ' + (info.mbType === 'en' ? 'Doppelbindung' : 'Dreifachbindung') + ' zwischen C' + info.mbLoc + ' und C' + (info.mbLoc + 1) + '.');
+  if (info.fgType === 'ol') st.push('„-ol“ → OH-Gruppe an C' + info.fgLoc + '.');
+  if (info.fgType === 'ket') st.push('„-on“ → C=O an C' + info.fgLoc + '.');
+  if (info.fgType === 'ald') st.push('„-al“ → C1 trägt =O und ein H (Aldehydgruppe).');
+  if (info.fgType === 'acid') st.push('„-säure“ → C1 trägt =O und –OH (Carboxygruppe).');
+  Object.keys(info.groups).sort().forEach(nm => { const l = info.groups[nm]; st.push('„' + l.join(',') + '-' + cap(MULT[l.length] + nm) + '“ → ' + (l.length > 1 ? l.length + ' ' + cap(nm) + 'gruppen' : 'eine ' + cap(nm) + 'gruppe') + ' an C' + l.join(', C') + '.'); });
+  st.push('H-Atome ergänzen, bis jedes C-Atom 4 Bindungen hat.');
+  return st;
+}
+
+/* ---- H-Positionen (für Darstellung) ---- */
+const DIRS = { N: [0, -1], S: [0, 1], W: [-1, 0], E: [1, 0] };
+function hydrogens(mol) {
+  const A = adjOf(mol);
+  const occ = new Set(mol.atoms.map(a => a.x + ',' + a.y));
+  const out = [];
+  mol.atoms.forEach((a, i) => {
+    const used = A[i].reduce((t, e) => t + e.o, 0);
+    let h = (a.el === 'C' ? 4 : 2) - used; if (h <= 0) return;
+    const taken = new Set(A[i].map(e => { const b = mol.atoms[e.to]; return Math.sign(b.x - a.x) + ',' + Math.sign(b.y - a.y); }));
+    let order = ['N', 'S', 'W', 'E'];
+    if (A[i].length) { const b = mol.atoms[A[i][0].to]; const opp = Math.sign(a.x - b.x) + ',' + Math.sign(a.y - b.y); const nm = Object.keys(DIRS).find(d => DIRS[d].join(',') === opp); if (nm) order = [nm, ...order.filter(d => d !== nm)]; }
+    if (a.el === 'C' && A[i].length === 1) { /* endständig: zuerst nach außen, dann oben/unten */ }
+    for (const d of order) {
+      if (h <= 0) break;
+      const [dx, dy] = DIRS[d];
+      if (taken.has(dx + ',' + dy)) continue;
+      const crowded = occ.has((a.x + dx) + ',' + (a.y + dy));
+      out.push({ atom: i, dx, dy, crowded }); h--;
+    }
+  });
+  return out;
+}
+
+
+/* ---- Freie Elektronenpaare (je O-Atom zwei freie Richtungen) ---- */
+function lonePairs(mol, Hs) {
+  const out = [];
+  mol.atoms.forEach((a, i) => {
+    if (a.el !== 'O') return;
+    const occ = new Set();
+    let nb = 0;
+    mol.bonds.forEach(b => { if (b.a === i || b.b === i) { const o = mol.atoms[b.a === i ? b.b : b.a]; occ.add(Math.sign(o.x - a.x) + ',' + Math.sign(o.y - a.y)); nb++; } });
+    (Hs || []).forEach(h => { if (h.atom === i) occ.add(h.dx + ',' + h.dy); });
+    let free;
+    if (occ.size === 1) { const [dx] = [...occ][0].split(',').map(Number); free = dx === 0 ? [[-1, 0], [1, 0]] : [[0, -1], [0, 1]]; }
+    else free = [[0, -1], [0, 1], [-1, 0], [1, 0]].filter(d => !occ.has(d[0] + ',' + d[1])).slice(0, 2);
+    free.forEach(d => out.push({ atom: i, dx: d[0], dy: d[1] }));
+  });
+  return out;
+}
+
+if (false) module.exports = { lonePairs, nameMolecule, buildMol, makeTask, generateTask, finalizeSpec, canon, checkName, checkDrawing, explain, explainDraw, hydrogens, LEVEL_GEN, isTree };
+
+/* ===== Feste Aufgaben des Lernpfads (gemeinsame Quelle für Lernpfad und Musterlösung) ===== */
+const SPEC = {
+  ethan: { n: 2, subs: [] }, ethen: { n: 2, mb: { pos: 1, o: 2 }, subs: [] }, ethin: { n: 2, mb: { pos: 1, o: 3 }, subs: [] },
+  ethanol: { n: 2, fg: { type: 'ol', pos: 2, end: true }, subs: [] }, ethanal: { n: 2, fg: { type: 'ald', pos: 1, dir: -1 }, subs: [] },
+  ethansaeure: { n: 2, fg: { type: 'acid', pos: 1, dir: -1 }, subs: [] },
+  mbutan: { n: 4, subs: [{ pos: 2, len: 1, dir: 1 }] }, but1en: { n: 4, mb: { pos: 1, o: 2 }, subs: [] },
+  propan2ol: { n: 3, fg: { type: 'ol', pos: 2, dir: -1 }, subs: [] }, butanal: { n: 4, fg: { type: 'ald', pos: 1, dir: -1 }, subs: [] },
+  butanon: { n: 4, fg: { type: 'ket', pos: 2, dir: -1 }, subs: [] }, dmbutan: { n: 4, subs: [{ pos: 2, len: 1, dir: -1 }, { pos: 3, len: 1, dir: 1 }] },
+  propanon: { n: 3, fg: { type: 'ket', pos: 2, dir: -1 }, subs: [] }, mpropan: { n: 3, subs: [{ pos: 2, len: 1, dir: 1 }] },
+  butan: { n: 4, subs: [] }, butanKnick: { n: 4, subs: [], bend: { end: 'start', k: 1, dir: -1 } },
+  propan1ol: { n: 3, fg: { type: 'ol', pos: 3, end: true }, subs: [] }, propanal: { n: 3, fg: { type: 'ald', pos: 1, dir: -1 }, subs: [] },
+  mbutanB: { n: 4, subs: [{ pos: 3, len: 1, dir: -1 }] },
+  pentan: { n: 5, subs: [] }, dmpropan: { n: 3, subs: [{ pos: 2, len: 1, dir: -1 }, { pos: 2, len: 1, dir: 1 }] }, mpentan: { n: 5, subs: [{ pos: 2, len: 1, dir: 1 }] },
+  propan: { n: 3, subs: [] }, propen: { n: 3, mb: { pos: 1, o: 2 }, subs: [] }, propin: { n: 3, mb: { pos: 1, o: 3 }, subs: [] },
+  propansaeure: { n: 3, fg: { type: 'acid', pos: 1, dir: -1 }, subs: [] },
+  butan1ol: { n: 4, fg: { type: 'ol', pos: 1, end: true }, subs: [] }, butan2ol: { n: 4, fg: { type: 'ol', pos: 2, dir: -1 }, subs: [] },
+  mpropan1ol: { n: 3, fg: { type: 'ol', pos: 1, end: true }, subs: [{ pos: 2, len: 1, dir: 1 }] }, tbutanol: { n: 3, fg: { type: 'ol', pos: 2, dir: -1 }, subs: [{ pos: 2, len: 1, dir: 1 }] },
+};
+
+const TASKS = {
+  benennen: ['mbutan', 'but1en', 'propan2ol', 'butanal', 'butanon'],
+  benennenTips: {
+    mbutan: 'Zählt die längste Kette: 4 C-Atome. Die Seitenkette hat 1 C-Atom (Methyl). Nummeriert so, dass sie die kleinste Nummer bekommt.',
+    but1en: 'Doppelbindung → Endung -en. Die Doppelbindung beginnt an C1.',
+    propan2ol: 'OH-Gruppe → Endung -ol. Sie sitzt am mittleren von 3 C-Atomen.',
+    butanal: 'C=O am Kettenende mit H → Aldehyd, Endung -al. Das C-Atom der Gruppe ist immer C1, keine Nummer nötig.',
+    butanon: 'C=O in der Kette → Keton, Endung -on. Bei 4 C-Atomen gibt es nur eine Möglichkeit, die Nummer darf entfallen.',
+  },
+  zeichnen: [ // Name, H-Atome, freie Elektronenpaare
+    ['ethanol', 6, 2], ['propanon', 6, 2], ['ethansaeure', 4, 4],
+  ],
+  memory: ['ethan', 'ethen', 'ethin', 'ethanol', 'ethanal', 'ethansaeure'],
+  paare: [ // links, rechts, Beziehung: 0 dasselbe Molekül, 1 Isomere, 2 andere Summenformel
+    ['butan', 'butanKnick', 0, 'Beide haben eine durchgehende Kette aus 4 C-Atomen. Die Kette ist nur abgeknickt gezeichnet.'],
+    ['propan1ol', 'propan2ol', 1, 'Beide C₃H₈O, die OH-Gruppe sitzt an einem anderen C-Atom.'],
+    ['ethanol', 'propan1ol', 2, 'C₂H₆O und C₃H₈O: Ein C-Atom mehr heißt andere Summenformel.'],
+    ['propanal', 'propanon', 1, 'Beide C₃H₆O, aber ein Aldehyd und ein Keton.'],
+  ],
+  klassen: [['butanal', 'Aldehyd'], ['butan2ol', 'Alkohol'], ['butanon', 'Keton'], ['but1en', 'Alken']],
+  input: { // Beispiele in den Input-Karten
+    klassen: [['propan', 'Alkane', 'nur Einfachbindungen', '-an'], ['propen', 'Alkene', 'C=C-Doppelbindung', '-en'], ['propin', 'Alkine', 'C≡C-Dreifachbindung', '-in'],
+      ['propan1ol', 'Alkohole', 'Hydroxygruppe: O–H an einem C-Atom', '-ol'], ['propanal', 'Aldehyde', 'Aldehydgruppe: C=O am Kettenende, am C hängt ein H', '-al'],
+      ['propanon', 'Ketone', 'Carbonylgruppe: C=O mitten in der Kette', '-on'], ['propansaeure', 'Carbonsäuren', 'Carboxygruppe: C=O und O–H am selben C-Atom', '-säure']],
+    benennen: ['mbutan', 'butan2ol'], zeichnen: 'propan1ol', isomere: ['butan', 'mpropan'],
+  },
+  c5h12: { show: ['pentan', 'butan', 'mbutan', 'mpentan', 'dmpropan'], correct: ['pentan', 'mbutan', 'dmpropan'] },
+  alkohole: { show: ['butan1ol', 'butanal', 'butan2ol', 'propan1ol', 'mpropan1ol', 'tbutanol'], correct: ['butan1ol', 'butan2ol', 'mpropan1ol', 'tbutanol'] },
+};
+if (false) module.exports = { SPEC, TASKS };
+
+const $ = (s, r = document) => r.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const shuffle = a => { const b = a.slice(); for (let i = b.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [b[i], b[j]] = [b[j], b[i]]; } return b; };
+/* ---------- Strukturformeln (Lewis: alle H-Atome, freie Elektronenpaare) ---------- */
+const G = 56;
+function renderMol(mol, opts = {}) {
+  const fake = { atoms: mol.atoms.map(a => ({ ...a, el: a.el === 'R' ? 'C' : a.el })), bonds: mol.bonds };
+  const Hs = hydrogens(fake).filter(h => !['*', 'R'].includes(mol.atoms[h.atom].el));
+  const LP = lonePairs(mol, Hs);
+  const pts = mol.atoms.map(a => [a.x * G, a.y * G]);
+  const hpos = Hs.map(h => { const a = mol.atoms[h.atom]; const f = h.crowded ? 0.33 : 0.52; return [a.x * G + h.dx * G * f, a.y * G + h.dy * G * f, h]; });
+  hpos.forEach(p => pts.push([p[0], p[1]]));
+  LP.forEach(l => { const a = mol.atoms[l.atom]; pts.push([a.x * G + l.dx * G * 0.3, a.y * G + l.dy * G * 0.3]); });
+  const pad = opts.pad || 16;
+  const minX = Math.min(...pts.map(p => p[0])) - pad, maxX = Math.max(...pts.map(p => p[0])) + pad;
+  const minY = Math.min(...pts.map(p => p[1])) - pad, maxY = Math.max(...pts.map(p => p[1])) + pad;
+  const w = maxX - minX, h = maxY - minY;
+  const R = el => el === '*' ? -4 : (el === 'C' || el === 'O' || el === 'R') ? 9 : 7;
+  const line = (x1, y1, x2, y2, r1, r2, cls) => {
+    const dx = x2 - x1, dy = y2 - y1, L = Math.hypot(dx, dy) || 1, ux = dx / L, uy = dy / L;
+    return `<line class="${cls || 'bd'}" x1="${(x1 + ux * r1).toFixed(1)}" y1="${(y1 + uy * r1).toFixed(1)}" x2="${(x2 - ux * r2).toFixed(1)}" y2="${(y2 - uy * r2).toFixed(1)}"/>`;
+  };
+  let s = '';
+  mol.bonds.forEach(b => {
+    const a = mol.atoms[b.a], c = mol.atoms[b.b];
+    const x1 = a.x * G, y1 = a.y * G, x2 = c.x * G, y2 = c.y * G;
+    if (b.o === 1) s += line(x1, y1, x2, y2, R(a.el), R(c.el));
+    else {
+      const L = Math.hypot(x2 - x1, y2 - y1), nx = -(y2 - y1) / L, ny = (x2 - x1) / L;
+      (b.o === 2 ? [-3.2, 3.2] : [-5, 0, 5]).forEach(o => { s += line(x1 + nx * o, y1 + ny * o, x2 + nx * o, y2 + ny * o, R(a.el), R(c.el)); });
+    }
+  });
+  hpos.forEach(([hx, hy, hh]) => { const a = mol.atoms[hh.atom]; s += line(a.x * G, a.y * G, hx, hy, R(a.el), 6.5, 'bd bh'); });
+  LP.forEach(l => {
+    const a = mol.atoms[l.atom]; const cx = a.x * G + l.dx * G * 0.25, cy = a.y * G + l.dy * G * 0.25, px = -l.dy * G * 0.1, py = l.dx * G * 0.1;
+    s += `<line class="lp" x1="${(cx - px).toFixed(1)}" y1="${(cy - py).toFixed(1)}" x2="${(cx + px).toFixed(1)}" y2="${(cy + py).toFixed(1)}"/>`;
+  });
+  mol.atoms.forEach(a => { if (a.el !== '*') s += `<text class="at at-${a.el}" x="${a.x * G}" y="${a.y * G}">${a.el}</text>`; });
+  hpos.forEach(([hx, hy]) => { s += `<text class="at at-H" x="${hx.toFixed(1)}" y="${hy.toFixed(1)}">H</text>`; });
+  (opts.numbers || []).forEach((ai, i) => { const a = mol.atoms[ai]; s += `<text class="num" x="${a.x * G + 16}" y="${a.y * G - 16}">${i + 1}</text>`; });
+  const scale = opts.scale || 1;
+  return `<svg class="mol" viewBox="${minX.toFixed(1)} ${minY.toFixed(1)} ${w.toFixed(1)} ${h.toFixed(1)}" width="${(w * scale).toFixed(0)}" role="img" aria-label="${esc(opts.label || 'Strukturformel')}">${s}</svg>`;
+}
+/* ---------- Aufgabentypen ---------- */
+// Jede Aufgabe: {type, q, ...}; render(task, id) -> html; read(id) -> value; ok(task, value) -> bool
+const T = {
+  mc: {
+    render: (t, id) => `<fieldset class="q" id="${id}"><legend>${t.q}</legend>${t.img || ''}<div class="opts">${t.o.map((o, i) => `<label class="opt"><input type="radio" name="${id}" value="${i}"><span>${o}</span></label>`).join('')}</div></fieldset>`,
+    read: id => { const r = document.querySelector(`input[name="${id}"]:checked`); return r ? +r.value : null; },
+    ok: (t, v) => t.any ? v !== null : v === t.a,
+    sol: t => t.o[t.a],
+  },
+  num: {
+    render: (t, id) => `<div class="q" id="${id}"><label class="qlabel" for="${id}-in">${t.q}</label><input class="num" id="${id}-in" type="number" inputmode="numeric" min="0"></div>`,
+    read: id => { const v = $(`#${id}-in`).value.trim(); return v === '' ? null : +v; },
+    ok: (t, v) => v === t.a, sol: t => String(t.a),
+  },
+  sel: { // Zeilen mit Auswahllisten: rows [{html, a:[correct...], label}], cols [{name, options}]
+    render: (t, id) => `<div class="q" id="${id}"><p class="qlabel">${t.q}</p><div class="rows${t.two ? ' two' : ''}">${t.rows.map((r, i) => `<div class="row-sel" data-i="${i}"><div class="row-fig">${r.html}</div><div class="row-ctrl">${r.label ? `<p class="row-label">${r.label}</p>` : ''}${t.cols.map((c, j) => `<label class="sel"><span>${c.name}</span><select id="${id}-${i}-${j}"><option value="">– wählen –</option>${c.opts.map(o => `<option>${o}</option>`).join('')}</select></label>`).join('')}<span class="mark" aria-live="polite"></span></div></div>`).join('')}</div></div>`,
+    read: (id, t) => t.rows.map((r, i) => t.cols.map((c, j) => $(`#${id}-${i}-${j}`).value)),
+    ok: (t, v) => t.rows.every((r, i) => r.a.every((a, j) => (Array.isArray(a) ? a.includes(v[i][j]) : v[i][j] === a))),
+    rowOk: (t, v, i) => t.rows[i].a.every((a, j) => (Array.isArray(a) ? a.includes(v[i][j]) : v[i][j] === a)),
+    sol: t => '', fill: (t, id) => t.rows.forEach((r, i) => r.a.forEach((a, j) => { $(`#${id}-${i}-${j}`).value = Array.isArray(a) ? a[0] : a; })),
+  },
+  multi: {
+    render: (t, id) => `<fieldset class="q" id="${id}"><legend>${t.q}</legend><div class="opts grid2">${t.o.map((o, i) => `<label class="opt"><input type="checkbox" name="${id}" value="${i}"><span>${o}</span></label>`).join('')}</div></fieldset>`,
+    read: id => [...document.querySelectorAll(`input[name="${id}"]:checked`)].map(x => +x.value).sort((a, b) => a - b),
+    ok: (t, v) => JSON.stringify(v) === JSON.stringify(t.a.slice().sort((a, b) => a - b)),
+    sol: t => t.a.map(i => t.o[i]).join(', '),
+  },
+  tf: {
+    render: (t, id) => `<div class="q" id="${id}"><p class="qlabel">${t.q}</p>${t.items.map((it, i) => `<div class="tf"><p>${i + 1}. ${it[0]}</p><div class="tfbtn" role="radiogroup" aria-label="Aussage ${i + 1}"><label><input type="radio" name="${id}-${i}" value="1"><span>richtig</span></label><label><input type="radio" name="${id}-${i}" value="0"><span>falsch</span></label></div><span class="mark"></span></div>`).join('')}</div>`,
+    read: (id, t) => t.items.map((it, i) => { const r = document.querySelector(`input[name="${id}-${i}"]:checked`); return r ? r.value === '1' : null; }),
+    ok: (t, v) => t.items.every((it, i) => v[i] === it[1]),
+    sol: t => '', fill: (t, id) => t.items.forEach((it, i) => { document.querySelector(`input[name="${id}-${i}"][value="${it[1] ? 1 : 0}"]`).checked = true; }),
+  },
+  rank: {
+    render: (t, id) => `<div class="q" id="${id}"><p class="qlabel">${t.q}</p><ol class="rank" id="${id}-list">${shuffle(t.items).map(it => `<li data-k="${it.k}"><span class="rk-fig">${it.html}</span><span class="rk-name">${it.label}</span><span class="rk-btn"><button type="button" class="mini" data-mv="-1" aria-label="nach oben">▲</button><button type="button" class="mini" data-mv="1" aria-label="nach unten">▼</button></span></li>`).join('')}</ol></div>`,
+    read: id => [...document.querySelectorAll(`#${id}-list li`)].map(li => li.dataset.k),
+    ok: (t, v) => t.accept.some(order => order.join() === v.join()),
+    sol: t => '', fill: (t, id) => { const ol = $(`#${id}-list`); t.accept[0].forEach(k => ol.appendChild(ol.querySelector(`[data-k="${k}"]`))); },
+  },
+  text: {
+    render: (t, id) => `<div class="q" id="${id}"><label class="qlabel" for="${id}-in">${t.q}</label><textarea id="${id}-in" rows="3"></textarea></div>`,
+    read: id => $(`#${id}-in`).value, ok: () => true, sol: () => '',
+  },
+};
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-mv]'); if (!b) return;
+  const li = b.closest('li'); const d = +b.dataset.mv;
+  if (d < 0 && li.previousElementSibling) li.parentNode.insertBefore(li, li.previousElementSibling);
+  if (d > 0 && li.nextElementSibling) li.parentNode.insertBefore(li.nextElementSibling, li);
+  b.focus();
+});
+
+// Kugelmodell: C mit vier verschiedenen Partnern, gespiegelt
+function ballModel(mirror) {
+  const sx = mirror ? -1 : 1;
+  const bonds = [[0, -70, '#F2F2EE', 'weiß'], [-62 * sx, 38, '#C4352B', 'rot'], [62 * sx, 38, '#2E8B57', 'grün'], [18 * sx, 22, '#E2B007', 'gelb']];
+  let s = '';
+  bonds.forEach(([x, y]) => { s += `<line x1="0" y1="0" x2="${x}" y2="${y}" class="stick"/>`; });
+  bonds.slice(0, 3).forEach(([x, y, c]) => { s += `<circle cx="${x}" cy="${y}" r="22" fill="${c}" class="ball"/>`; });
+  s += `<circle cx="0" cy="0" r="26" fill="#22272E" class="ball"/>`;
+  const [x, y, c] = bonds[3]; s += `<circle cx="${x * 1.9}" cy="${y * 1.9}" r="17" fill="${c}" class="ball front"/><line x1="0" y1="0" x2="${x * 1.9}" y2="${y * 1.9}" class="stick"/>`;
+  return `<svg class="balls" viewBox="-110 -110 220 200" role="img" aria-label="Kugelmodell: schwarzes C-Atom mit vier verschiedenfarbigen Kugeln${mirror ? ', Spiegelbild' : ''}">${s}</svg>`;
+}
+
+
+/* ===== Lernpfad „Rein in die organische Chemie“ ===== */
+const MOLS = {};
+const M = key => { if (!MOLS[key]) MOLS[key] = makeTask(Object.assign({ flip: false }, SPEC[key])); return MOLS[key]; };
+const mol = (key, opts) => renderMol(M(key).mol, opts);
+const nameOf = key => M(key).info.name;
+const hCount = key => hydrogens(M(key).mol).length;
+const paper = (key, cap) => `<figure class="fig"><div class="paper">${mol(key)}</div>${cap ? `<figcaption>${cap}</figcaption>` : ''}</figure>`;
+
+/* ---------- zusätzliche Aufgabentypen ---------- */
+T.name = {
+  render: (t, id) => `<div class="q nameq" id="${id}"><div class="paper">${mol(t.key)}</div><label class="qlabel" for="${id}-in">Name nach IUPAC</label><input class="txt" id="${id}-in" type="text" spellcheck="false" autocapitalize="off" autocomplete="off" placeholder="z. B. 2-Methylpropan"></div>`,
+  read: id => $(`#${id}-in`).value.trim() || null,
+  ok: (t, v) => checkName(v, M(t.key).info).status === 'correct',
+  sol: t => nameOf(t.key), fill: (t, id) => { $(`#${id}-in`).value = nameOf(t.key); },
+};
+T.draw = {
+  render: (t, id) => `<div class="q" id="${id}"><p class="target">${nameOf(t.key)}</p><p>Zeichnet auf Papier die <b>vollständige Strukturformel</b>: alle C-Atome, alle H-Atome, alle Bindungsstriche und die freien Elektronenpaare an O-Atomen. Zählt dann in eurer Zeichnung:</p>
+    <div class="row"><label class="sel"><span>H-Atome</span><input class="num" id="${id}-h" type="number" min="0" inputmode="numeric"></label><label class="sel"><span>freie Elektronenpaare</span><input class="num" id="${id}-lp" type="number" min="0" inputmode="numeric"></label></div></div>`,
+  read: id => { const h = $(`#${id}-h`).value, l = $(`#${id}-lp`).value; return (h === '' || l === '') ? null : [+h, +l]; },
+  ok: (t, v) => v && v[0] === t.h && v[1] === t.lp,
+  sol: () => '', fill: (t, id) => { $(`#${id}-h`).value = t.h; $(`#${id}-lp`).value = t.lp; },
+};
+T.memory = {
+  render: (t, id) => {
+    const cards = shuffle(t.keys.flatMap(k => [{ k, kind: 's' }, { k, kind: 'n' }]));
+    return `<div class="q" id="${id}"><p class="qlabel">Findet die Paare: Strukturformel und Name. Tippt zwei Karten an.</p><p class="small" id="${id}-moves">Züge: 0</p>
+      <div class="memory" data-pairs="${t.keys.length}" data-found="0" data-moves="0">${cards.map((c, i) => `<button type="button" class="mcard" data-k="${c.k}" data-i="${i}" aria-label="Verdeckte Karte ${i + 1}"><span class="back" aria-hidden="true">?</span><span class="face">${c.kind === 's' ? mol(c.k, { pad: 10 }) : `<span class="mname">${nameOf(c.k)}</span>`}</span></button>`).join('')}</div></div>`;
+  },
+  read: id => +document.querySelector(`#${id} .memory`).dataset.found,
+  ok: (t, v) => v === t.keys.length, sol: () => '',
+  fill: (t, id) => { const m = document.querySelector(`#${id} .memory`); m.querySelectorAll('.mcard').forEach(c => c.classList.add('open', 'found')); m.dataset.found = t.keys.length; },
+};
+T.pick = {
+  render: (t, id) => `<fieldset class="q" id="${id}"><legend>${t.q}</legend><div class="pickgrid">${t.show.map((k, i) => `<label class="pick"><input type="checkbox" name="${id}" value="${i}"><span class="pickfig">${mol(k)}</span><span class="pickno">Molekül ${i + 1}</span></label>`).join('')}</div></fieldset>`,
+  read: id => [...document.querySelectorAll(`input[name="${id}"]:checked`)].map(x => +x.value),
+  ok: (t, v) => JSON.stringify(v) === JSON.stringify(t.show.map((k, i) => t.correct.includes(k) ? i : -1).filter(i => i >= 0)),
+  sol: () => '', fill: (t, id) => { document.querySelectorAll(`input[name="${id}"]`).forEach(x => { x.checked = t.correct.includes(t.show[+x.value]); }); },
+};
+document.addEventListener('click', e => {
+  const c = e.target.closest('.mcard'); if (!c || c.classList.contains('found') || c.classList.contains('open')) return;
+  const m = c.closest('.memory'); if (m.dataset.lock === '1') return;
+  c.classList.add('open'); c.setAttribute('aria-label', 'Aufgedeckte Karte');
+  const open = [...m.querySelectorAll('.mcard.open:not(.found)')];
+  if (open.length === 2) {
+    m.dataset.moves = +m.dataset.moves + 1; const mv = m.parentElement.querySelector('[id$="-moves"]'); if (mv) mv.textContent = 'Züge: ' + m.dataset.moves;
+    if (open[0].dataset.k === open[1].dataset.k) {
+      open.forEach(o => o.classList.add('found')); m.dataset.found = +m.dataset.found + 1;
+      if (+m.dataset.found === +m.dataset.pairs) setTimeout(() => check(false), 400);
+    } else { m.dataset.lock = '1'; setTimeout(() => { open.forEach(o => { o.classList.remove('open'); o.setAttribute('aria-label', 'Verdeckte Karte'); }); m.dataset.lock = '0'; }, 1100); }
+  }
+});
+
+/* ---------- Stationen ---------- */
+const REL = ['dasselbe Molekül', 'Isomere', 'andere Summenformel'];
+const KL = ['Alkan', 'Alken', 'Alkin', 'Alkohol', 'Aldehyd', 'Keton', 'Carbonsäure'];
+const card = (h, body, cls = '') => `<div class="card ${cls}">${h ? `<h3>${h}</h3>` : ''}${body}</div>`;
+const numFig = (key, cap) => `<figure class="fig"><div class="paper">${mol(key, { numbers: M(key).info.chain })}</div>${cap ? `<figcaption>${cap}</figcaption>` : ''}</figure>`;
+const IN = TASKS.input;
+const inputKlassen = () => card('Stoffklassen und funktionelle Gruppen', `<p>Organische Stoffe werden nach ihrer <b>funktionellen Gruppe</b> in <b>Stoffklassen</b> eingeteilt. Die Stoffklasse bestimmt die <b>Endung</b> des Namens. Alle Beispiele haben drei C-Atome:</p>
+  <div class="tablewrap"><table class="ct"><thead><tr><th>Stoffklasse</th><th>Beispiel</th><th>Erkennungsmerkmal</th><th>Endung</th></tr></thead><tbody>${IN.klassen.map(([k, c, g, e]) => `<tr><td><b>${c}</b><br><span class="small">${nameOf(k)}</span></td><td class="cfig">${mol(k, { pad: 8, scale: .8 })}</td><td>${g}</td><td class="suffix">${e}</td></tr>`).join('')}</tbody></table></div>
+  <p class="small">Alkane, Alkene und Alkine enthalten nur C- und H-Atome (Kohlenwasserstoffe). Die anderen Stoffklassen enthalten zusätzlich O-Atome.</p>`, 'input');
+const inputBenennen = () => card('Benennen nach IUPAC', `<p><b>Stamm</b> = Zahl der C-Atome in der längsten Kette:</p>
+  <div class="stem">${['Meth', 'Eth', 'Prop', 'But', 'Pent', 'Hex'].map((s, i) => `<span><b>${i + 1}</b> ${s}-</span>`).join('')}</div>
+  <ol class="list"><li><b>Stoffklasse</b> bestimmen → Endung (-an, -en, -in, -ol, -al, -on, -säure).</li><li><b>Längste Kette</b> suchen → Stamm. Sie muss das C-Atom mit der funktionellen Gruppe bzw. die Mehrfachbindung enthalten.</li><li><b>Nummerieren</b>, sodass die funktionelle Gruppe bzw. Mehrfachbindung die kleinste Zahl bekommt, danach die Seitenketten.</li><li><b>Seitenketten</b> mit -yl benennen (Methyl = 1 C-Atom) und mit ihrer Nummer vor den Stamm schreiben.</li><li><b>Schreibweise:</b> Zahl und Wort mit Bindestrich, Zahlen untereinander mit Komma, Name groß und zusammen.</li></ol>
+  <div class="exrow">${numFig(IN.benennen[0], '2-Methylbutan: Kette 4 C → But-, Seitenkette an C2')}${numFig(IN.benennen[1], 'Butan-2-ol: OH-Gruppe an C2 → -2-ol')}</div>`, 'input');
+const inputZeichnen = () => card('Vollständige Strukturformel', `<p>In einer vollständigen Strukturformel ist <b>jedes Atom</b> und <b>jede Bindung</b> als Strich gezeichnet. Jedes Atom hat eine feste Zahl an Bindungen:</p>
+  <ul class="list"><li><b>C</b> bildet immer <b>4</b> Bindungen.</li><li><b>H</b> bildet <b>1</b> Bindung.</li><li><b>O</b> bildet <b>2</b> Bindungen und hat <b>2 freie Elektronenpaare</b> (rote Striche).</li><li>Eine Doppelbindung zählt als 2 Bindungen.</li></ul>
+  <p><b>So geht ihr vor</b> – Beispiel Propan-1-ol: 1. Kette aus 3 C-Atomen zeichnen. 2. OH-Gruppe an C1. 3. Jedes C-Atom mit H-Atomen auf 4 Bindungen auffüllen. 4. Freie Elektronenpaare an das O-Atom.</p>
+  ${paper(IN.zeichnen, 'Propan-1-ol: 8 H-Atome, 2 freie Elektronenpaare')}`, 'input');
+const inputIsomere = () => card('Isomere', `<p>Isomere haben die <b>gleiche Summenformel</b>, aber eine <b>andere Struktur</b> – und deshalb verschiedene Namen und Eigenschaften.</p>
+  <div class="exrow">${paper(IN.isomere[0], 'Butan · C₄H₁₀')}${paper(IN.isomere[1], '2-Methylpropan · C₄H₁₀')}</div>
+  <p><b>Vorsicht:</b> Dasselbe Molekül kann verschieden gezeichnet sein – abgeknickt oder von der anderen Seite. Gleicher Name heißt: dasselbe Molekül.</p>`, 'input');
+const inputBau = () => card('Arbeiten mit dem Baukasten', `<ul class="list"><li><b>schwarz = C</b> (4 Löcher), <b>weiß = H</b> (1 Loch), <b>rot = O</b> (2 Löcher)</li><li>Erst die C-Kette bauen, dann die funktionelle Gruppe, dann mit H-Atomen auffüllen.</li><li>Jedes Loch wird belegt – dann stimmt die Zahl der Bindungen automatisch.</li></ul>`, 'input');
+const STATIONS = [
+  { id: 'start', title: 'Start', kind: 'Info', min: 2,
+    steps: [{ intro: () => `<p class="lead">In den nächsten 45 Minuten frischt ihr zu zweit auf, was ihr aus der Einführungsphase braucht. Jede Station beginnt mit einem kurzen <b>Input</b>, danach übt ihr.</p>
+      ${card('Fünf Stationen', '<ol class="list"><li>Stoffklassen und funktionelle Gruppen – mit Memory</li><li>Benennen nach IUPAC</li><li>Zeichnen auf Papier</li><li>Isomere</li><li>Nachbauen mit dem Molekülbaukasten</li></ol>')}
+      ${card('So funktioniert es', `<ul class="list"><li>Zu zweit an einem Gerät, wechselt euch beim Tippen ab.</li><li>Lest den Input genau – die Aufgaben danach bauen darauf auf.</li><li>Nach jeder Aufgabe <b>Prüfen</b> drücken. Hängt ihr fest: <b>Tipp</b>. Nach zwei Fehlversuchen könnt ihr die Lösung ansehen.</li><li>Oben rechts gibt es einen <b>Spickzettel</b> mit allem Wichtigen.</li><li>Alle Formeln sind <b>vollständige Strukturformeln</b>: jedes Atom, jeder Bindungsstrich, die freien Elektronenpaare am O-Atom als rote Striche.</li></ul>`)}
+      ${card('Ihr braucht', '<ul class="list"><li>Papier und Stift (Station 3)</li><li>einen Molekülbaukasten (Station 5)</li></ul>')}`,
+      tasks: [{ type: 'text', q: 'Eure Namen:', key: 'team' }] }] },
+
+  { id: 'stoffklassen', title: 'Stoffklassen', kind: 'Input + Digital', min: 9,
+    steps: [
+      { input: true, intro: inputKlassen,
+        tasks: [{ type: 'sel', q: 'Kurzcheck: Zu welcher Stoffklasse gehört das Molekül?', cols: [{ name: 'Stoffklasse', opts: KL }],
+          rows: TASKS.klassen.map(([k, c], i) => ({ html: `<div class="paper sm">${mol(k)}</div>`, label: `Molekül ${i + 1}`, a: [c] })),
+          tips: ['Sucht zuerst nach einem O-Atom. Kein O → Alkan, Alken oder Alkin. Mit O: Ist es eine O–H-Gruppe oder ein C=O?', 'C=O am Kettenende mit H am C → Aldehyd. C=O mitten in der Kette → Keton.'],
+          fb: 'Richtig! Molekül 1 ist ein Aldehyd, 2 ein Alkohol, 3 ein Keton und 4 ein Alken.' }] },
+      { intro: () => `<p class="lead">Jetzt das Memory: Sechs Stoffe mit je zwei C-Atomen – sie unterscheiden sich nur in der funktionellen Gruppe oder der Bindung. Findet die Paare aus Strukturformel und Name.</p>`,
+        tasks: [{ type: 'memory', keys: TASKS.memory, fb: 'Alle Paare gefunden! Ethan, Ethen und Ethin unterscheiden sich in der Bindung, Ethanol, Ethanal und Ethansäure in der funktionellen Gruppe.' }] }] },
+
+  { id: 'benennen', title: 'Benennen', kind: 'Input + Digital', min: 11,
+    steps: [
+      { input: true, intro: inputBenennen,
+        tasks: [
+          { type: 'mc', q: 'Kurzcheck: Welcher Stamm gehört zu einer Kette aus 5 C-Atomen?', o: ['Prop-', 'But-', 'Pent-', 'Hex-'], a: 2 },
+          { type: 'mc', q: 'Welcher Name ist richtig geschrieben?', o: ['3 Methylpentan', '3-methylpentan', '3-Methylpentan', 'Methyl-3-pentan'], a: 2, tips: ['Zahl und Wort mit Bindestrich, der Name beginnt mit einem Großbuchstaben, die Seitenkette steht vor dem Stamm.'] }] },
+      { intro: () => `<p class="lead">Benennt die fünf Stoffe nach IUPAC. Achtet auf Groß- und Kleinschreibung und Bindestriche.</p>`,
+        tasks: TASKS.benennen.map(k => ({ type: 'name', key: k, tips: [TASKS.benennenTips[k]] })) }] },
+
+  { id: 'zeichnen', title: 'Zeichnen', kind: 'Input + Papier', min: 10,
+    steps: [
+      { input: true, intro: inputZeichnen,
+        tasks: [{ type: 'num', q: 'Kurzcheck: Wie viele H-Atome hat Propan (3 C-Atome, nur Einfachbindungen)? Zeichnet es, wenn ihr unsicher seid.', a: 8, tips: ['Die beiden äußeren C-Atome haben je 1 Bindung zum Nachbar-C, also 3 H-Atome. Das mittlere C-Atom hat 2 Nachbarn, also 2 H-Atome.'], fb: () => `<p>3 + 2 + 3 = 8 H-Atome.</p><div class="paper inline">${mol('propan')}</div>` }] },
+      ...TASKS.zeichnen.map(([k, h, lp], i) => ({
+        intro: () => i === 0 ? `<p class="lead">Ihr bekommt einen Namen und zeichnet die vollständige Strukturformel auf Papier. Zur Kontrolle zählt ihr H-Atome und freie Elektronenpaare. Danach seht ihr die Lösung und vergleicht.</p>` : '',
+        tasks: [{ type: 'draw', key: k, h, lp,
+          tips: ['Zeichnet erst die Kette der C-Atome. Jedes C-Atom braucht genau 4 Bindungsstriche – füllt mit H-Atomen auf.', 'Jedes O-Atom hat 2 Bindungen und 2 freie Elektronenpaare. Eine Doppelbindung zählt als 2 Bindungen.'],
+          fb: () => `<p>So sieht die vollständige Strukturformel aus. Vergleicht Atom für Atom:</p><div class="paper">${mol(k)}</div>` }] }))] },
+
+  { id: 'isomere', title: 'Isomere', kind: 'Input + Digital', min: 7,
+    steps: [
+      { input: true, intro: inputIsomere,
+        tasks: [{ type: 'sel', q: 'Was trifft auf das Paar zu?', cols: [{ name: 'Beziehung', opts: REL }],
+          rows: TASKS.paare.map(([a, b, r], i) => ({ html: `<div class="pair"><div class="paper sm">${mol(a)}</div><div class="paper sm">${mol(b)}</div></div>`, label: `Paar ${i + 1}`, a: [REL[r]] })),
+          tips: ['Zählt in beiden Molekülen C-, H- und O-Atome. Unterschiedliche Anzahl → andere Summenformel.', 'Gleiche Anzahl: Gebt beiden Molekülen in Gedanken einen Namen. Gleicher Name → dasselbe Molekül, anderer Name → Isomere.'],
+          fb: () => '<ul class="corr">' + TASKS.paare.map(([a, b, r, why], i) => `<li><b>Paar ${i + 1}: ${REL[r]}.</b> ${why}</li>`).join('') + '</ul>' }] },
+      { intro: () => '',
+        tasks: [{ type: 'pick', q: 'Welche dieser Moleküle sind Isomere mit der Summenformel C₅H₁₂? Wählt alle passenden aus.', show: TASKS.c5h12.show, correct: TASKS.c5h12.correct,
+          tips: ['Zählt in jedem Molekül die C-Atome: Es müssen genau 5 sein.'],
+          fb: () => `<p>Richtig sind Pentan, 2-Methylbutan und 2,2-Dimethylpropan – die drei Isomere von C₅H₁₂. Butan hat nur 4 C-Atome, 2-Methylpentan hat 6.</p>` }] }] },
+
+  { id: 'nachbauen', title: 'Nachbauen', kind: 'Baukasten', min: 7,
+    steps: [
+      { input: true, intro: () => `${inputBau()}${card('Baut nach', `<p>Baut dieses Molekül mit dem Molekülbaukasten:</p><div class="paper inline">${mol('propan1ol')}</div><p>Setzt dann die OH-Gruppe an das <b>mittlere</b> C-Atom um.</p>`, 'kitcard')}`,
+        tasks: [
+          { type: 'mc', q: 'Wie heißt das Molekül, mit dem ihr gestartet seid?', o: ['Propan-1-ol', 'Propan-2-ol', 'Propanal', 'Propanon'], a: 0 },
+          { type: 'mc', q: 'Und wie heißt es, nachdem ihr die OH-Gruppe umgesetzt habt?', o: ['Propan-1-ol', 'Propan-2-ol', 'Propanal', 'Propanon'], a: 1, tips: ['Die Zahl vor -ol gibt an, an welchem C-Atom die OH-Gruppe sitzt.'] },
+          { type: 'mc', q: 'Die beiden Moleküle sind …', o: ['Isomere', 'dasselbe Molekül', 'verschiedene Stoffklassen'], a: 0, fb: 'Isomere: gleiche Summenformel C₃H₈O, andere Struktur.' }] },
+      { intro: () => `${card('Baut alle Alkohole mit vier C-Atomen', '<p>Baut alle Alkohole mit der Summenformel C₄H₁₀O: Es gibt zwei Kohlenstoffgerüste (gerade Kette und verzweigte Kette). Setzt die OH-Gruppe an alle Stellen, die zu verschiedenen Molekülen führen.</p>', 'kitcard')}`,
+        tasks: [{ type: 'pick', q: 'Welche dieser Strukturformeln habt ihr gebaut? Wählt alle Alkohole mit der Summenformel C₄H₁₀O aus.', show: TASKS.alkohole.show, correct: TASKS.alkohole.correct,
+          tips: ['Ein Alkohol hat eine OH-Gruppe. Zählt außerdem die C-Atome: genau 4.'],
+          fb: 'Vier Alkohole: Butan-1-ol, Butan-2-ol, 2-Methylpropan-1-ol und 2-Methylpropan-2-ol. Butanal ist ein Aldehyd, Propan-1-ol hat nur 3 C-Atome.' }] },
+      { intro: () => `${card('Zum Schluss: Bild und Spiegelbild', `<p>Baut ein schwarzes C-Atom mit <b>vier verschiedenfarbigen</b> Kugeln und daneben sein Spiegelbild. Versucht, beide durch Drehen zur Deckung zu bringen – wie bei Contergan und Carvon aus der Präsentation.</p><div class="mirror">${ballModel(false)}<span class="mline" aria-hidden="true"></span>${ballModel(true)}</div>`, 'kitcard')}`,
+        tasks: [{ type: 'mc', q: 'Gelingt es?', o: ['Ja', 'Nein, egal wie wir drehen'], a: 1, fb: 'Nein: Bild und Spiegelbild sind nicht deckungsgleich – wie eure linke und rechte Hand.' }] }] },
+
+  { id: 'ende', title: 'Geschafft', kind: 'Info', min: 0, steps: [] },
+];
+
+/* ---------- Speicher ---------- */
+const KEY = 'rein-in-die-oc.v2';
+let st = { team: '', done: {}, cur: 0, tips: 0 };
+try { const x = JSON.parse(localStorage.getItem(KEY)); if (x && typeof x === 'object') st = Object.assign(st, x); } catch (e) { }
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify(st)); } catch (e) { } };
+
+/* ---------- Ablauf ---------- */
+let stepIdx = 0, attempts = {}, tipIdx = {};
+function maxReachable() { let i = 0; while (i < STATIONS.length - 1 && st.done[STATIONS[i].id]) i++; return i; }
+function renderNav() {
+  const total = STATIONS.length - 2, done = STATIONS.slice(1, -1).filter(s => st.done[s.id]).length;
+  $('#progressBar').style.width = (done / total * 100) + '%';
+  $('#progressTxt').textContent = done + ' von ' + total + ' Stationen';
+  $('#nav').innerHTML = STATIONS.map((s, i) => {
+    const state = st.done[s.id] ? 'done' : (i <= maxReachable() ? 'open' : 'locked');
+    return `<li><button class="nav-it ${state}${i === st.cur ? ' cur' : ''}" data-go="${i}" ${state === 'locked' ? 'disabled' : ''}><span class="nav-no">${state === 'done' ? '✓' : (i === 0 ? '•' : s.id === 'ende' ? '★' : i)}</span><span class="nav-t">${s.title}</span>${s.kind === 'Baukasten' ? '<span class="nav-code">Bau</span>' : ''}</button></li>`;
+  }).join('');
+  $('#cheatBtn').hidden = !st.done.start;
+}
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-go]'); if (!b || b.disabled) return;
+  st.cur = +b.dataset.go; stepIdx = 0; save(); renderStation(); document.body.classList.remove('navopen');
+});
+function renderStation() {
+  renderNav();
+  const i = st.cur, s = STATIONS[i], box = $('#main');
+  const head = `<header class="st-head"><p class="eyebrow">${s.id === 'ende' ? 'Ende' : `Station ${i} von ${STATIONS.length - 2}`} · <span class="kind ${s.kind === 'Baukasten' ? 'kit' : ''}">${s.kind}</span>${s.min ? ` · ca. ${s.min} Min.` : ''}</p><h2>${s.title}</h2></header>`;
+  if (s.id === 'start') box.innerHTML = '';
+  if (s.id === 'ende') { box.innerHTML = head + endeHTML(); return; }
+  if (st.done[s.id]) {
+    box.innerHTML = head + `<div class="fb good"><p class="fb-h">Station erledigt</p><div class="row"><button class="btn ghost" id="redo">Station wiederholen</button><button class="btn primary" id="next">Weiter</button></div></div>`;
+    $('#redo').onclick = () => { delete st.done[s.id]; stepIdx = 0; save(); renderStation(); };
+    $('#next').onclick = () => { st.cur = Math.min(i + 1, STATIONS.length - 1); stepIdx = 0; save(); renderStation(); window.scrollTo(0, 0); };
+    return;
+  }
+  const step = s.steps[stepIdx];
+  const dots = s.steps.length > 1 ? `<p class="steps">Teil ${stepIdx + 1} von ${s.steps.length}${step.input ? ' · <span class="inp">Input</span>' : ''}</p>` : '';
+  box.innerHTML = (s.id === 'start' ? head.replace(`Station 0 von ${STATIONS.length - 2}`, 'Willkommen') : head) + dots + `<div class="step">${step.intro()}<form id="stepForm" class="tasks" autocomplete="off">${step.tasks.map((t, k) => `<div class="task-wrap" data-k="${k}">${T[t.type].render(t, `t${k}`)}<div class="tips" id="tips${k}"></div><div class="tfb" id="fb${k}"></div></div>`).join('')}
+    <div class="row actions"><button class="btn primary" type="submit" id="check">${step.tasks[0].type === 'memory' ? 'Fertig' : 'Prüfen'}</button>${step.tasks.some(t => t.tips) ? '<button class="btn ghost" type="button" id="tipBtn">Tipp</button>' : ''}<button class="btn ghost" type="button" id="solBtn" hidden>Lösung ansehen</button></div>
+    <div id="stepFb" aria-live="polite"></div></form></div>`;
+  if (step.tasks[0].key === 'team') $('#t0-in').value = st.team || '';
+  const key = s.id + ':' + stepIdx; attempts[key] = attempts[key] || 0; tipIdx[key] = 0;
+  $('#stepForm').addEventListener('submit', ev => { ev.preventDefault(); check(false); });
+  const tb = $('#tipBtn'); if (tb) tb.onclick = showTip;
+  $('#solBtn').onclick = () => check(true);
+}
+function showTip() {
+  const s = STATIONS[st.cur], step = s.steps[stepIdx], key = s.id + ':' + stepIdx;
+  const all = []; step.tasks.forEach((t, k) => (t.tips || []).forEach(tp => all.push([k, tp])));
+  // Bei mehreren Aufgaben: zuerst Tipps zu den noch falschen Aufgaben
+  const n = Math.min(++tipIdx[key], all.length);
+  step.tasks.forEach((t, k) => { const mine = all.slice(0, n).filter(x => x[0] === k).map(x => x[1]); $(`#tips${k}`).innerHTML = mine.length ? `<div class="tip"><p class="tip-h">Tipp</p><ul>${mine.map(m => `<li>${m}</li>`).join('')}</ul></div>` : ''; });
+  st.tips = (st.tips || 0) + 1; save();
+  if (n >= all.length) $('#tipBtn').disabled = true;
+}
+function check(reveal) {
+  const s = STATIONS[st.cur], step = s.steps[stepIdx], key = s.id + ':' + stepIdx;
+  if (!step) return;
+  let allOk = true, missing = false;
+  step.tasks.forEach((t, k) => {
+    const id = `t${k}`, tt = T[t.type];
+    if (reveal) {
+      if (tt.fill) tt.fill(t, id);
+      if (t.type === 'mc') document.querySelectorAll(`input[name="${id}"]`).forEach(x => { x.checked = +x.value === t.a; });
+      if (t.type === 'num') $(`#${id}-in`).value = t.a;
+    }
+    const v = tt.read(id, t);
+    if (t.key === 'team') st.team = (v || '').trim();
+    const empty = t.type !== 'memory' && t.type !== 'pick' && t.type !== 'text' && (v === null || (Array.isArray(v) && v.some(x => x === null || x === '' || (Array.isArray(x) && x.some(y => y === '')))));
+    const ok = !empty && tt.ok(t, v);
+    if (empty && !reveal) missing = true;
+    if (!ok) allOk = false;
+    if (t.type === 'sel') t.rows.forEach((r, i) => { const m = document.querySelector(`#${id} .row-sel[data-i="${i}"] .mark`); const rk = tt.rowOk(t, v, i); m.textContent = rk ? '✓' : '✗'; m.className = 'mark ' + (rk ? 'ok' : 'bad'); });
+    const fb = $(`#fb${k}`);
+    if (ok || reveal) {
+      const f = typeof t.fb === 'function' ? t.fb() : (t.fb || '');
+      const extra = t.type === 'name' ? `<p>${reveal && !ok ? 'Lösung' : 'Richtig'}: <b>${nameOf(t.key)}</b></p>` : '';
+      fb.innerHTML = (f || extra) ? `<div class="fb good">${extra}${f ? (f.startsWith('<') ? f : `<p>${f}</p>`) : ''}</div>` : '';
+    } else if (!empty) {
+      let msg = 'Das stimmt noch nicht.';
+      if (t.type === 'name') { const r = checkName(v, M(t.key).info); if (r.status === 'hint') msg = r.msg.replace(/^Regel \d+: /, ''); else if (r.diag) msg += ' ' + r.diag.replace(/^Regel \d+: /, ''); }
+      if (t.type === 'draw') msg = `Eure Zählung stimmt noch nicht. ${v[0] !== t.h ? 'Prüft die H-Atome: Jedes C-Atom braucht genau 4 Bindungen.' : ''} ${v[1] !== t.lp ? 'Prüft die freien Elektronenpaare: Jedes O-Atom hat zwei.' : ''}`;
+      if (t.type === 'memory') msg = 'Es fehlen noch Paare.';
+      fb.innerHTML = `<div class="fb ${t.type === 'name' && checkName(v, M(t.key).info).status === 'hint' ? 'note' : 'bad'}"><p>${msg}</p></div>`;
+    } else fb.innerHTML = '';
+  });
+  const sfb = $('#stepFb');
+  if (missing && !allOk) { sfb.innerHTML = '<div class="fb note"><p>Beantwortet zuerst alle Fragen.</p></div>'; return; }
+  if (allOk || reveal) {
+    if (reveal) { st.solved = st.solved || {}; st.solved[s.id] = true; }
+    document.querySelectorAll('#stepForm input, #stepForm select, #stepForm .mini').forEach(x => { if (step.tasks[0].key !== 'team') x.disabled = true; });
+    $('#check').hidden = true; const tb = $('#tipBtn'); if (tb) tb.hidden = true; $('#solBtn').hidden = true;
+    const last = stepIdx + 1 >= s.steps.length;
+    sfb.innerHTML = `<div class="row actions"><button class="btn primary" type="button" id="goOn">${last ? (st.cur + 1 < STATIONS.length - 1 ? 'Weiter zur nächsten Station' : 'Fertig') : 'Weiter zu Teil ' + (stepIdx + 2)}</button></div>`;
+    $('#goOn').onclick = () => {
+      if (last) { st.done[s.id] = { solved: !!(st.solved && st.solved[s.id]) }; stepIdx = 0; st.cur = Math.min(st.cur + 1, STATIONS.length - 1); save(); renderStation(); }
+      else { stepIdx++; renderStation(); }
+      window.scrollTo(0, 0);
+    };
+    $('#goOn').focus({ preventScroll: true });
+    save();
+  } else {
+    attempts[key]++;
+    sfb.innerHTML = '<div class="fb bad"><p>Noch nicht alles richtig. Die Rückmeldungen zeigen, wo es hakt.</p></div>';
+    if (attempts[key] >= 2) $('#solBtn').hidden = false;
+  }
+}
+function endeHTML() {
+  const rows = STATIONS.slice(1, -1).map(s => { const d = st.done[s.id]; return `<tr><td>${s.title}</td><td>${d ? (d.solved ? 'mit Lösung' : '✓ selbst gelöst') : 'offen'}</td></tr>`; }).join('');
+  return `<p class="lead">Stark gemacht! Zeigt diese Karte eurer Lehrkraft.</p><div class="resultcard"><p class="badge-top">Ergebnis</p><p class="badge-name">${esc(st.team || 'Unser Team')}</p>
+    <table class="rt"><thead><tr><th>Station</th><th>Status</th></tr></thead><tbody>${rows}</tbody></table><p><b>Tipps genutzt:</b> ${st.tips || 0}</p>
+    <p class="next">Gleich kommt das Kahoot – mit genau diesen Inhalten.</p></div>`;
+}
+
+/* ---------- Spickzettel ---------- */
+function cheatHTML() {
+  const rows = [['ethan', 'Alkane', 'nur Einfachbindungen', '-an'], ['ethen', 'Alkene', 'C=C-Doppelbindung', '-en'], ['ethin', 'Alkine', 'C≡C-Dreifachbindung', '-in'], ['ethanol', 'Alkohole', 'Hydroxygruppe (O–H)', '-ol'],
+    ['ethanal', 'Aldehyde', 'C=O am Kettenende mit H', '-al'], ['propanon', 'Ketone', 'C=O in der Kette', '-on'], ['ethansaeure', 'Carbonsäuren', 'Carboxygruppe (C=O und O–H)', '-säure']];
+  return `<h3>Stoffklassen</h3><div class="tablewrap"><table class="ct"><thead><tr><th>Stoffklasse</th><th>Beispiel</th><th>Merkmal</th><th>Endung</th></tr></thead><tbody>${rows.map(([k, c, g, e]) => `<tr><td><b>${c}</b><br><span class="small">${nameOf(k)}</span></td><td class="cfig">${mol(k, { pad: 8 })}</td><td>${g}</td><td class="suffix">${e}</td></tr>`).join('')}</tbody></table></div>
+    <h3>Stammnamen</h3><p>1 Meth · 2 Eth · 3 Prop · 4 But · 5 Pent · 6 Hex · 7 Hept · 8 Oct</p>
+    <h3>Benennen</h3><ol class="list"><li>Stoffklasse → Endung</li><li>Längste Kette zählen → Stamm</li><li>Seitenketten: Methyl (1 C), Ethyl (2 C); gleiche zusammenfassen: Dimethyl</li><li>So nummerieren, dass funktionelle Gruppe bzw. Mehrfachbindung und dann die Seitenketten die kleinsten Zahlen bekommen</li><li>Schreibweise: 2,3-Dimethylbutan · Butan-2-ol · But-1-en</li></ol>
+    <h3>Vollständige Strukturformel</h3><p>C bildet 4 Bindungen, H bildet 1 Bindung, O bildet 2 Bindungen und hat 2 freie Elektronenpaare.</p>
+    <h3>Isomere</h3><p>Gleiche Summenformel, andere Struktur. Gleicher Name heißt: dasselbe Molekül.</p>`;
+}
+document.addEventListener('DOMContentLoaded', () => {
+  $('#cheatBtn').onclick = () => { $('#cheatBody').innerHTML = cheatHTML(); $('#cheat').hidden = false; $('#cheatClose').focus(); };
+  $('#cheatClose').onclick = () => { $('#cheat').hidden = true; $('#cheatBtn').focus(); };
+  $('#cheat').addEventListener('click', e => { if (e.target.id === 'cheat') $('#cheat').hidden = true; });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') $('#cheat').hidden = true; });
+  $('#navToggle').onclick = () => document.body.classList.toggle('navopen');
+  $('#resetBtn').onclick = () => { $('#resetConfirm').hidden = false; };
+  $('#resetNo').onclick = () => { $('#resetConfirm').hidden = true; };
+  $('#resetYes').onclick = () => { st = { team: '', done: {}, cur: 0, tips: 0 }; save(); $('#resetConfirm').hidden = true; stepIdx = 0; renderStation(); };
+  if (st.cur > maxReachable()) st.cur = maxReachable();
+  renderStation();
+});
+
+</script>
+
+</body></html>
